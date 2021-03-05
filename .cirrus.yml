@@ -34,7 +34,7 @@ check_android_task:
     export JACOCO_SOURCE_PATH=app/src/main/java/
     ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
     ./cc-test-reporter upload-coverage
-    lint_script:
+  lint_script:
       ./gradlew lintDebug
     always:
       android-lint_artifacts:
