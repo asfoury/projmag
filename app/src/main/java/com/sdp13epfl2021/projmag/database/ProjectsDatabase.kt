@@ -3,6 +3,19 @@ package com.sdp13epfl2021.projmag.database
 interface ProjectsDatabase {
 
     /**
+     * Asynchronously get all `ProjectId`s from the database
+     * and pass them to the `onSuccess` consumer. Otherwise pass
+     * an exception to the `onFailure` consumer
+     *
+     * @param onSuccess
+     * @param onFailure
+     */
+    fun getAllIds(
+        onSuccess: (List<ProjectId>) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
      * Asynchronously get a `List` of `Projects` from their `id`
      * and pass them to the `onSuccess` consumer. Otherwise pass
      * an exception to the `onFailure` consumer
