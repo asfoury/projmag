@@ -1,5 +1,9 @@
 package com.sdp13epfl2021.projmag.database
 
+/**
+ * Interface for a Database of Projects
+ *
+ */
 interface ProjectsDatabase {
 
     /**
@@ -12,6 +16,21 @@ interface ProjectsDatabase {
      */
     fun getAllIds(
         onSuccess: (List<ProjectId>) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Asynchronously get a `Projects` from its `id`
+     * and pass it to the `onSuccess` consumer. Otherwise pass
+     * an exception to the `onFailure` consumer
+     *
+     * @param ids the id of the project to fetch on the database
+     * @param onSuccess the consumer for successful results
+     * @param onFailure the consumer for failures
+     */
+    fun getProjectFromId(
+        id: ProjectId,
+        onSuccess: (Project) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -31,7 +50,7 @@ interface ProjectsDatabase {
     )
 
     /**
-     * Asynchronoulsy get `ProjectId`'s of `Project`s matching the given
+     * Asynchronoulsy get `Project`s matching the given
      * `name`, and pass them to the `onSuccess` consumer. Otherwise pass
      * an `Exception` to the `onFailure` consumer.
      *
@@ -41,12 +60,12 @@ interface ProjectsDatabase {
      */
     fun getProjectsFromName(
         name: String,
-        onSuccess: (List<ProjectId>) -> Unit,
+        onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
     /**
-     * Asynchronoulsy get `ProjectId`'s of `Project`s matching the given
+     * Asynchronoulsy get `Project`s matching the given
      * `tags`, and pass them to the `onSuccess` consumer. Otherwise pass
      * an `Exception` to the `onFailure` consumer.
      *
@@ -56,7 +75,7 @@ interface ProjectsDatabase {
      */
     fun getProjectsFromTags(
         tags: List<String>,
-        onSuccess: (List<ProjectId>) -> Unit,
+        onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -74,7 +93,22 @@ interface ProjectsDatabase {
         onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     )
+
+
+    /**
+     * Delete a Project matching the given id, and then, call `onSuccess`.
+     * Otherwise call `onFailure` with an `Exception`
+     *
+     * @param id the project id
+     * @param onSuccess function called on success
+     * @param onFailure function called when an exception arise
+     */
+    fun deleteProjectWithId(
+        id: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
 }
 
 typealias ProjectId = String
-typealias Project = Any
+typealias Project = DummyProject?
