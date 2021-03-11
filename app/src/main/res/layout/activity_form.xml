@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".form">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Project Submission"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"></TextView>
+
+
+    <EditText
+        android:id="@+id/EditTextName2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Laboratory"
+        android:inputType="textPersonName"
+
+        app:layout_constraintStart_toStartOf="@+id/EditTextName"
+        app:layout_constraintTop_toBottomOf="@+id/EditTextName"></EditText>
+
+    <EditText
+        android:id="@+id/EditTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="24dp"
+        android:hint="Project name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"></EditText>
+
+    <EditText
+        android:id="@+id/EditTextName3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Teacher"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/EditTextName2"
+        app:layout_constraintTop_toBottomOf="@+id/EditTextName2"></EditText>
+
+    <EditText
+        android:id="@+id/EditTextName5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:hint="Project TA"
+
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/EditTextName3"
+        app:layout_constraintTop_toBottomOf="@+id/EditTextName3"></EditText>
+
+    <EditText
+        android:id="@+id/EditTextName6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Number of participant"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="@+id/EditTextName5"
+        app:layout_constraintTop_toBottomOf="@+id/EditTextName5"></EditText>
+
+    <CheckBox
+        android:id="@+id/CheckBoxResponse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="Semester project"
+        app:layout_constraintEnd_toStartOf="@+id/CheckBoxResponse2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EditTextName6"></CheckBox>
+
+    <CheckBox
+        android:id="@+id/CheckBoxResponse2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="29dp"
+        android:text="Master project"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/CheckBoxResponse"
+        app:layout_constraintTop_toBottomOf="@+id/EditTextName6"></CheckBox>
+
+    <EditText
+        android:id="@+id/EditTextFeedbackBody"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:hint="Project Description"
+        android:inputType="textMultiLine"
+        android:lines="10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CheckBoxResponse"></EditText>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
