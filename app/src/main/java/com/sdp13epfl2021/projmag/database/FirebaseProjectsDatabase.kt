@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 
 /**
  * A Firebase Firestore Database of Projects
@@ -24,6 +25,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
      * @param doc the Firebase document
      * @return a Project built from the given document
      */
+    @Suppress("UNCHECKED_CAST")
     private fun documentToProject(doc: DocumentSnapshot?): Project =
         doc?.let {
             DummyProject(
@@ -32,10 +34,10 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
                 teacher = doc["teacher"] as String,
                 TA = doc["TA"] as String,
                 nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-                assigned = doc["assigned"] as List<String>,
+                assigned = (doc["assigned"] as? List<String>) ?: listOf(),
                 masterProject = doc["masterProject"] as Boolean,
                 bachelorProject = doc["bachelorProject"] as Boolean,
-                tags = doc["tags"] as List<String>,
+                tags = (doc["tags"] as? List<String>) ?: listOf(),
                 isTaken = doc["isTaken"] as Boolean,
                 description = doc["description"] as String
             )
@@ -98,7 +100,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onFailure: (Exception) -> Unit
     ) {
         val docRef = getDB().collection(ROOT)
-            .whereArrayContainsAny("name-search", name.toLowerCase().split(" "))
+            .whereArrayContainsAny("name-search", name.toLowerCase(Locale.ROOT).split(" "))
         docRef
             .get()
             .addOnSuccessListener { query ->
@@ -114,7 +116,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        tags.flatMap { tag -> tag.toLowerCase().split(" ") }
+        tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
         val docRef = getDB().collection(ROOT).whereArrayContains("tags-search", tags)
         docRef
             .get()
@@ -135,19 +137,19 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
             getDB().collection(ROOT).add(
                 hashMapOf(
                     "name" to name,
-                    "name-search" to name.toLowerCase().split(" "),
+                    "name-search" to name.toLowerCase(Locale.ROOT).split(" "),
                     "lab" to lab,
-                    "lab-search" to lab.toLowerCase(),
+                    "lab-search" to lab.toLowerCase(Locale.ROOT),
                     "teacher" to teacher,
-                    "teacher-search" to teacher.toLowerCase().split(" "),
+                    "teacher-search" to teacher.toLowerCase(Locale.ROOT).split(" "),
                     "TA" to TA,
-                    "TA-search" to TA.toLowerCase(),
+                    "TA-search" to TA.toLowerCase(Locale.ROOT),
                     "nbParticipant" to nbParticipant,
                     "assigned" to assigned,
                     "masterProject" to masterProject,
                     "bachelorProject" to bachelorProject,
                     "tags" to tags,
-                    "tags-search" to tags.map { it.toLowerCase() },
+                    "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
                     "isTaken" to isTaken,
                     "description" to description
                 )
