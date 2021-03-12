@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projmag.database
 
-import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -42,6 +41,34 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
                 description = doc["description"] as String
             )
         }
+
+    /**
+     * Perform a firebase query filtering from a specific `field`
+     * that is a list of strings with the given `elements` (any of them match).
+     * Pass the successful result to `onSuccess`. Otherwise, pass an exception to `onFailure`.
+     *
+     * @param elements elements to filter with (if any of them match)
+     * @param field the field to filter
+     * @param onSuccess called with successful result
+     * @param onFailure called with exception
+     */
+    private fun getProjectsFrom(
+        elements: List<String>,
+        field: String,
+        onSuccess: (List<Project>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ){
+        val docRef = getDB().collection(ROOT)
+            .whereArrayContainsAny(field, elements)
+        docRef
+            .get()
+            .addOnSuccessListener { query ->
+                val project = query?.map { documentToProject(it) } ?: listOf()
+                onSuccess(project)
+            }.addOnFailureListener {
+                onFailure(it)
+            }
+    }
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
         val docRef = getDB().collection(ROOT)
@@ -99,16 +126,12 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = getDB().collection(ROOT)
-            .whereArrayContainsAny("name-search", name.toLowerCase(Locale.ROOT).split(" "))
-        docRef
-            .get()
-            .addOnSuccessListener { query ->
-                val project = query?.map { documentToProject(it) } ?: listOf()
-                onSuccess(project)
-            }.addOnFailureListener {
-                onFailure(it)
-            }
+        getProjectsFrom(
+            name.toLowerCase(Locale.ROOT).split(" "),
+            "name-search",
+            onSuccess,
+            onFailure
+        )
     }
 
     override fun getProjectsFromTags(
@@ -116,16 +139,13 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
-        val docRef = getDB().collection(ROOT).whereArrayContains("tags-search", tags)
-        docRef
-            .get()
-            .addOnSuccessListener { query ->
-                val project = query?.map { documentToProject(it) } ?: listOf()
-                onSuccess(project)
-            }.addOnFailureListener {
-                onFailure(it)
-            }
+        val listOfTags = tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
+        getProjectsFrom(
+            listOfTags,
+            "tags-search",
+            onSuccess,
+            onFailure
+        )
     }
 
     override fun pushProjectWithId(
