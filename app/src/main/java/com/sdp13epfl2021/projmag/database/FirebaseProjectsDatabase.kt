@@ -11,7 +11,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
     /**
      * the Root collection in Firebase
      */
-    private const val ROOT = "projects"
+    const val ROOT = "projects"
 
     /**
      * return a new FireStore instance
@@ -24,20 +24,22 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
      * @param doc the Firebase document
      * @return a Project built from the given document
      */
-    private fun documentToProject(doc: DocumentSnapshot): Project =
-        DummyProject(
-            name = doc["name"] as String,
-            lab = doc["lab"] as String,
-            teacher = doc["teacher"] as String,
-            TA = doc["TA"] as String,
-            nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-            assigned = doc["assigned"] as List<String>,
-            masterProject = doc["masterProject"] as Boolean,
-            bachelorProject = doc["bachelorProject"] as Boolean,
-            tags = doc["tags"] as List<String>,
-            isTaken = doc["isTaken"] as Boolean,
-            description = doc["description"] as String
-        )
+    private fun documentToProject(doc: DocumentSnapshot?): Project =
+        doc?.let {
+            DummyProject(
+                name = doc["name"] as String,
+                lab = doc["lab"] as String,
+                teacher = doc["teacher"] as String,
+                TA = doc["TA"] as String,
+                nbParticipant = (doc["nbParticipant"] as Long).toInt(),
+                assigned = doc["assigned"] as List<String>,
+                masterProject = doc["masterProject"] as Boolean,
+                bachelorProject = doc["bachelorProject"] as Boolean,
+                tags = doc["tags"] as List<String>,
+                isTaken = doc["isTaken"] as Boolean,
+                description = doc["description"] as String
+            )
+        }
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
         val docRef = getDB().collection(ROOT)
@@ -61,7 +63,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         docRef
             .get()
             .addOnSuccessListener { query ->
-                val project = if (query.exists()) {
+                val project = if (query != null && query.exists()) {
                     documentToProject(query)
                 } else {
                     null
@@ -72,8 +74,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
             }
     }
 
-    override fun getProjectFromIds(
-        ids: List<ProjectId>,
+    override fun getAllProjects(
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -81,11 +82,10 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         docRef
             .get()
             .addOnSuccessListener { query ->
-                val project = query
-                    .filter { ids.contains(it.id) }
-                    .map { doc ->
+                val project =
+                    query?.map { doc ->
                         documentToProject(doc)
-                    }
+                    } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)
@@ -102,7 +102,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         docRef
             .get()
             .addOnSuccessListener { query ->
-                val project = query.map { documentToProject(it) }
+                val project = query?.map { documentToProject(it) } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)
@@ -119,7 +119,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         docRef
             .get()
             .addOnSuccessListener { query ->
-                val project = query.map { documentToProject(it) }
+                val project = query?.map { documentToProject(it) } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)

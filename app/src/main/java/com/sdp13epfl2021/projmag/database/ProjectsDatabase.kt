@@ -35,7 +35,7 @@ interface ProjectsDatabase {
     )
 
     /**
-     * Asynchronously get a `List` of `Projects` from their `id`
+     * Asynchronously get a All `Projects`
      * and pass them to the `onSuccess` consumer. Otherwise pass
      * an exception to the `onFailure` consumer
      *
@@ -43,8 +43,7 @@ interface ProjectsDatabase {
      * @param onSuccess the consumer for successful results
      * @param onFailure the consumer for failures
      */
-    fun getProjectFromIds(
-        ids: List<ProjectId>,
+    fun getAllProjects(
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     )
