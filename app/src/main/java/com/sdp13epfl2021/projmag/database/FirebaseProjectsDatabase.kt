@@ -133,29 +133,12 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        project?.run {
+        project?.let {
             getDB().collection(ROOT).add(
-                hashMapOf(
-                    "name" to name,
-                    "name-search" to name.toLowerCase(Locale.ROOT).split(" "),
-                    "lab" to lab,
-                    "lab-search" to lab.toLowerCase(Locale.ROOT),
-                    "teacher" to teacher,
-                    "teacher-search" to teacher.toLowerCase(Locale.ROOT).split(" "),
-                    "TA" to TA,
-                    "TA-search" to TA.toLowerCase(Locale.ROOT),
-                    "nbParticipant" to nbParticipant,
-                    "assigned" to assigned,
-                    "masterProject" to masterProject,
-                    "bachelorProject" to bachelorProject,
-                    "tags" to tags,
-                    "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
-                    "isTaken" to isTaken,
-                    "description" to description
-                )
+                it.toMapString()
             )
-                .addOnSuccessListener { onSuccess(it.id) }
-                .addOnFailureListener { onFailure(it) }
+                .addOnSuccessListener { id -> onSuccess(id.id) }
+                .addOnFailureListener { ex -> onFailure(ex) }
         }
     }
 
