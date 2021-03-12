@@ -19,7 +19,7 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class form_test {
+class FormTest {
 
     @Rule
     @JvmField
@@ -44,7 +44,7 @@ class form_test {
 
         val appCompatEditText = onView(
             allOf(
-                withId(R.id.EditTextName),
+                withId(R.id.EditTextProjectName),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -59,7 +59,7 @@ class form_test {
 
         val appCompatEditText2 = onView(
             allOf(
-                withId(R.id.EditTextName), withText("test"),
+                withId(R.id.EditTextProjectName), withText("test"),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -74,7 +74,7 @@ class form_test {
 
         val appCompatEditText3 = onView(
             allOf(
-                withId(R.id.EditTextName2),
+                withId(R.id.EditTextLaboratory),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -89,7 +89,7 @@ class form_test {
 
         val appCompatEditText4 = onView(
             allOf(
-                withId(R.id.EditTextName3),
+                withId(R.id.EditTextTeacher),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -104,7 +104,7 @@ class form_test {
 
         val appCompatEditText5 = onView(
             allOf(
-                withId(R.id.EditTextName5),
+                withId(R.id.EditTextProjectTA),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -119,7 +119,7 @@ class form_test {
 
         val appCompatEditText6 = onView(
             allOf(
-                withId(R.id.EditTextName5), withText("nico"),
+                withId(R.id.EditTextProjectTA), withText("nico"),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -134,7 +134,7 @@ class form_test {
 
         val appCompatEditText7 = onView(
             allOf(
-                withId(R.id.EditTextName6),
+                withId(R.id.nbOfParticipant),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -149,7 +149,7 @@ class form_test {
 
         val appCompatEditText8 = onView(
             allOf(
-                withId(R.id.EditTextName6), withText("2"),
+                withId(R.id.nbOfParticipant), withText("2"),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -164,7 +164,7 @@ class form_test {
 
         val materialCheckBox = onView(
             allOf(
-                withId(R.id.CheckBoxResponse), withText("Semester project"),
+                withId(R.id.CheckBoxSP), withText("Semester project"),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
@@ -179,7 +179,7 @@ class form_test {
 
         val appCompatEditText9 = onView(
             allOf(
-                withId(R.id.EditTextFeedbackBody),
+                withId(R.id.projectDescription),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),

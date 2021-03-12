@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendMessage(view: View?) {
-        val intent = Intent(this, form::class.java)
+        val intent = Intent(this, Form::class.java)
         startActivity(intent)
     }
 }
