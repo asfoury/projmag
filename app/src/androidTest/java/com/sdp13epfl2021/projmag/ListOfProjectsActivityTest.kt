@@ -1,7 +1,8 @@
-package com.sdp13epfl2021.projmag
+    package com.sdp13epfl2021.projmag
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.junit.Before
 import org.junit.Rule
@@ -19,7 +20,7 @@ class ListOfProjectsActivityTest {
     @Test
     fun userCanScroll()  {
         onView(withId(R.id.recycler_view))
-                .perform(ViewActions.scrollTo())
+                .perform(ViewActions.swipeUp())
 
     }
 
