@@ -12,7 +12,7 @@ class FirebaseProjectsDatabaseTest {
      */
     @Test
     fun pushNullProjectShouldNotCrash(){
-        FirebaseProjectsDatabase.pushProjectWithId(null,
+        FirebaseProjectsDatabase.pushProject(null,
             {},
             {})
     }

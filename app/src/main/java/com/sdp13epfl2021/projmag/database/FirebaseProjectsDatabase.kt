@@ -148,7 +148,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         )
     }
 
-    override fun pushProjectWithId(
+    override fun pushProject(
         project: Project,
         onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit

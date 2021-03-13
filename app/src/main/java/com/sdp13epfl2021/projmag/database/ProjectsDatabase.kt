@@ -23,8 +23,9 @@ interface ProjectsDatabase {
      * Asynchronously get a `Projects` from its `id`
      * and pass it to the `onSuccess` consumer. Otherwise pass
      * an exception to the `onFailure` consumer
+     * If the `id` is not present, onSuccess is called with null
      *
-     * @param ids the id of the project to fetch on the database
+     * @param id the id of the project to fetch on the database
      * @param onSuccess the consumer for successful results
      * @param onFailure the consumer for failures
      */
@@ -39,7 +40,6 @@ interface ProjectsDatabase {
      * and pass them to the `onSuccess` consumer. Otherwise pass
      * an exception to the `onFailure` consumer
      *
-     * @param ids the id's of the projects to fetch on the database
      * @param onSuccess the consumer for successful results
      * @param onFailure the consumer for failures
      */
@@ -52,6 +52,7 @@ interface ProjectsDatabase {
      * Asynchronoulsy get `Project`s matching the given
      * `name`, and pass them to the `onSuccess` consumer. Otherwise pass
      * an `Exception` to the `onFailure` consumer.
+     * If the query is empty, onSuccess is called with an empty list
      *
      * @param name The project name to search for
      * @param onSuccess the consumer for successful results
@@ -67,6 +68,7 @@ interface ProjectsDatabase {
      * Asynchronoulsy get `Project`s matching the given
      * `tags`, and pass them to the `onSuccess` consumer. Otherwise pass
      * an `Exception` to the `onFailure` consumer.
+     * If the query is empty, onSuccess is called with an empty list
      *
      * @param tags The project tags to search for
      * @param onSuccess the consumer for successful results
@@ -87,7 +89,7 @@ interface ProjectsDatabase {
      * @param onSuccess the consumer for successful results
      * @param onFailure the consumer for failures
      */
-    fun pushProjectWithId(
+    fun pushProject(
         project: Project,
         onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
@@ -97,6 +99,7 @@ interface ProjectsDatabase {
     /**
      * Delete a Project matching the given id, and then, call `onSuccess`.
      * Otherwise call `onFailure` with an `Exception`
+     * If the id is not present `onSuccess` is called
      *
      * @param id the project id
      * @param onSuccess function called on success
