@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projStructure
 
-import java.lang.IllegalStateException
 
 public abstract class AbstractProject(
         val projectName: String, val labName: String,
@@ -12,19 +11,21 @@ public abstract class AbstractProject(
     companion object{
         private final const val TAKEN: Boolean = true
         private final const val FREE: Boolean = false
-    }
 
+    }
+    sealed class results{
+        object userCommandSuccess : results()
+        object userErrorProjectTaken : results()
+    }
      private var isTaken = FREE;
 
-    fun showProject(): String {
-        return "owner : $projectOwner \nlab : $labName \ndescription : $projectDescription \n"
-    }
 
-    fun setTaken(){
+    fun setTaken() : results{
         if(isTaken == TAKEN){
-            throw IllegalStateException("project was already taken!")
+            return results.userErrorProjectTaken
         }
         isTaken = TAKEN;
+        return results.userCommandSuccess
     }
 
     fun setFree(){

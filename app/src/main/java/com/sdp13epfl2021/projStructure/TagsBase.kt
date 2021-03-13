@@ -4,42 +4,67 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 data class TagsBase(
-        val tags: MutableSet<String> = mutableSetOf<String>(),
+        private val tags: MutableSet<String> = mutableSetOf<String>(),
         private final val MAX_TAG_SIZE : Int = 40
 
 ){
+    /**
+     * TagTooLong : the tag is longer than MAX_TAG_SIZE which is output by the function maxTagSize
+     * TagContainsSpecialChar : the tag contains numbers, and special characters like $ £ etc
+     * TagAlreadyExists : a version of this tag already exists without whitespaces or caps
+     *
+     */
     sealed class tagAddResult {
         object TagTooLong : tagAddResult()
-        object TagContainsSpecialCharacters : tagAddResult()
-        object
+        object TagContainsSpecialChar : tagAddResult()
+        object TagAlreadyExists : tagAddResult()
+        object GoodTag : tagAddResult()
     }
 
+    /**
+     * Function that gives the max size of a tag in characters
+     *
+     * @return max size of the tag
+     */
     fun maxTagSize(): Int {
         return MAX_TAG_SIZE
     }
+
+    /**
+     * Function that checks that the tag is valid and can be added in the database of tags
+     *
+     * @param tag
+     * @return whether or not an error has happened and what type it is using the sealed class tagAddResult
+     */
     fun addTag(tag : String) : tagAddResult{
+        //cleaning up the data :
         if(tag.length > MAX_TAG_SIZE ){
-            //what to do when I have to throw an exeption since exeption throwing is bad in kotlin
             //sealed class?
-            throw IllegalArgumentException("the tag is more than $MAX_TAG_SIZE chars!");
+            return tagAddResult.TagTooLong
         }
-        val cleanTag = tag.toLowerCase()
-        val p = Pattern.compile("[^0-9A-Za-z ]")
+        val cleanTag = tag.toLowerCase().replace(" ","")
+
+        //checking that there are other characters than normal letters :
+        val p = Pattern.compile("[^a-z ]")
         val m : Matcher = p.matcher(cleanTag)
         if(m.find()){
-            throw IllegalArgumentException("the tag contains special characters which is forbidden!")
+            return tagAddResult.TagContainsSpecialChar
         }
 
+        //various other checks :
         if(tags.contains(cleanTag)){
-            throw IllegalArgumentException("the tag was already contained in the tag list")
-        }
-        else if(cleanTag.equals(cleanTag.replace(" ", ""))){
-            throw java.lang.IllegalArgumentException("The tag is the same as another but with or without whitespaces")
+            return tagAddResult.TagAlreadyExists
         }
         else{
             tags.add(cleanTag)
+            return tagAddResult.GoodTag
         }
 
+    }
+
+    //should I be making a defensive copy here?
+    fun getAllTags() : Set<String>{
+        return tags
     }
 
 }
