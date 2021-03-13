@@ -10,6 +10,7 @@ import androidx.core.view.marginRight
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.model.Project
 
@@ -40,14 +41,13 @@ class ItemAdapter(private val context: Context, private val dataset : List<Proje
         // set the lab name
         holder.labNameView.text = project.lab
         // add the tags to the project
-       for(tag in project.tags) {
-           val chipView : Chip = Chip(context)
-           chipView.text = tag
-
-           holder.linearLayoutView.addView(chipView)
-       }
-
-
+        val group = ChipGroup(context)
+        for(tag in project.tags) {
+            val chipView : Chip = Chip(context)
+            chipView.text = tag
+            group.addView(chipView)
+        }
+        holder.linearLayoutView.addView(group)
     }
 
 }
