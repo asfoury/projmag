@@ -7,7 +7,7 @@ I implemented the user interface that shows the list of projects, it took about 
 ## Luke
 
 ## Arnaud
-
+I created the Firebase project and setup all dependencies. It took me less than 3 hours. After finishing my task, I started reading documentations about firebase.
 ## Kaourintin (Scrum Master)
 
 ## Paul
