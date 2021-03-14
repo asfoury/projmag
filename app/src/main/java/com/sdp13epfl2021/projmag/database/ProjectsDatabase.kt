@@ -1,5 +1,8 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.QuerySnapshot
+
 /**
  * Interface for a Database of Projects
  *
@@ -110,6 +113,13 @@ interface ProjectsDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
+
+    /**
+     * Attaches the 'changeListener' to the projects collection.
+     * It will be trigger at every creation, modification and deletion of project.
+     */
+    fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
+
 }
 
 typealias ProjectId = String
