@@ -6,7 +6,7 @@ import org.junit.Test
 class DatasourceTest {
     @Test
     fun loadProjectsIsCorrect() {
-       val projects = Datasource().loadProjects()
+        val projects = Datasource().loadProjects()
         assert(projects != null)
     }
 }
