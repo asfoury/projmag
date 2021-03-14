@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Projmag</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_in_through_google_using_your_epfl_email_address">Sign in through Google using your EPFL email address</string>
 </resources>
