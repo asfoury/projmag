@@ -179,7 +179,7 @@ class FormTest {
 
         val appCompatEditText9 = onView(
             allOf(
-                withId(R.id.projectDescription),
+                withId(R.id.projectDescriptionForm),
                 childAtPosition(
                     childAtPosition(
                         withId(android.R.id.content),
