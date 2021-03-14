@@ -1,0 +1,16 @@
+2021.03.12 17:05:19 INFO  started: Metals version 0.9.1 in workspace '/home/paul/Documents/EPFL/BA5/SDP/projmag'
+2021.03.12 17:05:20 INFO  time: initialize in 0.32s
+2021.03.12 17:06:30 INFO  started: Metals version 0.9.1 in workspace '/home/paul/Documents/EPFL/BA5/SDP/projmag'
+2021.03.12 17:06:30 INFO  time: initialize in 0.31s
+2021.03.12 17:06:31 INFO  skipping build import with status 'Dismissed'
+2021.03.12 17:32:45 INFO  started: Metals version 0.9.1 in workspace '/home/paul/Documents/EPFL/BA5/SDP/projmag'
+2021.03.12 17:32:45 INFO  time: initialize in 0.31s
+2021.03.12 17:32:45 INFO  skipping build import with status 'Requested'
+2021.03.12 17:33:04 INFO  started: Metals version 0.9.1 in workspace '/home/paul/Documents/EPFL/BA5/SDP/projmag'
+2021.03.12 17:33:05 INFO  time: initialize in 0.31s
+2021.03.12 17:33:09 INFO  skipping build import with status 'Requested'
+2021.03.12 18:03:58 INFO  started: Metals version 0.9.1 in workspace '/home/paul/Documents/EPFL/BA5/SDP/projmag'
+2021.03.12 18:03:59 INFO  time: initialize in 0.3s
+2021.03.12 18:19:25 INFO  started: Metals version 0.9.1 in workspace '/home/paul/Documents/EPFL/BA5/SDP/projmag'
+2021.03.12 18:19:25 INFO  time: initialize in 0.31s
+2021.03.12 18:19:29 INFO  skipping build import with status 'Requested'
