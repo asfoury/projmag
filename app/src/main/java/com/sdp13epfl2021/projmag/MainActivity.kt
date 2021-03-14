@@ -11,8 +11,5 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun sendMessage(view: View?) {
-        val intent = Intent(this, Form::class.java)
-        startActivity(intent)
-    }
+
 }
