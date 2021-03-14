@@ -14,22 +14,23 @@ import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.model.Project
 
-class ItemAdapter(private val context: Context, private val dataset : List<Project>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val context: Context, private val dataset: List<Project>) :
+    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
-    class ItemViewHolder(private val view : View) : RecyclerView.ViewHolder(view) {
-        val textView : TextView = view.findViewById(R.id.project_title)
-        val labNameView : TextView = view.findViewById(R.id.lab_name)
-        val linearLayoutView : LinearLayout = view.findViewById(R.id.linear_layout_2)
+    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.project_title)
+        val labNameView: TextView = view.findViewById(R.id.lab_name)
+        val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
 
 
     }
 
 
-    override fun getItemCount() =  dataset.size
+    override fun getItemCount() = dataset.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-      val adapterLayout = LayoutInflater.from(parent.context)
-              .inflate(R.layout.list_project, parent, false)
+        val adapterLayout = LayoutInflater.from(parent.context)
+            .inflate(R.layout.list_project, parent, false)
         return ItemViewHolder(adapterLayout)
     }
 
@@ -42,8 +43,8 @@ class ItemAdapter(private val context: Context, private val dataset : List<Proje
         holder.labNameView.text = project.lab
         // add the tags to the project
         val group = ChipGroup(context)
-        for(tag in project.tags) {
-            val chipView : Chip = Chip(context)
+        for (tag in project.tags) {
+            val chipView: Chip = Chip(context)
             chipView.text = tag
             group.addView(chipView)
         }
