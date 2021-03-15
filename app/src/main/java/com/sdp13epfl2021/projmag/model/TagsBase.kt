@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.model
 
+import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -42,7 +43,7 @@ data class TagsBase(
             //sealed class?
             return InputResult.TooLong
         }
-        val cleanTag = tag.toLowerCase().replace(" ","")
+        val cleanTag = tag.toLowerCase(Locale.getDefault()).replace(" ","")
 
         //checking that there are other characters than normal letters :
         val p = Pattern.compile("[^a-z ]")
