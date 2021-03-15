@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Projmag</string>
+    <string name="project_Submission">Project Submission</string>
+    <string name="lab">Laboratory</string>
+    <string name="project_name">Project name</string>
+    <string name="teacher">Teacher</string>
+    <string name="project_TA">Project TA</string>
+    <string name="numberOfParticipant">Number of participant</string>
+    <string name="semester_project">Semester project</string>
+    <string name="master_project">Master project</string>
+    <string name="project_description">Project Description</string>
+    <string name="submission">Submission</string>
+
 </resources>
