@@ -1,4 +1,4 @@
-    package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -11,16 +11,18 @@ import org.junit.runner.RunWith
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 
 @RunWith(AndroidJUnit4::class)
 class ListOfProjectsActivityTest {
     @get:Rule
-    var activityRule: ActivityScenarioRule<MainActivity>
-            = ActivityScenarioRule(MainActivity::class.java)
+    var activityRule: ActivityScenarioRule<ProjectsListActivity> =
+        ActivityScenarioRule(ProjectsListActivity::class.java)
+
     @Test
-    fun userCanScroll()  {
+    fun userCanScroll() {
         onView(withId(R.id.recycler_view))
-                .perform(ViewActions.swipeUp())
+            .perform(ViewActions.swipeUp())
 
     }
 
