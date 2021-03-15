@@ -8,8 +8,8 @@
 
 ## Arnaud
 
-## Kaourintin (Scrum Master)
+## Kaourintin 
 
-## Paul
+## Paul (Scrum Master)
 
 ## Overall Team
