@@ -14,6 +14,6 @@ I created the Firebase project and setup all dependencies. It took me less than 
 ## Kaourintin (Scrum Master)
 
 ## Paul
-I created an Interface for a Database of `Project`s and also an implementation of it using FireStore from Firebase, which required some time reading the FireStore API documentation. The base code is present an functional, but I still need to write tests (if possible as it has strong external dependencies). It took me way more than the estimated 8h, until now.
+I created an Interface for a Database of `Project`s and also an implementation of it using FireStore from Firebase, which required some time reading the FireStore API documentation. The base code is present an functional, but I still need to write tests (if possible as it has strong external dependencies). It took me more than the estimated 8h, until now.
 
 ## Overall Team
