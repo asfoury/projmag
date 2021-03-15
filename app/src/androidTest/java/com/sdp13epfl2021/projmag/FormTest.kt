@@ -28,7 +28,7 @@ class FormTest {
     @Test
     fun formTest() {
         val appCompatEditText = onView(
-                allOf(withId(R.id.EditTextProjectName),
+                allOf(withId(R.id.form_edit_text_project_name),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -38,7 +38,7 @@ class FormTest {
         appCompatEditText.perform(replaceText("Nicolas"), closeSoftKeyboard())
 
         val appCompatEditText2 = onView(
-                allOf(withId(R.id.EditTextLaboratory),
+                allOf(withId(R.id.form_edit_text_laboratory),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -48,7 +48,7 @@ class FormTest {
         appCompatEditText2.perform(replaceText("computer"), closeSoftKeyboard())
 
         val appCompatEditText3 = onView(
-                allOf(withId(R.id.EditTextProjectName), withText("Nicolas"),
+                allOf(withId(R.id.form_edit_text_project_name), withText("Nicolas"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -58,7 +58,7 @@ class FormTest {
         appCompatEditText3.perform(replaceText("Manager"))
 
         val appCompatEditText4 = onView(
-                allOf(withId(R.id.EditTextProjectName), withText("Manager"),
+                allOf(withId(R.id.form_edit_text_project_name), withText("Manager"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -68,7 +68,7 @@ class FormTest {
         appCompatEditText4.perform(closeSoftKeyboard())
 
         val appCompatEditText5 = onView(
-                allOf(withId(R.id.EditTextTeacher),
+                allOf(withId(R.id.form_edit_text_teacher),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -78,7 +78,7 @@ class FormTest {
         appCompatEditText5.perform(replaceText("Nicolas"), closeSoftKeyboard())
 
         val appCompatEditText6 = onView(
-                allOf(withId(R.id.EditTextProjectTA),
+                allOf(withId(R.id.form_edit_text_project_TA),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -88,7 +88,7 @@ class FormTest {
         appCompatEditText6.perform(replaceText("mike"), closeSoftKeyboard())
 
         val appCompatEditText7 = onView(
-                allOf(withId(R.id.EditTextProjectTA), withText("mike"),
+                allOf(withId(R.id.form_edit_text_project_TA), withText("mike"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -98,7 +98,7 @@ class FormTest {
         appCompatEditText7.perform(pressImeActionButton())
 
         val appCompatEditText8 = onView(
-                allOf(withId(R.id.nbOfParticipant),
+                allOf(withId(R.id.form_nb_of_participant),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -108,7 +108,7 @@ class FormTest {
         appCompatEditText8.perform(replaceText("2"), closeSoftKeyboard())
 
         val appCompatEditText9 = onView(
-                allOf(withId(R.id.nbOfParticipant), withText("2"),
+                allOf(withId(R.id.form_nb_of_participant), withText("2"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -118,7 +118,7 @@ class FormTest {
         appCompatEditText9.perform(pressImeActionButton())
 
         val materialCheckBox = onView(
-                allOf(withId(R.id.CheckBoxSP), withText("Semester project"),
+                allOf(withId(R.id.form_check_box_SP), withText("Semester project"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -128,7 +128,7 @@ class FormTest {
         materialCheckBox.perform(click())
 
         val appCompatEditText10 = onView(
-                allOf(withId(R.id.projectDescriptionForm),
+                allOf(withId(R.id.form_project_description),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
