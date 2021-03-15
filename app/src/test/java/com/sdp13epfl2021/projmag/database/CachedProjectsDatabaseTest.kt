@@ -27,6 +27,20 @@ class CachedProjectsDatabaseTest {
         assertFalse(all.contains(p2))
         assertTrue(all.contains(p3))
 
+        fakeDB.remove(p2)
+        all = cachedDB.getAllProjects()
+        assertEquals(2, all.size)
+        assertTrue(all.contains(p1))
+        assertFalse(all.contains(p2))
+        assertTrue(all.contains(p3))
+
+        fakeDB.remove(null)
+        all = cachedDB.getAllProjects()
+        assertEquals(2, all.size)
+        assertTrue(all.contains(p1))
+        assertFalse(all.contains(p2))
+        assertTrue(all.contains(p3))
+
         //Adding a project already in the db <=> update the project
         fakeDB.modify(p1)
         all = cachedDB.getAllProjects()
@@ -36,6 +50,11 @@ class CachedProjectsDatabaseTest {
         assertTrue(all.contains(p3))
 
         fakeDB.add(p2)
+        all = cachedDB.getAllProjects()
+        assertEquals(3, all.size)
+        assertTrue(all.containsAll(allBeginning))
+
+        fakeDB.add(null)
         all = cachedDB.getAllProjects()
         assertEquals(3, all.size)
         assertTrue(all.containsAll(allBeginning))

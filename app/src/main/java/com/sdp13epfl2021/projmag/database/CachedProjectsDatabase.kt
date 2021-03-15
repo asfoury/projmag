@@ -45,7 +45,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      * If the project is not present, nothing is done.
      */
     @Synchronized private fun removeProjectWithId(id: ProjectId) {
-        projects = projects.filter { p -> p?.id != id }
+        projects = projects.filter { p -> p!!.id != id }
     }
 
 
@@ -58,11 +58,11 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
 
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
-        GlobalScope.launch { onSuccess(projects.mapNotNull{p -> p?.id }) }
+        GlobalScope.launch { onSuccess(projects.mapNotNull{p -> p!!.id }) }
     }
 
     override fun getProjectFromId(id: ProjectId, onSuccess: (Project) -> Unit, onFailure: (Exception) -> Unit) {
-        GlobalScope.launch { onSuccess(projects.find { p -> p?.id == id}) }
+        GlobalScope.launch { onSuccess(projects.find { p -> p!!.id == id}) }
     }
 
     override fun getAllProjects(onSuccess: (List<Project>) -> Unit, onFailure: (Exception) -> Unit) {
@@ -70,13 +70,13 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
     }
 
     override fun getProjectsFromName(name: String, onSuccess: (List<Project>) -> Unit, onFailure: (Exception) -> Unit) {
-        GlobalScope.launch { onSuccess(projects.filter { p -> p?.name == name}) }
+        GlobalScope.launch { onSuccess(projects.filter { p -> p!!.name == name}) }
     }
 
     override fun getProjectsFromTags(tags: List<String>, onSuccess: (List<Project>) -> Unit, onFailure: (Exception) -> Unit) {
         val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
         GlobalScope.launch {
-            onSuccess(projects.filter { p -> p?.tags!!.any{ tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT))} })
+            onSuccess(projects.filter { p -> p!!.tags.any{ tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT))} })
         }
     }
 
