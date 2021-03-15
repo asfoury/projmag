@@ -98,4 +98,9 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         listeners = listeners + changeListener
     }
 
+    @Synchronized
+    override fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
+        listeners = listeners - changeListener
+    }
+
 }

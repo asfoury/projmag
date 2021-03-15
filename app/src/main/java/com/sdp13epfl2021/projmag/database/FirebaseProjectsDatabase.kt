@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 
 /**
@@ -18,6 +19,8 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
      * return a new FireStore instance
      */
     private fun getDB() = FirebaseFirestore.getInstance()
+
+    private var listeners: Map<((ProjectChange) -> Unit), ListenerRegistration> = emptyMap()
 
     /**
      * Take a `DocumentSnapshot` from Firebase and return a `Project`
@@ -178,7 +181,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
-        getDB()
+        val listener = getDB()
             .collection(ROOT)
             .addSnapshotListener { snapshot, _ ->
                 for (doc in snapshot!!.documentChanges) {
@@ -191,5 +194,17 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
                     changeListener(ProjectChange(type, project))
                 }
             }
+        synchronized(this) {
+            listeners = listeners + (changeListener to listener)
+        }
+    }
+
+    @Synchronized
+    override fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
+        val listener = listeners[changeListener]
+        if (listener != null) {
+            listener.remove()
+            listeners = listeners - changeListener
+        }
     }
 }

@@ -16,4 +16,9 @@ class FirebaseProjectsDatabaseTest {
             {},
             {})
     }
+
+    @Test
+    fun removeProjectsChangeListenerShouldNotCrash(){
+        FirebaseProjectsDatabase.removeProjectsChangeListener {  }
+    }
 }

@@ -120,6 +120,10 @@ interface ProjectsDatabase {
      */
     fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
 
+    /**
+     * Remove the 'changeListener' if it is still attached.
+     */
+    fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
 }
 
 typealias ProjectId = String
