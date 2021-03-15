@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
         <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".Form"></activity>
         <activity android:name=".activities.ProjectsListActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>

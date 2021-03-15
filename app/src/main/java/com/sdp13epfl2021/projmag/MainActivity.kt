@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,4 +45,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+
 }
+
