@@ -24,12 +24,12 @@
         android:id="@+id/EditTextLaboratory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:hint="@string/lab"
-        android:inputType="textPersonName"
 
+        android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/EditTextProjectName"
-        app:layout_constraintTop_toBottomOf="@+id/EditTextProjectName"
-        android:autofillHints=""></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/EditTextProjectName"></EditText>
 
     <EditText
         android:id="@+id/EditTextProjectName"
@@ -37,44 +37,44 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="46dp"
         android:layout_marginTop="24dp"
+        android:autofillHints=""
         android:hint="@string/project_name"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_form"
-        android:autofillHints=""></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/title_form"></EditText>
 
     <EditText
         android:id="@+id/EditTextTeacher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:autofillHints=""
         android:hint="@string/teacher"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/EditTextLaboratory"
-        app:layout_constraintTop_toBottomOf="@+id/EditTextLaboratory"
-        android:autofillHints=""></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/EditTextLaboratory"></EditText>
 
     <EditText
         android:id="@+id/EditTextProjectTA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
-        android:hint="@string/project_TA"
+        android:autofillHints=""
 
+        android:hint="@string/project_TA"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/EditTextTeacher"
-        app:layout_constraintTop_toBottomOf="@+id/EditTextTeacher"
-        android:autofillHints=""></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/EditTextTeacher"></EditText>
 
     <EditText
         android:id="@+id/nbOfParticipant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:hint="@string/numberOfParticipant"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="@+id/EditTextProjectTA"
-        app:layout_constraintTop_toBottomOf="@+id/EditTextProjectTA"
-        android:autofillHints=""></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/EditTextProjectTA"></EditText>
 
     <CheckBox
         android:id="@+id/CheckBoxSP"
@@ -101,12 +101,22 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
+        android:autofillHints=""
         android:hint="@string/project_description"
         android:inputType="textMultiLine"
         android:lines="10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CheckBoxSP"
-        android:autofillHints=""></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/CheckBoxSP"></EditText>
+
+    <Button
+        android:id="@+id/buttonSubForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
+        android:text="@string/submission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
