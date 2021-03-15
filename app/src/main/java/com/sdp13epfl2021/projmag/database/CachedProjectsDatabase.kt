@@ -61,8 +61,13 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
     }
 
     override fun getProjectsFromTags(tags: List<String>, onSuccess: (List<Project>) -> Unit, onFailure: (Exception) -> Unit) {
-        val listOfTags = tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
-        GlobalScope.launch { onSuccess(projects.filter { p -> p != null && p.tags.any(listOfTags::contains) }) }
+        val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
+        GlobalScope.launch {
+            onSuccess(projects.filter {
+                p -> p != null &&
+                p.tags.any{ tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT))}
+            })
+        }
     }
 
     override fun pushProject(project: Project, onSuccess: (ProjectId) -> Unit, onFailure: (Exception) -> Unit) {
