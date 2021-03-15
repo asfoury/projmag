@@ -12,6 +12,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
+
+/**
+ * Activity which signs in a user who has not yet signed in. Some code taken from
+ * the Google tutorial to integrate Google sign in in an android app.
+ */
 class SignInActivity : AppCompatActivity() {
 
     companion object {
