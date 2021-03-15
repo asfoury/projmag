@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 
 
 /**
@@ -77,6 +78,9 @@ class SignInActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("SignInActivity", "signInWithCredential:success")
+                        val intent = Intent(this, ProjectsListActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
