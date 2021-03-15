@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -41,8 +42,6 @@ class SignInActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
 
-        mAuth = FirebaseAuth.getInstance()
-
         button.setOnClickListener {
             signIn()
         }
@@ -65,6 +64,7 @@ class SignInActivity : AppCompatActivity() {
                 Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
+                Toast.makeText(applicationContext, "Google sign in failed", Toast.LENGTH_SHORT)
                 // Google Sign In failed, update UI appropriately
                 Log.w("SignInActivity", "Google sign in failed", e)
             }

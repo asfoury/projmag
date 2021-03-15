@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-
+import android.os.Looper
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,15 +21,13 @@ class MainActivity : AppCompatActivity() {
 
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
          * Else send him to DashboardActivity*/
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if(user != null){
                 goToProjectsList()
             }else{
                 goToSignIn()
             }
         }, 2000)
-
-        goToSignIn()
     }
 
     fun goToSignIn() {
