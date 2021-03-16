@@ -66,11 +66,20 @@ object UserDataFirebase : UserDataDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getUserDoc()?.set(
-            hashMapOf(
-                FAVORITES_FIELD to listOf(ProjectId)
-            ), SetOptions.merge()
-        )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
+        getUserDoc()?.let { doc ->
+            getListOfFavoriteProjects(
+                { ls ->
+                    val newList = (ls.toSet().union(projectIDs.toSet())).toList()
+                    doc.set(
+                        hashMapOf(
+                            "favorites" to newList
+                        ), SetOptions.merge()
+                    )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
+                },
+                onFailure
+            )
+
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
