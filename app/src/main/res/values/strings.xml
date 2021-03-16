@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Projmag</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_in_through_google_using_your_epfl_email_address">Sign in through Google using your EPFL email address</string>
     <string name="project_Submission">Project Submission</string>
     <string name="lab">Laboratory</string>
     <string name="project_name">Project name</string>
@@ -10,5 +12,4 @@
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
     <string name="submission">Submission</string>
-
 </resources>
