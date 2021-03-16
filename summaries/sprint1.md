@@ -1,7 +1,7 @@
 # Summary for week 1
 
 ## Mohamed
-I implemented the user interface that shows the list of projects, it took about 8 hours, I was unable to test the view as I was not sure how to test.
+I implemented the user interface that shows the list of projects, it took about 8 hours, After implementing the UI, I was unable to test the view as I was not sure how to test, but in the end I figured it out and tested the view.
 
 ## Giovanni
 I implemented the UI that allow teacher to submit their project, it took me less than 3 hours.
