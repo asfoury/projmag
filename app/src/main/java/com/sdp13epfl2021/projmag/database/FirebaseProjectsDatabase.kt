@@ -9,16 +9,13 @@ import java.util.*
 /**
  * A Firebase Firestore Database of Projects
  */
-object FirebaseProjectsDatabase : ProjectsDatabase {
+class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : ProjectsDatabase {
     /**
      * the Root collection in Firebase
      */
-    const val ROOT = "projects"
-
-    /**
-     * return a new FireStore instance
-     */
-    private fun getDB() = FirebaseFirestore.getInstance()
+    companion object {
+        const val ROOT = "projects"
+    }
 
     private var listeners: Map<((ProjectChange) -> Unit), ListenerRegistration> = emptyMap()
 
@@ -63,9 +60,9 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ){
-        val docRef = getDB().collection(ROOT)
+        val queryRef = firestore.collection(ROOT)
             .whereArrayContainsAny(field, elements)
-        docRef
+        queryRef
             .get()
             .addOnSuccessListener { query ->
                 val project = query?.map { documentToProject(it) } ?: listOf()
@@ -76,12 +73,12 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
     }
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
-        val docRef = getDB().collection(ROOT)
-        docRef
+        val colRef = firestore.collection(ROOT)
+        colRef
             .get()
             .addOnSuccessListener { query ->
                 val project = query
-                    .map { doc -> doc.id }
+                    ?.map { doc -> doc.id } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)
@@ -93,7 +90,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (Project) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = getDB().collection(ROOT).document(id)
+        val docRef = firestore.collection(ROOT).document(id)
         docRef
             .get()
             .addOnSuccessListener { query ->
@@ -112,8 +109,8 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = getDB().collection(ROOT)
-        docRef
+        val colRef = firestore.collection(ROOT)
+        colRef
             .get()
             .addOnSuccessListener { query ->
                 val project =
@@ -159,7 +156,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onFailure: (Exception) -> Unit
     ) {
         project?.let {
-            getDB().collection(ROOT).add(
+            firestore.collection(ROOT).add(
                 it.toMapString()
             )
                 .addOnSuccessListener { id -> onSuccess(id.id) }
@@ -172,7 +169,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getDB()
+        firestore
             .collection(ROOT)
             .document(id)
             .delete()
