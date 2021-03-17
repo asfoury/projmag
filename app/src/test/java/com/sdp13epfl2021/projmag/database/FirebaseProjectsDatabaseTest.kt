@@ -3,16 +3,11 @@ package com.sdp13epfl2021.projmag.database
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
-import java.lang.Exception
-import java.util.function.Consumer
 
 
 /**
@@ -21,14 +16,30 @@ import java.util.function.Consumer
  */
 @Suppress("UNCHECKED_CAST")
 class FirebaseProjectsDatabaseTest {
-    val ID = "some-id"
     val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
     val mockColRef = Mockito.mock(CollectionReference::class.java)
-    val mockTask: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
+    val mockDocRef = Mockito.mock(DocumentReference::class.java)
+    val mockTaskCol: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
+    val mockTaskDoc: Task<DocumentSnapshot> =
+        Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
     val mockQS: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
-    val mockIterator: MutableIterator<QueryDocumentSnapshot> =
-        Mockito.mock(Iterator::class.java) as MutableIterator<QueryDocumentSnapshot>
+    val mockDS: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQDS: QueryDocumentSnapshot = Mockito.mock(QueryDocumentSnapshot::class.java)
+
+    val ID = "some-id"
+    val project = DummyProject(
+        name = "Some test project",
+        description = "some description",
+        tags = listOf("t1", "t2"),
+        isTaken = false,
+        bachelorProject = false,
+        masterProject = true,
+        assigned = listOf("s1", "s2"),
+        nbParticipant = 2,
+        TA = "Some TA",
+        teacher = "Some Teacher",
+        lab = "some lab"
+    )
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
         private var nb = 1
@@ -41,46 +52,92 @@ class FirebaseProjectsDatabaseTest {
         }
 
         override fun remove() {}
-
     }
 
     @Before
     fun setUpMocks() {
+
+        // --- mockFirebaseFirestore ---
         Mockito
             .`when`(mockFirebaseFirestore.collection(FirebaseProjectsDatabase.ROOT))
             .thenReturn(mockColRef)
 
+        // --- mockColRef ---
         Mockito
             .`when`(mockColRef.get())
-            .thenReturn(mockTask)
+            .thenReturn(mockTaskCol)
 
         Mockito
-            .`when`(mockTask.addOnSuccessListener(anyObject()))
+            .`when`(mockColRef.document(ID))
+            .thenReturn(mockDocRef)
+
+        // --- mockDocRef ---
+        Mockito
+            .`when`(mockDocRef.get())
+            .thenReturn(mockTaskDoc)
+
+        // --- mockTaskCol ---
+        Mockito
+            .`when`(mockTaskCol.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<QuerySnapshot>
                 a.onSuccess(mockQS)
-                mockTask
+                mockTaskCol
             }
 
         Mockito
-            .`when`(mockTask.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
-            .thenReturn(mockTask)
+            .`when`(mockTaskCol.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
+            .thenReturn(mockTaskCol)
 
+        // --- mockTaskDoc ---
+        Mockito
+            .`when`(mockTaskDoc.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .then {
+                val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+                a.onSuccess(mockDS)
+                mockTaskDoc
+            }
+
+        Mockito
+            .`when`(mockTaskDoc.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
+            .thenReturn(mockTaskDoc)
+
+        // --- mockDS ---
+        Mockito.`when`(mockDS["name"]).thenReturn(project.name)
+        Mockito.`when`(mockDS["lab"]).thenReturn(project.lab)
+        Mockito.`when`(mockDS["teacher"]).thenReturn(project.teacher)
+        Mockito.`when`(mockDS["TA"]).thenReturn(project.TA)
+        Mockito.`when`(mockDS["nbParticipant"]).thenReturn(project.nbParticipant.toLong())
+        Mockito.`when`(mockDS["assigned"]).thenReturn(project.assigned)
+        Mockito.`when`(mockDS["masterProject"]).thenReturn(project.masterProject)
+        Mockito.`when`(mockDS["bachelorProject"]).thenReturn(project.bachelorProject)
+        Mockito.`when`(mockDS["tags"]).thenReturn(project.tags)
+        Mockito.`when`(mockDS["isTaken"]).thenReturn(project.isTaken)
+        Mockito.`when`(mockDS["description"]).thenReturn(project.description)
+
+        // --- mockQS ---
         Mockito
             .`when`(mockQS.iterator())
             .thenReturn(newQDSIterator())
 
+        // --- mockQDS ---
         Mockito
             .`when`(mockQDS.id)
             .thenReturn(ID)
     }
 
-    private fun <T> anyObject(): T {
-        Mockito.anyObject<T>()
-        return uninitialized()
-    }
+    /**
+     * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
+     * a `NullPointerException` caused by Java to Kotlin type cast
+     */
+    object JavaToKotlinHelper {
+        fun <T> anyObject(): T {
+            Mockito.anyObject<T>()
+            return uninitialized()
+        }
 
-    private fun <T> uninitialized(): T = null as T
+        private fun <T> uninitialized(): T = null as T
+    }
 
     /**
      * test that no unexpected behaviour when passing null
@@ -96,6 +153,28 @@ class FirebaseProjectsDatabaseTest {
         val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getAllIds(
             { list -> assertEquals(listOf(ID), list) },
+            {}
+        )
+    }
+
+    @Test
+    fun getProjectFromIdIsCorrect() {
+        Mockito.`when`(mockDS.exists()).thenReturn(true)
+        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.getProjectFromId(
+            ID,
+            { p -> assertEquals(project, p) },
+            {}
+        )
+    }
+
+    @Test
+    fun getProjectFromIdWhenDSDoNotExistsDoNotCrash() {
+        Mockito.`when`(mockDS.exists()).thenReturn(false)
+        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.getProjectFromId(
+            ID,
+            { p -> assertEquals(null, p) },
             {}
         )
     }

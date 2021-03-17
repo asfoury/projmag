@@ -68,8 +68,8 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     }
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
-        val docRef = firestore.collection(ROOT)
-        docRef
+        val colRef = firestore.collection(ROOT)
+        colRef
             .get()
             .addOnSuccessListener { query ->
                 val project = query
@@ -104,8 +104,8 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = firestore.collection(ROOT)
-        docRef
+        val colRef = firestore.collection(ROOT)
+        colRef
             .get()
             .addOnSuccessListener { query ->
                 val project =
