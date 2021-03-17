@@ -124,6 +124,17 @@ class FirebaseProjectsDatabaseTest {
         Mockito
             .`when`(mockQDS.id)
             .thenReturn(ID)
+        Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
+        Mockito.`when`(mockQDS["lab"]).thenReturn(project.lab)
+        Mockito.`when`(mockQDS["teacher"]).thenReturn(project.teacher)
+        Mockito.`when`(mockQDS["TA"]).thenReturn(project.TA)
+        Mockito.`when`(mockQDS["nbParticipant"]).thenReturn(project.nbParticipant.toLong())
+        Mockito.`when`(mockQDS["assigned"]).thenReturn(project.assigned)
+        Mockito.`when`(mockQDS["masterProject"]).thenReturn(project.masterProject)
+        Mockito.`when`(mockQDS["bachelorProject"]).thenReturn(project.bachelorProject)
+        Mockito.`when`(mockQDS["tags"]).thenReturn(project.tags)
+        Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
+        Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
     }
 
     /**
@@ -175,6 +186,15 @@ class FirebaseProjectsDatabaseTest {
         db.getProjectFromId(
             ID,
             { p -> assertEquals(null, p) },
+            {}
+        )
+    }
+
+    @Test
+    fun getAllProjectsIsCorrect() {
+        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.getAllProjects(
+            { lp -> assertEquals(listOf(project), lp) },
             {}
         )
     }

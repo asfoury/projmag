@@ -55,9 +55,9 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ){
-        val docRef = firestore.collection(ROOT)
+        val queryRef = firestore.collection(ROOT)
             .whereArrayContainsAny(field, elements)
-        docRef
+        queryRef
             .get()
             .addOnSuccessListener { query ->
                 val project = query?.map { documentToProject(it) } ?: listOf()
@@ -73,7 +73,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .get()
             .addOnSuccessListener { query ->
                 val project = query
-                    .map { doc -> doc.id }
+                    ?.map { doc -> doc.id } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)
