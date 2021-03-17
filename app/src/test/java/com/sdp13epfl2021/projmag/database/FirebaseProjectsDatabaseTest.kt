@@ -223,4 +223,14 @@ class FirebaseProjectsDatabaseTest {
             {}
         )
     }
+
+    @Test
+    fun getProjectsFromTagsIsCorrect() {
+        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.getProjectsFromTags(
+            project.tags,
+            { lp -> assertEquals(listOf(project), lp) },
+            {}
+        )
+    }
 }
