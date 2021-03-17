@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.database
 
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.concurrent.atomic.AtomicInteger
 
 
 class CachedProjectsDatabaseTest {
@@ -10,7 +11,7 @@ class CachedProjectsDatabaseTest {
     private val p3 = Project("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
 
 
-    @Test
+    @Test(timeout = 1000)
     fun getAllProjectWorksWhenTheDBIsUpdated() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
@@ -60,122 +61,173 @@ class CachedProjectsDatabaseTest {
         assertTrue(all.containsAll(allBeginning))
     }
 
-    @Test
+    @Test(timeout = 1000)
     fun getProjectFromIdWorks() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: Project = null
 
         cachedDB.getProjectFromId(p2.id, { project ->
-            assertEquals(p2, project)
-            //assertTrue(false)
+            result = project
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+        while (result == null);
+        assertEquals(p2, result)
     }
 
-    @Test
+    @Test(timeout = 1000)
     fun getProjectsFromNameWorks() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: List<Project>? = null
 
         cachedDB.getProjectsFromName(p2.name, { projects ->
-            assertEquals(listOf(p2), projects)
-            //assertTrue(false)
+            result = projects
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+
+        while (result == null);
+        assertEquals(listOf(p2), result)
     }
 
-    @Test
+    @Test(timeout = 1000)
     fun getAllIdsWorks() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: List<ProjectId>? = null
 
         cachedDB.getAllIds({ projectsIds ->
-            assertEquals(3, projectsIds.size)
-            assertTrue(projectsIds.contains(p1.id))
-            assertTrue(projectsIds.contains(p2.id))
-            assertTrue(projectsIds.contains(p3.id))
-            //assertTrue(false)
+            result = projectsIds
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+
+        while (result == null);
+        assertEquals(3, result!!.size)
+        assertTrue(result!!.contains(p1.id))
+        assertTrue(result!!.contains(p2.id))
+        assertTrue(result!!.contains(p3.id))
     }
 
-    @Test
+    @Test(timeout = 2000)
     fun getAllProjectsAsyncWorks() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: List<Project>? = null
 
         cachedDB.getAllProjects({ projects ->
-            assertEquals(3, projects.size)
-            assertTrue(projects.contains(p1))
-            assertTrue(projects.contains(p2))
-            assertTrue(projects.contains(p3))
-            //assertTrue(false)
+            result = projects
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+
+        Thread.sleep(200)
+        while (result == null);
+        assertEquals(3, result!!.size)
+        assertTrue(result!!.contains(p1))
+        assertTrue(result!!.contains(p2))
+        assertTrue(result!!.contains(p3))
     }
 
-    @Test
+    @Test(timeout = 1000)
     fun getProjectsFromTagsWorks() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: List<Project>? = null
 
         cachedDB.getProjectsFromTags(listOf("ml", "Driver"), { projects ->
-            assertEquals(2, projects.size)
-            assertTrue(projects.contains(p2))
-            assertTrue(projects.contains(p3))
-            //assertTrue(false)
+            result = projects
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+
+        while (result == null);
+        assertEquals(2, result!!.size)
+        assertTrue(result!!.contains(p2))
+        assertTrue(result!!.contains(p3))
     }
 
-    @Test
+    @Test(timeout = 1000)
     fun pushIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: ProjectId? = null
 
         cachedDB.pushProject(p3, { projectId ->
-            val projects = cachedDB.getAllProjects()
-            assertEquals("90000", projectId)
-            assertEquals(3, projects.size)
-            //assertTrue(false)
+            result = projectId
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+        while (result == null);
+        assertEquals("90000", result)
+        val projects = cachedDB.getAllProjects()
+        assertEquals(3, projects.size)
     }
 
-    @Test
+    @Test(timeout = 1000)
     fun deleteProjectWithIdIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
+        var result: List<Project>? = null
 
         cachedDB.deleteProjectWithId(p3.id, {
-            val projects = cachedDB.getAllProjects()
-            assertEquals(2, projects.size)
-            assertFalse(projects.contains(p3))
-            //assertTrue(false)
+            result = cachedDB.getAllProjects()
         }, { e ->
             assertNull(e)
         })
-        Thread.sleep(1000)
+
+        while (result == null);
+        assertEquals(2, result!!.size)
+        assertFalse(result!!.contains(p3))
     }
+
+    @Test
+    fun listenersWorks() {
+        val allBeginning = listOf(p1, p2)
+        val fakeDB = FakeDatabase(allBeginning)
+        val cachedDB = CachedProjectsDatabase(fakeDB)
+        var count: AtomicInteger = AtomicInteger(0)
+
+        val listener: ((ProjectChange) -> Unit) = { change ->
+            when (change.type) {
+                ProjectChange.Type.ADDED -> assertEquals(p3, change.project)
+                ProjectChange.Type.MODIFIED -> assertEquals(p2, change.project)
+                ProjectChange.Type.REMOVED -> assertEquals(p2, change.project)
+            }
+            count.incrementAndGet()
+            change.project
+        }
+
+        cachedDB.addProjectsChangeListener(listener)
+
+        fakeDB.modify(p2)
+        fakeDB.remove(p2)
+        fakeDB.remove(p2)
+        fakeDB.add(p3)
+
+        Thread.sleep(100)
+        assertEquals(4, count.get())
+
+        cachedDB.removeProjectsChangeListener(listener)
+        fakeDB.modify(p1)
+        fakeDB.remove(p1)
+        fakeDB.remove(p1)
+        fakeDB.add(p1)
+
+        Thread.sleep(100)
+        assertEquals(4, count.get())
+    }
+
+
 
 
     private class FakeDatabase(projectsBeginning: List<Project>) : ProjectsDatabase {
