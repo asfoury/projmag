@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import java.util.*
 
 /**
@@ -26,21 +27,19 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
      * @return a Project built from the given document
      */
     @Suppress("UNCHECKED_CAST")
-    private fun documentToProject(doc: DocumentSnapshot?): Project =
+    private fun documentToProject(doc: DocumentSnapshot?): ImmutableProject? =
         doc?.let {
-            DummyProject(
+            ImmutableProject(
                 id = doc.id,
-                name = doc["name"] as String,
-                lab = doc["lab"] as String,
-                teacher = doc["teacher"] as String,
-                TA = doc["TA"] as String,
-                nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-                assigned = (doc["assigned"] as? List<String>) ?: listOf(),
-                masterProject = doc["masterProject"] as Boolean,
-                bachelorProject = doc["bachelorProject"] as Boolean,
-                tags = (doc["tags"] as? List<String>) ?: listOf(),
-                isTaken = doc["isTaken"] as Boolean,
-                description = doc["description"] as String
+                name = doc["name"] as? String ?: "",
+                labName = doc["lab"] as? String ?: "",
+                projectManager = doc["teacher"] as? String ?: "",
+                numberStudents = (doc["nbParticipant"] as? Long ?: 0).toInt(),
+                assignedStudents = (doc["assigned"] as? List<String>) ?: listOf(),
+                masterProject = doc["masterProject"] as? Boolean ?: false,
+                bachelorSemesterProject = doc["bachelorProject"] as? Boolean ?: false,
+                masterSemesterProject = doc["masterSemesterProject"] as? Boolean ?: false,
+                description = doc["description"] as? String ?: ""
             )
         }
 
@@ -57,7 +56,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     private fun getProjectsFrom(
         elements: List<String>,
         field: String,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
     ){
         val queryRef = firestore.collection(ROOT)
@@ -87,7 +86,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
 
     override fun getProjectFromId(
         id: ProjectId,
-        onSuccess: (Project) -> Unit,
+        onSuccess: (ImmutableProject?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val docRef = firestore.collection(ROOT).document(id)
@@ -106,7 +105,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     }
 
     override fun getAllProjects(
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val colRef = firestore.collection(ROOT)
@@ -125,7 +124,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
 
     override fun getProjectsFromName(
         name: String,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getProjectsFrom(
@@ -136,9 +135,10 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         )
     }
 
-    override fun getProjectsFromTags(
+    /* This piece of code should be UNCOMMENTED when tags are part of the project*/
+/*    override fun getProjectsFromTags(
         tags: List<String>,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val listOfTags = tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
@@ -148,14 +148,14 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             onSuccess,
             onFailure
         )
-    }
+    }*/
 
     override fun pushProject(
-        project: Project,
+        project: ImmutableProject,
         onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        project?.let {
+        project.let {
             firestore.collection(ROOT).add(
                 it.toMapString()
             )
@@ -182,7 +182,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .collection(ROOT)
             .addSnapshotListener { snapshot, _ ->
                 for (doc in snapshot!!.documentChanges) {
-                    val project: Project = documentToProject(doc.document)
+                    val project: ImmutableProject? = documentToProject(doc.document)
                     val type = when (doc.type) {
                         DocumentChange.Type.ADDED -> ProjectChange.Type.ADDED
                         DocumentChange.Type.MODIFIED -> ProjectChange.Type.MODIFIED

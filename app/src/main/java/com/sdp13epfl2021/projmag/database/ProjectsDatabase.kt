@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.database
 
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 /**
  * Interface for a Database of Projects
@@ -34,7 +35,7 @@ interface ProjectsDatabase {
      */
     fun getProjectFromId(
         id: ProjectId,
-        onSuccess: (Project) -> Unit,
+        onSuccess: (ImmutableProject?) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -47,7 +48,7 @@ interface ProjectsDatabase {
      * @param onFailure the consumer for failures
      */
     fun getAllProjects(
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -63,7 +64,7 @@ interface ProjectsDatabase {
      */
     fun getProjectsFromName(
         name: String,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -77,11 +78,13 @@ interface ProjectsDatabase {
      * @param onSuccess the consumer for successful results
      * @param onFailure the consumer for failures
      */
-    fun getProjectsFromTags(
+
+    /* This piece of code should be UNCOMMENTED when tags are part of the project*/
+    /*fun getProjectsFromTags(
         tags: List<String>,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject?>) -> Unit,
         onFailure: (Exception) -> Unit
-    )
+    )*/
 
     /**
      * Asynchronously push a `Project` to the database, an pass its id
@@ -93,7 +96,7 @@ interface ProjectsDatabase {
      * @param onFailure the consumer for failures
      */
     fun pushProject(
-        project: Project,
+        project: ImmutableProject,
         onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -127,4 +130,3 @@ interface ProjectsDatabase {
 }
 
 typealias ProjectId = String
-typealias Project = DummyProject?

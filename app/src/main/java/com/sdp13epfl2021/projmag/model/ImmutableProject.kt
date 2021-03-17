@@ -1,18 +1,23 @@
 package com.sdp13epfl2021.projmag.model
 
+import java.util.*
+
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
-class ImmutableProject(val name : String,
-                       val labName : String,
-                       val projectManager : String,
-                       val description : String,
-                       val numberStudents: Int,
-                       val masterProject : Boolean,
-                       val bachelorSemesterProject : Boolean,
-                       val masterSemesterProject : Boolean,
-                       val assignedStudents : List<String>) {
+class ImmutableProject(
+    val id: String?,
+    val name: String,
+    val labName: String,
+    val projectManager: String,
+    val description: String,
+    val numberStudents: Int,
+    val masterProject: Boolean,
+    val bachelorSemesterProject: Boolean,
+    val masterSemesterProject: Boolean,
+    val assignedStudents: List<String>
+) {
     companion object {
         const val MAX_NAME_SIZE = 40
         const val MAX_DESCRIPTION_SIZE = 300
@@ -39,6 +44,7 @@ class ImmutableProject(val name : String,
                 )
                 else -> Success(
                     ImmutableProject(
+                        null,
                         name,
                         labName,
                         projectManager,
@@ -70,14 +76,36 @@ class ImmutableProject(val name : String,
      * @param masterSemesterProject : can this project be a master semester project
      * @param assignedStudents : list of the assigned students to the project
      */
-    fun buildCopy(name: String = this.name, labName: String = this.labName, projectManager: String = this.projectManager
-                  , description: String = this.description, numberStudents: Int = this.numberStudents,
-                  masterProject: Boolean = this.masterProject
-                  , bachelorSemesterProject: Boolean = this.bachelorSemesterProject
-                  , masterSemesterProject: Boolean = this.masterSemesterProject
-                  , assignedStudents: List<String> = this.assignedStudents)
-            = build(name, labName, projectManager, description, numberStudents,
-        masterProject, bachelorSemesterProject, masterSemesterProject, assignedStudents)
+    fun buildCopy(
+        name: String = this.name,
+        labName: String = this.labName,
+        projectManager: String = this.projectManager,
+        description: String = this.description,
+        numberStudents: Int = this.numberStudents,
+        masterProject: Boolean = this.masterProject,
+        bachelorSemesterProject: Boolean = this.bachelorSemesterProject,
+        masterSemesterProject: Boolean = this.masterSemesterProject,
+        assignedStudents: List<String> = this.assignedStudents
+    ) = build(
+        name, labName, projectManager, description, numberStudents,
+        masterProject, bachelorSemesterProject, masterSemesterProject, assignedStudents
+    )
+
+    /**
+     * A map of the members with their name
+     */
+    fun toMapString(): Map<String, Any> = hashMapOf(
+        "name" to name,
+        "name-search" to name.toLowerCase(Locale.ROOT).split(" "),
+        "labName" to labName,
+        "labName-search" to labName.toLowerCase(Locale.ROOT),
+        "projectManager" to projectManager,
+        "numberStudents" to numberStudents,
+        "assignedStudents" to assignedStudents,
+        "masterProject" to masterProject,
+        "bachelorSemesterProject" to bachelorSemesterProject,
+        "description" to description
+    )
 
 
 }

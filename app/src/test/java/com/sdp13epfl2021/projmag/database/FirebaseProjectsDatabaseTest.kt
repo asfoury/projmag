@@ -173,14 +173,6 @@ class FirebaseProjectsDatabaseTest {
         private fun <T> uninitialized(): T = null as T
     }
 
-    /**
-     * test that no unexpected behaviour when passing null
-     */
-    @Test
-    fun pushNullProjectShouldNotCrash() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
-        db.pushProject(null, {}, {})
-    }
 
     @Test
     fun getAllIdsIsCorrect() {
@@ -232,7 +224,9 @@ class FirebaseProjectsDatabaseTest {
         )
     }
 
-    @Test
+
+    /* this piece of code should be UNCOMMENTED when tags are part of the project */
+/*    @Test
     fun getProjectsFromTagsIsCorrect() {
         val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getProjectsFromTags(
@@ -240,7 +234,7 @@ class FirebaseProjectsDatabaseTest {
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
-    }
+    }*/
 
     /*
      * No test for deleteProjectWithId(...). It's implementation is only relying on Firebase calls,
