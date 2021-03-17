@@ -25,6 +25,7 @@ class FirebaseProjectsDatabaseTest {
     val mockQS: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
     val mockDS: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQDS: QueryDocumentSnapshot = Mockito.mock(QueryDocumentSnapshot::class.java)
+    val mockQuery: Query = Mockito.mock(Query::class.java)
 
     val ID = "some-id"
     val project = DummyProject(
@@ -70,6 +71,15 @@ class FirebaseProjectsDatabaseTest {
         Mockito
             .`when`(mockColRef.document(ID))
             .thenReturn(mockDocRef)
+
+        Mockito
+            .`when`(
+                mockColRef.whereArrayContainsAny(
+                    Mockito.anyString(),
+                    Mockito.anyListOf(String::class.java)
+                )
+            )
+            .thenReturn(mockQuery)
 
         // --- mockDocRef ---
         Mockito
@@ -135,6 +145,11 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
+
+        // ---  mockQuery ---
+        Mockito
+            .`when`(mockQuery.get())
+            .thenReturn(mockTaskCol)
     }
 
     /**
@@ -194,6 +209,16 @@ class FirebaseProjectsDatabaseTest {
     fun getAllProjectsIsCorrect() {
         val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getAllProjects(
+            { lp -> assertEquals(listOf(project), lp) },
+            {}
+        )
+    }
+
+    @Test
+    fun getProjectsFromNameIsCorrect() {
+        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.getProjectsFromName(
+            project.name,
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
