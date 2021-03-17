@@ -233,4 +233,9 @@ class FirebaseProjectsDatabaseTest {
             {}
         )
     }
+
+    /*
+     * No test for deleteProjectWithId(...). It's implementation is only relying on Firebase calls,
+     * and is very similar to the other methods.
+     */
 }
