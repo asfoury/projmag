@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import java.util.*
 
 data class DummyProject(
+    val id: String,
     val name: String,
     val lab: String,
     val teacher: String,
