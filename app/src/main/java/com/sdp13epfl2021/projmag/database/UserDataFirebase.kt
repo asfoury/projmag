@@ -1,41 +1,38 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.ktx.Firebase
 
 /**
  * An implementation of a user-data database
  * using Google Firebase/FireStore
  */
-object UserDataFirebase : UserDataDatabase {
+class UserDataFirebase(
+    private val firestore: FirebaseFirestore,
+    private val auth: FirebaseAuth
+) : UserDataDatabase {
 
-    /**
-     * Root collection for user-data
-     */
-    private const val ROOT = "user-data"
+    companion object {
+        /**
+         * Root collection for user-data
+         */
+        const val ROOT = "user-data"
 
-    /**
-     *  The field containing favorites
-     */
-    private const val FAVORITES_FIELD = "favorites"
-
-    /**
-     * A new Firebase FireStore instance
-     *
-     * @return A new Firebase FireStore instance
-     */
-    private fun getDB(): FirebaseFirestore = FirebaseFirestore.getInstance()
+        /**
+         *  The field containing favorites
+         */
+        const val FAVORITES_FIELD = "favorites"
+    }
 
     /**
      * Return the current logged user or null if none
      *
      * @return current logged user or null
      */
-    private fun getUser(): FirebaseUser? = Firebase.auth.currentUser
+    private fun getUser(): FirebaseUser? = auth.currentUser
 
     /**
      * Return the document associated to the user
@@ -44,7 +41,7 @@ object UserDataFirebase : UserDataDatabase {
      */
     private fun getUserDoc(): DocumentReference? =
         getUser()?.let { user ->
-            getDB()
+            firestore
                 .collection(ROOT)
                 .document(user.uid)
         }
@@ -74,11 +71,10 @@ object UserDataFirebase : UserDataDatabase {
                         hashMapOf(
                             "favorites" to newList
                         ), SetOptions.merge()
-                    )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
+                    ).addOnSuccessListener { onSuccess() }.addOnFailureListener(onFailure)
                 },
                 onFailure
             )
-
         }
     }
 
