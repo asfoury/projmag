@@ -1,7 +1,9 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 
 /**
@@ -15,6 +17,8 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         const val ROOT = "projects"
     }
 
+    private var listeners: Map<((ProjectChange) -> Unit), ListenerRegistration> = emptyMap()
+
     /**
      * Take a `DocumentSnapshot` from Firebase and return a `Project`
      *
@@ -25,6 +29,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     private fun documentToProject(doc: DocumentSnapshot?): Project =
         doc?.let {
             DummyProject(
+                id = doc.id,
                 name = doc["name"] as String,
                 lab = doc["lab"] as String,
                 teacher = doc["teacher"] as String,
@@ -170,5 +175,33 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .delete()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
+    }
+
+    override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
+        val listener = firestore
+            .collection(ROOT)
+            .addSnapshotListener { snapshot, _ ->
+                for (doc in snapshot!!.documentChanges) {
+                    val project: Project = documentToProject(doc.document)
+                    val type = when (doc.type) {
+                        DocumentChange.Type.ADDED -> ProjectChange.Type.ADDED
+                        DocumentChange.Type.MODIFIED -> ProjectChange.Type.MODIFIED
+                        DocumentChange.Type.REMOVED -> ProjectChange.Type.REMOVED
+                    }
+                    changeListener(ProjectChange(type, project))
+                }
+            }
+        synchronized(this) {
+            listeners = listeners + (changeListener to listener)
+        }
+    }
+
+    @Synchronized
+    override fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
+        val listener = listeners[changeListener]
+        if (listener != null) {
+            listener.remove()
+            listeners = listeners - changeListener
+        }
     }
 }
