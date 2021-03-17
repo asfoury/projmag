@@ -177,26 +177,6 @@ class CachedProjectsDatabaseTest {
         Thread.sleep(1000)
     }
 
-    @Test
-    fun addProjectsChangeListenerShouldNotCrash() {
-        val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
-
-        cachedDB.addProjectsChangeListener {  }
-    }
-
-    @Test
-    fun removeProjectsChangeListenerShouldNotCrash() {
-        val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
-
-        cachedDB.addProjectsChangeListener {  }
-        cachedDB.removeProjectsChangeListener {  }
-    }
-
-
 
     private class FakeDatabase(projectsBeginning: List<Project>) : ProjectsDatabase {
         private var projects: List<Project> = projectsBeginning

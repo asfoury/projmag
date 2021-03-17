@@ -29,6 +29,7 @@ class FirebaseProjectsDatabaseTest {
 
     val ID = "some-id"
     val project = DummyProject(
+        id = ID,
         name = "Some test project",
         description = "some description",
         tags = listOf("t1", "t2"),
@@ -113,6 +114,7 @@ class FirebaseProjectsDatabaseTest {
             .thenReturn(mockTaskDoc)
 
         // --- mockDS ---
+        Mockito.`when`(mockDS.id).thenReturn(project.id)
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockDS["lab"]).thenReturn(project.lab)
         Mockito.`when`(mockDS["teacher"]).thenReturn(project.teacher)

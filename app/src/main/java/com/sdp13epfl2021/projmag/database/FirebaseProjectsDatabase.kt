@@ -178,7 +178,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
-        val listener = getDB()
+        val listener = firestore
             .collection(ROOT)
             .addSnapshotListener { snapshot, _ ->
                 for (doc in snapshot!!.documentChanges) {
