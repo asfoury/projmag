@@ -1,7 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Project(

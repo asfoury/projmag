@@ -28,34 +28,6 @@ class ProjectInformationActivityTest {
         )
     }
 
-    @Test
-    fun userCanPressOnProjectAndGoBackUsingBackInToolBar() {
-        // press on first project
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
-                0,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
-            )
-        )
-        // go back to list of project
-        val imageButton = onView(
-            Matchers.allOf(
-                withContentDescription("Navigate up"),
-                isDisplayed()
-            )
-        )
-        imageButton.perform(click())
-        // press on second project
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
-                1,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
-            )
-        )
-        // go back to list of projects
-        imageButton.perform(click())
-    }
-
 
     @Test
     fun userCanPressOnProjectAndGoBackUsingBackButton() {
