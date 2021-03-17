@@ -27,6 +27,8 @@ class FirebaseProjectsDatabaseTest {
     val mockQDS: QueryDocumentSnapshot = Mockito.mock(QueryDocumentSnapshot::class.java)
     val mockQuery: Query = Mockito.mock(Query::class.java)
 
+    val mockListener = Mockito.mock(ListenerRegistration::class.java)
+
     val ID = "some-id"
     val project = DummyProject(
         id = ID,
@@ -81,6 +83,10 @@ class FirebaseProjectsDatabaseTest {
                 )
             )
             .thenReturn(mockQuery)
+
+        Mockito
+            .`when`(mockColRef.addSnapshotListener(Mockito.any()))
+            .thenReturn(mockListener)
 
         // --- mockDocRef ---
         Mockito
@@ -240,4 +246,13 @@ class FirebaseProjectsDatabaseTest {
      * No test for deleteProjectWithId(...). It's implementation is only relying on Firebase calls,
      * and is very similar to the other methods.
      */
+
+    @Test
+    fun listenersShouldNotCrash() {
+        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val listener: ((ProjectChange) -> Unit) = {}
+        db.addProjectsChangeListener(listener)
+        db.removeProjectsChangeListener(listener)
+        db.removeProjectsChangeListener(listener)
+    }
 }
