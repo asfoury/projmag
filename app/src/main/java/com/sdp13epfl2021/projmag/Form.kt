@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.database.FirebaseProjectsDatabase
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.model.Success
 
 class Form : AppCompatActivity() {
@@ -22,14 +23,13 @@ class Form : AppCompatActivity() {
         initUi()
     }
 
-    fun getTextFromView(id: Int): String = findViewById<EditText>(id).run {
+    private fun getTextFromView(id: Int): String = findViewById<EditText>(id).run {
         text.toString()
     }
 
-    fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    private fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 
-
-    fun submit(view: View) {
+    fun constructProject(): Result<ImmutableProject> {
         val name = getTextFromView(R.id.form_edit_text_project_name)
         val lab = getTextFromView(R.id.form_edit_text_laboratory)
         val teacher = getTextFromView(R.id.form_edit_text_teacher)
@@ -43,7 +43,8 @@ class Form : AppCompatActivity() {
         val master = findViewById<CheckBox>(R.id.form_check_box_MP)
         val bachelor = findViewById<CheckBox>(R.id.form_check_box_SP)
         val description = getTextFromView(R.id.form_project_description)
-        val project = ImmutableProject.build(
+
+        return ImmutableProject.build(
             name = name,
             lab = lab,
             teacher = teacher,
@@ -56,7 +57,10 @@ class Form : AppCompatActivity() {
             assigned = listOf(),
             tags = listOf("Default-tag")
         )
-        when (project) {
+    }
+
+    fun sendToFirebase(project: Result<ImmutableProject>) =
+        when (val project = constructProject()) {
             is Success<*> -> {
                 FirebaseProjectsDatabase(FirebaseFirestore.getInstance()).pushProject(
                     project.value as com.sdp13epfl2021.projmag.database.Project,
@@ -68,6 +72,8 @@ class Form : AppCompatActivity() {
                 Toast.makeText(this, project.reason, Toast.LENGTH_LONG).show()
             }
         }
-    }
+
+    fun submit(view: View) = sendToFirebase(constructProject())
+
 
 }

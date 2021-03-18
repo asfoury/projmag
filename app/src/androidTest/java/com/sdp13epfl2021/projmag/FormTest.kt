@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -11,6 +12,7 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.Description
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
@@ -128,18 +130,45 @@ class FormTest {
         materialCheckBox.perform(click())
 
         val appCompatEditText10 = onView(
-                allOf(withId(R.id.form_project_description),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                8),
-                        isDisplayed()))
+            allOf(
+                withId(R.id.form_project_description),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    8
+                ),
+                isDisplayed()
+            )
+        )
         appCompatEditText10.perform(replaceText("Do nothing\n"), closeSoftKeyboard())
     }
 
+    @Test
+    fun formTestSub() {
+        onView(withId(R.id.form_edit_text_project_name)).perform(replaceText("name"))
+        onView(withId(R.id.form_edit_text_laboratory)).perform(replaceText("lab"))
+        onView(withId(R.id.form_edit_text_teacher)).perform(replaceText("teacher"))
+        onView(withId(R.id.form_edit_text_project_TA)).perform(replaceText("TA"))
+        onView(withId(R.id.form_nb_of_participant)).perform(replaceText("123"))
+        onView(withId(R.id.form_check_box_MP)).perform(click())
+        onView(withId(R.id.form_check_box_SP)).perform(click())
+        onView(withId(R.id.form_project_description)).perform(replaceText("description"))
+        onView(withId(R.id.form_button_sub)).perform(click())
+        onView(
+            withText(
+                Matchers.anyOf(
+                    Matchers.containsString("student"),
+                    Matchers.containsString("max")
+                )
+            )
+        )
+    }
+
     private fun childAtPosition(
-            parentMatcher: Matcher<View>, position: Int): Matcher<View> {
+        parentMatcher: Matcher<View>, position: Int
+    ): Matcher<View> {
 
         return object : TypeSafeMatcher<View>() {
             override fun describeTo(description: Description) {
