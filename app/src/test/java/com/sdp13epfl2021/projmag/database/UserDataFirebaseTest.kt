@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
 import org.mockito.Mockito
 
 @Suppress("UNCHECKED_CAST")
@@ -60,6 +61,9 @@ class UserDataFirebaseTest {
         Mockito
             .`when`(mockDocRef.get())
             .thenReturn(mockDSTask)
+        Mockito
+            .`when`(mockDocRef.update(Mockito.anyString(), JavaToKotlinHelper.anyObject()))
+            .thenReturn(mockVoidTask)
 
         //DocumentSnapshot
         Mockito
@@ -114,6 +118,15 @@ class UserDataFirebaseTest {
     fun getListOfFavoriteProjectsIsCorrect() {
         database.getListOfFavoriteProjects(
             { list -> Assert.assertEquals(listOf(ID), list) },
+            {}
+        )
+    }
+
+    @Test
+    fun removeFromFavoriteDoNotCrash() {
+        database.removeFromFavorite(
+            ID,
+            {},
             {}
         )
     }
