@@ -1,22 +1,23 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import java.util.*
 
 /**
  * A Firebase Firestore Database of Projects
  */
-object FirebaseProjectsDatabase : ProjectsDatabase {
+class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : ProjectsDatabase {
     /**
      * the Root collection in Firebase
      */
-    const val ROOT = "projects"
+    companion object {
+        const val ROOT = "projects"
+    }
 
-    /**
-     * return a new FireStore instance
-     */
-    private fun getDB() = FirebaseFirestore.getInstance()
+    private var listeners: Map<((ProjectChange) -> Unit), ListenerRegistration> = emptyMap()
 
     /**
      * Take a `DocumentSnapshot` from Firebase and return a `Project`
@@ -28,6 +29,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
     private fun documentToProject(doc: DocumentSnapshot?): Project =
         doc?.let {
             DummyProject(
+                id = doc.id,
                 name = doc["name"] as String,
                 lab = doc["lab"] as String,
                 teacher = doc["teacher"] as String,
@@ -58,9 +60,9 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ){
-        val docRef = getDB().collection(ROOT)
+        val queryRef = firestore.collection(ROOT)
             .whereArrayContainsAny(field, elements)
-        docRef
+        queryRef
             .get()
             .addOnSuccessListener { query ->
                 val project = query?.map { documentToProject(it) } ?: listOf()
@@ -71,12 +73,12 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
     }
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
-        val docRef = getDB().collection(ROOT)
-        docRef
+        val colRef = firestore.collection(ROOT)
+        colRef
             .get()
             .addOnSuccessListener { query ->
                 val project = query
-                    .map { doc -> doc.id }
+                    ?.map { doc -> doc.id } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)
@@ -88,7 +90,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (Project) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = getDB().collection(ROOT).document(id)
+        val docRef = firestore.collection(ROOT).document(id)
         docRef
             .get()
             .addOnSuccessListener { query ->
@@ -107,8 +109,8 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: (List<Project>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = getDB().collection(ROOT)
-        docRef
+        val colRef = firestore.collection(ROOT)
+        colRef
             .get()
             .addOnSuccessListener { query ->
                 val project =
@@ -154,7 +156,7 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onFailure: (Exception) -> Unit
     ) {
         project?.let {
-            getDB().collection(ROOT).add(
+            firestore.collection(ROOT).add(
                 it.toMapString()
             )
                 .addOnSuccessListener { id -> onSuccess(id.id) }
@@ -167,11 +169,39 @@ object FirebaseProjectsDatabase : ProjectsDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getDB()
+        firestore
             .collection(ROOT)
             .document(id)
             .delete()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
+    }
+
+    override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
+        val listener = firestore
+            .collection(ROOT)
+            .addSnapshotListener { snapshot, _ ->
+                for (doc in snapshot!!.documentChanges) {
+                    val project: Project = documentToProject(doc.document)
+                    val type = when (doc.type) {
+                        DocumentChange.Type.ADDED -> ProjectChange.Type.ADDED
+                        DocumentChange.Type.MODIFIED -> ProjectChange.Type.MODIFIED
+                        DocumentChange.Type.REMOVED -> ProjectChange.Type.REMOVED
+                    }
+                    changeListener(ProjectChange(type, project))
+                }
+            }
+        synchronized(this) {
+            listeners = listeners + (changeListener to listener)
+        }
+    }
+
+    @Synchronized
+    override fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
+        val listener = listeners[changeListener]
+        if (listener != null) {
+            listener.remove()
+            listeners = listeners - changeListener
+        }
     }
 }
