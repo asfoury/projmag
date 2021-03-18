@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.LinearLayout
@@ -29,6 +30,7 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
+        val chipGroupView : ChipGroup = view.findViewById(R.id.chip_group)
     }
 
 
@@ -47,14 +49,17 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
         holder.textView.text = project.name
         // set the lab name
         holder.labNameView.text = project.lab
+
+        // remove all tags to keep them from being duplicated
+        holder.chipGroupView.removeAllViews()
+
         // add the tags to the project
-        val group = ChipGroup(context)
-        for (tag in project.tags) {
-            val chipView: Chip = Chip(context)
-            chipView.text = tag
-            group.addView(chipView)
-        }
-        holder.linearLayoutView.addView(group)
+            for (tag in project.tags) {
+                val chipView: Chip = Chip(context)
+                chipView.text = tag
+                holder.chipGroupView.addView(chipView)
+            }
+
 
         // make the projects pressable
         holder.textView.setOnClickListener {
@@ -68,7 +73,7 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
     }
 
     override fun getFilter(): Filter {
-        return object: Filter() {
+        return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filteredList = ArrayList<ImmutableProject>()
                 val search = constraint.toString()
