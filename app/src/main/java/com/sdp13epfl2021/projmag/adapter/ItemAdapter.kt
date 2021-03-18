@@ -30,6 +30,7 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
+        val chipGroupView : ChipGroup = view.findViewById(R.id.chip_group)
     }
 
 
@@ -48,21 +49,17 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
         holder.textView.text = project.name.toString()
         // set the lab name
         holder.labNameView.text = project.lab
+
+        // remove all tags to keep them from being duplicated
+        holder.chipGroupView.removeAllViews()
+
         // add the tags to the project
-
-        val group = ChipGroup(context)
-        // give the group that contains the tags an id so that we can check to see if the view already has id so they are not redrawn
-        group.id = R.id.mygroup_tag
-
-        // add the tags only if they are not present
-        if (holder.linearLayoutView.findViewById<ChipGroup>(R.id.mygroup_tag) == null) {
             for (tag in project.tags) {
                 val chipView: Chip = Chip(context)
                 chipView.text = tag
-                group.addView(chipView)
+                holder.chipGroupView.addView(chipView)
             }
-            holder.linearLayoutView.addView(group)
-        }
+
 
         // make the projects pressable
         holder.textView.setOnClickListener {
