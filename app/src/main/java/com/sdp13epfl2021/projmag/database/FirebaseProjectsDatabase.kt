@@ -28,7 +28,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     @Suppress("UNCHECKED_CAST")
     private fun documentToProject(doc: DocumentSnapshot?): Project =
         doc?.let {
-            DummyProject(
+            Project(
                 id = doc.id,
                 name = doc["name"] as String,
                 lab = doc["lab"] as String,

@@ -1,38 +1,41 @@
 package com.sdp13epfl2021.projmag.model
 
+import java.util.*
+
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
 
-class ImmutableProject(val id : String,
-                       val name : String,
-                       val lab : String,
-                       val teacher : String,
-                       val TA: String,
-                       val nbParticipant : Int,
-                       val assigned : List<String>,
-                       val masterProject : Boolean,
-                       val bachelorProject : Boolean,
-                       val tags : List<String>,
-                       val isTaken: Boolean,
-                       val description: String
-                        ) {
+data class ImmutableProject(
+    val id: String,
+    val name: String,
+    val lab: String,
+    val teacher: String,
+    val TA: String,
+    val nbParticipant: Int,
+    val assigned: List<String>,
+    val masterProject: Boolean,
+    val bachelorProject: Boolean,
+    val tags: List<String>,
+    val isTaken: Boolean,
+    val description: String
+) {
     companion object {
         const val MAX_NAME_SIZE = 40
         const val MAX_DESCRIPTION_SIZE = 300
         const val MAX_STUDENT_NUMBER = 10
         fun build(
-            id : String,
-            name : String,
-            lab : String,
-            teacher : String,
+            id: String,
+            name: String,
+            lab: String,
+            teacher: String,
             TA: String,
-            nbParticipant : Int,
-            assigned : List<String>,
-            masterProject : Boolean,
-            bachelorProject : Boolean,
-            tags : List<String>,
+            nbParticipant: Int,
+            assigned: List<String>,
+            masterProject: Boolean,
+            bachelorProject: Boolean,
+            tags: List<String>,
             isTaken: Boolean,
             description: String
         ): Result<ImmutableProject> {
@@ -47,19 +50,20 @@ class ImmutableProject(val id : String,
                     "there are ${assigned.size} " +
                             "students currently assigned but only $nbParticipant allowed to work for the project"
                 )
-                else -> Success( ImmutableProject(
-                    id,
-                    name,
-                    lab,
-                    teacher,
-                    TA,
-                    nbParticipant,
-                    assigned,
-                    masterProject,
-                    bachelorProject,
-                    tags,
-                    isTaken,
-                    description,
+                else -> Success(
+                    ImmutableProject(
+                        id,
+                        name,
+                        lab,
+                        teacher,
+                        TA,
+                        nbParticipant,
+                        assigned,
+                        masterProject,
+                        bachelorProject,
+                        tags,
+                        isTaken,
+                        description,
                     )
                 )
             }
@@ -84,20 +88,45 @@ class ImmutableProject(val id : String,
      * @param isTaken : Is this project already taken
      * @param description : description of the project
      */
-    fun buildCopy(id : String = this.id,
-                  name : String = this.name,
-                  lab : String = this.lab,
-                  teacher : String = this.teacher,
-                  TA : String = this.TA,
-                  nbParticipant : Int = this.nbParticipant,
-                  assigned : List<String> = this.assigned,
-                  masterProject: Boolean = this.masterProject,
-                  bachelorProject: Boolean = this.bachelorProject,
-                  tags: List<String> = this.tags,
-                  isTaken: Boolean = this.isTaken,
-                  description: String = this.description)
-            = build( id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
-                    tags, isTaken, description,)
+    fun buildCopy(
+        id: String = this.id,
+        name: String = this.name,
+        lab: String = this.lab,
+        teacher: String = this.teacher,
+        TA: String = this.TA,
+        nbParticipant: Int = this.nbParticipant,
+        assigned: List<String> = this.assigned,
+        masterProject: Boolean = this.masterProject,
+        bachelorProject: Boolean = this.bachelorProject,
+        tags: List<String> = this.tags,
+        isTaken: Boolean = this.isTaken,
+        description: String = this.description
+    ) = build(
+        id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
+        tags, isTaken, description,
+    )
+
+    /**
+     *  Give a Map<String,Any> the maps name of members to their values
+     */
+    fun toMapString() = hashMapOf(
+        "name" to name,
+        "name-search" to name.toLowerCase(Locale.ROOT).split(" "),
+        "lab" to lab,
+        "lab-search" to lab.toLowerCase(Locale.ROOT),
+        "teacher" to teacher,
+        "teacher-search" to teacher.toLowerCase(Locale.ROOT).split(" "),
+        "TA" to TA,
+        "TA-search" to TA.toLowerCase(Locale.ROOT),
+        "nbParticipant" to nbParticipant,
+        "assigned" to assigned,
+        "masterProject" to masterProject,
+        "bachelorProject" to bachelorProject,
+        "tags" to tags,
+        "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
+        "isTaken" to isTaken,
+        "description" to description
+    )
 
 
 }
