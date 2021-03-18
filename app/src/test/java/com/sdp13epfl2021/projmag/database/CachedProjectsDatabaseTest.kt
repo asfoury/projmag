@@ -6,9 +6,48 @@ import java.util.concurrent.atomic.AtomicInteger
 
 
 class CachedProjectsDatabaseTest {
-    private val p1 = Project("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
-    private val p2 = Project("11111","Real-time reconstruction of deformable objects","CVLAB","Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
-    private val p3 = Project("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
+    private val p1 = Project(
+        "12345",
+        "What fraction of Google searches are answered by Wikipedia?",
+        "DLAB",
+        "Robert West",
+        "TA1",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf("data analysis", "large datasets", "database", "systems", "database", "systems"),
+        false,
+        "Description of project1"
+    )
+    private val p2 = Project(
+        "11111",
+        "Real-time reconstruction of deformable objects",
+        "CVLAB",
+        "Teacher2",
+        "TA2",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf("Computer Vision", "ML"),
+        false,
+        "Description of project2"
+    )
+    private val p3 = Project(
+        "00000",
+        "Implement a fast driver for a 100 Gb/s network card",
+        "DSLAB",
+        "Teacher5",
+        "TA5",
+        3,
+        listOf<String>(),
+        false,
+        true,
+        listOf("Low Level", "Networking", "Driver"),
+        false,
+        "Description of project5"
+    )
 
 
     @Test(timeout = 1000)
@@ -228,8 +267,6 @@ class CachedProjectsDatabaseTest {
     }
 
 
-
-
     private class FakeDatabase(projectsBeginning: List<Project>) : ProjectsDatabase {
         private var projects: List<Project> = projectsBeginning
         private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
@@ -237,18 +274,18 @@ class CachedProjectsDatabaseTest {
 
         fun add(project: Project) {
             projects = projects + project
-            listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.ADDED, project)) }
+            listeners.forEach { it -> it(ProjectChange(ProjectChange.Type.ADDED, project)) }
         }
 
         fun modify(project: Project) {
             projects.filter { p -> p?.id != project?.id }
             projects = projects + project
-            listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
+            listeners.forEach { it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
         }
 
         fun remove(project: Project) {
             projects = projects + project
-            listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.REMOVED, project)) }
+            listeners.forEach { it -> it(ProjectChange(ProjectChange.Type.REMOVED, project)) }
         }
 
         override fun getAllIds(
@@ -296,9 +333,21 @@ class CachedProjectsDatabaseTest {
         ) {
             val pid = nextId.toString()
             nextId += 1
-            val newProject = project?.let {Project(pid,
-                it.name, it.lab, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
-                it.bachelorProject, it.tags, it.isTaken, it.description)
+            val newProject = project?.let {
+                Project(
+                    pid,
+                    it.name,
+                    it.lab,
+                    it.teacher,
+                    it.TA,
+                    it.nbParticipant,
+                    it.assigned,
+                    it.masterProject,
+                    it.bachelorProject,
+                    it.tags,
+                    it.isTaken,
+                    it.description
+                )
             }
             add(newProject)
             onSuccess(pid)
@@ -309,7 +358,7 @@ class CachedProjectsDatabaseTest {
             onSuccess: () -> Unit,
             onFailure: (Exception) -> Unit
         ) {
-            remove(projects.find {p -> p?.id == id})
+            remove(projects.find { p -> p?.id == id })
             onSuccess()
         }
 
