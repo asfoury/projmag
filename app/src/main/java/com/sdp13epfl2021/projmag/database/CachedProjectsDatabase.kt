@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 import android.util.Log
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
@@ -8,7 +9,7 @@ import java.util.*
 class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabase {
 
     private val TAG = "CachedProjectDatabase"
-    private var projects: List<Project> = emptyList()
+    private var projects: List<ImmutableProject> = emptyList()
     private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
 
     init {
@@ -16,13 +17,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
-                ProjectChange.Type.REMOVED -> change.project?.let {
-                    it.id?.run {
-                        removeProjectWithId(
-                            this
-                        )
-                    }
-                }
+                ProjectChange.Type.REMOVED -> removeProjectWithId(change.project.id)
             }
             listeners.forEach { it -> it(change) }
         }
@@ -39,11 +34,9 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      * If the project is null, nothing is done.
      */
     @Synchronized
-    private fun addProject(project: Project) {
-        project?.let {
-            it.id?.run { removeProjectWithId(this) }
-            projects = projects + it
-        }
+    private fun addProject(project: ImmutableProject) {
+        removeProjectWithId(project.id)
+        projects = projects + project
 
     }
 
@@ -52,8 +45,8 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      * If the project is not present, nothing is done.
      */
     @Synchronized
-    private fun removeProjectWithId(id: String) {
-        projects = projects.filter { p -> p!!.id != id }
+    private fun removeProjectWithId(id: ProjectId) {
+        projects = projects.filter { p -> p.id != id }
     }
 
 
@@ -61,71 +54,41 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      * Synchronously get all projects cached locally.
      * This list is guaranteed to have only non null Project.
      */
-    fun getAllProjects(): List<Project> {
+    fun getAllProjects(): List<ImmutableProject> {
         return projects
     }
 
 
-    override fun getAllIds(onSuccess: (List<String>) -> Unit, onFailure: (Exception) -> Unit) {
-        GlobalScope.launch { onSuccess(projects.mapNotNull { p -> p!!.id }) }
+    override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
+        GlobalScope.launch { onSuccess(projects.map { p -> p.id }) }
     }
 
-    override fun getProjectFromId(
-        id: String,
-        onSuccess: (Project) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        GlobalScope.launch { onSuccess(projects.find { p -> p!!.id == id }) }
+    override fun getProjectFromId(id: ProjectId, onSuccess: (ImmutableProject?) -> Unit, onFailure: (Exception) -> Unit) {
+        GlobalScope.launch { onSuccess(projects.find { p -> p.id == id }) }
     }
 
-    override fun getAllProjects(
-        onSuccess: (List<Project>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+    override fun getAllProjects(onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
         GlobalScope.launch { onSuccess(projects) }
     }
 
-    override fun getProjectsFromName(
-        name: String,
-        onSuccess: (List<Project>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        GlobalScope.launch { onSuccess(projects.filter { p -> p!!.name == name }) }
+    override fun getProjectsFromName(name: String, onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+        GlobalScope.launch { onSuccess(projects.filter { p -> p.name == name }) }
     }
 
-    override fun getProjectsFromTags(
-        tags: List<String>,
-        onSuccess: (List<Project>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+    override fun getProjectsFromTags(tags: List<String>, onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
         GlobalScope.launch {
             val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
-            onSuccess(projects.filter { p ->
-                p!!.tags.any { tag ->
-                    listOfTags.contains(
-                        tag.toLowerCase(
-                            Locale.ROOT
-                        )
-                    )
-                }
-            }
+            onSuccess(projects.filter {
+                p -> p.tags.any { tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT)) } }
             )
         }
     }
 
-    override fun pushProject(
-        project: Project,
-        onSuccess: (String) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+    override fun pushProject(project: ImmutableProject, onSuccess: (ProjectId) -> Unit, onFailure: (Exception) -> Unit) {
         db.pushProject(project, onSuccess, onFailure)
     }
 
-    override fun deleteProjectWithId(
-        id: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+    override fun deleteProjectWithId(id: ProjectId, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         db.deleteProjectWithId(id, onSuccess, onFailure)
     }
 

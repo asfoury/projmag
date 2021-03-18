@@ -1,7 +1,5 @@
 package com.sdp13epfl2021.projmag.database
 
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 /**
@@ -19,7 +17,7 @@ interface ProjectsDatabase {
      * @param onFailure
      */
     fun getAllIds(
-        onSuccess: (List<String>) -> Unit,
+        onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -34,8 +32,8 @@ interface ProjectsDatabase {
      * @param onFailure the consumer for failures
      */
     fun getProjectFromId(
-        id: String,
-        onSuccess: (Project) -> Unit,
+        id: ProjectId,
+        onSuccess: (ImmutableProject?) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -48,7 +46,7 @@ interface ProjectsDatabase {
      * @param onFailure the consumer for failures
      */
     fun getAllProjects(
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -64,7 +62,7 @@ interface ProjectsDatabase {
      */
     fun getProjectsFromName(
         name: String,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -80,7 +78,7 @@ interface ProjectsDatabase {
      */
     fun getProjectsFromTags(
         tags: List<String>,
-        onSuccess: (List<Project>) -> Unit,
+        onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -94,8 +92,8 @@ interface ProjectsDatabase {
      * @param onFailure the consumer for failures
      */
     fun pushProject(
-        project: Project,
-        onSuccess: (String) -> Unit,
+        project: ImmutableProject,
+        onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -110,7 +108,7 @@ interface ProjectsDatabase {
      * @param onFailure function called when an exception arise
      */
     fun deleteProjectWithId(
-        id: String,
+        id: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -127,4 +125,4 @@ interface ProjectsDatabase {
     fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
 }
 
-typealias Project = ImmutableProject?
+typealias ProjectId = String
