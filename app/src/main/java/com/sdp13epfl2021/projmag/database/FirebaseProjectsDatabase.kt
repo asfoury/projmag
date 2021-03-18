@@ -71,7 +71,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             }
     }
 
-    override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getAllIds(onSuccess: (List<String>) -> Unit, onFailure: (Exception) -> Unit) {
         val colRef = firestore.collection(ROOT)
         colRef
             .get()
@@ -85,7 +85,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     }
 
     override fun getProjectFromId(
-        id: ProjectId,
+        id: String,
         onSuccess: (ImmutableProject?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -151,7 +151,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
 
     override fun pushProject(
         project: ImmutableProject,
-        onSuccess: (ProjectId) -> Unit,
+        onSuccess: (String) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         project.let {
@@ -164,7 +164,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     }
 
     override fun deleteProjectWithId(
-        id: ProjectId,
+        id: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {

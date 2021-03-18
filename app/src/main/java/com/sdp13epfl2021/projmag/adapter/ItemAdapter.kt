@@ -15,14 +15,16 @@ import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ItemAdapter(private val context: Context, private val dataset: MutableList<ImmutableProject>) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
 
-    val datasetAll: List<ImmutableProject>
+    val dataSetAll: List<ImmutableProject>
 
     init {
-        datasetAll = ArrayList(dataset)
+        dataSetAll = ArrayList(dataset)
     }
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
@@ -67,16 +69,19 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun getFilter(): Filter {
         return object: Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filteredList = ArrayList<ImmutableProject>()
                 val search = constraint.toString()
                 if (constraint.toString().isEmpty()) {
-                    filteredList.addAll(datasetAll)
+                    filteredList.addAll(dataSetAll)
                 } else {
-                    for (project in datasetAll) {
-                        if (project.name.toLowerCase().contains(search.toLowerCase())) {
+                    for (project in dataSetAll) {
+                        if (project.name.toLowerCase(Locale.ROOT)
+                                .contains(search.toLowerCase(Locale.ROOT))
+                        ) {
                             filteredList.add(project)
                         }
                     }

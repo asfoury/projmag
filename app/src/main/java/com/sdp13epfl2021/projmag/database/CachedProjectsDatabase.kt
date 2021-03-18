@@ -17,7 +17,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
-                ProjectChange.Type.REMOVED -> removeProjectWithId(change.project.id)
+                ProjectChange.Type.REMOVED -> change.project.id?.let { removeProjectWithId(it) }
             }
             listeners.forEach { it -> it(change) }
         }
@@ -35,7 +35,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      */
     @Synchronized
     private fun addProject(project: ImmutableProject) {
-        removeProjectWithId(project.id)
+        project.id?.let { removeProjectWithId(it) }
         projects = projects + project
 
     }
@@ -45,7 +45,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      * If the project is not present, nothing is done.
      */
     @Synchronized
-    private fun removeProjectWithId(id: ProjectId) {
+    private fun removeProjectWithId(id: String) {
         projects = projects.filter { p -> p.id != id }
     }
 
@@ -59,15 +59,22 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
     }
 
 
-    override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
-        GlobalScope.launch { onSuccess(projects.map { p -> p.id }) }
+    override fun getAllIds(onSuccess: (List<String>) -> Unit, onFailure: (Exception) -> Unit) {
+        GlobalScope.launch { onSuccess(projects.mapNotNull { p -> p.id }) }
     }
 
-    override fun getProjectFromId(id: ProjectId, onSuccess: (ImmutableProject?) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getProjectFromId(
+        id: String,
+        onSuccess: (ImmutableProject?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch { onSuccess(projects.find { p -> p.id == id }) }
     }
 
-    override fun getAllProjects(onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getAllProjects(
+        onSuccess: (List<ImmutableProject>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch { onSuccess(projects) }
     }
 
@@ -84,11 +91,19 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         }
     }
 
-    override fun pushProject(project: ImmutableProject, onSuccess: (ProjectId) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun pushProject(
+        project: ImmutableProject,
+        onSuccess: (String) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         db.pushProject(project, onSuccess, onFailure)
     }
 
-    override fun deleteProjectWithId(id: ProjectId, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    override fun deleteProjectWithId(
+        id: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         db.deleteProjectWithId(id, onSuccess, onFailure)
     }
 

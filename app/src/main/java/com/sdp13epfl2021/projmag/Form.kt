@@ -29,41 +29,31 @@ class Form : AppCompatActivity() {
 
     private fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 
-    fun constructProject(): Result<ImmutableProject> {
-        val name = getTextFromView(R.id.form_edit_text_project_name)
-        val lab = getTextFromView(R.id.form_edit_text_laboratory)
-        val teacher = getTextFromView(R.id.form_edit_text_teacher)
-        val TA = getTextFromView(R.id.form_edit_text_project_TA)
-        val nbStudents =
-            try {
+    private fun constructProject(): Result<ImmutableProject> {
+        return ImmutableProject.build(
+            name = getTextFromView(R.id.form_edit_text_project_name),
+            lab = getTextFromView(R.id.form_edit_text_laboratory),
+            teacher = getTextFromView(R.id.form_edit_text_teacher),
+            TA = getTextFromView(R.id.form_edit_text_project_TA),
+            nbParticipant = try {
                 getTextFromView(R.id.form_nb_of_participant).toInt()
             } catch (_: NumberFormatException) {
                 0
-            }
-        val master = findViewById<CheckBox>(R.id.form_check_box_MP)
-        val bachelor = findViewById<CheckBox>(R.id.form_check_box_SP)
-        val description = getTextFromView(R.id.form_project_description)
-
-        return ImmutableProject.build(
-            name = name,
-            lab = lab,
-            teacher = teacher,
-            TA = TA,
-            nbParticipant = nbStudents,
-            masterProject = master.isChecked,
-            bachelorProject = bachelor.isChecked,
+            },
+            masterProject = findViewById<CheckBox>(R.id.form_check_box_MP).isChecked,
+            bachelorProject = findViewById<CheckBox>(R.id.form_check_box_SP).isChecked,
             isTaken = false,
-            description = description,
+            description = getTextFromView(R.id.form_project_description),
             assigned = listOf(),
             tags = listOf("Default-tag")
         )
     }
 
-    fun sendToFirebase(project: Result<ImmutableProject>) =
-        when (val project = constructProject()) {
+    private fun sendToFirebase(project: Result<ImmutableProject>) =
+        when (project) {
             is Success<*> -> {
                 FirebaseProjectsDatabase(FirebaseFirestore.getInstance()).pushProject(
-                    project.value as com.sdp13epfl2021.projmag.database.Project,
+                    project.value as ImmutableProject,
                     { id -> showToast("Project pushed with ID : $id") },
                     { showToast("Can't push project") }
                 )
