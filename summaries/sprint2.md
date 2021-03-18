@@ -1,6 +1,7 @@
 # Summary for week 2
 
 ## Mohamed
+I made the projects clickable and they now open a new activity with the details of the project and the user can go back to the list of projects from the new activity.
 
 ## Giovanni
 
