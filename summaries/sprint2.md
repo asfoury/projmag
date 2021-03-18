@@ -15,7 +15,10 @@ Next time, I will be more careful to write efficient code.
 
 
 ## Arnaud
-I added a cached version of the ProjectDatabase, then I use most of my times writting tests and modifying my code. (to change from temporary Project type, to new one).
+I added a cached version of the ProjectDatabase, then I use most of my times writting tests and merging changes.
+I linked the database to the the project list activity.
+It took me more than 12 hours, because the change to the new type of ImmutableProject took me many times to rewrite my code to be compatible.
+Next time, I will try to add more tests to my code (not enough code coverage).
 
 ## Kaourintin 
 I improved the project type by making it totally immutable and easier to create slightly modified copies. I then changed it to make it easier to incorporate it into other people's code. I added tags to the project (for now as a simple string list). My sprint tasks were slightly short of eight hours but I think I took on the right amount of work. Next time I would like to do some UI because i've only done backend and don't fully understand the code of others which is annoying for reviews.
