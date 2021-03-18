@@ -34,6 +34,13 @@
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
     </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/starFavoriteProject"
+            style="?android:attr/starStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="addOnFavoriteList" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

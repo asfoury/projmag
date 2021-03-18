@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.marginRight
@@ -21,9 +22,15 @@ class ItemAdapter(private val context: Context, private val dataset: List<Projec
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
+        val buttonFav: CheckBox = view.findViewById(R.id.starFavoriteProject)
 
+       /* fun AddtoListProject(view: View){
+            buttonFav.setOnClickListener{
 
+            }
+        }*/
     }
+
 
 
     override fun getItemCount() = dataset.size
