@@ -46,10 +46,10 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
 
         val group = ChipGroup(context)
         // give the group that contains the tags an id so that we can check to see if the view already has id so they are not redrawn
-        group.id = 99
+        group.id = R.id.mygroup_tag
 
         // add the tags only if they are not present
-        if (holder.linearLayoutView.findViewById<ChipGroup>(99) == null) {
+        if (holder.linearLayoutView.findViewById<ChipGroup>(R.id.mygroup_tag) == null) {
             for (tag in project.tags) {
                 val chipView: Chip = Chip(context)
                 chipView.text = tag
