@@ -6,35 +6,38 @@ import org.junit.Test
 class ImmutableProjectTest {
     @Test
     fun initializationAndSanitizationTests(){
+        val id = "zoerjfoerfj"
         val name = "epic roblox coding"
         val labName = "roblox labs"
         val projectManager = "kaou el roblox master"
+        val teacher = "kaou el roblox master"
         val description = "epic roblox coding alll freaking day DAMN SON"
         val numberStudents = 3
         val masterProject = true
         val bachelorSemesterProject = true
         val masterSemesterProject = true
         val listStudents = listOf("epic robloxxx programmer")
+        val tags = listOf("robloxprog")
 
 
-        val result = ImmutableProject.build(name, labName, projectManager,
-            description, numberStudents,
-            masterProject, bachelorSemesterProject, masterSemesterProject ,
-            listOf("epic robloxxx programmer"))
+        val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
+            listStudents, true, true, tags, false, description)
         when(result){
             is Success -> {
 
                 //testing the getters
                 val project = result.value
                 Assert.assertEquals(name, project.name)
-                Assert.assertEquals(labName, project.labName)
-                Assert.assertEquals(projectManager, project.projectManager)
+                Assert.assertEquals(labName, project.lab)
+                Assert.assertEquals(teacher, project.teacher)
                 Assert.assertEquals(description, project.description)
-                Assert.assertEquals(numberStudents, project.numberStudents)
+                Assert.assertEquals(numberStudents, project.nbParticipant)
                 Assert.assertEquals(masterProject, project.masterProject)
-                Assert.assertEquals(bachelorSemesterProject, project.bachelorSemesterProject)
-                Assert.assertEquals(masterSemesterProject, project.masterSemesterProject)
-
+                Assert.assertEquals(bachelorSemesterProject, project.bachelorProject)
+                Assert.assertEquals(id, project.id)
+                Assert.assertEquals(true, project.bachelorProject)
+                Assert.assertEquals(true, project.masterProject)
+                Assert.assertEquals(listStudents, project.assigned)
                 //testing the limit of functions
                 val longName = "ultra epic robloxx coder ultimate guy but with a name that's long"
                 when( project.buildCopy(name = longName)){
@@ -43,12 +46,17 @@ class ImmutableProjectTest {
                 }
 
                 val longLabName = "ultra epic robloxxx lab but the name is too long"
-                when( project.buildCopy(labName = longLabName)){
+                when( project.buildCopy(lab = longLabName)){
                     is Success -> assert(false)
                     is Failure -> assert(true)
                 }
 
-                when( project.buildCopy(projectManager = longLabName)){
+                when( project.buildCopy(TA = longLabName)){
+                    is Success -> assert(false)
+                    is Failure -> assert(true)
+                }
+
+                when( project.buildCopy(teacher = longLabName)){
                     is Success -> assert(false)
                     is Failure -> assert(true)
                 }
@@ -64,7 +72,7 @@ class ImmutableProjectTest {
                 }
 
                 val numberStudents = 100
-                when(project.buildCopy(numberStudents = numberStudents)){
+                when(project.buildCopy(nbParticipant = numberStudents)){
                     is Success -> assert(false)
                     is Failure -> assert(true)
                 }
