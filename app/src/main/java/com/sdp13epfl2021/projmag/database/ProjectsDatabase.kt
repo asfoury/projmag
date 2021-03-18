@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.database
 
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 /**
  * Interface for a Database of Projects
@@ -127,4 +128,4 @@ interface ProjectsDatabase {
 }
 
 typealias ProjectId = String
-typealias Project = DummyProject?
+typealias Project = ImmutableProject?
