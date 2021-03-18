@@ -107,7 +107,7 @@ data class ImmutableProject(
     )
 
     /**
-     *  Give a Map<String,Any> the maps name of members to their values
+     *  Give a Map<String,Any> the maps name of members to their values.
      */
     fun toMapString() = hashMapOf(
         "name" to name,
