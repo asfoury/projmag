@@ -6,7 +6,7 @@ import java.util.regex.Pattern
 
 data class TagsBase(
     private val tags: MutableSet<String> = mutableSetOf(),
-    private val MAX_TAG_SIZE : Int = 25
+    private val MAX_TAG_SIZE: Int = 40
 
 ){
     /**
