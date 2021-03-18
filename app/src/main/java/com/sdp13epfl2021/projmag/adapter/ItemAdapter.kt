@@ -4,12 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.marginRight
-import androidx.core.view.setPadding
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -48,17 +43,24 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
         // set the lab name
         holder.labNameView.text = project.lab
         // add the tags to the project
+
         val group = ChipGroup(context)
-        for (tag in project.tags) {
-            val chipView: Chip = Chip(context)
-            chipView.text = tag
-            group.addView(chipView)
+        // give the group that contains the tags an id so that we can check to see if the view already has id so they are not redrawn
+        group.id = 99
+
+        // add the tags only if they are not present
+        if (holder.linearLayoutView.findViewById<ChipGroup>(99) == null) {
+            for (tag in project.tags) {
+                val chipView: Chip = Chip(context)
+                chipView.text = tag
+                group.addView(chipView)
+            }
+            holder.linearLayoutView.addView(group)
         }
-        holder.linearLayoutView.addView(group)
     }
 
     override fun getFilter(): Filter {
-        return object: Filter() {
+        return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filteredList = ArrayList<Project>()
                 val search = constraint.toString()
