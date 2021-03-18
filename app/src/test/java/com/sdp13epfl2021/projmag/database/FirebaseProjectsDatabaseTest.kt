@@ -30,7 +30,7 @@ class FirebaseProjectsDatabaseTest {
     val mockListener = Mockito.mock(ListenerRegistration::class.java)
 
     val ID = "some-id"
-    val project = DummyProject(
+    val project = Project(
         id = ID,
         name = "Some test project",
         description = "some description",
