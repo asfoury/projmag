@@ -20,4 +20,11 @@ I added more tests to my last week task.
 
 I also begin my new task which was to setup a favorites Collection on firebase, which stores user's favorite projects. Then I setup a interface and implementation of it to interract with this newly created collection. Everything went flawlessly except, that Mockito has some issue with some Firebase class.
 
+I need to get more familiar with the scrum board, and UI testing.
+
 ## Overall Team
+The team took realize that last sprint was not a good one, and worked hard to put the project back on track.
+
+We are getting more ease with the Scrum metodology. We did a stand up meeting each day, tracking the progress of each member an their difficulties.
+
+However we are still in hurry, and the final result (even though it is working) is not as polished as we wanted.
