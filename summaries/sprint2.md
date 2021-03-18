@@ -7,6 +7,7 @@
 ## Luke
 
 ## Arnaud
+I added a cached version of the ProjectDatabase, then I use most of my times writting tests and modifying my code. (to change from temporary Project type, to new one).
 
 ## Kaourintin 
 
