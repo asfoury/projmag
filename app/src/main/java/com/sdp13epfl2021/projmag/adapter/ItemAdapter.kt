@@ -63,7 +63,6 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
             }
             holder.linearLayoutView.addView(group)
         }
-        holder.linearLayoutView.addView(group)
 
         // make the projects pressable
         holder.textView.setOnClickListener {
