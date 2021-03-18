@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.model.Project
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 class ProjectInformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
 
         // get the project
-        val project: Project? = intent.getParcelableExtra("project")
+        val project: ImmutableProject? = intent.getParcelableExtra("project")
 
         // set the text views
         title.text = project?.name

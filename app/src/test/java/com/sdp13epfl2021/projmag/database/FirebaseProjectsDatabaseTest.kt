@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +31,7 @@ class FirebaseProjectsDatabaseTest {
     val mockListener = Mockito.mock(ListenerRegistration::class.java)
 
     val ID = "some-id"
-    val project = Project(
+    val project = ImmutableProject(
         id = ID,
         name = "Some test project",
         description = "some description",
@@ -173,6 +174,7 @@ class FirebaseProjectsDatabaseTest {
         private fun <T> uninitialized(): T = null as T
     }
 
+    /*
     /**
      * test that no unexpected behaviour when passing null
      */
@@ -180,7 +182,7 @@ class FirebaseProjectsDatabaseTest {
     fun pushNullProjectShouldNotCrash() {
         val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.pushProject(null, {}, {})
-    }
+    }*/
 
     @Test
     fun getAllIdsIsCorrect() {

@@ -1,12 +1,14 @@
 package com.sdp13epfl2021.projmag.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
-
+@Parcelize
 data class ImmutableProject(
     val id: String,
     val name: String,
@@ -20,7 +22,7 @@ data class ImmutableProject(
     val tags: List<String>,
     val isTaken: Boolean,
     val description: String
-) {
+) : Parcelable {
     companion object {
         const val MAX_NAME_SIZE = 40
         const val MAX_DESCRIPTION_SIZE = 300
