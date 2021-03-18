@@ -7,7 +7,10 @@ I made the projects clickable and they now open a new activity with the details 
 I add a checkbox to allow stutend to choose their favorite project.
 
 ## Luke
-I added search UI to the projects list activity and implemented the search function.
+I added a search UI to the projects list activity and implemented the search function.
+The time spent coding and debugging well exceeded the estimated 8 hours, because of a bug in the displaying of the project list, which was being redrawn each time a letter was typed.
+Next time, I will be more careful to write efficient code.
+
 
 ## Arnaud
 I added a cached version of the ProjectDatabase, then I use most of my times writting tests and modifying my code. (to change from temporary Project type, to new one).
