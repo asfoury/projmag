@@ -6,12 +6,14 @@ I made the projects clickable and they now open a new activity with the details 
 ## Giovanni
 
 ## Luke
+I added search UI to the projects list activity and implemented the search function.
 
 ## Arnaud
 I added a cached version of the ProjectDatabase, then I use most of my times writting tests and modifying my code. (to change from temporary Project type, to new one).
 
 ## Kaourintin 
 I improved the project type by making it totally immutable and easier to create slightly modified copies and changed it to make it easier to incorporate it into other people's code. I added tags to the project (for now as a simple string list) 
+
 ## Paul (Scrum Master)
 I added more tests to my last week task. 
 
