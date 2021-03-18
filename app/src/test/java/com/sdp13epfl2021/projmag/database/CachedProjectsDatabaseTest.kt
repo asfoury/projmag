@@ -68,11 +68,13 @@ class CachedProjectsDatabaseTest {
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: Project = null
 
-        cachedDB.getProjectFromId(p2.id, { project ->
-            result = project
-        }, { e ->
-            assertNull(e)
-        })
+        p2.id?.let {
+            cachedDB.getProjectFromId(it, { project ->
+                result = project
+            }, { e ->
+                assertNull(e)
+            })
+        }
         while (result == null);
         assertEquals(p2, result)
     }
@@ -99,7 +101,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: List<ProjectId>? = null
+        var result: List<String>? = null
 
         cachedDB.getAllIds({ projectsIds ->
             result = projectsIds
@@ -159,7 +161,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: ProjectId? = null
+        var result: String? = null
 
         cachedDB.pushProject(p3, { projectId ->
             result = projectId
@@ -179,11 +181,13 @@ class CachedProjectsDatabaseTest {
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<Project>? = null
 
-        cachedDB.deleteProjectWithId(p3.id, {
-            result = cachedDB.getAllProjects()
-        }, { e ->
-            assertNull(e)
-        })
+        p3.id?.let {
+            cachedDB.deleteProjectWithId(it, {
+                result = cachedDB.getAllProjects()
+            }, { e ->
+                assertNull(e)
+            })
+        }
 
         while (result == null);
         assertEquals(2, result!!.size)
@@ -252,14 +256,14 @@ class CachedProjectsDatabaseTest {
         }
 
         override fun getAllIds(
-            onSuccess: (List<ProjectId>) -> Unit,
+            onSuccess: (List<String>) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
             TODO("Not yet implemented")
         }
 
         override fun getProjectFromId(
-            id: ProjectId,
+            id: String,
             onSuccess: (Project) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
@@ -291,7 +295,7 @@ class CachedProjectsDatabaseTest {
 
         override fun pushProject(
             project: Project,
-            onSuccess: (ProjectId) -> Unit,
+            onSuccess: (String) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
             val pid = nextId.toString()
@@ -305,7 +309,7 @@ class CachedProjectsDatabaseTest {
         }
 
         override fun deleteProjectWithId(
-            id: ProjectId,
+            id: String,
             onSuccess: () -> Unit,
             onFailure: (Exception) -> Unit
         ) {
