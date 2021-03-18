@@ -7,10 +7,15 @@ import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import android.os.Looper
+import com.sdp13epfl2021.projmag.database.Utils
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
+
+    init {//TODO remove after better initialization
+        Utils.projectsDatabase
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
