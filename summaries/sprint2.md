@@ -4,6 +4,7 @@
 I made the projects clickable and they now open a new activity with the details of the project and the user can go back to the list of projects from the new activity.
 
 ## Giovanni
+I add a checkbox to allow stutend to choose their favorite project.
 
 ## Luke
 I added search UI to the projects list activity and implemented the search function.
