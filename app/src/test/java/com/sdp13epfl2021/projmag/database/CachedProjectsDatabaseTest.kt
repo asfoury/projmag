@@ -1,14 +1,15 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
 
 
 class CachedProjectsDatabaseTest {
-    private val p1 = Project("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
-    private val p2 = Project("11111","Real-time reconstruction of deformable objects","CVLAB","Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
-    private val p3 = Project("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
+    private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
+    private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
+    private val p3 = ImmutableProject("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
 
 
     @Test(timeout = 1000)
@@ -35,7 +36,6 @@ class CachedProjectsDatabaseTest {
         assertFalse(all.contains(p2))
         assertTrue(all.contains(p3))
 
-        fakeDB.remove(null)
         all = cachedDB.getAllProjects()
         assertEquals(2, all.size)
         assertTrue(all.contains(p1))
@@ -55,7 +55,6 @@ class CachedProjectsDatabaseTest {
         assertEquals(3, all.size)
         assertTrue(all.containsAll(allBeginning))
 
-        fakeDB.add(null)
         all = cachedDB.getAllProjects()
         assertEquals(3, all.size)
         assertTrue(all.containsAll(allBeginning))
@@ -66,7 +65,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: Project = null
+        var result: ImmutableProject? = null
 
         cachedDB.getProjectFromId(p2.id, { project ->
             result = project
@@ -82,7 +81,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: List<Project>? = null
+        var result: List<ImmutableProject>? = null
 
         cachedDB.getProjectsFromName(p2.name, { projects ->
             result = projects
@@ -119,7 +118,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: List<Project>? = null
+        var result: List<ImmutableProject>? = null
 
         cachedDB.getAllProjects({ projects ->
             result = projects
@@ -140,7 +139,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: List<Project>? = null
+        var result: List<ImmutableProject>? = null
 
         cachedDB.getProjectsFromTags(listOf("ml", "Driver"), { projects ->
             result = projects
@@ -177,7 +176,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: List<Project>? = null
+        var result: List<ImmutableProject>? = null
 
         cachedDB.deleteProjectWithId(p3.id, {
             result = cachedDB.getAllProjects()
@@ -230,44 +229,40 @@ class CachedProjectsDatabaseTest {
 
 
 
-    private class FakeDatabase(projectsBeginning: List<Project>) : ProjectsDatabase {
-        private var projects: List<Project> = projectsBeginning
+    private class FakeDatabase(projectsBeginning: List<ImmutableProject>) : ProjectsDatabase {
+        private var projects: List<ImmutableProject> = projectsBeginning
         private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
         private var nextId: Int = 90000
 
-        fun add(project: Project) {
+        fun add(project: ImmutableProject) {
             projects = projects + project
             listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.ADDED, project)) }
         }
 
-        fun modify(project: Project) {
-            projects.filter { p -> p?.id != project?.id }
+        fun modify(project: ImmutableProject) {
+            projects.filter { p -> p.id != project.id }
             projects = projects + project
             listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
         }
 
-        fun remove(project: Project) {
-            projects = projects + project
+        fun remove(project: ImmutableProject) {
+            projects = projects - project
             listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.REMOVED, project)) }
         }
 
         override fun getAllIds(
             onSuccess: (List<ProjectId>) -> Unit,
             onFailure: (Exception) -> Unit
-        ) {
-            TODO("Not yet implemented")
-        }
+        ) { }
 
         override fun getProjectFromId(
             id: ProjectId,
-            onSuccess: (Project) -> Unit,
+            onSuccess: (ImmutableProject?) -> Unit,
             onFailure: (Exception) -> Unit
-        ) {
-            TODO("Not yet implemented")
-        }
+        ) { }
 
         override fun getAllProjects(
-            onSuccess: (List<Project>) -> Unit,
+            onSuccess: (List<ImmutableProject>) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
             onSuccess(projects)
@@ -275,28 +270,24 @@ class CachedProjectsDatabaseTest {
 
         override fun getProjectsFromName(
             name: String,
-            onSuccess: (List<Project>) -> Unit,
+            onSuccess: (List<ImmutableProject>) -> Unit,
             onFailure: (Exception) -> Unit
-        ) {
-            TODO("Not yet implemented")
-        }
+        ) { }
 
         override fun getProjectsFromTags(
             tags: List<String>,
-            onSuccess: (List<Project>) -> Unit,
+            onSuccess: (List<ImmutableProject>) -> Unit,
             onFailure: (Exception) -> Unit
-        ) {
-            TODO("Not yet implemented")
-        }
+        ) { }
 
         override fun pushProject(
-            project: Project,
+            project: ImmutableProject,
             onSuccess: (ProjectId) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
             val pid = nextId.toString()
             nextId += 1
-            val newProject = project?.let {Project(pid,
+            val newProject = project?.let {ImmutableProject(pid,
                 it.name, it.lab, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
                 it.bachelorProject, it.tags, it.isTaken, it.description)
             }
@@ -309,7 +300,7 @@ class CachedProjectsDatabaseTest {
             onSuccess: () -> Unit,
             onFailure: (Exception) -> Unit
         ) {
-            remove(projects.find {p -> p?.id == id})
+            projects.find {p -> p.id == id}?.let { remove(it) }
             onSuccess()
         }
 

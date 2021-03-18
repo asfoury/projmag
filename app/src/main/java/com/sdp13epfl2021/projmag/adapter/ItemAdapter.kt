@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.model.Project
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
-class ItemAdapter(private val context: Context, private val dataset: MutableList<Project>) :
+class ItemAdapter(private val context: Context, private val dataset: MutableList<ImmutableProject>) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
 
-    val datasetAll: List<Project>
+    val datasetAll: List<ImmutableProject>
 
     init {
         datasetAll = ArrayList(dataset)
@@ -44,7 +44,7 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val project = dataset[position]
         // set the project name
-        holder.textView.text = project.name.toString()
+        holder.textView.text = project.name
         // set the lab name
         holder.labNameView.text = project.lab
         // add the tags to the project
@@ -60,7 +60,7 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
     override fun getFilter(): Filter {
         return object: Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList = ArrayList<Project>()
+                val filteredList = ArrayList<ImmutableProject>()
                 val search = constraint.toString()
                 if (constraint.toString().isEmpty()) {
                     filteredList.addAll(datasetAll)
@@ -79,7 +79,7 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 dataset.clear()
-                dataset.addAll(performFiltering(constraint).values as Collection<Project>)
+                dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
                 notifyDataSetChanged()
             }
         }
