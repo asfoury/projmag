@@ -23,7 +23,5 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SearchTest {
 
-    @Rule
-    @JvmField
-    var mActivityTestRule = ActivityScenarioRule(ProjectsListActivity::class.java)
+
 }
