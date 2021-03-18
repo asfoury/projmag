@@ -2,6 +2,8 @@
 
 ## Mohamed
 I made the projects clickable and they now open a new activity with the details of the project and the user can go back to the list of projects from the new activity.
+My time estimate for coding the feature and testing it was accurate but I spend more time on merging and fixing bugs and resolving conflicts.
+Next time I will try to think of how the code I am writing may cause bugs when new features are added.
 
 ## Giovanni
 I add a checkbox to allow stutend to choose their favorite project.
