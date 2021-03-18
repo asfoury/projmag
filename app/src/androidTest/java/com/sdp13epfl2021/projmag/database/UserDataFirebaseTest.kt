@@ -4,32 +4,36 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.*
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito
 
 @Suppress("UNCHECKED_CAST")
 class UserDataFirebaseTest {
-    val ID = "some-project-id"
-    val UID = "some-user-id"
+    companion object {
+        private const val ID = "some-project-id"
+        private const val UID = "some-user-id"
+    }
 
-    val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
-    val mockFirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
-    val mockFirebaseUser = Mockito.mock(FirebaseUser::class.java)
 
-    val mockColRef = Mockito.mock(CollectionReference::class.java)
-    val mockDocRef = Mockito.mock(DocumentReference::class.java)
-    val mockDS = Mockito.mock(DocumentSnapshot::class.java) as DocumentSnapshot
+    private val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
+    private val mockFirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
+    private val mockFirebaseUser = Mockito.mock(FirebaseUser::class.java)
 
-    val mockVoidTask: Task<Void> = Mockito.mock(Task::class.java) as Task<Void>
-    val mockDSTask: Task<DocumentSnapshot> =
+    private val mockColRef = Mockito.mock(CollectionReference::class.java)
+    private val mockDocRef = Mockito.mock(DocumentReference::class.java)
+    private val mockDS = Mockito.mock(DocumentSnapshot::class.java) as DocumentSnapshot
+
+    private val mockVoidTask: Task<Void> = Mockito.mock(Task::class.java) as Task<Void>
+    private val mockDSTask: Task<DocumentSnapshot> =
         Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
 
-    val database = UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
+    private val database = UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
 
     /**
      * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
