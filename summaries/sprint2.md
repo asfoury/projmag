@@ -6,7 +6,7 @@ My time estimate for coding the feature and testing it was accurate but I spend 
 Next time I will try to think of how the code I am writing may cause bugs when new features are added.
 
 ## Giovanni
-I add a checkbox to allow stutend to choose their favorite project.
+I add a checkbox to allow students to choose their favorite project.
 
 ## Luke
 I added a search UI to the projects list activity and implemented the search function.
@@ -18,7 +18,7 @@ Next time, I will be more careful to write efficient code.
 I added a cached version of the ProjectDatabase, then I use most of my times writting tests and modifying my code. (to change from temporary Project type, to new one).
 
 ## Kaourintin 
-I improved the project type by making it totally immutable and easier to create slightly modified copies and changed it to make it easier to incorporate it into other people's code. I added tags to the project (for now as a simple string list) 
+I improved the project type by making it totally immutable and easier to create slightly modified copies. I then changed it to make it easier to incorporate it into other people's code. I added tags to the project (for now as a simple string list). My sprint tasks were slightly short of eight hours but I think I took on the right amount of work. Next time I would like to do some UI because i've only done backend and don't fully understand the code of others which is annoying for reviews.
 
 ## Paul (Scrum Master)
 I added more tests to my last week task. 
