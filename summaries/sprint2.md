@@ -6,7 +6,7 @@ My time estimate for coding the feature and testing it was accurate but I spend 
 Next time I will try to think of how the code I am writing may cause bugs when new features are added.
 
 ## Giovanni
-I add a checkbox to allow students to choose their favorite project.
+I add a checkbox to allow students to choose their favorite project. it take me 5h and now i want to connect this set of favorite with firebase
 
 ## Luke
 I added a search UI to the projects list activity and implemented the search function.
