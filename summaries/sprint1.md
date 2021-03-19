@@ -7,7 +7,9 @@ I implemented the user interface that shows the list of projects, it took about 
 I implemented the UI that allow teacher to submit their project, it took me less than 3 hours.
 
 ## Luke
-I implemented the sign in UI, connected it to the Google API to enable a log in with Google and made it such that the app opens to the project list if already signed in, otherwise it goes to the sign in page which then leads to the project list. It took me longer than the estimated 8 hours, approximately 10 hours.
+I implemented the sign in UI, connected it to the Google API to enable a log in with Google and made it such that the app opens to the project list if already signed in, otherwise it goes to the sign in page which then leads to the project list.
+It took me longer than the estimated 8 hours, approximately 10 hours, because I spent a lot of time getting familiar with the relevevant documentation.
+Next time, I will look for tutorials rather than try to understand all the documentation before starting
 
 ## Arnaud
 I created the Firebase project and setup all dependencies. It took me less than 3 hours. After finishing my task, I started reading documentations about firebase.
