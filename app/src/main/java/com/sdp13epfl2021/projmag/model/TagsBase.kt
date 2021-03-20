@@ -63,7 +63,7 @@ import java.util.regex.Pattern
 
     //should I be making a defensive copy here?
     fun getAllTags() : Set<String>{
-        return tags
+        return tags.toSet()
     }
 
      fun contains(string : String) : Boolean{
