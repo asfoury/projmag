@@ -12,4 +12,5 @@
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
     <string name="submission">Submission</string>
+    <string name="submit">Add a new project to the list</string>
 </resources>
