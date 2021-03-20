@@ -4,7 +4,11 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
 
 class FirebaseFileDatabase(
     private val storage: FirebaseStorage,
@@ -23,11 +27,19 @@ class FirebaseFileDatabase(
         onSuccess: (File) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        destinationFolder.mkdirs()
-        //TODO check if the folder is valid and/or if the file can be created
+        lateinit var fileRef: StorageReference
+        lateinit var destinationFile: File
 
-        val fileRef = storage.getReferenceFromUrl(fileUrl)
-        val destinationFile = File(destinationFolder, fileRef.name)
+        try {
+            if (!destinationFolder.mkdirs() && !destinationFolder.isDirectory) {
+                throw IOException("The destination folder \"${destinationFolder.path}\" can't be created.")
+            }
+            fileRef = storage.getReferenceFromUrl(fileUrl)
+            destinationFile = File(destinationFolder, fileRef.name)
+        } catch (e: Exception) {
+            GlobalScope.launch { onFailure(e) }
+            return
+        }
 
         storage
             .getReferenceFromUrl(fileUrl)
