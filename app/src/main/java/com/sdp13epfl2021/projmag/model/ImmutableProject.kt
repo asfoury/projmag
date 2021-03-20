@@ -46,7 +46,8 @@ class ImmutableProject(val id : String,
                 assigned.size > nbParticipant -> Failure(
                     "there are ${assigned.size} " +
                             "students currently assigned but only $nbParticipant allowed to work for the project"
-                )
+                );
+                checkAllTags(tags) -> Failure("tags used were not from the allowed tag list")
                 else -> Success( ImmutableProject(
                     id,
                     name,
@@ -63,6 +64,15 @@ class ImmutableProject(val id : String,
                     )
                 )
             }
+        }
+
+        fun checkAllTags(tags : List<String>): Boolean {
+            for(tag in tags){
+                if(!TagsBase.contains(tag)){
+                    return true
+                }
+            }
+            return false
         }
     }
 
@@ -95,9 +105,26 @@ class ImmutableProject(val id : String,
                   bachelorProject: Boolean = this.bachelorProject,
                   tags: List<String> = this.tags,
                   isTaken: Boolean = this.isTaken,
-                  description: String = this.description)
-            = build( id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
-                    tags, isTaken, description,)
+                  description: String = this.description): Result<ImmutableProject> {
+
+        return build( id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
+            this.tags, isTaken, description,)
+
+    }
+
+    fun addTag(tag : String): Result<ImmutableProject> {
+        if(TagsBase.contains(tag)){
+            return build(this.id, this.name, this.lab, this.teacher, this.TA, nbParticipant, assigned, masterProject, bachelorProject,
+                this.tags.plus(tag), isTaken, description,)
+        }
+        else{
+            return Failure("the tag wasn't contained in the database")
+        }
+
+
+    }
+
+
 
 
 }

@@ -4,11 +4,10 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-data class TagsBase(
-    private val tags: MutableSet<String> = mutableSetOf(),
-    private val MAX_TAG_SIZE : Int = 25
+ object TagsBase{
 
-){
+     private val tags: MutableSet<String> = mutableSetOf()
+     private  val MAX_TAG_SIZE : Int = 25
     /**
      * TagTooLong : the tag is longer than MAX_TAG_SIZE which is output by the function maxTagSize
      * TagContainsSpecialChar : the tag contains numbers, and special characters like $ £ etc
@@ -53,12 +52,11 @@ data class TagsBase(
         }
 
         //various other checks :
-        if(tags.contains(cleanTag)){
-            return InputResult.AlreadyExists
-        }
-        else{
+        return if(tags.contains(cleanTag)){
+            InputResult.AlreadyExists
+        } else{
             tags.add(cleanTag)
-            return InputResult.OK
+            InputResult.OK
         }
 
     }
@@ -67,5 +65,9 @@ data class TagsBase(
     fun getAllTags() : Set<String>{
         return tags
     }
+
+     fun contains(string : String) : Boolean{
+         return tags.contains(string)
+     }
 
 }
