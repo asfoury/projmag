@@ -67,13 +67,11 @@ class CachedProjectsDatabaseTest {
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: ImmutableProject? = null
 
-        p2.id?.let {
-            cachedDB.getProjectFromId(it, { project ->
-                result = project
-            }, { e ->
-                assertNull(e)
-            })
-        }
+        cachedDB.getProjectFromId(p2.id, { project ->
+            result = project
+        }, { e ->
+            assertNull(e)
+        })
         while (result == null);
         assertEquals(p2, result)
     }
@@ -100,7 +98,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2, p3)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: List<String>? = null
+        var result: List<ProjectId>? = null
 
         cachedDB.getAllIds({ projectsIds ->
             result = projectsIds
@@ -160,7 +158,7 @@ class CachedProjectsDatabaseTest {
         val allBeginning = listOf(p1, p2)
         val fakeDB = FakeDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
-        var result: String? = null
+        var result: ProjectId? = null
 
         cachedDB.pushProject(p3, { projectId ->
             result = projectId
@@ -180,13 +178,11 @@ class CachedProjectsDatabaseTest {
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
-        p3.id?.let {
-            cachedDB.deleteProjectWithId(it, {
-                result = cachedDB.getAllProjects()
-            }, { e ->
-                assertNull(e)
-            })
-        }
+        cachedDB.deleteProjectWithId(p3.id, {
+            result = cachedDB.getAllProjects()
+        }, { e ->
+            assertNull(e)
+        })
 
         while (result == null);
         assertEquals(2, result!!.size)
@@ -255,12 +251,12 @@ class CachedProjectsDatabaseTest {
         }
 
         override fun getAllIds(
-            onSuccess: (List<String>) -> Unit,
+            onSuccess: (List<ProjectId>) -> Unit,
             onFailure: (Exception) -> Unit
         ) { }
 
         override fun getProjectFromId(
-            id: String,
+            id: ProjectId,
             onSuccess: (ImmutableProject?) -> Unit,
             onFailure: (Exception) -> Unit
         ) { }
@@ -286,12 +282,12 @@ class CachedProjectsDatabaseTest {
 
         override fun pushProject(
             project: ImmutableProject,
-            onSuccess: (String) -> Unit,
+            onSuccess: (ProjectId) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
             val pid = nextId.toString()
             nextId += 1
-            val newProject = project.let {
+            val newProject = project?.let {
                 ImmutableProject(
                     pid,
                     it.name,
@@ -312,7 +308,7 @@ class CachedProjectsDatabaseTest {
         }
 
         override fun deleteProjectWithId(
-            id: String,
+            id: ProjectId,
             onSuccess: () -> Unit,
             onFailure: (Exception) -> Unit
         ) {

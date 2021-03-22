@@ -31,6 +31,7 @@ class Form : AppCompatActivity() {
 
     private fun constructProject(): Result<ImmutableProject> {
         return ImmutableProject.build(
+            id = "",
             name = getTextFromView(R.id.form_edit_text_project_name),
             lab = getTextFromView(R.id.form_edit_text_laboratory),
             teacher = getTextFromView(R.id.form_edit_text_teacher),
@@ -64,6 +65,4 @@ class Form : AppCompatActivity() {
         }
 
     fun submit(view: View) = sendToFirebase(constructProject())
-
-
 }

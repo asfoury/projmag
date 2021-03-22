@@ -18,7 +18,7 @@ interface UserDataDatabase {
      * @param onFailure called with an exception on failure
      */
     fun pushFavoriteProject(
-        projectID: String,
+        projectID: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -33,7 +33,7 @@ interface UserDataDatabase {
      * @param onFailure called with an exception on failure
      */
     fun pushListOfFavoriteProjects(
-        projectIDs: List<String>,
+        projectIDs: List<ProjectId>,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -47,7 +47,7 @@ interface UserDataDatabase {
      * @param onFailure called with an exception on failure
      */
     fun getListOfFavoriteProjects(
-        onSuccess: (List<String>) -> Unit,
+        onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -61,7 +61,7 @@ interface UserDataDatabase {
      * @param onFailure called with an exception on failure
      */
     fun removeFromFavorite(
-        projectID: String,
+        projectID: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )

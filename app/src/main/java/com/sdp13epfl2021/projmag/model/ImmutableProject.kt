@@ -10,7 +10,7 @@ data class Failure<T>(val reason: String) : Result<T>()
 
 @Parcelize
 data class ImmutableProject(
-    val id: String?,
+    val id: String,
     val name: String,
     val lab: String,
     val teacher: String,
@@ -28,7 +28,7 @@ data class ImmutableProject(
         const val MAX_DESCRIPTION_SIZE = 300
         const val MAX_STUDENT_NUMBER = 10
         fun build(
-            id: String? = null,
+            id: String,
             name: String,
             lab: String,
             teacher: String,
@@ -91,7 +91,7 @@ data class ImmutableProject(
      * @param description : description of the project
      */
     fun buildCopy(
-        id: String? = this.id,
+        id: String = this.id,
         name: String = this.name,
         lab: String = this.lab,
         teacher: String = this.teacher,

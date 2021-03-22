@@ -47,7 +47,7 @@ class UserDataFirebase(
         }
 
     override fun pushFavoriteProject(
-        projectID: String,
+        projectID: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -59,7 +59,7 @@ class UserDataFirebase(
     }
 
     override fun pushListOfFavoriteProjects(
-        projectIDs: List<String>,
+        projectIDs: List<ProjectId>,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -80,19 +80,19 @@ class UserDataFirebase(
 
     @Suppress("UNCHECKED_CAST")
     override fun getListOfFavoriteProjects(
-        onSuccess: (List<String>) -> Unit,
+        onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getUserDoc()?.run {
             get()
                 .addOnSuccessListener { doc ->
-                    onSuccess((doc[FAVORITES_FIELD] as? List<String>) ?: listOf())
+                    onSuccess((doc[FAVORITES_FIELD] as? List<ProjectId>) ?: listOf())
                 }.addOnFailureListener(onFailure)
         }
     }
 
     override fun removeFromFavorite(
-        projectID: String,
+        projectID: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {

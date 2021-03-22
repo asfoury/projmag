@@ -17,7 +17,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
-                ProjectChange.Type.REMOVED -> change.project.id?.let { removeProjectWithId(it) }
+                ProjectChange.Type.REMOVED -> removeProjectWithId(change.project.id)
             }
             listeners.forEach { it -> it(change) }
         }
@@ -35,7 +35,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      */
     @Synchronized
     private fun addProject(project: ImmutableProject) {
-        project.id?.let { removeProjectWithId(it) }
+        removeProjectWithId(project.id)
         projects = projects + project
 
     }
@@ -45,7 +45,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
      * If the project is not present, nothing is done.
      */
     @Synchronized
-    private fun removeProjectWithId(id: String) {
+    private fun removeProjectWithId(id: ProjectId) {
         projects = projects.filter { p -> p.id != id }
     }
 
@@ -59,12 +59,12 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
     }
 
 
-    override fun getAllIds(onSuccess: (List<String>) -> Unit, onFailure: (Exception) -> Unit) {
-        GlobalScope.launch { onSuccess(projects.mapNotNull { p -> p.id }) }
+    override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
+        GlobalScope.launch { onSuccess(projects.map { p -> p.id }) }
     }
 
     override fun getProjectFromId(
-        id: String,
+        id: ProjectId,
         onSuccess: (ImmutableProject?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -93,14 +93,14 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
 
     override fun pushProject(
         project: ImmutableProject,
-        onSuccess: (String) -> Unit,
+        onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         db.pushProject(project, onSuccess, onFailure)
     }
 
     override fun deleteProjectWithId(
-        id: String,
+        id: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {

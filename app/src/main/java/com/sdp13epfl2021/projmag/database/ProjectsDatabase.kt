@@ -17,7 +17,7 @@ interface ProjectsDatabase {
      * @param onFailure
      */
     fun getAllIds(
-        onSuccess: (List<String>) -> Unit,
+        onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -32,7 +32,7 @@ interface ProjectsDatabase {
      * @param onFailure the consumer for failures
      */
     fun getProjectFromId(
-        id: String,
+        id: ProjectId,
         onSuccess: (ImmutableProject?) -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -93,7 +93,7 @@ interface ProjectsDatabase {
      */
     fun pushProject(
         project: ImmutableProject,
-        onSuccess: (String) -> Unit,
+        onSuccess: (ProjectId) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
@@ -108,7 +108,7 @@ interface ProjectsDatabase {
      * @param onFailure function called when an exception arise
      */
     fun deleteProjectWithId(
-        id: String,
+        id: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -124,3 +124,5 @@ interface ProjectsDatabase {
      */
     fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
 }
+
+typealias ProjectId = String
