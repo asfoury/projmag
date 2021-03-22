@@ -27,8 +27,8 @@ class FirebaseFileDatabase(
         onSuccess: (File) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        lateinit var fileRef: StorageReference
-        lateinit var destinationFile: File
+        val fileRef: StorageReference
+        val destinationFile: File
 
         try {
             if (!destinationFolder.mkdirs() && !destinationFolder.isDirectory) {
@@ -41,8 +41,7 @@ class FirebaseFileDatabase(
             return
         }
 
-        storage
-            .getReferenceFromUrl(fileUrl)
+        fileRef
             .getFile(destinationFile)
             .addOnSuccessListener { onSuccess(destinationFile) }
             .addOnFailureListener(onFailure)
@@ -54,6 +53,11 @@ class FirebaseFileDatabase(
         onSuccess: (Uri) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
+        if (!file.exists() || !file.isFile) {
+            GlobalScope.launch { onFailure(IOException("The file \"${file.path}\" can't be read.")) }
+            return
+        }
+
         val fileRef = rootRef
             .child(userUID)
             .child(file.name)
