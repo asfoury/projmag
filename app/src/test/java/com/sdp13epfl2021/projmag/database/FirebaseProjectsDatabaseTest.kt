@@ -186,7 +186,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getAllIdsIsCorrect() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getAllIds(
             { list -> assertEquals(listOf(ID), list) },
             {}
@@ -196,7 +196,7 @@ class FirebaseProjectsDatabaseTest {
     @Test
     fun getProjectFromIdIsCorrect() {
         Mockito.`when`(mockDS.exists()).thenReturn(true)
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getProjectFromId(
             ID,
             { p -> assertEquals(project, p) },
@@ -207,7 +207,7 @@ class FirebaseProjectsDatabaseTest {
     @Test
     fun getProjectFromIdWhenDSDoNotExistsDoNotCrash() {
         Mockito.`when`(mockDS.exists()).thenReturn(false)
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getProjectFromId(
             ID,
             { p -> assertEquals(null, p) },
@@ -217,7 +217,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getAllProjectsIsCorrect() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getAllProjects(
             { lp -> assertEquals(listOf(project), lp) },
             {}
@@ -226,7 +226,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getProjectsFromNameIsCorrect() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getProjectsFromName(
             project.name,
             { lp -> assertEquals(listOf(project), lp) },
@@ -236,7 +236,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getProjectsFromTagsIsCorrect() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getProjectsFromTags(
             project.tags,
             { lp -> assertEquals(listOf(project), lp) },
@@ -251,7 +251,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun listenersShouldNotCrash() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         val listener: ((ProjectChange) -> Unit) = {}
         db.addProjectsChangeListener(listener)
         db.removeProjectsChangeListener(listener)
