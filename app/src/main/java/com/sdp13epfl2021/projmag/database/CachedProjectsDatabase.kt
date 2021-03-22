@@ -50,6 +50,8 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         projects = projects.filter { p -> p!!.id != id }
     }
 
+    
+
 
     /**
      * Synchronously get all projects cached locally.

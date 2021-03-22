@@ -115,7 +115,7 @@ class ImmutableProject(val id : String,
     fun addTag(tag : String): Result<ImmutableProject> {
         if(TagsBase.contains(tag)){
             return build(this.id, this.name, this.lab, this.teacher, this.TA, nbParticipant, assigned, masterProject, bachelorProject,
-                this.tags.plus(tag), isTaken, description,)
+                this.tags.plus(tag), isTaken, description)
         }
         else{
             return Failure("the tag wasn't contained in the database")
