@@ -6,8 +6,8 @@ import java.util.regex.Pattern
 
  object TagsBase{
 
-     private val tags: MutableSet<String> = mutableSetOf()
-     private  val MAX_TAG_SIZE : Int = 25
+     private val tags: MutableSet<Tag> = mutableSetOf()
+     private  val MAX_TAG_SIZE : Int = 30
     /**
      * TagTooLong : the tag is longer than MAX_TAG_SIZE which is output by the function maxTagSize
      * TagContainsSpecialChar : the tag contains numbers, and special characters like $ £ etc
@@ -36,17 +36,17 @@ import java.util.regex.Pattern
      * @param tag
      * @return whether or not an error has happened and what type it is using the sealed class tagAddResult
      */
-    fun addTag(tag : String) : InputResult{
+    fun addTag(tag : Tag) : InputResult{
         //cleaning up the data :
-        if(tag.length > MAX_TAG_SIZE ){
+        if(tag.name.length > MAX_TAG_SIZE ){
             //sealed class?
             return InputResult.TooLong
         }
-        val cleanTag = tag.toLowerCase(Locale.getDefault()).replace(" ","")
-
+        val cleanTagName = tag.name.toLowerCase(Locale.getDefault()).replace(" ","")
+        val cleanTag = Tag(cleanTagName)
         //checking that there are other characters than normal letters :
         val p = Pattern.compile("[^a-z ]")
-        val m : Matcher = p.matcher(cleanTag)
+        val m : Matcher = p.matcher(cleanTagName)
         if(m.find()){
             return InputResult.ContainsSpecialChar
         }
@@ -62,12 +62,12 @@ import java.util.regex.Pattern
     }
 
     //should I be making a defensive copy here?
-    fun getAllTags() : Set<String>{
+    fun getAllTags() : Set<Tag>{
         return tags.toSet()
     }
 
-     fun contains(string : String) : Boolean{
-         return tags.contains(string)
+     fun contains(tag : Tag) : Boolean{
+         return tags.contains(tag)
      }
 
 }

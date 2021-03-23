@@ -14,7 +14,7 @@ class ImmutableProject(val id : String,
                        val assigned : List<String>,
                        val masterProject : Boolean,
                        val bachelorProject : Boolean,
-                       val tags : List<String>,
+                       val tags : List<Tag>,
                        val isTaken: Boolean,
                        val description: String
                         ) {
@@ -32,7 +32,7 @@ class ImmutableProject(val id : String,
             assigned : List<String>,
             masterProject : Boolean,
             bachelorProject : Boolean,
-            tags : List<String>,
+            tags : List<Tag>,
             isTaken: Boolean,
             description: String
         ): Result<ImmutableProject> {
@@ -66,7 +66,37 @@ class ImmutableProject(val id : String,
             }
         }
 
-        fun checkAllTags(tags : List<String>): Boolean {
+        //added this function so that when I add a new tag I dont have to do the full checkup of
+        //the whole list of tags
+        fun fastBuildForAddTag(id : String,
+                               name : String,
+                               lab : String,
+                               teacher : String,
+                               TA: String,
+                               nbParticipant : Int,
+                               assigned : List<String>,
+                               masterProject : Boolean,
+                               bachelorProject : Boolean,
+                               tags : List<Tag>,
+                               isTaken: Boolean,
+                               description: String) : Result<ImmutableProject>{
+            return Success( ImmutableProject(
+                id,
+                name,
+                lab,
+                teacher,
+                TA,
+                nbParticipant,
+                assigned,
+                masterProject,
+                bachelorProject,
+                tags,
+                isTaken,
+                description,
+            ))
+        }
+
+        fun checkAllTags(tags : List<Tag>): Boolean {
             for(tag in tags){
                 if(!TagsBase.contains(tag)){
                     return true
@@ -103,7 +133,7 @@ class ImmutableProject(val id : String,
                   assigned : List<String> = this.assigned,
                   masterProject: Boolean = this.masterProject,
                   bachelorProject: Boolean = this.bachelorProject,
-                  tags: List<String> = this.tags,
+                  tags: List<Tag> = this.tags,
                   isTaken: Boolean = this.isTaken,
                   description: String = this.description): Result<ImmutableProject> {
 
@@ -112,9 +142,9 @@ class ImmutableProject(val id : String,
 
     }
 
-    fun addTag(tag : String): Result<ImmutableProject> {
+    fun addTag(tag : Tag): Result<ImmutableProject> {
         if(TagsBase.contains(tag)){
-            return build(this.id, this.name, this.lab, this.teacher, this.TA, nbParticipant, assigned, masterProject, bachelorProject,
+            return fastBuildForAddTag(this.id, this.name, this.lab, this.teacher, this.TA, nbParticipant, assigned, masterProject, bachelorProject,
                 this.tags.plus(tag), isTaken, description)
         }
         else{

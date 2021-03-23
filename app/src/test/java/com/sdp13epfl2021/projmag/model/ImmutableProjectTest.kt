@@ -6,8 +6,8 @@ import org.junit.Test
 class ImmutableProjectTest {
     @Test
     fun initializationAndSanitizationTests(){
-        TagsBase.addTag("robloxprog")
-        TagsBase.addTag("machinelearning")
+        TagsBase.addTag(Tag("robloxprog"))
+        TagsBase.addTag(Tag("machinelearning"))
         val id = "zoerjfoerfj"
         val name = "epic roblox coding"
         val labName = "roblox labs"
@@ -19,7 +19,7 @@ class ImmutableProjectTest {
         val bachelorSemesterProject = true
         val masterSemesterProject = true
         val listStudents = listOf("epic robloxxx programmer")
-        val tags = listOf("robloxprog")
+        val tags = listOf(Tag("robloxprog"))
 
 
         val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
@@ -80,13 +80,13 @@ class ImmutableProjectTest {
                 }
 
                 val wrongTag = "hello"
-                when(project.addTag("hello")){
+                when(project.addTag(Tag("hello"))){
                     is Success -> assert(false)
                     is Failure -> assert(true)
                 }
 
                 val goodTag = "machinelearning"
-                when(project.addTag("machinelearning")){
+                when(project.addTag(Tag("machinelearning"))){
                     is Success -> assert(true)
                     is Failure -> assert(false)
                 }
