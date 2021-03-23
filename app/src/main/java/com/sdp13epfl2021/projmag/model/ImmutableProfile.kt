@@ -5,7 +5,7 @@ import javax.annotation.concurrent.Immutable
 
 
 class ImmutableProfile private constructor(val lastName : String, val firstName : String,
-                        val age : Int, val gender : genderEnum, val sciper : Int, val phoneNumber : Int) {
+                        val age : Int, val gender : genderEnum, val sciper : Int, val phoneNumber : String) {
 
     companion object{
         private const val MAX_LAST_NAME_SIZE = 40
@@ -27,7 +27,7 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
          * @return Success(profile) or failure(String explanation)
          */
         fun build( lastName : String,  firstName : String,
-                   age : Int,  gender : genderEnum,  sciper : Int,  phoneNumber :Int) : Result<ImmutableProfile> {
+                   age : Int,  gender : genderEnum,  sciper : Int,  phoneNumber :String) : Result<ImmutableProfile> {
             return when{
                 lastName.length > MAX_LAST_NAME_SIZE ->  Failure("last name is more than $MAX_LAST_NAME_SIZE characters")
                 firstName.length > MAX_FIRST_NAME_SIZE -> Failure("first name is more than $MAX_FIRST_NAME_SIZE characters")
@@ -57,7 +57,7 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
      */
     fun buildCopy(lastName: String = this.lastName, firstName : String = this.firstName,
                   age : Int = this.age, gender : genderEnum = this.gender, sciper : Int = this.sciper,
-                  phoneNumber :Int = this.phoneNumber) : Result<ImmutableProfile>{
+                  phoneNumber :String = this.phoneNumber) : Result<ImmutableProfile>{
         return ImmutableProfile.build(lastName,  firstName,
             age,  gender,  sciper,  phoneNumber)
 
