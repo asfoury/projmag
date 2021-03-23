@@ -12,6 +12,20 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
         private const val MAX_FIRST_NAME_SIZE = 40
         private const val MAX_AGE = 120
         private const val MIN_AGE = 15
+
+
+        /**
+         * Function that allows creating a profile with tests
+         *TOOODOOOO : implement contacting firebase to get the user email and names by default prefilled?
+         *
+         * @param lastName : Last name of the profile
+         * @param firstName : first name on the profile
+         * @param age : age on the profile
+         * @param gender : gender on the profile
+         * @param sciper : sciper on the profile
+         * @param phoneNumber : phone number on the profile
+         * @return Success(profile) or failure(String explanation)
+         */
         fun build( lastName : String,  firstName : String,
                    age : Int,  gender : genderEnum,  sciper : Int,  phoneNumber :Int) : Result<ImmutableProfile> {
             return when{
@@ -28,6 +42,19 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
 
     }
 
+    /**
+     * Function that allows creating a copy from another Immutable profile and modifying the fields
+     * we want. Re runs all the tests.
+     *TOOODOOOO : implement contacting firebase to get the user email and names by default prefilled?
+     *
+     * @param lastName : Last name of the profile
+     * @param firstName : first name on the profile
+     * @param age : age on the profile
+     * @param gender : gender on the profile
+     * @param sciper : sciper on the profile
+     * @param phoneNumber : phone number on the profile
+     * @return Success(profile) or failure(String explanation)
+     */
     fun buildCopy(lastName: String = this.lastName, firstName : String = this.firstName,
                   age : Int = this.age, gender : genderEnum = this.gender, sciper : Int = this.sciper,
                   phoneNumber :Int = this.phoneNumber) : Result<ImmutableProfile>{
