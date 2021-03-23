@@ -24,9 +24,9 @@ data class ImmutableProject(
     val description: String
 ) : Parcelable {
     companion object {
-        const val MAX_NAME_SIZE = 40
-        const val MAX_DESCRIPTION_SIZE = 300
-        const val MAX_STUDENT_NUMBER = 10
+        private const val MAX_NAME_SIZE = 40
+        private const val MAX_DESCRIPTION_SIZE = 300
+        private const val MAX_STUDENT_NUMBER = 10
         fun build(
             id: String,
             name: String,
