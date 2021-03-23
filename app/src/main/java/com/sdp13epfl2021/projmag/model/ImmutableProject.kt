@@ -9,7 +9,7 @@ data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
 @Parcelize
- class ImmutableProject(
+ class ImmutableProject  constructor(
     val id: String,
     val name: String,
     val lab: String,
@@ -24,8 +24,8 @@ data class Failure<T>(val reason: String) : Result<T>()
     val description: String
 ) : Parcelable {
     companion object {
-        private const val MAX_NAME_SIZE = 40
-        private const val MAX_DESCRIPTION_SIZE = 300
+         const val MAX_NAME_SIZE = 40
+         const val MAX_DESCRIPTION_SIZE = 300
         private const val MAX_STUDENT_NUMBER = 10
         fun build(
             id: String,

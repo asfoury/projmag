@@ -19,7 +19,7 @@ class ImmutableProjectTest {
         val listStudents = listOf("epic robloxxx programmer")
         val tags = listOf("robloxprog")
 
-
+        
         val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
             listStudents, true, true, tags, false, description)
         when(result){
