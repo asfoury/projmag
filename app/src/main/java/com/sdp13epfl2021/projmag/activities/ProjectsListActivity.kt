@@ -1,11 +1,15 @@
 package com.sdp13epfl2021.projmag.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.SignInActivity
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
 import com.sdp13epfl2021.projmag.data.Datasource
 
@@ -48,5 +52,14 @@ class ProjectsListActivity : AppCompatActivity() {
         })
 
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.profileButton) {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -1,8 +1,16 @@
 package com.sdp13epfl2021.projmag
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
 import android.widget.AutoCompleteTextView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers.anyIntent
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -93,6 +101,12 @@ class ListOfProjectsActivityTest {
                 }
             }
         }
+    }
+
+    @Test
+    fun profileButtonOpensSignActivity() {
+        onView(withId(R.id.profileButton)).perform(click())
+
     }
 
 }

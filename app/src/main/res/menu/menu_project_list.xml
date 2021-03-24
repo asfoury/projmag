@@ -2,8 +2,14 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:id="@+id/profileButton"
+        android:title="@string/profile"
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        app:showAsAction="ifRoom"
+        />
+
     <item android:id="@+id/searchButton"
-        android:title="search"
+        android:title="@string/search"
         android:icon="@drawable/ic_baseline_search_24"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
