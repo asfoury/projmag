@@ -12,4 +12,18 @@
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
     <string name="submission">Submission</string>
+    <string name="LastName">LastName</string>
+    <string name="FirstName">FirstName</string>
+    <string name="age">Age</string>
+    <string name="genre">Genre</string>
+    <string name="phone_number">Phone number</string>
+    <string name="scpier">Sciper</string>
+    <string name="description">Description</string>
+    <string name="edit">Edit</string>
+    <string name="email">example@epfl.ch</string>
+
+
+
+
+
 </resources>
