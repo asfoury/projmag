@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.LinearLayout
@@ -14,15 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
-class ItemAdapter(private val context: Context, private val dataset: MutableList<ImmutableProject>) :
+class ItemAdapter(private val context: Context, public val dataset: MutableList<ImmutableProject>, private val recyclerView: RecyclerView) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
 
     val datasetAll: List<ImmutableProject>
 
     init {
+        dataset.sortBy{ project -> project.isTaken}
         datasetAll = ArrayList(dataset)
     }
 
@@ -60,6 +60,11 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
                 holder.chipGroupView.addView(chipView)
             }
 
+        if (dataset[position].isTaken) {
+            holder.view.alpha = 0.5f
+        } else {
+            holder.view.alpha = 1f
+        }
 
         // make the projects pressable
         holder.textView.setOnClickListener {
@@ -70,6 +75,8 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
             intent.putExtra("project", project)
             context.startActivity(intent)
         }
+
+
     }
 
     override fun getFilter(): Filter {
@@ -88,13 +95,25 @@ class ItemAdapter(private val context: Context, private val dataset: MutableList
                 }
                 val filterResults = FilterResults()
                 filterResults.values = filteredList
-
                 return filterResults
+            }
+
+            fun greyOut() {
+                for (project in dataset) {
+                    val i = dataset.indexOf(project)
+                    if (project.isTaken) {
+                        recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 0.5f
+                    } else {
+                        recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 1f
+                    }
+                }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 dataset.clear()
                 dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
+                dataset.sortBy{ project -> project.isTaken}
+                greyOut()
                 notifyDataSetChanged()
             }
         }

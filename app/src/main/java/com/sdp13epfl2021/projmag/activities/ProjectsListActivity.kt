@@ -11,20 +11,30 @@ import com.sdp13epfl2021.projmag.data.Datasource
 
 class ProjectsListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ItemAdapter
+    private lateinit var recyclerView: RecyclerView
+
+    public fun getItemAdapter(): ItemAdapter {
+        return itemAdapter
+    }
+
+    public fun getRecyclerView(): RecyclerView {
+        return recyclerView
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
-        setContentView(R.layout.activity_projects_list)
         val myDataset = Datasource().loadProjects().toMutableList()
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        itemAdapter = ItemAdapter(this, myDataset)
+        myDataset.sortBy{ project -> project.isTaken }
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        itemAdapter = ItemAdapter(this, myDataset, recyclerView)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_list, menu)
-        val item = menu?.findItem(R.id.action_search)
+        val item = menu?.findItem(R.id.searchButton)
         val searchView: SearchView = item?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
