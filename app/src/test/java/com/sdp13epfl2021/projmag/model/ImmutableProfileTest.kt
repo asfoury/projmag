@@ -55,7 +55,7 @@ class ImmutableProfileTest {
                     is Success -> assert(false)
                     is Failure -> assert(true)
                 }
-                
+
 
             }
             is Failure->{

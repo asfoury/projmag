@@ -9,7 +9,7 @@ data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
 @Parcelize
- class ImmutableProject  constructor(
+ data class ImmutableProject  constructor(
     val id: String,
     val name: String,
     val lab: String,
