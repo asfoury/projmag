@@ -97,11 +97,7 @@ class ItemAdapter(private val context: Context, public val dataset: MutableList<
                 if (constraint.toString().isEmpty()) {
                     filteredList.addAll(datasetAll)
                 } else {
-                    for (project in datasetAll) {
-                        if (project.name.toLowerCase().contains(search.toLowerCase())) {
-                            filteredList.add(project)
-                        }
-                    }
+                    for (project in datasetAll) if (project.name.toLowerCase().contains(search.toLowerCase())) filteredList.add(project)
                 }
                 val filterResults = FilterResults()
                 filterResults.values = filteredList
