@@ -76,7 +76,17 @@ class ItemAdapter(private val context: Context, public val dataset: MutableList<
             context.startActivity(intent)
         }
 
+    }
 
+    fun greyOut() {
+        for (project in dataset) {
+            val i = dataset.indexOf(project)
+            if (project.isTaken) {
+                recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 0.5f
+            } else {
+                recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 1f
+            }
+        }
     }
 
     override fun getFilter(): Filter {
@@ -96,17 +106,6 @@ class ItemAdapter(private val context: Context, public val dataset: MutableList<
                 val filterResults = FilterResults()
                 filterResults.values = filteredList
                 return filterResults
-            }
-
-            fun greyOut() {
-                for (project in dataset) {
-                    val i = dataset.indexOf(project)
-                    if (project.isTaken) {
-                        recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 0.5f
-                    } else {
-                        recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 1f
-                    }
-                }
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
