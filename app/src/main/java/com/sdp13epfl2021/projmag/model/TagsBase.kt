@@ -4,8 +4,8 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
- object TagsBase{
 
+object TagsBase{
      private val tags: MutableSet<Tag> = mutableSetOf()
      private  val MAX_TAG_SIZE : Int = 30
     /**

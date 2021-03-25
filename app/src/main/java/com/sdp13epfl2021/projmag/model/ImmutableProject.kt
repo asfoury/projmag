@@ -1,9 +1,12 @@
 package com.sdp13epfl2021.projmag.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.util.*
+
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
-
 
 class ImmutableProject(val id : String,
                        val name : String,
@@ -23,10 +26,10 @@ class ImmutableProject(val id : String,
         const val MAX_DESCRIPTION_SIZE = 300
         const val MAX_STUDENT_NUMBER = 10
         fun build(
-            id : String,
-            name : String,
-            lab : String,
-            teacher : String,
+            id: String,
+            name: String,
+            lab: String,
+            teacher: String,
             TA: String,
             nbParticipant : Int,
             assigned : List<String>,
@@ -153,8 +156,5 @@ class ImmutableProject(val id : String,
 
 
     }
-
-
-
 
 }
