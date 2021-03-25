@@ -1,4 +1,4 @@
-# Summary for week 2
+# Summary for week 3
 
 ## Mohamed
 I made the projects clickable and they now open a new activity with the details of the project and the user can go back to the list of projects from the new activity.
@@ -6,7 +6,9 @@ My time estimate for coding the feature and testing it was accurate but I spend 
 Next time I will try to think of how the code I am writing may cause bugs when new features are added.
 
 ## Giovanni
-I add a checkbox to allow students to choose their favorite project.
+I made a UI for profile. With this interface user can add their informtions ,name,age,gender and can 
+add a profile picture from the gallery. My time estimate for coding the feature was accrute but i spend more time
+on merging and fixing bugs. I need next time to add more test in my code because my coverage was low
 
 ## Luke
 I added a search UI to the projects list activity and implemented the search function.
