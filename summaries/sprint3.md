@@ -22,7 +22,9 @@ I did very similar work to my previous week. I added extra classes and linked th
 I also pre prepared my UI work for the next week by creating and linking the tags.
 
 ## Paul
-
+I tried to improve the coverage for the overall project, which wasn't easy as most of the code of previous weeks relies on external dependencies and some Google API. The second part of my work was to create an UI to build up a curriculum vitae. As a CV can contain many info, I had to find a pleasant way to do it on a phone. It was exciting to learn new Android features with this task.
+I spent around 3h in improving, and around 10h for building the CV creation UI.
+I need to get to know better the Android documentation and Espresso testing.
 
 ## Overall Team
 For the most part, we had tasks which we found quite accessible and doable. However we realised that Asfoury had a harder task than the rest of us and spent much more time working on it.
