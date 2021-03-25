@@ -4,7 +4,7 @@ package com.sdp13epfl2021.projmag
 import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
@@ -20,14 +20,14 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class ProfilePageActivityTestEdit {
+class ProfilePageActivityTestEditButton {
 
     @Rule
     @JvmField
     var mActivityTestRule = ActivityTestRule(ProfilePageActivity::class.java)
 
     @Test
-    fun profilePageActivityTestEdit() {
+    fun profilePageActivityTest2() {
         val materialButton = onView(
             allOf(
                 withId(R.id.button_edit_profile), withText("Edit"),
@@ -42,36 +42,6 @@ class ProfilePageActivityTestEdit {
             )
         )
         materialButton.perform(click())
-
-        val appCompatEditText = onView(
-            allOf(
-                withId(R.id.profile_lastname),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        2
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText.perform(replaceText("gio"), closeSoftKeyboard())
-
-        val appCompatEditText2 = onView(
-            allOf(
-                withId(R.id.profile_lastname), withText("gio"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        2
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText2.perform(pressImeActionButton())
     }
 
     private fun childAtPosition(
