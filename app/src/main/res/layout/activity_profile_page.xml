@@ -150,7 +150,7 @@
             android:layout_marginHorizontal="15dp"
             android:layout_marginTop="30dp"
             android:autofillHints=""
-            android:hint="@string/scpier"
+            android:hint="@string/sciper"
             android:inputType="number"
             android:textSize="20sp" />
 
