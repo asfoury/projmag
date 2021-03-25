@@ -10,9 +10,13 @@ import org.junit.runner.RunWith
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
+import org.junit.Assume
 
 @RunWith(AndroidJUnit4::class)
 class ListOfProjectsActivityTest {
+
+    val userIsAProfessor: Boolean = true
+
     @get:Rule
     var activityRule: ActivityScenarioRule<ProjectsListActivity> =
         ActivityScenarioRule(ProjectsListActivity::class.java)
@@ -23,5 +27,13 @@ class ListOfProjectsActivityTest {
             .perform(ViewActions.swipeUp())
 
     }
+
+    @Test
+    fun professorCanNavigateToTheFormToSubmitAProject() {
+        Assume.assumeTrue("The user is a professor", userIsAProfessor)
+        onView(withId(R.id.fab))
+            .perform(ViewActions.click())
+    }
+
 
 }
