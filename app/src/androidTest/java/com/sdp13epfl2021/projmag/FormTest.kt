@@ -24,14 +24,6 @@ class FormTest {
     @Rule
     @JvmField
     var mActivityTestRule = ActivityScenarioRule(Form::class.java)
-
-
-    @Test
-    fun addVideoOpensFileExplorer() {
-        onView(withId(R.id.add_video))
-            .perform(click())
-    }
-
     @Test
     fun formTest() {
         val appCompatEditText = onView(
