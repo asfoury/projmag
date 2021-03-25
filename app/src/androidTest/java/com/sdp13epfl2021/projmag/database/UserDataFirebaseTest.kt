@@ -33,7 +33,8 @@ class UserDataFirebaseTest {
     private val mockDSTask: Task<DocumentSnapshot> =
         Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
 
-    private val database = UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
+    private val database: UserDataDatabase =
+        UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
 
     /**
      * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
