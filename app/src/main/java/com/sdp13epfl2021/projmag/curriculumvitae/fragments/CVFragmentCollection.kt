@@ -1,11 +1,16 @@
 package com.sdp13epfl2021.projmag.curriculumvitae.fragments
 
 class CVFragmentCollection {
+    companion object {
+        private const val EDUCATION_TITLE = "Your Education"
+        private const val JOB_TITLE = "Your Job Experience"
+
+    }
 
     private val intro = IntroFragment()
     private val summary = SummaryFragment()
-    private val education = PeriodFragment("Your Education")
-    private val job = PeriodFragment("Your Job Experiences")
+    private val education = PeriodFragment.getInstance(EDUCATION_TITLE)
+    private val job = PeriodFragment.getInstance(JOB_TITLE)
     private val languages = LanguagesFragment()
     private val submit = SubmitFragment()
 
