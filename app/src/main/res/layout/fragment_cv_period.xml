@@ -8,10 +8,11 @@
         android:id="@+id/cv_period_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Period (to change)"
+        android:layout_marginTop="56dp"
+        android:text="@string/cv_period_period_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintBottom_toTopOf="@+id/cv_period_name"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,12 +20,15 @@
         android:id="@+id/cv_period_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:ems="10"
-        android:hint="School Name"
+        android:hint="@string/cv_period_school_name"
+        android:importantForAutofill="no"
         android:inputType="textCapWords"
-        app:layout_constraintBottom_toTopOf="@+id/cv_period_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv_period_title" />
 
     <EditText
         android:id="@+id/cv_period_description"
@@ -32,11 +36,12 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Description"
+        android:hint="@string/cv_period_description"
+        android:importantForAutofill="no"
         android:inputType="textCapWords"
-        app:layout_constraintBottom_toTopOf="@+id/cv_period_from"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv_period_name" />
 
     <EditText
         android:id="@+id/cv_period_location"
@@ -44,7 +49,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="Location"
+        android:hint="@string/cv_period_location"
+        android:importantForAutofill="no"
         android:inputType="textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +62,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="To"
-        android:inputType="date"
+        android:hint="@string/cv_period_to"
+        android:importantForAutofill="no"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_period_from" />
@@ -68,11 +75,34 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="start|top"
-        android:hint="From"
+        android:hint="@string/cv_period_from"
+        android:importantForAutofill="no"
         android:inputType="date"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.447" />
+        app:layout_constraintTop_toBottomOf="@+id/cv_period_description" />
+
+    <Button
+        android:id="@+id/cv_period_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="@string/cv_period_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv_period_location" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cv_period_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="185dp"
+        android:layout_marginTop="36dp"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv_period_add" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

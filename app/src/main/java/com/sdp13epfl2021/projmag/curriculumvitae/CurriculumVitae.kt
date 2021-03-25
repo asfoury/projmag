@@ -1,7 +1,9 @@
 package com.sdp13epfl2021.projmag.curriculumvitae
 
 import android.net.Uri
+import java.time.LocalDate
 import java.util.*
+
 
 /**
  * A curriculum vitae
@@ -19,6 +21,12 @@ data class CurriculumVitae(
     val picture: Uri
 ) {
     companion object {
+        interface Validate {
+            fun isValid(): Boolean
+        }
+
+        private val VALID_YEARS = 1900..2100
+
         /**
          * Description a job/school over a period of time
          */
@@ -26,9 +34,19 @@ data class CurriculumVitae(
             val name: String,
             val location: String,
             val description: String,
-            val from: Date,
-            val to: Date
-        )
+            val from: Int,
+            val to: Int
+        ) : Validate {
+            override fun isValid(): Boolean = name.isNotEmpty() &&
+                    location.isNotEmpty() &&
+                    description.isNotEmpty() &&
+                    from in VALID_YEARS &&
+                    to in VALID_YEARS &&
+                    from <= to
+
+            override fun toString(): String =
+                "$name ($from - $to)"
+        }
 
         /**
          *  Description of an award or some prize
@@ -36,7 +54,7 @@ data class CurriculumVitae(
         data class AwardDescription(
             val name: String,
             val description: String,
-            val date: Date
+            val date: Int
         )
 
         /**
