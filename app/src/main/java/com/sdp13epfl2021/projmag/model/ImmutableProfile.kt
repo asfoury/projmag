@@ -1,11 +1,8 @@
 package com.sdp13epfl2021.projmag.model
 
 
-import javax.annotation.concurrent.Immutable
-
-
 class ImmutableProfile private constructor(val lastName : String, val firstName : String,
-                        val age : Int, val gender : genderEnum, val sciper : Int, val phoneNumber : String) {
+                                           val age : Int, val gender : Gender, val sciper : Int, val phoneNumber : String) {
 
     companion object{
         private const val MAX_LAST_NAME_SIZE = 40
@@ -26,8 +23,8 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
          * @param phoneNumber : phone number on the profile
          * @return Success(profile) or failure(String explanation)
          */
-        fun build( lastName : String,  firstName : String,
-                   age : Int,  gender : genderEnum,  sciper : Int,  phoneNumber :String) : Result<ImmutableProfile> {
+        fun build(lastName : String, firstName : String,
+                  age : Int, gender : Gender, sciper : Int, phoneNumber :String) : Result<ImmutableProfile> {
             return when{
                 lastName.length > MAX_LAST_NAME_SIZE ->  Failure("last name is more than $MAX_LAST_NAME_SIZE characters")
                 firstName.length > MAX_FIRST_NAME_SIZE -> Failure("first name is more than $MAX_FIRST_NAME_SIZE characters")
@@ -56,7 +53,7 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
      * @return Success(profile) or failure(String explanation)
      */
     fun buildCopy(lastName: String = this.lastName, firstName : String = this.firstName,
-                  age : Int = this.age, gender : genderEnum = this.gender, sciper : Int = this.sciper,
+                  age : Int = this.age, gender : Gender = this.gender, sciper : Int = this.sciper,
                   phoneNumber :String = this.phoneNumber) : Result<ImmutableProfile>{
         return ImmutableProfile.build(lastName,  firstName,
             age,  gender,  sciper,  phoneNumber)

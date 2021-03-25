@@ -1,6 +1,6 @@
 package com.sdp13epfl2021.projmag.model
 
-enum class genderEnum {
+enum class Gender {
     MALE{
         override fun toString(): String {
             return "Male"

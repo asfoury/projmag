@@ -9,7 +9,7 @@ class ImmutableProfileTest {
         val lastName : String =  "tamine"
         val firstName =  "kaourintin "
         val age =  21
-        val gender = genderEnum.MALE
+        val gender = Gender.MALE
         val sciper = 287746
         val phoneNumber = "0763030355"
 
