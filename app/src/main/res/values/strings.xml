@@ -12,4 +12,13 @@
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
     <string name="submission">Submission</string>
+    <string name="cv_creation_intro_title">CV creation</string>
+    <string name="cv_creation_intro_body">Let\'s create your curriculum vitae step by step</string>
+    <string name="cv_creation_intro_instruction">Just swipe to go through the forms</string>
+    <string name="cv_summary_title">Your Summary</string>
+    <string name="cv_summary_hint">Some sentences to introduce you and describe your professional or academic career</string>
+    <string name="cv_language_title">Languages</string>
+    <string name="cv_language_name_field">Language</string>
+    <string name="cv_submission_title">The End</string>
+    <string name="cv_submission_button">Submit</string>
 </resources>

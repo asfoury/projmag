@@ -25,7 +25,6 @@ data class CurriculumVitae(
         data class PeriodDescription(
             val name: String,
             val location: String,
-            val workedAs: String,
             val description: String,
             val from: Date,
             val to: Date
