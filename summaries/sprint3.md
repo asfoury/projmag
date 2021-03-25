@@ -13,7 +13,9 @@ I spent roughly 7 hours on my task but overall 10 hours with merging and reviewi
 I need to achieve a better understanding of UI xml files.
 
 ## Arnaud
-
+I added an interface and a firebase storage implementation, that allows us to push/get/delete file.
+Everything works fine, except if we give an output directory where we don't have permission (Storage permissions is needed to be setup in nexts weeks).
+I spent less than the expected time for this week (~5h instead of 8h).
 
 ## Kaourintin 
 I did very similar work to my previous week. I added extra classes and linked the classes I did last week to make for a more complete and coherent database structure for projects and profile.
