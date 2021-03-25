@@ -14,4 +14,5 @@
     <string name="submission">Submission</string>
     <string name="search">search</string>
     <string name="profile">profileButton</string>
+    <string name="submit">Add a new project to the list</string>
 </resources>

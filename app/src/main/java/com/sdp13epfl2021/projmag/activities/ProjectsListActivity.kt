@@ -8,6 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.SignInActivity
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
@@ -34,6 +40,14 @@ class ProjectsListActivity : AppCompatActivity() {
         itemAdapter = ItemAdapter(this, myDataset, recyclerView)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(true)
+
+        // get the fab and make it go to the Form activity
+        val fab: View = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(this, Form::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
