@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 
 class SubmitFragment : Fragment() {
 

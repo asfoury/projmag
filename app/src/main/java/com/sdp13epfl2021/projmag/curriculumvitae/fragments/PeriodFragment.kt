@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.curriculumvitae.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.PeriodDescription
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
 
-class PeriodFragment() : Fragment() {
+class PeriodFragment : Fragment() {
 
     private val listPeriod: MutableList<PeriodDescription> = mutableListOf()
 
@@ -54,12 +53,12 @@ class PeriodFragment() : Fragment() {
             text = arguments?.getString(TITLE_KEY) ?: DEFAULT_TITLE
         }
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.cv_language_recyclerview)
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.cv_period_recyclerview)
         recyclerView?.apply {
             adapter = periodAdapter
         }
 
-        view?.findViewById<Button>(R.id.cv_language_add)?.setOnClickListener(::onAddButtonClicked)
+        view?.findViewById<Button>(R.id.cv_period_add)?.setOnClickListener(::onAddButtonClicked)
         return view
     }
 
@@ -97,7 +96,7 @@ class PeriodFragment() : Fragment() {
         periodAdapter.notifyDataSetChanged()
     }
 
-
+    @Suppress("UNUSED_PARAMETER")
     private fun onAddButtonClicked(v: View) {
         val school: String? = getStringFromTextView(R.id.cv_period_name)
         val description: String? = getStringFromTextView(R.id.cv_period_description)
@@ -105,7 +104,7 @@ class PeriodFragment() : Fragment() {
         val from = getIntFromTextView(R.id.cv_period_from)
         val to = getIntFromTextView(R.id.cv_period_to)
         if (school != null && description != null && location != null && from != null && to != null) {
-            updateListPeriod(PeriodDescription(school, description, location, from, to))
+            updateListPeriod(PeriodDescription(school, location, description, from, to))
         } else {
             Toast.makeText(activity, "Couldn't get data", Toast.LENGTH_SHORT).show()
         }

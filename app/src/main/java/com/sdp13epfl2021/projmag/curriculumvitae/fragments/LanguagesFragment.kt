@@ -16,7 +16,7 @@ class LanguagesFragment : Fragment() {
 
     private val listLanguage: MutableList<LanguageLevel> = mutableListOf()
 
-    private val listLangAdapter = CVListAdapter<LanguageLevel>(listLanguage, ::removeFromListLang)
+    private val listLangAdapter = CVListAdapter(listLanguage, ::removeFromListLang)
 
     override fun onCreateView(
         inflater: LayoutInflater,

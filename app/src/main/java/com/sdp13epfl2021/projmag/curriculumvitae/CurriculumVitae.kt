@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.sdp13epfl2021.projmag.curriculumvitae
 
 import android.net.Uri
@@ -45,8 +47,8 @@ data class CurriculumVitae(
                     to in VALID_YEARS &&
                     from <= to
 
-            override fun toString(): String =
-                "$name ($from - $to)"
+            /*override fun toString(): String =
+                "$name ($from - $to)"*/
         }
 
         /**
@@ -127,4 +129,5 @@ data class CurriculumVitae(
 
         }
     }
+
 }

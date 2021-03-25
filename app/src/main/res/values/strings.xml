@@ -33,4 +33,5 @@
     <string name="cv_period_add">Add</string>
     <string name="cv_skills_hint">Your skill</string>
     <string name="cv_skills_title">Your Skills</string>
+    <string name="cv_cardview_close">close</string>
 </resources>
