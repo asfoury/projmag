@@ -7,7 +7,6 @@ import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import android.os.Looper
-import com.sdp13epfl2021.projmag.curriculumvitae.CVCreationActivity
 import com.sdp13epfl2021.projmag.database.Utils
 
 class MainActivity : AppCompatActivity() {
@@ -37,13 +36,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun goToSignIn() {
-        val intent = Intent(this, CVCreationActivity::class.java)
+        val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     fun goToProjectsList() {
-        val intent = Intent(this, CVCreationActivity::class.java)
+        val intent = Intent(this, ProjectsListActivity::class.java)
         startActivity(intent)
         finish()
     }

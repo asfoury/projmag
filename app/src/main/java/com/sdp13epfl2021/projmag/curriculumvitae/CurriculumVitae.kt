@@ -63,7 +63,7 @@ data class CurriculumVitae(
         data class LanguageLevel(
             val language: String,
             val level: Level
-        ) {
+        ) : Validate {
             companion object {
                 /**
                  * Possible language levels
@@ -77,6 +77,20 @@ data class CurriculumVitae(
                     override fun toString(): String = level
                 }
             }
+
+            override fun isValid(): Boolean = language.isNotEmpty()
+
+            override fun equals(other: Any?): Boolean =
+                if (other is LanguageLevel) {
+                    this.language == other.language
+                } else {
+                    false
+                }
+
+
+            override fun toString(): String =
+                "$language ($level)"
+
         }
 
         /**

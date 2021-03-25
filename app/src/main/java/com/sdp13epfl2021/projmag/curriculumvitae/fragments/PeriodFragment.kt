@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.PeriodDescription
+import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.mutDistinct
 
 class PeriodFragment() : Fragment() {
 
@@ -52,12 +53,12 @@ class PeriodFragment() : Fragment() {
             text = arguments?.getString(TITLE_KEY) ?: DEFAULT_TITLE
         }
 
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.cv_period_recyclerview)
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.cv_language_recyclerview)
         recyclerView?.apply {
             adapter = periodAdapter
         }
 
-        view?.findViewById<Button>(R.id.cv_period_add)?.setOnClickListener(::onAddButtonClicked)
+        view?.findViewById<Button>(R.id.cv_language_add)?.setOnClickListener(::onAddButtonClicked)
 
         return view
     }
@@ -83,8 +84,8 @@ class PeriodFragment() : Fragment() {
     private fun updateListPeriod(perDesc: PeriodDescription) {
         if (perDesc.isValid()) {
             listPeriod.add(perDesc)
+            listPeriod.mutDistinct()
             listPeriod.sortBy { p -> p.from }
-            listPeriod.distinct()
             periodAdapter.notifyDataSetChanged()
         } else {
             Toast.makeText(activity, "Invalid data", Toast.LENGTH_SHORT).show()

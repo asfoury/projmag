@@ -84,7 +84,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cv_period_description" />
 
     <Button
-        android:id="@+id/cv_period_add"
+        android:id="@+id/cv_language_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cv_period_location" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/cv_period_recyclerview"
+        android:id="@+id/cv_language_recyclerview"
         android:layout_width="0dp"
         android:layout_height="185dp"
         android:layout_marginTop="36dp"
@@ -103,6 +103,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_period_add" />
+        app:layout_constraintTop_toBottomOf="@+id/cv_language_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
