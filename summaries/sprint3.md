@@ -1,7 +1,7 @@
 # Summary for week 3
 
 ## Mohamed
-
+My task for this week was to implement the selection or creation of a  project video description, so I started by doing research on the different ways this could be implemented, this is not a task that can be done in one week and my time estimate of 8 hours was way off, I ended up implementing video selection from the file manager and ability to preview the selected video, this weeks work took about 10 hours. Next time when dividing tasks we should try to make the tasks as specific as possible(instead of implement possibility to take videos, implement the possibility to take videos with the existing camera app on the android phone) so that their is less time needed in figuring out what part of the task to focus on the implement.
 ## Giovanni
 I made a UI for profile. With this interface user can add their informtions ,name,age,gender and can 
 add a profile picture from the gallery. My time estimate for coding the feature was accrute but i spend more time
