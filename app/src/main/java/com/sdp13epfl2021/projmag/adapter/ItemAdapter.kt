@@ -56,7 +56,7 @@ class ItemAdapter(private val context: Context, public val dataset: MutableList<
         // add the tags to the project
             for (tag in project.tags) {
                 val chipView: Chip = Chip(context)
-                chipView.text = tag
+                chipView.text = tag.name
                 holder.chipGroupView.addView(chipView)
             }
 

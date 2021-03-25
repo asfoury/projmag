@@ -81,7 +81,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         GlobalScope.launch {
             val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
             onSuccess(projects.filter {
-                p -> p.tags.any { tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT)) } }
+                p -> p.tags.any { tag -> listOfTags.contains(tag.name.toLowerCase(Locale.ROOT)) } }
             )
         }
     }
