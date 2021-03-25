@@ -41,11 +41,11 @@ class ProfilePageActivityTest {
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(click())
+        appCompatEditText.perform(replaceText("mik@e"), closeSoftKeyboard())
 
         val appCompatEditText2 = onView(
             allOf(
-                withId(R.id.email_profile),
+                withId(R.id.email_profile), withText("mik@e"),
                 childAtPosition(
                     childAtPosition(
                         withClassName(`is`("android.widget.LinearLayout")),
@@ -56,7 +56,7 @@ class ProfilePageActivityTest {
                 isDisplayed()
             )
         )
-        appCompatEditText2.perform(replaceText("gio@epfl.ch"), closeSoftKeyboard())
+        appCompatEditText2.perform(click())
 
         val appCompatEditText3 = onView(
             allOf(
@@ -90,18 +90,18 @@ class ProfilePageActivityTest {
 
         val appCompatEditText5 = onView(
             allOf(
-                withId(R.id.profile_firstname), withText("miller"),
+                withId(R.id.profile_age),
                 childAtPosition(
                     childAtPosition(
                         withClassName(`is`("android.widget.LinearLayout")),
-                        2
+                        3
                     ),
-                    1
+                    0
                 ),
                 isDisplayed()
             )
         )
-        appCompatEditText5.perform(pressImeActionButton())
+        appCompatEditText5.perform(replaceText("22"), closeSoftKeyboard())
 
         val appCompatEditText6 = onView(
             allOf(
@@ -120,36 +120,6 @@ class ProfilePageActivityTest {
 
         val appCompatEditText7 = onView(
             allOf(
-                withId(R.id.profile_age),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        3
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText7.perform(replaceText("22"), closeSoftKeyboard())
-
-        val appCompatEditText8 = onView(
-            allOf(
-                withId(R.id.profile_age), withText("22"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        3
-                    ),
-                    0
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText8.perform(pressImeActionButton())
-
-        val appCompatEditText9 = onView(
-            allOf(
                 withId(R.id.profile_phone_number),
                 childAtPosition(
                     childAtPosition(
@@ -161,9 +131,9 @@ class ProfilePageActivityTest {
                 isDisplayed()
             )
         )
-        appCompatEditText9.perform(replaceText("797959267"), closeSoftKeyboard())
+        appCompatEditText7.perform(replaceText("7777777"), closeSoftKeyboard())
 
-        val appCompatEditText10 = onView(
+        val appCompatEditText8 = onView(
             allOf(
                 withId(R.id.profile_sciper),
                 childAtPosition(
@@ -176,24 +146,9 @@ class ProfilePageActivityTest {
                 isDisplayed()
             )
         )
-        appCompatEditText10.perform(replaceText("298545"), closeSoftKeyboard())
+        appCompatEditText8.perform(replaceText("22222"), closeSoftKeyboard())
 
-        val appCompatEditText11 = onView(
-            allOf(
-                withId(R.id.profile_sciper), withText("298545"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        4
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText11.perform(pressImeActionButton())
-
-        val appCompatEditText12 = onView(
+        val appCompatEditText9 = onView(
             allOf(
                 withId(R.id.info_profile_description),
                 childAtPosition(
@@ -206,7 +161,7 @@ class ProfilePageActivityTest {
                 isDisplayed()
             )
         )
-        appCompatEditText12.perform(replaceText("ba6 student\n"), closeSoftKeyboard())
+        appCompatEditText9.perform(replaceText("student"), closeSoftKeyboard())
     }
 
     private fun childAtPosition(
