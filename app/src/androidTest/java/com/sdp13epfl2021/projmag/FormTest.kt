@@ -138,6 +138,12 @@ class FormTest {
         appCompatEditText10.perform(replaceText("Do nothing\n"), closeSoftKeyboard())
     }
 
+    @Test
+    fun addVideoOpensFileExplorer() {
+        onView(withId(R.id.add_video))
+            .perform(click())
+    }
+
     private fun childAtPosition(
             parentMatcher: Matcher<View>, position: Int): Matcher<View> {
 

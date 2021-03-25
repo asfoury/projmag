@@ -38,7 +38,7 @@ class Form : AppCompatActivity() {
             if (data?.data != null) {
                 val selectedVidURI = data.data
                 val selectedVidPath = getPath(selectedVidURI)
-                Log.d("GET PATH", "After: ${selectedVidPath}")
+                Log.d("GET PATH", "After: $selectedVidPath")
 
                 val file = File(selectedVidPath)
 
