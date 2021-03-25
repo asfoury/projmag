@@ -16,7 +16,8 @@ I need to achieve a better understanding of UI xml files.
 
 
 ## Kaourintin 
-
+I did very similar work to my previous week. I added extra classes and linked the classes I did last week to make for a more complete and coherent database structure for projects and profile.
+I also pre prepared my UI work for the next week by creating and linking the tags.
 
 ## Paul
 
