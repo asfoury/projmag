@@ -21,4 +21,7 @@
     <string name="cv_language_name_field">Language</string>
     <string name="cv_submission_title">The End</string>
     <string name="cv_submission_button">Submit</string>
+    <string name="search">search</string>
+    <string name="profile">profileButton</string>
+    <string name="submit">Add a new project to the list</string>
 </resources>
