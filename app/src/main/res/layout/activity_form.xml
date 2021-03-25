@@ -17,7 +17,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"></TextView>
+        app:layout_constraintVertical_bias="0.023"/>
 
 
     <EditText
@@ -29,7 +29,7 @@
 
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/form_edit_text_project_name"
-        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_project_name"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_project_name"/>
 
     <EditText
         android:id="@+id/form_edit_text_project_name"
@@ -41,7 +41,7 @@
         android:hint="@string/project_name"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_form"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/title_form"/>
 
     <EditText
         android:id="@+id/form_edit_text_teacher"
@@ -52,7 +52,7 @@
         android:hint="@string/teacher"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/form_edit_text_laboratory"
-        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_laboratory"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_laboratory"/>
 
     <EditText
         android:id="@+id/form_edit_text_project_TA"
@@ -64,7 +64,7 @@
         android:hint="@string/project_TA"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/form_edit_text_teacher"
-        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_teacher"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_teacher"/>
 
     <EditText
         android:id="@+id/form_nb_of_participant"
@@ -74,7 +74,7 @@
         android:hint="@string/numberOfParticipant"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="@+id/form_edit_text_project_TA"
-        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_project_TA"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/form_edit_text_project_TA" />
 
     <CheckBox
         android:id="@+id/form_check_box_SP"
@@ -84,7 +84,7 @@
         android:text="@string/semester_project"
         app:layout_constraintEnd_toStartOf="@+id/form_check_box_MP"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/form_nb_of_participant"></CheckBox>
+        app:layout_constraintTop_toBottomOf="@+id/form_nb_of_participant" />
 
     <CheckBox
         android:id="@+id/form_check_box_MP"
@@ -94,7 +94,7 @@
         android:text="@string/master_project"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/form_check_box_SP"
-        app:layout_constraintTop_toBottomOf="@+id/form_nb_of_participant"></CheckBox>
+        app:layout_constraintTop_toBottomOf="@+id/form_nb_of_participant" />
 
     <EditText
         android:id="@+id/form_project_description"
@@ -104,10 +104,10 @@
         android:autofillHints=""
         android:hint="@string/project_description"
         android:inputType="textMultiLine"
-        android:lines="10"
+        android:lines="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/form_check_box_SP"></EditText>
+        app:layout_constraintTop_toBottomOf="@+id/form_check_box_SP" />
 
     <Button
         android:id="@+id/form_button_sub"
@@ -118,5 +118,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/form_project_description"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/add_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Video"
+            app:layout_constraintBottom_toTopOf="@+id/form_button_sub"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/form_project_description"
+            app:layout_constraintVertical_bias="0.416"
+            android:layout_marginEnd="180dp"/>
+
+        <Button
+            android:id="@+id/play_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Play Video" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
