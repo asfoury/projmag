@@ -2,14 +2,12 @@ package com.sdp13epfl2021.projmag.curriculumvitae
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
-import com.sdp13epfl2021.projmag.curriculumvitae.fragments.SummaryFragment
 
 class CVCreationActivity : AppCompatActivity() {
 
@@ -24,9 +22,19 @@ class CVCreationActivity : AppCompatActivity() {
 
         val pagerAdapter = ScreenSlidePagerAdapter(this)
         viewPager.adapter = pagerAdapter
+
+        cvFrags.addCallbackOnSubmission(::onFinish)
     }
 
     override fun onBackPressed() { /* DO NOTHING TO AVOID LOOSING WORK */
+    }
+
+    fun buildCV() = cvFrags.buildCV()
+
+    private fun onFinish() {
+        val cv = buildCV()
+        /* DO SOMETHING WITH IT */
+        finish()
     }
 
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {

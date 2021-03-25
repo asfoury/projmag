@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.curriculumvitae.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,7 +60,6 @@ class PeriodFragment() : Fragment() {
         }
 
         view?.findViewById<Button>(R.id.cv_language_add)?.setOnClickListener(::onAddButtonClicked)
-
         return view
     }
 

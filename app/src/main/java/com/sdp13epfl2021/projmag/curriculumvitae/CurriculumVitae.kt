@@ -10,14 +10,17 @@ data class CurriculumVitae(
     val summary: String,
     val education: List<PeriodDescription>,
     val jobExperience: List<PeriodDescription>,
-    val awards: List<AwardDescription>,
     val languages: List<LanguageLevel>,
     val skills: List<SkillDescription>,
-    val interests: List<Interests>,
-    val contact: Contact,
-    val references: List<Contact>,
-    val picture: Uri
 ) {
+
+    var uri: Uri? = null
+        set(value) {
+            if (field == null) {
+                field = value
+            }
+        }
+
     companion object {
         interface Validate {
             fun isValid(): Boolean
@@ -45,15 +48,6 @@ data class CurriculumVitae(
             override fun toString(): String =
                 "$name ($from - $to)"
         }
-
-        /**
-         *  Description of an award or some prize
-         */
-        data class AwardDescription(
-            val name: String,
-            val description: String,
-            val date: Int
-        )
 
         /**
          * A language with the level
@@ -89,6 +83,10 @@ data class CurriculumVitae(
             override fun toString(): String =
                 "$language ($level)"
 
+            override fun hashCode(): Int {
+                return language.hashCode()
+            }
+
         }
 
         /**
@@ -122,26 +120,11 @@ data class CurriculumVitae(
                     false
                 }
 
+            override fun hashCode(): Int {
+                return name.hashCode()
+            }
+
 
         }
-
-        /**
-         * Contact of a person or some entity
-         */
-        data class Contact(
-            val firstName: String,
-            val surName: String,
-            val address: String,
-            val phoneNumbers: List<String>,
-            val emails: List<String>
-        )
-
-        /**
-         * Interest with description
-         */
-        data class Interests(
-            val name: String,
-            val description: String
-        )
     }
 }

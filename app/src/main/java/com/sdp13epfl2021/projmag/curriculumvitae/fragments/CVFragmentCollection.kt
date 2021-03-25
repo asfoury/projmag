@@ -1,5 +1,7 @@
 package com.sdp13epfl2021.projmag.curriculumvitae.fragments
 
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+
 class CVFragmentCollection {
     companion object {
         private const val EDUCATION_TITLE = "Your Education"
@@ -26,6 +28,17 @@ class CVFragmentCollection {
     ).distinct() // this avoid crashing when changing a fragment for the same one
 
     operator fun get(pos: Int) = frags[pos]
+
+    fun addCallbackOnSubmission(callback: () -> Unit) = submit.addCallback(callback)
+
+    fun buildCV() =
+        CurriculumVitae(
+            summary = summary.get(),
+            education = education.get(),
+            jobExperience = job.get(),
+            languages = languages.get(),
+            skills = skills.get()
+        )
 
     fun getItemCount() = frags.size
 }
