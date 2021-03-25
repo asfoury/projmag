@@ -52,6 +52,8 @@ class Form : AppCompatActivity() {
                 // path of video in local storage unable to play video from it for now playing using location in external storage
                 val pathInLocalStorage = saveVideoToLocalStorage(file)
 
+                Log.d("PATH IN LOC",pathInLocalStorage)
+
                 val playVidButton = findViewById<Button>(R.id.play_video)
                 playVidButton.isEnabled = true
                 playVidButton.setOnClickListener {
@@ -69,7 +71,7 @@ class Form : AppCompatActivity() {
     private fun saveVideoToLocalStorage(file : File) : String {
         val fileOutputStream: FileOutputStream
         try {
-            fileOutputStream = openFileOutput("${file.name}.mp4", Context.MODE_PRIVATE)
+            fileOutputStream = openFileOutput(file.name, Context.MODE_PRIVATE)
             fileOutputStream.write(file.readBytes())
             fileOutputStream.close()
 
@@ -77,7 +79,7 @@ class Form : AppCompatActivity() {
             e.printStackTrace()
         }
 
-      return "${this.filesDir}/${file.name}.mp4"
+      return "${this.filesDir}/${file.name}"
     }
 
     private fun getPath(uri: Uri?): String? {
