@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.LanguageLevel
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.LanguageLevel.Companion.Level
-import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.mutDistinct
+import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
 
 class LanguagesFragment : Fragment() {
 
@@ -29,7 +29,7 @@ class LanguagesFragment : Fragment() {
         spinner?.adapter = activity?.let {
             ArrayAdapter(
                 it.applicationContext,
-                R.layout.spinner_layout_cv_language,
+                R.layout.spinner_layout_cv,
                 values
             )
         }
@@ -52,8 +52,7 @@ class LanguagesFragment : Fragment() {
 
     private fun addToListLang(lang: LanguageLevel) {
         if (lang.isValid()) {
-            listLanguage.add(lang)
-            listLanguage.mutDistinct()
+            listLanguage.addNotExisting(lang)
             listLanguage.sortBy { -(it.level.ordinal) }
             listLangAdapter.notifyDataSetChanged()
         } else {

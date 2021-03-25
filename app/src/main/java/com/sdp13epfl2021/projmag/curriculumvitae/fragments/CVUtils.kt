@@ -3,11 +3,11 @@ package com.sdp13epfl2021.projmag.curriculumvitae.fragments
 object CVUtils {
 
     /**
-     * Remove duplicate in this MutableList
+     * Add to the MutableList if not already present
      */
-    fun <T> MutableList<T>.mutDistinct() {
-        val tmp = this.distinct()
-        this.clear()
-        this.addAll(tmp)
+    fun <T> MutableList<T>.addNotExisting(e: T) {
+        if (e !in this) {
+            add(e)
+        }
     }
 }

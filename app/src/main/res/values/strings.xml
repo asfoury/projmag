@@ -31,4 +31,6 @@
     <string name="cv_period_to">To (Year)</string>
     <string name="cv_period_from">From (Year)</string>
     <string name="cv_period_add">Add</string>
+    <string name="cv_skills_hint">Your skill</string>
+    <string name="cv_skills_title">Your Skills</string>
 </resources>

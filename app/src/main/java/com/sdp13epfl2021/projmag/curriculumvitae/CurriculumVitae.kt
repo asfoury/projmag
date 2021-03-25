@@ -1,8 +1,6 @@
 package com.sdp13epfl2021.projmag.curriculumvitae
 
 import android.net.Uri
-import java.time.LocalDate
-import java.util.*
 
 
 /**
@@ -98,8 +96,34 @@ data class CurriculumVitae(
          */
         data class SkillDescription(
             val name: String,
-            val level: Float
-        )
+            val skillLevel: SkillLevel
+        ) : Validate {
+            /**
+             * Possible language levels
+             */
+            enum class SkillLevel(private val level: String) {
+                Basic("Basic"),
+                Normal("Normal"),
+                Expert("Expert");
+
+                override fun toString(): String = level
+            }
+
+            override fun isValid(): Boolean =
+                name.isNotEmpty()
+
+            override fun toString(): String =
+                "$name ($skillLevel)"
+
+            override fun equals(other: Any?): Boolean =
+                if (other is SkillDescription) {
+                    this.name == other.name
+                } else {
+                    false
+                }
+
+
+        }
 
         /**
          * Contact of a person or some entity

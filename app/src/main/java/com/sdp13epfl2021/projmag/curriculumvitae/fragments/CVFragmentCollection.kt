@@ -12,6 +12,7 @@ class CVFragmentCollection {
     private val education = PeriodFragment.getInstance(EDUCATION_TITLE)
     private val job = PeriodFragment.getInstance(JOB_TITLE)
     private val languages = LanguagesFragment()
+    private val skills = SkillsFragment()
     private val submit = SubmitFragment()
 
     private val frags = listOf(
@@ -20,6 +21,7 @@ class CVFragmentCollection {
         education,
         job,
         languages,
+        skills,
         submit
     ).distinct() // this avoid crashing when changing a fragment for the same one
 

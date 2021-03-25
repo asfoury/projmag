@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.PeriodDescription
-import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.mutDistinct
+import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
 
 class PeriodFragment() : Fragment() {
 
@@ -83,8 +83,7 @@ class PeriodFragment() : Fragment() {
 
     private fun updateListPeriod(perDesc: PeriodDescription) {
         if (perDesc.isValid()) {
-            listPeriod.add(perDesc)
-            listPeriod.mutDistinct()
+            listPeriod.addNotExisting(perDesc)
             listPeriod.sortBy { p -> p.from }
             periodAdapter.notifyDataSetChanged()
         } else {
