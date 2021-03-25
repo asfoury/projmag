@@ -25,6 +25,13 @@ class FormTest {
     @JvmField
     var mActivityTestRule = ActivityTestRule(Form::class.java)
 
+
+    @Test
+    fun addVideoOpensFileExplorer() {
+        onView(withId(R.id.add_video))
+            .perform(click())
+    }
+
     @Test
     fun formTest() {
         val appCompatEditText = onView(
@@ -137,13 +144,6 @@ class FormTest {
                         isDisplayed()))
         appCompatEditText10.perform(replaceText("Do nothing\n"), closeSoftKeyboard())
     }
-
-    @Test
-    fun addVideoOpensFileExplorer() {
-        onView(withId(R.id.add_video))
-            .perform(click())
-    }
-
     private fun childAtPosition(
             parentMatcher: Matcher<View>, position: Int): Matcher<View> {
 
