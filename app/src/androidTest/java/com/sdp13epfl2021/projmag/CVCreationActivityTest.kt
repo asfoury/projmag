@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
@@ -17,8 +19,7 @@ import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.Perio
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.SkillDescription
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.*
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert
 import org.junit.Rule
@@ -33,13 +34,13 @@ class CVCreationActivityTest {
     @JvmField
     var mActivityTestRule = ActivityTestRule(CVCreationActivity::class.java)
 
-    fun swipe(id: Int) {
+    private fun swipe(id: Int) {
         SystemClock.sleep(1000)
         onView(withId(id)).perform(swipeLeft())
         SystemClock.sleep(1000)
     }
 
-    val exampleCV = CurriculumVitae(
+    private val exampleCV = CurriculumVitae(
         "hello",
         listOf(PeriodDescription("period", "location", "description", 2000, 2001)),
         listOf(),
@@ -265,6 +266,92 @@ class CVCreationActivityTest {
 
         materialButton4.perform(click())
     }
+
+    @Test
+    fun deleteViewPeriodWorks() {
+        swipe(R.id.cv_intro_title)
+        swipe(R.id.cv_summary_title)
+        onView(withId(R.id.cv_period_name)).perform(replaceText("something"), closeSoftKeyboard())
+        onView(withId(R.id.cv_period_description)).perform(replaceText("else"), closeSoftKeyboard())
+        onView(withId(R.id.cv_period_location)).perform(replaceText("hi"), closeSoftKeyboard())
+        onView(withId(R.id.cv_period_from)).perform(replaceText("2000"), closeSoftKeyboard())
+        onView(withId(R.id.cv_period_to)).perform(replaceText("2020"), closeSoftKeyboard())
+        onView(withId(R.id.cv_period_add)).perform(click())
+
+        onView(
+            allOf(
+                withText(containsString("something")),
+                withId(R.id.cv_cardview_textview)
+            )
+        ).check(matches(isDisplayed()))
+        onView(withId(R.id.cv_item_cardview_button)).perform(click())
+        onView(
+            allOf(
+                withText(containsString("something")),
+                withId(R.id.cv_cardview_textview)
+            )
+        ).check(
+            doesNotExist()
+        )
+
+    }
+
+    @Test
+    fun deleteViewLanguageWorks() {
+        swipe(R.id.cv_intro_title)
+        swipe(R.id.cv_summary_title)
+        swipe(R.id.cv_period_title)
+        swipe(R.id.cv_period_title)
+        onView(withId(R.id.cv_language_name)).perform(replaceText("something"), closeSoftKeyboard())
+        onView(withId(R.id.cv_language_add)).perform(click())
+
+        onView(
+            allOf(
+                withText(containsString("something")),
+                withId(R.id.cv_cardview_textview)
+            )
+        ).check(matches(isDisplayed()))
+        onView(withId(R.id.cv_item_cardview_button)).perform(click())
+        onView(
+            allOf(
+                withText(containsString("something")),
+                withId(R.id.cv_cardview_textview)
+            )
+        ).check(
+            doesNotExist()
+        )
+
+    }
+
+
+    @Test
+    fun deleteViewSkillsWorks() {
+        swipe(R.id.cv_intro_title)
+        swipe(R.id.cv_summary_title)
+        swipe(R.id.cv_period_title)
+        swipe(R.id.cv_period_title)
+        swipe(R.id.cv_language_title)
+        onView(withId(R.id.cv_skills_name)).perform(replaceText("something"), closeSoftKeyboard())
+        onView(withId(R.id.cv_skills_add)).perform(click())
+
+        onView(
+            allOf(
+                withText(containsString("something")),
+                withId(R.id.cv_cardview_textview)
+            )
+        ).check(matches(isDisplayed()))
+        onView(withId(R.id.cv_item_cardview_button)).perform(click())
+        onView(
+            allOf(
+                withText(containsString("something")),
+                withId(R.id.cv_cardview_textview)
+            )
+        ).check(
+            doesNotExist()
+        )
+
+    }
+
 
     private fun childAtPosition(
         parentMatcher: Matcher<View>, position: Int

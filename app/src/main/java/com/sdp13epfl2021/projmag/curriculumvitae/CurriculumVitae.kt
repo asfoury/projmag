@@ -47,8 +47,8 @@ data class CurriculumVitae(
                     to in VALID_YEARS &&
                     from <= to
 
-            /*override fun toString(): String =
-                "$name ($from - $to)"*/
+            override fun toString(): String =
+                "$name ($from - $to)"
         }
 
         /**
