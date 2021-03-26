@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
+import com.sdp13epfl2021.projmag.ProfilePageActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.SignInActivity
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
@@ -65,7 +66,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.profileButton) {
-            val intent = Intent(this, SignInActivity::class.java)
+            val intent = Intent(this, ProfilePageActivity::class.java)
             startActivity(intent)
             return true
         }
