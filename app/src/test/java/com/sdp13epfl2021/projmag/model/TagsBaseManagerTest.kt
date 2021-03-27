@@ -7,7 +7,7 @@ class TagsBaseManagerTest {
     @Test
     fun tagAddTest(){
         val tagBase = TagsBaseManager()
-        tagBase.addTag("hellogoodsir");
+        tagBase.addTag(Tag("hellogoodsir"));
 
     }
 
@@ -20,31 +20,32 @@ class TagsBaseManagerTest {
     @Test
     fun tagAddTestErrors(){
         val tagBase = TagsBaseManager()
-        tagBase.addTag("Machine learning")
+        tagBase.addTag(Tag("Machine learning"))
 
         //tag is too long
-        val error = tagBase.addTag("voluntarily going over the maximum character limit " +
-                "wheep doop doop da dooble dooble do do do")
+        val error = tagBase.addTag(Tag("voluntarily going over the maximum character limit " +
+                "wheep doop doop da dooble dooble do do do"))
         Assert.assertEquals(TagsBaseManager.InputResult.TooLong, error)
 
         //tag already exists
-        val error1 = tagBase.addTag("machinelearning")
+        val error1 = tagBase.addTag(Tag("machinelearning"))
+        println(tagBase.getAllTags())
         Assert.assertEquals(TagsBaseManager.InputResult.AlreadyExists, error1)
 
         //tag contains special characters
-        val error2 = tagBase.addTag("machine1learning")
-        val error3 = tagBase.addTag("machineélearning")
+        val error2 = tagBase.addTag(Tag("machine1learning"))
+        val error3 = tagBase.addTag(Tag("machineélearning"))
         Assert.assertEquals(TagsBaseManager.InputResult.ContainsSpecialChar, error2)
         Assert.assertEquals(TagsBaseManager.InputResult.ContainsSpecialChar, error3)
 
         //another good tag
-        val success = tagBase.addTag("Software engineering")
+        val success = tagBase.addTag(Tag("Software engineering"))
         Assert.assertEquals(TagsBaseManager.InputResult.OK, success)
 
 
         val tags = tagBase.getAllTags()
-        assert(tags.contains("machinelearning"))
-        assert(tags.contains("softwareengineering"))
+        assert(tags.contains(Tag("machinelearning")))
+        assert(tags.contains(Tag("softwareengineering")))
 
 
     }
