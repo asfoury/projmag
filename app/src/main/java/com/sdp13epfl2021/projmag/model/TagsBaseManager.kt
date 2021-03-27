@@ -4,11 +4,17 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-data class TagsBase(
-    private val tags: MutableSet<String> = mutableSetOf(),
-    private val MAX_TAG_SIZE: Int = 40
+data class TagsBaseManager(){
+    private  val MAX_TAG_SIZE: Int = 40
 
-){
+    //this should be thread safe
+    companion object tagsBase{
+        private val tags: MutableSet<String> = mutableSetOf(),
+
+    }
+
+
+
     /**
      * TagTooLong : the tag is longer than MAX_TAG_SIZE which is output by the function maxTagSize
      * TagContainsSpecialChar : the tag contains numbers, and special characters like $ £ etc
@@ -65,7 +71,8 @@ data class TagsBase(
 
     //should I be making a defensive copy here?
     fun getAllTags() : Set<String>{
-        return tags
+        //defensive copy
+        return tags.toSet()
     }
 
 }
