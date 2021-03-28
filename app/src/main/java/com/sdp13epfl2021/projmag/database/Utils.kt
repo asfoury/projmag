@@ -15,27 +15,28 @@ object Utils {
 
     private var initalized = false
 
-    @Synchronized
     fun init(context: Context) {
-        val firestore = Firebase.firestore
+        if (!initalized) {
+            val firestore = Firebase.firestore
 
-        // Uncomment to disable firebase cache
-        /* val settings = firestoreSettings {
+            // Uncomment to disable firebase cache
+            /* val settings = firestoreSettings {
             isPersistenceEnabled = false
         }
         firestore.firestoreSettings = settings*/
 
-        projectsDatabase =
-            CachedProjectsDatabase(
-                OfflineProjectDatabase(
-                    FirebaseProjectsDatabase(
-                        firestore
-                    ),
-                    File(context.filesDir, "projects")
+            projectsDatabase =
+                CachedProjectsDatabase(
+                    OfflineProjectDatabase(
+                        FirebaseProjectsDatabase(
+                            firestore
+                        ),
+                        File(context.filesDir, "projects")
+                    )
                 )
-            )
-        fileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
-        userDatabase = UserDataFirebase(firestore, Firebase.auth)
-        initalized = true
+            fileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
+            userDatabase = UserDataFirebase(firestore, Firebase.auth)
+            initalized = true
+        }
     }
 }
