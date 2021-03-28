@@ -1,3 +1,12 @@
+version: "2"         # required to adjust maintainability checks
+checks:
+  similar-code:
+    config:
+      threshold: 120 # not number of lines, but mass threshold (see default analysis configuration)
+  identical-code:
+    config:
+      threshold: 120 # not number of lines, but mass threshold (see default analysis configuration)
+
 exclude_patterns:
 - "**/test/"
 - "**/androidTest/"
