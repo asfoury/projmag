@@ -7,7 +7,7 @@ interface FileDatabase {
 
     /**
      * Asynchronously get the file from the database
-     * The file will be downloaded inside `destinationFolder`, the name is the same as in the url
+     * The file will be downloaded inside `destinationFolder`
      *
      * Call `onSuccess` with the local file if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
@@ -26,7 +26,9 @@ interface FileDatabase {
 
     /**
      * Asynchronously push the file to the database
-     * If the file already exist, it will overwrite it
+     * The name stored is a random string appended by the original name
+     * If the same file is push multiple times, it will result to different files
+     *
      * Call `onSuccess` with the Uri if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
      *

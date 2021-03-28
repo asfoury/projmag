@@ -15,7 +15,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import java.io.File
-import java.lang.reflect.TypeVariable
 import java.nio.file.Files
 
 
@@ -134,7 +133,7 @@ class FirebaseFileDatabaseTest {
             .`when`(mockRootRef.child(UID))
             .thenReturn(mockUserRef)
         Mockito
-            .`when`(mockUserRef.child(filename))
+            .`when`(mockUserRef.child(Mockito.anyString()))
             .thenReturn(mockFileRef)
 
         // putFile

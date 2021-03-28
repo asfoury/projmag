@@ -1,16 +1,15 @@
 package com.sdp13epfl2021.projmag.database
 
-import android.app.AuthenticationRequiredException
 import android.net.Uri
 import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 class FirebaseFileDatabase(
     private val storage: FirebaseStorage,
@@ -68,7 +67,7 @@ class FirebaseFileDatabase(
 
         val fileRef = rootRef
             .child(user.uid)
-            .child(file.name)
+            .child("${UUID.randomUUID()}_${file.name}")
 
         fileRef
             .putFile(file.toUri())
