@@ -4,7 +4,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
  class TagsBaseManager{
-    private  val MAX_TAG_SIZE: Int = 40
+     val MAX_TAG_SIZE: Int = 40
 
     //this should be thread safe
     companion object TagsBase{
