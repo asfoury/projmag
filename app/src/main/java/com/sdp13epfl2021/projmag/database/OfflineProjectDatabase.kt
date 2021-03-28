@@ -50,10 +50,10 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
     @Synchronized
     private fun deleteProject(projectId: ProjectId) {
         val projectFile = projectsFiles[projectId]
+        projectsFiles = projectsFiles - projectId
         if (projectFile != null && projectFile.exists()) {
             synchronized(projectFile) {
-                projectFile.deleteRecursively()
-                projectsFiles = projectsFiles - projectId
+                projectFile.parentFile.deleteRecursively()
             }
         }
     }
@@ -110,17 +110,13 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
 
     override fun getAllIds(onSuccess: (List<ProjectId>) -> Unit, onFailure: (Exception) -> Unit) {
         db.getAllIds({ remoteProjects ->
-            val localProjects = projectsFiles
-                .filterKeys { id -> !remoteProjects.contains(id) }
-                .map { entry -> entry.key }
-            onSuccess(remoteProjects + localProjects)
+            GlobalScope.launch(Dispatchers.IO) {
+                val localProjects = projectsFiles
+                    .filterKeys { id -> !remoteProjects.contains(id) }
+                    .map { entry -> entry.key }
+                onSuccess(remoteProjects + localProjects)
+            }
         }, onFailure)
-        GlobalScope.launch(Dispatchers.IO) {
-            onSuccess(projectsFiles
-                .mapValues { entry -> readProject(entry.value) }
-                .mapNotNull { entry -> entry.value?.id }
-            )
-        }
     }
 
     override fun getProjectFromId(
@@ -133,9 +129,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
             db.getProjectFromId(id, onSuccess, onFailure)
         } else {
             GlobalScope.launch(Dispatchers.IO) {
-                synchronized(projectFile) {
-                    onSuccess(readProject(projectFile))
-                }
+                onSuccess(readProject(projectFile))
             }
         }
     }
@@ -159,7 +153,6 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        db.getProjectsFromName(name, onSuccess, onFailure)
         db.getProjectsFromName(name, { remoteProjects ->
             GlobalScope.launch(Dispatchers.IO) {
                 val localProjects = projectsFiles
