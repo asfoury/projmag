@@ -6,6 +6,7 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.io.File
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,6 +29,14 @@ class OfflineProjectsDatabase {
     fun setup() {
         projectsDir.mkdirs()
 
+        val validDir = File(projectsDir, "testDir55555")
+        validDir.mkdirs()
+
+        val invalidDir = File(projectsDir, "dir invalid !")
+        invalidDir.mkdirs()
+
+        val invalidFile = File(validDir, "project.data")
+        invalidFile.mkdir()
     }
 
     @After

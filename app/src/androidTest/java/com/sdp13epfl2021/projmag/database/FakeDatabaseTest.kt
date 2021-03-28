@@ -72,7 +72,7 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
     ) {
         val pid = nextId.toString()
         nextId += 1
-        val newProject = project?.let {
+        val newProject = project.let {
             ImmutableProject(pid,
             it.name, it.lab, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
             it.bachelorProject, it.tags, it.isTaken, it.description)
