@@ -1,7 +1,9 @@
 package com.sdp13epfl2021.projmag.database
 
+import android.app.AuthenticationRequiredException
 import android.net.Uri
 import androidx.core.net.toUri
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.google.firebase.storage.StorageReference
@@ -12,7 +14,7 @@ import java.io.IOException
 
 class FirebaseFileDatabase(
     private val storage: FirebaseStorage,
-    private val userUID: String
+    private val auth: FirebaseAuth
 ) : FileDatabase {
 
     /**
@@ -55,6 +57,12 @@ class FirebaseFileDatabase(
     ) {
         if (!file.exists() || !file.isFile) {
             GlobalScope.launch { onFailure(IOException("The file \"${file.path}\" can't be read.")) }
+            return
+        }
+
+        val userUID = auth.uid
+        if (userUID == null) {
+            GlobalScope.launch { onFailure(SecurityException("Pushing file can only be done by authenticated user.")) }
             return
         }
 

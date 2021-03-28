@@ -13,13 +13,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
 
-    init {//TODO remove after better initialization
-        Utils.projectsDatabase
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Utils.init(this)
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
