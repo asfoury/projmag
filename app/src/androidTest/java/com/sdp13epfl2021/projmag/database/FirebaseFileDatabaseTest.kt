@@ -3,6 +3,8 @@ package com.sdp13epfl2021.projmag.database
 import android.net.Uri
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -23,7 +25,7 @@ class FirebaseFileDatabaseTest {
     private val rootUsers = "users"
 
     private val fileUrl = "https://example.com/firestore/a/b/310771/video_test.mp4"
-    private val fileUri = Uri.parse(fileUrl)
+    //private val fileUri = Uri.parse(fileUrl)
     private val filename = "video_test.mp4"
     private val tempFolder = Files.createTempDirectory("firebase_temp_test").toFile()
     private val tempFile = File(tempFolder, filename)
@@ -34,6 +36,8 @@ class FirebaseFileDatabaseTest {
 
 
 
+    private val mockFirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
+    private val mockFirebaseUser = Mockito.mock(FirebaseUser::class.java)
     private val mockFirebaseStorage = Mockito.mock(FirebaseStorage::class.java)
     private val mockRootRef = Mockito.mock(StorageReference::class.java)
     private val mockUserRef = Mockito.mock(StorageReference::class.java)
@@ -41,6 +45,8 @@ class FirebaseFileDatabaseTest {
     private val mockFileRef = Mockito.mock(StorageReference::class.java)
     private val mockFolder = Mockito.mock(File::class.java)
     private val mockFile = Mockito.mock(File::class.java)
+
+    private val mockFileUri = Mockito.mock(Uri::class.java)
 
     private val mockDownloadTask = Mockito.mock(FileDownloadTask::class.java)
     private val mockUploadTask = Mockito.mock(UploadTask::class.java)
@@ -114,6 +120,16 @@ class FirebaseFileDatabaseTest {
             .thenReturn(mockDownloadTask)
 
 
+        //FirebaseAuth
+        Mockito
+            .`when`(mockFirebaseAuth.currentUser)
+            .thenReturn(mockFirebaseUser)
+
+        //FirebaseUser
+        Mockito
+            .`when`(mockFirebaseUser.uid)
+            .thenReturn(UID)
+
         Mockito
             .`when`(mockRootRef.child(UID))
             .thenReturn(mockUserRef)
@@ -137,7 +153,7 @@ class FirebaseFileDatabaseTest {
         Mockito
             .`when`(mockTask.addOnSuccessListener(Mockito.any()))
             .then {
-                onSuccessPush(fileUri)
+                onSuccessPush(mockFileUri)
                 mockTask
             }
         Mockito
@@ -160,7 +176,7 @@ class FirebaseFileDatabaseTest {
     @Test(timeout = 1000)
     fun getFailedSuccessfullyWithInvalidFolder() {
         var e: Exception? = null
-        val db = FirebaseFileDatabase(mockFirebaseStorage, UID)
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
         db.getFile(fileUrl, invalidFolder, { assertTrue(false) }, { it ->
             e = it
         })
@@ -171,7 +187,7 @@ class FirebaseFileDatabaseTest {
 
     @Test(timeout = 1000)
     fun getWorks() {
-        val db = FirebaseFileDatabase(mockFirebaseStorage, UID)
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
         db.getFile(fileUrl, tempFolder, onSuccessGet, onFailureNotExpected)
 
         while (onSuccessGetFile == null);
@@ -185,7 +201,7 @@ class FirebaseFileDatabaseTest {
     @Test(timeout = 1000)
     fun pushFailedSuccessfullyWithInvalidFile() {
         var e: Exception? = null
-        val db = FirebaseFileDatabase(mockFirebaseStorage, UID)
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
 
         db.pushFile(invalidFile, onSuccessPush, { it ->
             e = it
@@ -204,18 +220,18 @@ class FirebaseFileDatabaseTest {
     @Test(timeout = 1000)
     fun pushWorks() {
         assertTrue(tempFile.createNewFile())
-        val db = FirebaseFileDatabase(mockFirebaseStorage, UID)
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
         db.pushFile(tempFile, onSuccessPush, onFailureNotExpected)
 
         while (onSuccessPushUri == null);
 
-        assertEquals(fileUri, onSuccessPushUri)
+        assertEquals(mockFileUri, onSuccessPushUri)
 
     }
 
     @Test(timeout = 1000)
     fun deleteFileDoesntCrash() {
-        val db = FirebaseFileDatabase(mockFirebaseStorage, UID)
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
         db.deleteFile(fileUrl, {}, {})
     }
 

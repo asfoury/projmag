@@ -14,6 +14,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.SignInActivity
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
 import com.sdp13epfl2021.projmag.data.Datasource
+import com.sdp13epfl2021.projmag.database.Utils
 
 class ProjectsListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ItemAdapter
@@ -30,6 +31,9 @@ class ProjectsListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
+
+        Utils.init(this) //TODO remove. Better to init Utils only in JUnit with @Before/etc
+
         val myDataset = Datasource().loadProjects().toMutableList()
         myDataset.sortBy{ project -> project.isTaken }
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)

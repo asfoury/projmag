@@ -13,6 +13,9 @@ object Utils {
     lateinit var userDatabase: UserDataDatabase
     lateinit var fileDatabase: FileDatabase
 
+    private var initalized = false
+
+    @Synchronized
     fun init(context: Context) {
         val firestore = Firebase.firestore
 
@@ -33,5 +36,6 @@ object Utils {
             )
         fileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
         userDatabase = UserDataFirebase(firestore, Firebase.auth)
+        initalized = true
     }
 }
