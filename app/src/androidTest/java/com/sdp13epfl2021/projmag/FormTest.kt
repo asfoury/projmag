@@ -50,12 +50,12 @@ class FormTest {
                 Much of Glasse's later life is unrecorded; information about her identity was lost until uncovered in 1938 by the historian Madeleine Hope Dodds.
             """.trimIndent()))
 
-        pressOnAddVideoButton()
+        //pressOnAddVideoButton()
     }
 
     @Test
     fun pressOnAddVideo() {
-        pressOnAddVideoButton()
+        //pressOnAddVideoButton()
     }
 
 
