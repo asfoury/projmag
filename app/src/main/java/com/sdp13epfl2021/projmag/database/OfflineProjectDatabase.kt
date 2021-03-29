@@ -10,7 +10,6 @@ import java.io.*
 import java.util.*
 import kotlin.collections.HashMap
 
-private const val TAG = "OfflineProjectDatabase"
 private const val PROJECT_DATA_FILE: String = "project.data"
 private val ID_PATTERN: Regex = Regex("^[a-zA-Z0-9]*\$")
 
@@ -53,7 +52,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         projectsFiles = projectsFiles - projectId
         if (projectFile != null && projectFile.exists()) {
             synchronized(projectFile) {
-                projectFile.parentFile.deleteRecursively()
+                projectFile.parentFile?.deleteRecursively()
             }
         }
     }
@@ -81,7 +80,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         synchronized(file) {
             if (file.exists() && file.isFile) {
                 ObjectInputStream(FileInputStream(file)).use {
-                    val map: (HashMap<String, Any>) = it.readObject() as HashMap<String, Any>
+                    val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
                     val result = ImmutableProject.build(
                         id = file.parentFile.name,
                         name = map["name"] as String,
@@ -141,7 +140,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         db.getAllProjects({ remoteProjects ->
             GlobalScope.launch(Dispatchers.IO) {
                 val localProjects = projectsFiles
-                    .filterKeys { id -> !remoteProjects.contains(id) }
+                    .filterKeys { id -> !remoteProjects.any { p -> p.id == id } }
                     .mapNotNull { entry -> readProject(entry.value) }
                 onSuccess(remoteProjects + localProjects)
             }
@@ -156,7 +155,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         db.getProjectsFromName(name, { remoteProjects ->
             GlobalScope.launch(Dispatchers.IO) {
                 val localProjects = projectsFiles
-                    .filterKeys { id -> !remoteProjects.contains(id) }
+                    .filterKeys { id -> !remoteProjects.any { p -> p.id == id } }
                     .mapNotNull { entry -> readProject(entry.value) }
                     .filter { p -> p.name == name}
                 onSuccess(remoteProjects + localProjects)
@@ -173,7 +172,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
             GlobalScope.launch(Dispatchers.IO) {
                 val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
                 val localProjects = projectsFiles
-                    .filterKeys { id -> !remoteProjects.contains(id) }
+                    .filterKeys { id -> !remoteProjects.any { p -> p.id == id } }
                     .mapNotNull { entry -> readProject(entry.value) }
                     .filter { p -> p.tags.any { tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT)) } }
                 onSuccess(remoteProjects + localProjects)

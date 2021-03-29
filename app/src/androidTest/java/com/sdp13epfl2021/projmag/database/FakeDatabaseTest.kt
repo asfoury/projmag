@@ -16,7 +16,7 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
     }
 
     fun modify(project: ImmutableProject) {
-        projects.filter { p -> p.id != project.id }
+        projects = projects.filter { p -> p.id != project.id }
         projects = projects + project
         listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
     }
