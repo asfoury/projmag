@@ -42,6 +42,10 @@ class FirebaseFileDatabase(
             return
         }
 
+        if (destinationFile.exists()) {
+            GlobalScope.launch { onSuccess(destinationFile) }
+        }
+
         fileRef
             .getFile(destinationFile)
             .addOnSuccessListener { onSuccess(destinationFile) }

@@ -8,8 +8,9 @@ interface FileDatabase {
     /**
      * Asynchronously get the file from the database
      * The file will be downloaded inside `destinationFolder`
+     * If there already is a file with the same name, nothing is downloaded.
      *
-     * Call `onSuccess` with the local file if the operation succeeded
+     * Call `onSuccess` with the local file if the operation succeeded or if file already present.
      * Call `onFailure` with an Exception in case of failure
      *
      * @param fileUrl the url of the file
