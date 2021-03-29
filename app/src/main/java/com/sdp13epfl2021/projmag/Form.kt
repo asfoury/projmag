@@ -40,7 +40,7 @@ class Form : AppCompatActivity() {
                 val selectedVidPath = getPath(selectedVidURI)
                 Log.d("GET PATH", "After: $selectedVidPath")
 
-                val file = File(selectedVidPath)
+                val file = File(selectedVidPath!!)
 
                 // path of video in local storage unable to play video from it for now playing using location in external storage
                 val pathInLocalStorage = saveVideoToLocalStorage(file)
