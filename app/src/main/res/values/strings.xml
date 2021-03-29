@@ -12,6 +12,15 @@
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
     <string name="submission">Submit</string>
+    <string name="cv_creation_intro_title">CV creation</string>
+    <string name="cv_creation_intro_body">Let\'s create your curriculum vitae step by step</string>
+    <string name="cv_creation_intro_instruction">Just swipe to go through the forms</string>
+    <string name="cv_summary_title">Your Summary</string>
+    <string name="cv_summary_hint">Some sentences to introduce you and describe your professional or academic career</string>
+    <string name="cv_language_title">Languages</string>
+    <string name="cv_language_name_field">Language</string>
+    <string name="cv_submission_title">The End</string>
+    <string name="cv_submission_button">Submit</string>
     <string name="LastName">LastName</string>
     <string name="FirstName">FirstName</string>
     <string name="age">Age</string>
@@ -26,4 +35,14 @@
     <string name="submit">Add a new project to the list</string>
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
+    <string name="cv_period_description">Description</string>
+    <string name="cv_period_school_name">School Name</string>
+    <string name="cv_period_period_title">Period (to change)</string>
+    <string name="cv_period_location">Location</string>
+    <string name="cv_period_to">To (Year)</string>
+    <string name="cv_period_from">From (Year)</string>
+    <string name="cv_period_add">Add</string>
+    <string name="cv_skills_hint">Your skill</string>
+    <string name="cv_skills_title">Your Skills</string>
+    <string name="cv_cardview_close">close</string>
 </resources>
