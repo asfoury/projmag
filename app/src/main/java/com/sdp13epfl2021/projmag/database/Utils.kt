@@ -15,6 +15,7 @@ object Utils {
 
     private var initalized = false
 
+    @Synchronized
     fun init(context: Context) {
         if (!initalized) {
             val firestore = Firebase.firestore
