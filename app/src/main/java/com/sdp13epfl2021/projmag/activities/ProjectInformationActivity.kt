@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.activities
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -9,13 +10,16 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.view.MotionEvent
 import android.widget.MediaController
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
@@ -24,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.xml.sax.XMLReader
 import java.io.File
 
 class ProjectInformationActivity : AppCompatActivity() {
@@ -48,6 +53,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
@@ -77,11 +83,14 @@ class ProjectInformationActivity : AppCompatActivity() {
                     cleanDescription,
                     Html.FROM_HTML_MODE_LEGACY,
                     imageGetter,
-                    null
+                    TagHandler2()
                 )
             } else {
-                description.text = Html.fromHtml(cleanDescription, imageGetter, null)
+                description.text = Html.fromHtml(cleanDescription, imageGetter, TagHandler2())
             }
+
+            // Allow user to click on link
+            description.movementMethod = LinkMovementMethod.getInstance()
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
             type.text =
@@ -95,15 +104,23 @@ class ProjectInformationActivity : AppCompatActivity() {
             if (videosLinks.isEmpty()) {
                 video.isInvisible = true
             } else {
-                val controller = MediaController(this)
+                val controller = AlwaysShownMediaController(this)
                 video.setMediaController(controller)
+                controller.show()
 
-                video.setOnClickListener {
-                    if (video.isPlaying) {
-                        video.pause()
-                    } else {
-                        video.start()
+                // pause/start when we touch the video
+                video.setOnTouchListener { _, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            if (video.isPlaying) {
+                                video.pause()
+                            } else {
+                                video.start()
+                            }
+                            controller.show(0) //update controller state
+                        }
                     }
+                    true
                 }
 
                 // set the controller buttons to play next/prev video
@@ -113,7 +130,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                     readVideo(current - 1, video)
                 })
 
-                // play the next video at the end
+                // play the next video when the video is finished
                 video.setOnCompletionListener {
                     readVideo(current + 1, video)
                 }
@@ -130,9 +147,14 @@ class ProjectInformationActivity : AppCompatActivity() {
                     Utils.fileDatabase.getFile(link, projectDir, { file ->
                         addVideo(Uri.fromFile(file), video)
                     }, {
-                        Toast.makeText(this, "An error occurred while downloading a video.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "An error occurred while downloading a video.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     })
                 }
+
             }
 
         } else {
@@ -140,7 +162,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
 
         // make the back button in the title bar work
-        var actionBar = supportActionBar
+        val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -153,7 +175,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val startString = "<video>"
         val endString = "</video>"
 
-        while (true) {
+        while (newText.isNotEmpty()) {
             val start = newText.indexOf(startString)
             val end = newText.indexOf(endString)
             if (start < 0 || end < 0) {
@@ -165,59 +187,102 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         return Pair(newText.toString(), links)
     }
+}
 
+private class ImageGetter2(
+    private val context: Context,
+    private val projectDir: File,
+    private val htmlTextView: TextView
+) : Html.ImageGetter {
 
-    private class ImageGetter2(
-        private val context: Context,
-        private val projectDir: File,
-        private val htmlTextView: TextView
-    ) : Html.ImageGetter {
+    override fun getDrawable(source: String): Drawable {
+        val res = context.resources
+        val holder = BitmapDrawablePlaceHolder(res, null)
 
-        override fun getDrawable(source: String): Drawable {
-            val res = context.resources
-            val holder = BitmapDrawablePlaceHolder(res, null)
+        Utils.fileDatabase.getFile(source, projectDir, { file ->
+            GlobalScope.launch(Dispatchers.IO) {
+                val draw = Drawable.createFromPath(file.path)
+                if (draw != null) {
+                    var width = draw.intrinsicWidth
+                    var height = draw.intrinsicHeight
 
-            Utils.fileDatabase.getFile(source, projectDir, { file ->
-                GlobalScope.launch(Dispatchers.IO) {
-                    val draw = Drawable.createFromPath(file.path)
-                    if (draw != null) {
-                        var width = draw.intrinsicWidth
-                        var height = draw.intrinsicHeight
-
-                        val maxWidth = res.displayMetrics.widthPixels - 20
-                        if (width > maxWidth) {
-                            height = (height / (width / maxWidth.toFloat())).toInt()
-                            width = maxWidth
-                        }
-
-                        draw.setBounds(10, 0, width, height)
-                        holder.setDrawable(draw)
-                        holder.setBounds(10, 0, width, height)
-
-                        // force view update
-                        withContext(Dispatchers.Main) {
-                            htmlTextView.text = htmlTextView.text
-                        }
-                    } else {
-                        Toast.makeText(context, "An error occurred while loading image.", Toast.LENGTH_SHORT).show()
+                    val maxWidth = res.displayMetrics.widthPixels
+                    if (width > maxWidth) {
+                        height = (height / (width / maxWidth.toFloat())).toInt()
+                        width = maxWidth
                     }
+
+                    draw.setBounds(0, 0, width, height)
+                    holder.setDrawable(draw)
+                    holder.setBounds(0, 0, width, height)
+
+                    // force view update
+                    withContext(Dispatchers.Main) {
+                        htmlTextView.text = htmlTextView.text
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "An error occurred while loading image.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }, {
-                Toast.makeText(context, "An error occurred while downloading image.", Toast.LENGTH_SHORT).show()
-            })
-            return holder
-        }
+            }
+        }, {
+            Toast.makeText(
+                context,
+                "An error occurred while downloading image.",
+                Toast.LENGTH_SHORT
+            ).show()
+        })
+        return holder
+    }
+}
+
+private class BitmapDrawablePlaceHolder(res: Resources, bitmap: Bitmap?) : BitmapDrawable(res, bitmap) {
+    private var drawable: Drawable? = null
+
+    override fun draw(canvas: Canvas) {
+        drawable?.run { draw(canvas) }
     }
 
-    private class BitmapDrawablePlaceHolder(res: Resources, bitmap: Bitmap?) : BitmapDrawable(res, bitmap) {
-        private var drawable: Drawable? = null
+    fun setDrawable(drawable: Drawable) {
+        this.drawable = drawable
+    }
+}
 
-        override fun draw(canvas: Canvas) {
-            drawable?.run { draw(canvas) }
-        }
+// This is a normal MediaController but it is never hidden
+private class AlwaysShownMediaController(context: Context) : MediaController(context, false) {
 
-        fun setDrawable(drawable: Drawable) {
-            this.drawable = drawable
+    override fun hide() {
+        show(0)
+    }
+}
+
+// This is used to handle some tags unsupported in version 23 (Android 6.0), such as list ul/ol
+private class TagHandler2 : Html.TagHandler {
+
+    var parent: String? = null
+    var index: Int = 1
+
+    override fun handleTag(
+        opening: Boolean,
+        tag: String,
+        output: Editable,
+        xmlReader: XMLReader
+    ) {
+        when (tag) {
+            "ul", "ol" -> parent = if (opening) tag else null
+            "li" -> {
+                if (opening) {
+                    if (parent == "ul")
+                        output.append("\n\t•")
+                    if (parent == "ol") {
+                        output.append("\n\t$index. ")
+                        index += 1
+                    }
+                }
+            }
         }
     }
 }
