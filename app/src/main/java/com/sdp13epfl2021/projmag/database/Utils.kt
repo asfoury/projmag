@@ -21,9 +21,9 @@ object Utils {
 
             // Uncomment to disable firebase cache
             /* val settings = firestoreSettings {
-            isPersistenceEnabled = false
-        }
-        firestore.firestoreSettings = settings*/
+                isPersistenceEnabled = false
+            }
+            firestore.firestoreSettings = settings*/
 
             projectsDatabase =
                 CachedProjectsDatabase(
