@@ -57,12 +57,12 @@ class FormTest {
                 )
             )
 
-        pressOnAddVideoButton()
+        //pressOnAddVideoButton()
     }
 
     @Test
     fun pressOnAddVideo() {
-        pressOnAddVideoButton()
+        //pressOnAddVideoButton()
     }
 
 
