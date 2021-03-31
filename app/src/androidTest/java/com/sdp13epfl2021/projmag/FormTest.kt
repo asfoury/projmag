@@ -23,6 +23,7 @@ class FormTest {
         onView(withId(R.id.project_submission_scrollview))
             .perform(ViewActions.swipeDown())
 
+        Thread.sleep(2000)
 
         onView(withId(R.id.form_edit_text_laboratory))
             .perform(replaceText("Lab Name"))
