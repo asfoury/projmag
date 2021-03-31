@@ -1,13 +1,16 @@
 package com.sdp13epfl2021.projmag
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import com.sdp13epfl2021.projmag.database.FirebaseProjectsDatabase
+import androidx.core.net.toFile
+import com.sdp13epfl2021.projmag.database.FileDatabase
+import com.sdp13epfl2021.projmag.database.ProjectsDatabase
+import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
@@ -50,19 +53,41 @@ class Form : AppCompatActivity() {
         )
     }
 
-    private fun sendToFirebase(project: Result<ImmutableProject>) =
-        when (project) {
+    private fun getTmpVideoUri(): Uri? = TODO("Not Implemented Yet")
+
+    private fun upload(
+        maybeProject: Result<ImmutableProject>,
+        projectDB: ProjectsDatabase,
+        fileDB: FileDatabase
+    ) =
+        when (maybeProject) {
             is Success<*> -> {
-                FirebaseProjectsDatabase(FirebaseFirestore.getInstance()).pushProject(
-                    project.value as ImmutableProject,
-                    { id -> showToast("Project pushed with ID : $id") },
+                val project = maybeProject.value as ImmutableProject
+                projectDB.pushProject(
+                    project,
+                    { id ->
+                        getTmpVideoUri()?.let { tmpUri ->
+                            fileDB.pushFile(
+                                tmpUri.toFile(),
+                                { newUri ->
+                                    projectDB.updateVideoWithProject(
+                                        id,
+                                        newUri.toString(),
+                                        { showToast("Project pushed with ID : $id") },
+                                        {}
+                                    )
+                                },
+                                { showToast("Can't push video") }
+                            )
+                        }
+                    },
                     { showToast("Can't push project") }
                 )
             }
             is Failure<*> -> {
-                Toast.makeText(this, project.reason, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, maybeProject.reason, Toast.LENGTH_LONG).show()
             }
         }
 
-    fun submit(view: View) = sendToFirebase(constructProject())
+    fun submit(view: View) = upload(constructProject(), Utils.projectsDatabase, Utils.fileDatabase)
 }

@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
+import android.net.Uri
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,7 +41,13 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             bachelorProject = doc["bachelorProject"] as Boolean,
             tags = (doc["tags"] as? List<String>) ?: listOf(),
             isTaken = doc["isTaken"] as Boolean,
-            description = doc["description"] as String
+            description = doc["description"] as String,
+            videoURI = doc["videoURI"]?.let {
+                when (val uri = (it as String)) {
+                    "" -> null
+                    else -> Uri.parse(uri)
+                }
+            }
         )
 
     /**
@@ -58,7 +65,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         field: String,
         onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
-    ){
+    ) {
         val queryRef = firestore.collection(ROOT)
             .whereArrayContainsAny(field, elements)
         queryRef
@@ -174,6 +181,19 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .delete()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
+    }
+
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val docRef = firestore.collection(ROOT).document(id)
+        docRef
+            .update("videoUri", uri)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener(onFailure)
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {

@@ -107,6 +107,15 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         db.deleteProjectWithId(id, onSuccess, onFailure)
     }
 
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        db.updateVideoWithProject(id, uri, onSuccess, onFailure)
+    }
+
     @Synchronized
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
         listeners = listeners + changeListener
