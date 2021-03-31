@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,9 +9,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.Button
+import android.widget.MediaController
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
-import com.sdp13epfl2021.projmag.activities.PlayVideoDescription
 import java.io.File
 import java.io.FileOutputStream
 
@@ -32,6 +35,7 @@ class Form : AppCompatActivity() {
      * This function is called after the user comes back
      * from selecting a video from the file explorer
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
@@ -50,9 +54,13 @@ class Form : AppCompatActivity() {
                 val playVidButton = findViewById<Button>(R.id.play_video)
                 playVidButton.isEnabled = true
                 playVidButton.setOnClickListener {
-                    val intent = Intent(this, PlayVideoDescription::class.java)
-                    intent.putExtra("videoPath", pathInLocalStorage)
-                    startActivity(intent)
+                    val vidView = findViewById<VideoView>(R.id.videoView)
+                    val mediaController = MediaController(this)
+
+                    vidView.setMediaController(mediaController)
+
+                    vidView.setVideoPath(pathInLocalStorage)
+                    vidView.start()
                 }
             }
         }

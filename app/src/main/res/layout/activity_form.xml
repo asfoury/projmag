@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/project_submission_scrollview"
     tools:context=".Form">
 
     <LinearLayout
@@ -104,6 +105,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_check_box_SP" />
+
+        <VideoView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
 
 
         <LinearLayout
