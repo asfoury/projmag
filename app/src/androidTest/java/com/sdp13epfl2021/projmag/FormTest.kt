@@ -1,8 +1,9 @@
 package com.sdp13epfl2021.projmag
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
@@ -18,6 +19,11 @@ class FormTest {
 
     @Test
     fun writeAProjectToSubmit() {
+        // need to swipe down to make sure textFields are visible when running tests
+        onView(withId(R.id.project_submission_scrollview))
+            .perform(ViewActions.swipeDown())
+
+
         onView(withId(R.id.form_edit_text_laboratory))
             .perform(replaceText("Lab Name"))
 
