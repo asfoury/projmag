@@ -41,6 +41,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         videosUris = videosUris + videoUri
         if (current < 0) {
             readVideo(0, videoView)
+            videoView.isInvisible = false
             videoView.pause()
         }
     }
@@ -101,23 +102,23 @@ class ProjectInformationActivity : AppCompatActivity() {
 
             responsible.text = project.teacher
 
-            if (videosLinks.isEmpty()) {
-                video.isInvisible = true
-            } else {
-                val controller = AlwaysShownMediaController(this)
+            video.isInvisible = true // hide the videoView before a video is loaded
+            if (videosLinks.isNotEmpty()) {
+                val controller = MediaController(this)
                 video.setMediaController(controller)
-                controller.show()
 
                 // pause/start when we touch the video
                 video.setOnTouchListener { _, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            if (video.isPlaying) {
-                                video.pause()
-                            } else {
-                                video.start()
+                            if (current >= 0) {
+                                if (video.isPlaying) {
+                                    video.pause()
+                                } else {
+                                    video.start()
+                                }
+                                controller.show() //update controller state
                             }
-                            controller.show(0) //update controller state
                         }
                     }
                     true
@@ -248,14 +249,6 @@ private class BitmapDrawablePlaceHolder(res: Resources, bitmap: Bitmap?) : Bitma
 
     fun setDrawable(drawable: Drawable) {
         this.drawable = drawable
-    }
-}
-
-// This is a normal MediaController but it is never hidden
-private class AlwaysShownMediaController(context: Context) : MediaController(context, false) {
-
-    override fun hide() {
-        show(0)
     }
 }
 
