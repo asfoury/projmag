@@ -56,19 +56,5 @@ class FormTest {
             """.trimIndent()
                 )
             )
-
-        //pressOnAddVideoButton()
     }
-
-    @Test
-    fun pressOnAddVideo() {
-        //pressOnAddVideoButton()
-    }
-
-
-    private fun pressOnAddVideoButton() {
-        onView(withId(R.id.add_video))
-            .perform(click())
-    }
-
 }
