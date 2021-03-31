@@ -15,15 +15,16 @@ object Utils {
 
     private var initalized = false
 
+    @Synchronized
     fun init(context: Context) {
         if (!initalized) {
             val firestore = Firebase.firestore
 
             // Uncomment to disable firebase cache
             /* val settings = firestoreSettings {
-            isPersistenceEnabled = false
-        }
-        firestore.firestoreSettings = settings*/
+                isPersistenceEnabled = false
+            }
+            firestore.firestoreSettings = settings*/
 
             projectsDatabase =
                 CachedProjectsDatabase(
