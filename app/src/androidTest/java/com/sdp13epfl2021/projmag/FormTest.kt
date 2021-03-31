@@ -1,6 +1,9 @@
 package com.sdp13epfl2021.projmag
 
 import android.content.Context
+import android.widget.Button
+import android.widget.MediaController
+import android.widget.VideoView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
@@ -25,6 +28,7 @@ class FormTest {
     fun setup() {
         instrumentationContext = InstrumentationRegistry.getInstrumentation().context
     }
+
     @Test
     fun writeAProjectToSubmit() {
         // need to swipe down to make sure textFields are visible when running tests
@@ -76,6 +80,20 @@ class FormTest {
     @Test
     fun testFormHelperFunctions() {
         val fileName = "test"
-        assert(FormHelper.saveVideoToLocalStorage(File(fileName), instrumentationContext) == "${instrumentationContext.filesDir}/${fileName}" )
+        assert(
+            FormHelper.saveVideoToLocalStorage(
+                File(fileName),
+                instrumentationContext
+            ) == "${instrumentationContext.filesDir}/${fileName}"
+        )
+        val button = Button(instrumentationContext)
+        val mediaController = MediaController(instrumentationContext)
+        val fakeStringPath = "local/123/aa"
+        val vidView = VideoView(instrumentationContext)
+
+        FormHelper.playVideoFromLocalPath(button, vidView, mediaController, fakeStringPath)
+        assert(button.isEnabled)
+        assert(button.hasOnClickListeners())
+        assert(!vidView.isPlaying)
     }
 }

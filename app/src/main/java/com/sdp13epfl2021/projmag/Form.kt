@@ -24,10 +24,14 @@ class Form : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initUi()
+        setContentView(R.layout.activity_form)
         val addVideoButton: Button = findViewById(R.id.add_video)
         addVideoButton.setOnClickListener {
-            openGalleryForVideo()
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(
+                Intent.createChooser(intent, "Select Video"),
+                REQUEST_VIDEO_ACCESS
+            )
         }
     }
 
@@ -45,37 +49,19 @@ class Form : AppCompatActivity() {
                 val file = File(selectedVidPath!!)
 
                 // path of video in local storage unable to play video from it for now playing using location in external storage
-                val pathInLocalStorage = FormHelper.saveVideoToLocalStorage(file,this)
+                val pathInLocalStorage = FormHelper.saveVideoToLocalStorage(file, this)
                 val playVidButton = findViewById<Button>(R.id.play_video)
-                playVidButton.isEnabled = true
-                playVidButton.setOnClickListener {
-                    val vidView = findViewById<VideoView>(R.id.videoView)
-                    val mediaController = MediaController(this)
+                val vidView = findViewById<VideoView>(R.id.videoView)
+                val mediaController = MediaController(this)
 
-                    vidView.setMediaController(mediaController)
-
-                    vidView.setVideoPath(pathInLocalStorage)
-                    vidView.start()
-                }
+                FormHelper.playVideoFromLocalPath(
+                    playVidButton,
+                    vidView,
+                    mediaController,
+                    pathInLocalStorage
+                )
             }
         }
-    }
-
-    /**
-     * Initialises the Form UI
-     */
-    private fun initUi() {
-        setContentView(R.layout.activity_form)
-    }
-
-    /**
-     * Opens the file explorer so the user
-     * can select a video from the device
-     */
-    private fun openGalleryForVideo() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_VIDEO_ACCESS)
-
     }
 }
 
@@ -118,5 +104,21 @@ class FormHelper() {
 
             return "${context.filesDir}/${file.name}"
         }
+
+        public fun playVideoFromLocalPath(
+            playVidButton: Button,
+            vidView: VideoView,
+            mediaController: MediaController,
+            pathInLocalStorage: String
+        ) {
+            playVidButton.isEnabled = true
+            playVidButton.setOnClickListener {
+                vidView.setMediaController(mediaController)
+                vidView.setVideoPath(pathInLocalStorage)
+                vidView.start()
+            }
+        }
+
+
     }
 }
