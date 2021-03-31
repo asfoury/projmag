@@ -1,22 +1,30 @@
 package com.sdp13epfl2021.projmag
 
+import android.content.Context
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import junit.framework.Assert.assertEquals
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
+
 
 class FormTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<Form> =
         ActivityScenarioRule(Form::class.java)
 
+
+    lateinit var instrumentationContext: Context
+
+    @Before
+    fun setup() {
+        instrumentationContext = InstrumentationRegistry.getInstrumentation().context
+    }
     @Test
     fun writeAProjectToSubmit() {
         // need to swipe down to make sure textFields are visible when running tests
@@ -63,5 +71,11 @@ class FormTest {
             """.trimIndent()
                 )
             )
+    }
+
+    @Test
+    fun testFormHelperFunctions() {
+        val fileName = "test"
+        assert(FormHelper.saveVideoToLocalStorage(File(fileName), instrumentationContext) == "${instrumentationContext.filesDir}/${fileName}" )
     }
 }
