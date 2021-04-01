@@ -20,7 +20,6 @@ class ProjectUploaderTest {
 
     val mockFileDatabase = Mockito.mock(FileDatabase::class.java)
 
-    val mockFile = Mockito.mock(File::class.java)
     val mockUri = Mockito.mock(Uri::class.java)
 
     val PID = "pid"
@@ -56,6 +55,31 @@ class ProjectUploaderTest {
                 val onSuccess = it.arguments[1] as ((String) -> Unit)
                 onSuccess(PID)
             }
+
+        Mockito.`when`(
+            mockProjectDB.updateVideoWithProject(
+                JavaToKotlinHelper.anyObject(),
+                JavaToKotlinHelper.anyObject(),
+                JavaToKotlinHelper.anyObject(),
+                JavaToKotlinHelper.anyObject()
+            )
+        ).then {
+            val onSuccess = it.arguments[2] as (() -> Unit)
+            onSuccess()
+        }
+
+        /* MOCK_FILE_DB */
+        Mockito.`when`(
+            mockFileDatabase.pushFileFromUri(
+                JavaToKotlinHelper.anyObject(),
+                JavaToKotlinHelper.anyObject(),
+                JavaToKotlinHelper.anyObject()
+            )
+        ).then {
+            val onSuccess = it.arguments[1] as ((Uri) -> Unit)
+            onSuccess(mockUri)
+        }
+
     }
 
     @Test
@@ -81,6 +105,19 @@ class ProjectUploaderTest {
             {}).checkProjectAndThenUpload(
             Success(exampleProject),
             null
+        )
+    }
+
+    @Test
+    fun checkProjectAndThenUploadWithURIWorks() {
+        ProjectUploader(
+            mockProjectDB,
+            mockFileDatabase,
+            { msg -> assertEquals("Project pushed with ID : $PID", msg) },
+            {},
+            {}).checkProjectAndThenUpload(
+            Success(exampleProject),
+            mockUri
         )
     }
 }

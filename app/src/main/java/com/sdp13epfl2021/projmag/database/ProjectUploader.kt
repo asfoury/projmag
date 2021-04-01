@@ -65,7 +65,9 @@ class ProjectUploader(
         projectDB.pushProject(
             project,
             { id ->
-                videoUri?.let { uri -> uploadVideo(id, uri) }
+                videoUri?.let { uri ->
+                    uploadVideo(id, uri)
+                }
                     ?: run {
                         showMsg("Project pushed (without video) with ID : $id")
                         onSuccess()
