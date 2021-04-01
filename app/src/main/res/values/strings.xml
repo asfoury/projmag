@@ -7,11 +7,11 @@
     <string name="project_name">Project name</string>
     <string name="teacher">Teacher</string>
     <string name="project_TA">Project TA</string>
-    <string name="numberOfParticipant">Number of participant</string>
+    <string name="numberOfParticipant">Number of participants</string>
     <string name="semester_project">Semester project</string>
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
-    <string name="submission">Submission</string>
+    <string name="submission">Submit</string>
     <string name="cv_creation_intro_title">CV creation</string>
     <string name="cv_creation_intro_body">Let\'s create your curriculum vitae step by step</string>
     <string name="cv_creation_intro_instruction">Just swipe to go through the forms</string>
@@ -33,6 +33,8 @@
     <string name="search">search</string>
     <string name="profile">profileButton</string>
     <string name="submit">Add a new project to the list</string>
+    <string name="play_video">Play Video</string>
+    <string name="add_video">Add Video</string>
     <string name="cv_period_description">Description</string>
     <string name="cv_period_school_name">School Name</string>
     <string name="cv_period_period_title">Period (to change)</string>

@@ -7,7 +7,6 @@ import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import android.os.Looper
-import com.sdp13epfl2021.projmag.database.Utils
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,17 +16,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Utils.init(this)
-
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
 
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
          * Else send him to DashboardActivity*/
         Handler(Looper.getMainLooper()).postDelayed({
-            if(user != null){
+            if (user != null) {
                 goToProjectsList()
-            }else{
+            } else {
                 goToSignIn()
             }
         }, 2000)

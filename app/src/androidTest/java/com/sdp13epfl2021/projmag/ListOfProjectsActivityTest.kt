@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag
 
+import android.view.View
 import android.widget.AutoCompleteTextView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -78,10 +79,13 @@ class ListOfProjectsActivityTest {
             val recyclerView = projectListActivity.getRecyclerView()
             for (project in dataset) {
                 val i = dataset.indexOf(project)
-                if (project.isTaken) {
-                    assert(recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha == 0.5f)
-                } else {
-                    assert(recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha == 1f)
+                val iv: View? = recyclerView.findViewHolderForLayoutPosition(i)?.itemView
+                if (iv != null) {
+                    if (project.isTaken) {
+                        assert(iv.alpha == 0.5f)
+                    } else {
+                        assert(iv.alpha == 1f)
+                    }
                 }
             }
         }

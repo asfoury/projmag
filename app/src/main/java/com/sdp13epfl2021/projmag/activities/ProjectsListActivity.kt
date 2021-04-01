@@ -11,9 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.ProfilePageActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.SignInActivity
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
-import com.sdp13epfl2021.projmag.data.Datasource
 import com.sdp13epfl2021.projmag.database.Utils
 
 class ProjectsListActivity : AppCompatActivity() {
@@ -31,15 +29,10 @@ class ProjectsListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
-
-        Utils.init(this) //TODO remove. Better to init Utils only in JUnit with @Before/etc
-
-        val myDataset = Datasource().loadProjects().toMutableList()
-        myDataset.sortBy{ project -> project.isTaken }
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        itemAdapter = ItemAdapter(this, myDataset, recyclerView)
+        itemAdapter = ItemAdapter(this, Utils(this), recyclerView)
         recyclerView.adapter = itemAdapter
-        recyclerView.setHasFixedSize(true)
+        recyclerView.setHasFixedSize(false)
 
         // get the fab and make it go to the Form activity
         val fab: View = findViewById(R.id.fab)
