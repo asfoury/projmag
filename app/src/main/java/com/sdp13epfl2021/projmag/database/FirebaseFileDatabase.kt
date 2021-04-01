@@ -76,6 +76,29 @@ class FirebaseFileDatabase(
             .addOnFailureListener(onFailure)
     }
 
+    override fun pushFileFromUri(
+        uri: Uri,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val fileRef = rootRef
+            .child(userUID)
+            .child(uri.toString())
+
+        fileRef
+            .putFile(uri)
+            .continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                fileRef.downloadUrl
+            }
+            .addOnSuccessListener(onSuccess)
+            .addOnFailureListener(onFailure)
+    }
+
 
     override fun deleteFile(
         fileUrl: String,

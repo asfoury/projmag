@@ -40,6 +40,18 @@ class Form : AppCompatActivity() {
 
 
     /**
+     * Disable submission button
+     * Useful to submit only one project at time
+     */
+    private fun setSubmitButtonEnabled(enabled: Boolean) = runOnUiThread {
+        findViewById<Button>(R.id.form_button_sub)?.apply {
+            isEnabled = enabled
+            text = if (enabled) getString(R.string.submission) else "Loading"
+        }
+    }
+
+
+    /**
      * This function is called after the user comes back
      * from selecting a video from the file explorer
      */
@@ -48,8 +60,7 @@ class Form : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
             if (data?.data != null) {
                 // THIS IS THE VID URI
-                val selectedVidURI = data.data
-
+                videoUri = data.data
 
                 val playVidButton = findViewById<Button>(R.id.play_video)
                 val vidView = findViewById<VideoView>(R.id.videoView)
@@ -59,7 +70,7 @@ class Form : AppCompatActivity() {
                     playVidButton,
                     vidView,
                     mediaController,
-                    selectedVidURI!!
+                    videoUri!!
                 )
             }
         }
@@ -117,18 +128,20 @@ class Form : AppCompatActivity() {
      * Submit project and video with information in the view.
      * Expected to be called when clicking on a submission button on the view
      */
-    fun submit(view: View) = Firebase.auth.uid?.let { uid ->
+    private fun submit(view: View) = Firebase.auth.uid?.let { uid ->
+        setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
         ProjectUploader(
             Utils.projectsDatabase,
             FirebaseFileDatabase(
                 FirebaseStorage.getInstance(),
                 uid
-            )
+            ),
+            ::showToast,
+            { setSubmitButtonEnabled(true) },
+            ::finishFromOtherThread
         ).checkProjectAndThenUpload(
             constructProject(),
-            videoUri,
-            ::showToast,
-            ::finishFromOtherThread
+            videoUri
         )
     }
 }
@@ -148,7 +161,5 @@ class FormHelper() {
                 vidView.start()
             }
         }
-
-
     }
 }
