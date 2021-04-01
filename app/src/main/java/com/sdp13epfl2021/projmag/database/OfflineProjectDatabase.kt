@@ -40,10 +40,12 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
     @Synchronized
     private fun loadProjects() {
         projectsFiles = projectsDir
-            .listFiles()!!
-            .map { child -> child.name to File(child, PROJECT_DATA_FILE) }
-            .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile }
-            .toMap()
+            .listFiles()
+            ?.let {
+                it.map { child -> child.name to File(child, PROJECT_DATA_FILE) }
+                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile }
+                .toMap()
+            } ?: emptyMap()
     }
 
     @Synchronized
