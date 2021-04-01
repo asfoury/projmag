@@ -46,7 +46,7 @@ interface FileDatabase {
      * Call `onSuccess` with the Uri if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
      *
-     * @param file the File to push
+     * @param uri the File to push
      * @param onSuccess the consumer for success
      * @param onFailure the consumer for failures
      */

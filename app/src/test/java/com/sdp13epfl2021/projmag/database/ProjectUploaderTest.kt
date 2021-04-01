@@ -60,21 +60,27 @@ class ProjectUploaderTest {
 
     @Test
     fun checkProjectAndThenUploadWorksWithFailure() {
-        ProjectUploader(mockProjectDB, mockFileDatabase).checkProjectAndThenUpload(
+        ProjectUploader(
+            mockProjectDB,
+            mockFileDatabase,
+            { msg -> assertEquals(reason, msg) },
+            {},
+            {}).checkProjectAndThenUpload(
             Failure(reason),
             null,
-            { msg -> assertEquals(reason, msg) },
-            {}
         )
     }
 
     @Test
     fun checkProjectAndThenUploadWorks() {
-        ProjectUploader(mockProjectDB, mockFileDatabase).checkProjectAndThenUpload(
-            Success(exampleProject),
-            null,
+        ProjectUploader(
+            mockProjectDB,
+            mockFileDatabase,
             { msg -> assertEquals("Project pushed (without video) with ID : $PID", msg) },
-            {}
+            {},
+            {}).checkProjectAndThenUpload(
+            Success(exampleProject),
+            null
         )
     }
 }
