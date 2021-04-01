@@ -11,4 +11,3 @@ exclude_patterns:
 - "**/test/"
 - "**/androidTest/"
 - "**test"
-- "ProjectsDatabase.tk"
