@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".ProfilePageActivity" />
+        <activity
+            android:name=".ProfilePageActivity"
+            android:parentActivityName=".activities.ProjectsListActivity"/>
         <activity
             android:name=".curriculumvitae.CVCreationActivity"
             android:screenOrientation="portrait" />

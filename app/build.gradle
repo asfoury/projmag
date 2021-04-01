@@ -62,7 +62,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
-
+    implementation 'com.google.firebase:firebase-dynamic-links-ktx'
+    implementation 'com.google.firebase:firebase-core:18.0.2'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
@@ -85,6 +86,8 @@ dependencies {
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.28-alpha'
     annotationProcessor 'com.google.dagger:hilt-android-compiler:2.28-alpha'
     androidTestAnnotationProcessor 'com.google.dagger:hilt-android-compiler:2.28-alpha'
+
+
 }
 
 
