@@ -14,7 +14,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
-import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
 import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -39,8 +38,17 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
 
     @Synchronized
     private fun addProject(project: ImmutableProject) {
-        datasetAll = datasetAll + project
-        dataset.addNotExisting(project)
+        val oldProject: ImmutableProject? = dataset.find { p -> p.id == project.id }
+        if (oldProject == null) {
+            datasetAll = datasetAll + project
+            dataset.add(project)
+        } else {
+            datasetAll = datasetAll - oldProject + project
+            val index = dataset.indexOf(oldProject)
+            if (index >= 0 && index < dataset.size) {
+                dataset[index] = project
+            }
+        }
         greyOut()
         dataset.sortBy{ p -> p.isTaken}
     }
