@@ -146,12 +146,15 @@ class FormTest {
     }
 
     @Test
-    fun formTestSub() {
+    fun formTestSubmissionShouldFailWithTooManyParticipant() {
         onView(withId(R.id.form_edit_text_project_name)).perform(replaceText("name"))
         onView(withId(R.id.form_edit_text_laboratory)).perform(replaceText("lab"))
         onView(withId(R.id.form_edit_text_teacher)).perform(replaceText("teacher"))
         onView(withId(R.id.form_edit_text_project_TA)).perform(replaceText("TA"))
+
+        // this will cause failure
         onView(withId(R.id.form_nb_of_participant)).perform(replaceText("123"))
+
         onView(withId(R.id.form_check_box_MP)).perform(click())
         onView(withId(R.id.form_check_box_SP)).perform(click())
         onView(withId(R.id.form_project_description)).perform(replaceText("description"))

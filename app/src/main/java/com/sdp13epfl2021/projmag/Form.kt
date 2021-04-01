@@ -7,15 +7,13 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toFile
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.sdp13epfl2021.projmag.database.*
-import com.sdp13epfl2021.projmag.model.Failure
+import com.sdp13epfl2021.projmag.database.ProjectUploader
+import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
-import com.sdp13epfl2021.projmag.model.Success
 
 class Form : AppCompatActivity() {
     private fun initUi() {
@@ -73,62 +71,6 @@ class Form : AppCompatActivity() {
      */
     private fun getTmpVideoUri(): Uri? = null    /* TODO */
 
-    /**
-     * Upload a video to firebase and edit the link of the video in the project corresponding
-     * to the given ProjectId
-     */
-    private fun uploadVideo(
-        id: ProjectId,
-        projectDB: ProjectsDatabase,
-        fileDB: FileDatabase,
-        videoUri: Uri
-    ) = videoUri.let { tmpUri ->
-        fileDB.pushFile(
-            tmpUri.toFile(),
-            { newUri ->
-                projectDB.updateVideoWithProject(
-                    id,
-                    newUri.toString(),
-                    {
-                        showToast("Project pushed with ID : $id")
-                        finishFromOtherThread()
-                    },
-                    {}
-                )
-            },
-            { showToast("Can't push video") }
-        )
-    }
-
-    /**
-     * Upload a project (if valid) and upload and attach a video to it,
-     * if a video is given (Uri not null)
-     */
-    private fun upload(
-        maybeProject: Result<ImmutableProject>,
-        projectDB: ProjectsDatabase,
-        fileDB: FileDatabase,
-        videoUri: Uri?
-    ) =
-        when (maybeProject) {
-            is Success<*> -> {
-                val project = maybeProject.value as ImmutableProject
-                projectDB.pushProject(
-                    project,
-                    { id ->
-                        videoUri?.let { uri -> uploadVideo(id, projectDB, fileDB, uri) }
-                            ?: run {
-                                showToast("Project pushed (without video) with ID : $id")
-                                finishFromOtherThread()
-                            }
-                    },
-                    { showToast("Can't push project") }
-                )
-            }
-            is Failure<*> -> {
-                Toast.makeText(this, maybeProject.reason, Toast.LENGTH_LONG).show()
-            }
-        }
 
     /**
      * Finish the activity from another thread
@@ -143,13 +85,15 @@ class Form : AppCompatActivity() {
      * Expected to be called when clicking on a submission button on the view
      */
     fun submit(view: View) = Firebase.auth.uid?.let {
-        upload(
-            constructProject(),
+        ProjectUploader(
             Utils.projectsDatabase,
-            FirebaseFileDatabase(
-                FirebaseStorage.getInstance(), it
-            ),
-            getTmpVideoUri()
+            it,
+            FirebaseStorage.getInstance()
+        ).checkProjectAndThenUpload(
+            constructProject(),
+            getTmpVideoUri(),
+            ::showToast,
+            ::finishFromOtherThread
         )
     }
 }
