@@ -1,14 +1,20 @@
 package com.sdp13epfl2021.projmag.model
 
-import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-data class TagsBase(
-    private val tags: MutableSet<String> = mutableSetOf(),
-    private val MAX_TAG_SIZE: Int = 40
+ class TagsBaseManager{
+     val MAX_TAG_SIZE: Int = 40
 
-){
+    //this should be thread safe
+    companion object TagsBase{
+        private val tags: MutableSet<Tag> = mutableSetOf()
+
+
+    }
+
+
+
     /**
      * TagTooLong : the tag is longer than MAX_TAG_SIZE which is output by the function maxTagSize
      * TagContainsSpecialChar : the tag contains numbers, and special characters like $ £ etc
@@ -37,35 +43,37 @@ data class TagsBase(
      * @param tag
      * @return whether or not an error has happened and what type it is using the sealed class tagAddResult
      */
-    fun addTag(tag : String) : InputResult{
-        //cleaning up the data :
-        if(tag.length > MAX_TAG_SIZE ){
+    fun addTag(tag : Tag) : InputResult{
+        val tagName = tag.name
+
+        if(tagName.length > MAX_TAG_SIZE ){
             //sealed class?
             return InputResult.TooLong
         }
-        val cleanTag = tag.toLowerCase(Locale.getDefault()).replace(" ","")
+
 
         //checking that there are other characters than normal letters :
         val p = Pattern.compile("[^a-z ]")
-        val m : Matcher = p.matcher(cleanTag)
+        val m : Matcher = p.matcher(tagName)
         if(m.find()){
             return InputResult.ContainsSpecialChar
         }
 
         //various other checks :
-        if(tags.contains(cleanTag)){
+        if(tags.contains(tag)){
             return InputResult.AlreadyExists
         }
         else{
-            tags.add(cleanTag)
+            tags.add(tag)
             return InputResult.OK
         }
 
     }
 
     //should I be making a defensive copy here?
-    fun getAllTags() : Set<String>{
-        return tags
+    fun getAllTags(): Set<Tag> {
+        //defensive copy
+        return tags.toSet()
     }
 
 }
