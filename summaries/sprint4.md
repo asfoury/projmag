@@ -1,7 +1,7 @@
 # Summary for week 3
 
 ## Mohamed(Scrum Master)
-
+This week I added some tests for the video selection when submitting a project and updated the UI of the project form submission to support the addition of the video and a space to play the video once it's selected. The main problem I encountered with this sprint is with the coverage of the testing. To test my code I need to select a video from the phone gallery which is not possible to do using Cirrus. Another problem I encountered is copying the video from the phone gallery to the apps internal storage as the information available online is either very new or uses deprecated code or does not work foll all versions of android, in the end we decided not to copy the video to the local app storage and upload it directly to FireBase. My time estimate was accurate this sprint.
 ## Giovanni
 I allow user to add a video from gallery to the cv. I spent a lot of time to search how to use gallery and video api on android studio and to seach how to test the selection on th
 gallery. I need next time to add more test in my code because my coverage was low
@@ -23,3 +23,4 @@ Improved the tagsbase. I actually spent a lot of time on the computer trying to 
 ## Paul
 
 ## Overall Team
+This week we did 3 standup meetings and we can see that the amount of small meetings after each standup is increasing because we are modifying code that depends on other people. As for this weeks tasks we were not able to finish all tasks in time, next time we should try to select our tasks more accuretly so we can all finish our pull requests before the end of the sprint.
