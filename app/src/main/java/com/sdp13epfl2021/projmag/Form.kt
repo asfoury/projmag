@@ -1,24 +1,14 @@
 package com.sdp13epfl2021.projmag
 
 import android.app.Activity
-import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Button
 import android.widget.MediaController
-import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.net.URI
 
 
 class Form : AppCompatActivity() {
@@ -46,8 +36,9 @@ class Form : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
             if (data?.data != null) {
+                // THIS IS THE VID URI
                 val selectedVidURI = data.data
-                //val pathInLocalStorage = selectedVidURI!!.path
+
 
                 val playVidButton = findViewById<Button>(R.id.play_video)
                 val vidView = findViewById<VideoView>(R.id.videoView)
