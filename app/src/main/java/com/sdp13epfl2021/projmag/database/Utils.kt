@@ -7,37 +7,26 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 
-object Utils {
-
-    lateinit var projectsDatabase: CachedProjectsDatabase
-    lateinit var userDatabase: UserDataDatabase
-    lateinit var fileDatabase: FileDatabase
-
-    private var initalized = false
-
-    @Synchronized
-    fun init(context: Context) {
-        if (!initalized) {
-            val firestore = Firebase.firestore
-
-            // Uncomment to disable firebase cache
-            /* val settings = firestoreSettings {
-                isPersistenceEnabled = false
-            }
-            firestore.firestoreSettings = settings*/
-
-            projectsDatabase =
-                CachedProjectsDatabase(
-                    OfflineProjectDatabase(
-                        FirebaseProjectsDatabase(
-                            firestore
-                        ),
-                        File(context.filesDir, "projects")
-                    )
-                )
-            fileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
-            userDatabase = UserDataFirebase(firestore, Firebase.auth)
-            initalized = true
-        }
+class Utils(private val context: Context) {
+    
+    private val firestore = Firebase.firestore
+    // Uncomment to disable firebase cache
+    /* val settings = firestoreSettings {
+        isPersistenceEnabled = false
     }
+    firestore.firestoreSettings = settings*/
+
+    val userDatabase: UserDataDatabase = UserDataFirebase(firestore, Firebase.auth)
+    val fileDatabase: FileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
+    val projectsDatabase: CachedProjectsDatabase =
+        CachedProjectsDatabase(
+            OfflineProjectDatabase(
+                FirebaseProjectsDatabase(
+                    firestore
+                ),
+                File(context.filesDir, "projects")
+            )
+        )
+
+
 }

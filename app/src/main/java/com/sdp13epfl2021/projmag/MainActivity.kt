@@ -7,7 +7,6 @@ import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import android.os.Looper
-import com.sdp13epfl2021.projmag.database.Utils
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,8 +15,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        Utils.init(this)
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser

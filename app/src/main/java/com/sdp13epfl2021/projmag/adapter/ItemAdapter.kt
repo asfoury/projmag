@@ -14,16 +14,41 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
+import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
+import com.sdp13epfl2021.projmag.database.ProjectChange
+import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
-class ItemAdapter(private val context: Context, public val dataset: MutableList<ImmutableProject>, private val recyclerView: RecyclerView) :
+class ItemAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
 
-    val datasetAll: List<ImmutableProject>
+    var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
+    val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
     init {
         dataset.sortBy{ project -> project.isTaken}
-        datasetAll = ArrayList(dataset)
+        utils.projectsDatabase.addProjectsChangeListener { change ->
+            when (change.type) {
+                ProjectChange.Type.ADDED -> addProject(change.project)
+                ProjectChange.Type.MODIFIED -> addProject(change.project)
+                ProjectChange.Type.REMOVED -> removeProject(change.project)
+            }
+            notifyDataSetChanged()
+        }
+    }
+
+    @Synchronized
+    private fun addProject(project: ImmutableProject) {
+        datasetAll = datasetAll + project
+        dataset.addNotExisting(project)
+        greyOut()
+        dataset.sortBy{ p -> p.isTaken}
+    }
+
+    @Synchronized
+    private fun removeProject(project: ImmutableProject) {
+        datasetAll = datasetAll - project
+        dataset.remove(project)
     }
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
