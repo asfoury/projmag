@@ -21,6 +21,9 @@ Next time I'll try to not add more work to my tasks.
 Improved the tagsbase. I actually spent a lot of time on the computer trying to understand my UI tasks but I just didn't manage to focus and wasted it. Work discipline is going down a blackhole need to find a solution to it. For next week I need to catch up this week's work and also manage the tasks that are given to me better. 
 
 ## Paul
+This week I had first to configure `codeclimate` to relax the code duplication constraint. It was quite fast and easy to do, thanks to codeclimate docs.
+My second task was to upload project, a video and link both together. This implementation was quite challenging and the testing even more. I had some issues with URI and had to modify the File Database interface.
+In the following weeks, I will need to get more familiar with handling mutlimedia in android, and to learn more about Firebase services.
 
 ## Overall Team
 This week we did 3 standup meetings and we can see that the amount of small meetings after each standup is increasing because we are modifying code that depends on other people. As for this weeks tasks we were not able to finish all tasks in time, next time we should try to select our tasks more accuretly so we can all finish our pull requests before the end of the sprint.
