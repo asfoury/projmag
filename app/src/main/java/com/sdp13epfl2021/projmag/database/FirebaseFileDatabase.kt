@@ -93,8 +93,15 @@ class FirebaseFileDatabase(
         onSuccess: (Uri) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
+
+        val user = auth.currentUser
+        if (user == null) {
+            GlobalScope.launch { onFailure(SecurityException("Pushing file can only be done by authenticated user.")) }
+            return
+        }
+
         val fileRef = rootRef
-            .child(userUID)
+            .child(user.uid)
             .child("${UUID.randomUUID()}_${uri.toString()}")
 
         fileRef

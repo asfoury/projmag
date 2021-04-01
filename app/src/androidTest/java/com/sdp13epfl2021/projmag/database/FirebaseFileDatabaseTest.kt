@@ -233,12 +233,12 @@ class FirebaseFileDatabaseTest {
     @Test(timeout = 1000)
     fun pushFromUriWorks() {
         assertTrue(tempFile.createNewFile())
-        val db = FirebaseFileDatabase(mockFirebaseStorage, UID)
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
         db.pushFileFromUri(mockUri, onSuccessPush, onFailureNotExpected)
 
         while (onSuccessPushUri == null);
 
-        assertEquals(fileUri, onSuccessPushUri)
+        assertEquals(mockFileUri, onSuccessPushUri)
 
     }
 

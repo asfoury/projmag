@@ -128,13 +128,13 @@ class Form : AppCompatActivity() {
      * Submit project and video with information in the view.
      * Expected to be called when clicking on a submission button on the view
      */
-    private fun submit(view: View) = Firebase.auth.uid?.let { uid ->
+    private fun submit(view: View) = Firebase.auth.let { auth ->
         setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
         ProjectUploader(
-            Utils.projectsDatabase,
+            Utils(this).projectsDatabase,
             FirebaseFileDatabase(
                 FirebaseStorage.getInstance(),
-                uid
+                auth
             ),
             ::showToast,
             { setSubmitButtonEnabled(true) },
