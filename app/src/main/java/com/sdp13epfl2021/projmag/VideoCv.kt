@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 class VideoCv : AppCompatActivity() {
     lateinit var vidButton: Button
     lateinit var videoView: VideoView
+    private var VideoUri: Uri? = null
     private val pickVideo = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,8 @@ class VideoCv : AppCompatActivity() {
             if (data?.data != null) {
                 val uriPathHelper = URIPathHelper()
                 val videoPath = uriPathHelper.getPath(this, data?.data!!)
-                videoView.setVideoPath(videoPath)
+                VideoUri = data?.data
+                videoView.setVideoURI(VideoUri)
                 videoView.start();
             }
         }
