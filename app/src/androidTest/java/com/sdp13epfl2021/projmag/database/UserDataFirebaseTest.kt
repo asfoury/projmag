@@ -12,6 +12,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import com.sdp13epfl2021.projmag.JavaToKotlinHelper
 
 @Suppress("UNCHECKED_CAST")
 class UserDataFirebaseTest {
@@ -36,18 +37,6 @@ class UserDataFirebaseTest {
     private val database: UserDataDatabase =
         UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
 
-    /**
-     * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
-     * a `NullPointerException` caused by Java to Kotlin type cast
-     */
-    object JavaToKotlinHelper {
-        fun <T> anyObject(): T {
-            Mockito.anyObject<T>()
-            return uninitialized()
-        }
-
-        private fun <T> uninitialized(): T = null as T
-    }
 
     @Before
     fun setupMocks() {

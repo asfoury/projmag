@@ -17,11 +17,8 @@ import com.sdp13epfl2021.projmag.model.Success
  */
 class ProjectUploader(
     private val projectDB: ProjectsDatabase,
-    uid: String,
-    firebaseStorage: FirebaseStorage
+    private val fileDB: FileDatabase
 ) {
-
-    private val fileDB: FirebaseFileDatabase = FirebaseFileDatabase(firebaseStorage, uid)
 
     /**
      * Upload a video to firebase and edit the link of the video in the project corresponding
@@ -43,7 +40,7 @@ class ProjectUploader(
                         showMsg("Project pushed with ID : $id")
                         finish()
                     },
-                    {}
+                    { showMsg("Can't link video to project") }
                 )
             },
             { showMsg("Can't push video") }
@@ -86,14 +83,12 @@ class ProjectUploader(
     ) =
         when (maybeProject) {
             is Success<*> -> {
-                Firebase.auth.uid?.let {
-                    upload(
-                        maybeProject.value as ImmutableProject,
-                        videoUri,
-                        showMsg,
-                        finish
-                    )
-                }
+                upload(
+                    maybeProject.value as ImmutableProject,
+                    videoUri,
+                    showMsg,
+                    finish
+                )
             }
             is Failure<*> -> {
                 showMsg(maybeProject.reason)
