@@ -15,7 +15,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getAllProjectWorksWhenTheDBIsUpdated() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
 
         var all = cachedDB.getAllProjects()
@@ -63,7 +63,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectFromIdWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: ImmutableProject? = null
 
@@ -79,7 +79,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectsFromNameWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -96,7 +96,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getAllIdsWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ProjectId>? = null
 
@@ -116,7 +116,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 2000)
     fun getAllProjectsAsyncWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -137,7 +137,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectsFromTagsWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -156,7 +156,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun pushIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: ProjectId? = null
 
@@ -174,7 +174,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun deleteProjectWithIdIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -192,7 +192,7 @@ class CachedProjectsDatabaseTest {
     @Test
     fun listenersWorks() {
         val allBeginning = listOf(p1, p2)
-        val fakeDB = FakeDatabase(allBeginning)
+        val fakeDB = FakeDatabaseTest(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var count: AtomicInteger = AtomicInteger(0)
 
@@ -226,112 +226,4 @@ class CachedProjectsDatabaseTest {
         assertEquals(4, count.get())
     }
 
-
-
-
-    private class FakeDatabase(projectsBeginning: List<ImmutableProject>) : ProjectsDatabase {
-        private var projects: List<ImmutableProject> = projectsBeginning
-        private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
-        private var nextId: Int = 90000
-
-        fun add(project: ImmutableProject) {
-            projects = projects + project
-            listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.ADDED, project)) }
-        }
-
-        fun modify(project: ImmutableProject) {
-            projects.filter { p -> p.id != project.id }
-            projects = projects + project
-            listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
-        }
-
-        fun remove(project: ImmutableProject) {
-            projects = projects - project
-            listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.REMOVED, project)) }
-        }
-
-        override fun getAllIds(
-            onSuccess: (List<ProjectId>) -> Unit,
-            onFailure: (Exception) -> Unit
-        ) { }
-
-        override fun getProjectFromId(
-            id: ProjectId,
-            onSuccess: (ImmutableProject?) -> Unit,
-            onFailure: (Exception) -> Unit
-        ) { }
-
-        override fun getAllProjects(
-            onSuccess: (List<ImmutableProject>) -> Unit,
-            onFailure: (Exception) -> Unit
-        ) {
-            onSuccess(projects)
-        }
-
-        override fun getProjectsFromName(
-            name: String,
-            onSuccess: (List<ImmutableProject>) -> Unit,
-            onFailure: (Exception) -> Unit
-        ) { }
-
-        override fun getProjectsFromTags(
-            tags: List<String>,
-            onSuccess: (List<ImmutableProject>) -> Unit,
-            onFailure: (Exception) -> Unit
-        ) { }
-
-        override fun pushProject(
-            project: ImmutableProject,
-            onSuccess: (ProjectId) -> Unit,
-            onFailure: (Exception) -> Unit
-        ) {
-            val pid = nextId.toString()
-            nextId += 1
-            val newProject = project?.let {
-                ImmutableProject(
-                    pid,
-                    it.name,
-                    it.lab,
-                    it.teacher,
-                    it.TA,
-                    it.nbParticipant,
-                    it.assigned,
-                    it.masterProject,
-                    it.bachelorProject,
-                    it.tags,
-                    it.isTaken,
-                    it.description
-                )
-            }
-            add(newProject)
-            onSuccess(pid)
-        }
-
-        override fun deleteProjectWithId(
-            id: ProjectId,
-            onSuccess: () -> Unit,
-            onFailure: (Exception) -> Unit
-        ) {
-            projects.find { p -> p.id == id }?.let { remove(it) }
-            onSuccess()
-        }
-
-        override fun updateVideoWithProject(
-            id: ProjectId,
-            uri: String,
-            onSuccess: () -> Unit,
-            onFailure: (Exception) -> Unit
-        ) {
-            TODO("Not yet implemented")
-        }
-
-        override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
-            listeners = listeners + changeListener
-        }
-
-        override fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
-            listeners = listeners - changeListener
-        }
-
-    }
 }

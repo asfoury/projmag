@@ -26,8 +26,9 @@ data class ImmutableProject constructor(
     val videoURI: Uri? = null
 ) : Parcelable {
     companion object {
+         const val MAX_PROJECT_NAME_SIZE = 120
          const val MAX_NAME_SIZE = 40
-         const val MAX_DESCRIPTION_SIZE = 300
+         const val MAX_DESCRIPTION_SIZE = 4000
         private const val MAX_STUDENT_NUMBER = 10
         fun build(
             id: String,
@@ -45,7 +46,7 @@ data class ImmutableProject constructor(
             videoURI: Uri? = null
         ): Result<ImmutableProject> {
             return when {
-                name.length > MAX_NAME_SIZE -> Failure("name is more than $MAX_NAME_SIZE characters")
+                name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
                 lab.length > MAX_NAME_SIZE -> Failure("lab name is more than $MAX_NAME_SIZE characters")
                 TA.length > MAX_NAME_SIZE -> Failure("project manager name is more than $MAX_NAME_SIZE characters")
                 teacher.length > MAX_NAME_SIZE -> Failure("teacher name is more than $MAX_NAME_SIZE characters")
