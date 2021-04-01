@@ -3,7 +3,8 @@
 ## Mohamed(Scrum Master)
 
 ## Giovanni
-
+I allow user to add a video from gallery to the cv. I spent a lot of time to search how to use gallery and video api on android studio and to seach how to test the selection on th
+gallery. I need next time to add more test in my code because my coverage was low
 ## Luke 
 
 ## Arnaud
