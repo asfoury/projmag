@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag
 
 import android.content.Context
+import android.net.Uri
 import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
@@ -79,16 +80,9 @@ class FormTest {
 
     @Test
     fun testFormHelperFunctions() {
-        val fileName = "test"
-        assert(
-            FormHelper.saveVideoToLocalStorage(
-                File(fileName),
-                instrumentationContext
-            ) == "${instrumentationContext.filesDir}/${fileName}"
-        )
         val button = Button(instrumentationContext)
         val mediaController = MediaController(instrumentationContext)
-        val fakeStringPath = "local/123/aa"
+        val fakeStringPath = Uri.fromFile(File("test"))
         val vidView = VideoView(instrumentationContext)
 
         FormHelper.playVideoFromLocalPath(button, vidView, mediaController, fakeStringPath)

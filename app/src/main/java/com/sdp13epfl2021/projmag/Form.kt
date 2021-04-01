@@ -1,22 +1,24 @@
 package com.sdp13epfl2021.projmag
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.MotionEvent
 import android.widget.Button
 import android.widget.MediaController
+import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
+import java.net.URI
 
 
 class Form : AppCompatActivity() {
@@ -45,11 +47,8 @@ class Form : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
             if (data?.data != null) {
                 val selectedVidURI = data.data
-                val selectedVidPath = FormHelper.getPath(selectedVidURI, contentResolver)
-                val file = File(selectedVidPath!!)
+                //val pathInLocalStorage = selectedVidURI!!.path
 
-                // path of video in local storage unable to play video from it for now playing using location in external storage
-                val pathInLocalStorage = FormHelper.saveVideoToLocalStorage(file, this)
                 val playVidButton = findViewById<Button>(R.id.play_video)
                 val vidView = findViewById<VideoView>(R.id.videoView)
                 val mediaController = MediaController(this)
@@ -58,7 +57,7 @@ class Form : AppCompatActivity() {
                     playVidButton,
                     vidView,
                     mediaController,
-                    pathInLocalStorage
+                    selectedVidURI!!
                 )
             }
         }
@@ -67,54 +66,16 @@ class Form : AppCompatActivity() {
 
 class FormHelper() {
     companion object {
-        /**
-         * Takes the URI returned from the intent and gets the
-         * absolute location of the video that has been selected
-         * this is needed to be able to copy the video file that has
-         * been selected, for now uses a deprecated variable till
-         * we find the correct way of implementing it
-         */
-        public fun getPath(uri: Uri?, contentResolver: ContentResolver): String? {
-            val projection =
-                arrayOf(MediaStore.Video.Media.DATA)
-            val cursor: Cursor? = contentResolver.query(uri!!, projection, null, null, null)
-            return if (cursor != null) {
-                val columnIndex: Int = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-                cursor.moveToFirst()
-                cursor.getString(columnIndex)
-            } else null
-        }
-
-        /**
-         * Saves the video selected by the user to the
-         * apps local storage by keeping the name of the file in
-         * the gallery, if same video is selected no new videos are saved
-         */
-        public fun saveVideoToLocalStorage(file: File, context: Context): String {
-            val fileOutputStream: FileOutputStream
-            try {
-                fileOutputStream = context.openFileOutput(file.name, Context.MODE_PRIVATE)
-                fileOutputStream.write(file.readBytes())
-                fileOutputStream.close()
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            return "${context.filesDir}/${file.name}"
-        }
-
         public fun playVideoFromLocalPath(
             playVidButton: Button,
             vidView: VideoView,
             mediaController: MediaController,
-            pathInLocalStorage: String
+            uri: Uri
         ) {
             playVidButton.isEnabled = true
             playVidButton.setOnClickListener {
                 vidView.setMediaController(mediaController)
-                vidView.setVideoPath(pathInLocalStorage)
+                vidView.setVideoURI(uri)
                 vidView.start()
             }
         }
