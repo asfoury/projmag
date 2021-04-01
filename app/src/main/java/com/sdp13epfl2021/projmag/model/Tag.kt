@@ -7,10 +7,11 @@ import java.util.*
  *
  * @property name : name of the tag
  */
-data class Tag(var name : String) {
+data class Tag(var name: String) {
     private var accepted : Boolean = false
     init{
-        name = name.toLowerCase(Locale.ROOT).replace(" ","")
+
+        name = name.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
     }
 
 
