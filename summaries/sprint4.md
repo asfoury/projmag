@@ -27,3 +27,4 @@ In the following weeks, I will need to get more familiar with handling mutlimedi
 
 ## Overall Team
 This week we did 3 standup meetings and we can see that the amount of small meetings after each standup is increasing because we are modifying code that depends on other people. As for this weeks tasks we were not able to finish all tasks in time, next time we should try to select our tasks more accuretly so we can all finish our pull requests before the end of the sprint.
+
