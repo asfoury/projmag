@@ -33,7 +33,8 @@ class TagAdapter(private val context : Context, val tags : List<Tag>)
     }
 
     override fun onBindViewHolder(holder: ItemAdapter.ItemViewHolder, position: Int) {
-
+        val item = tags[position]
+        holder.textView.text = item.name
     }
 
     override fun getItemCount(): Int = tags.size
