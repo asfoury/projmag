@@ -3,12 +3,15 @@ package com.sdp13epfl2021.projmag
 
 import android.content.Intent
 import android.widget.VideoView
+import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.filters.LargeTest
 import androidx.test.runner.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.*
@@ -22,6 +25,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
+@LargeTest
 @RunWith(AndroidJUnit4::class)
 class ProjectInformationActivityTest {
 
@@ -120,11 +124,10 @@ class ProjectInformationActivityTest {
 
         assertFalse(videoView.isPlaying)
         Thread.sleep(100)
-        onView(withId(R.id.info_scroll_view)).perform(ViewActions.swipeUp())
-        Thread.sleep(100)
-
-        onView(withId(R.id.info_video)).perform(click())
-        Thread.sleep(100)
-        assertTrue(videoView.isPlaying)
+        if (videoView.isVisible) { // else the video is still not downloaded
+            onView(withId(R.id.info_video)).perform(scrollTo()).perform(click())
+            Thread.sleep(100)
+            assertTrue(videoView.isPlaying)
+        }
     }
 }
