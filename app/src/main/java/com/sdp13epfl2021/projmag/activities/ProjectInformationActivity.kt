@@ -191,11 +191,13 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private fun showToast(error: String) {
-        Toast.makeText(
-            this,
-            error,
-            Toast.LENGTH_SHORT
-        ).show()
+        runOnUiThread {
+            Toast.makeText(
+                this,
+                error,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
      // return a pair of (text without video tag, and a list of theses videos links)
