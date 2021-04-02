@@ -36,22 +36,30 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private lateinit var fileDB: FileDatabase
     private lateinit var videoView: VideoView
-    private var videosUris: List<Uri> = emptyList()
+    private val videosUris: MutableList<Uri> = ArrayList()
     private var current: Int = -1
 
     @Synchronized
-    private fun addVideo(videoUri: Uri, videoView: VideoView) {
-        videosUris = videosUris + videoUri
+    private fun addVideo(videoUri: Uri) {
+        videosUris.add(videoUri)
         if (current < 0) {
-            readVideo(0, videoView)
+            readNextVideo()
             videoView.isInvisible = false
             videoView.pause()
         }
     }
 
-    private fun readVideo(newCurrent: Int, videoView: VideoView) {
-        if (newCurrent >= 0 && newCurrent < videosUris.size) {
-            current = newCurrent
+    private fun readNextVideo() {
+        if (current + 1 < videosUris.size) {
+            current++
+            videoView.setVideoURI(videosUris[current])
+            videoView.start()
+        }
+    }
+
+    private fun readPrevVideo() {
+        if (current > 0) {
+            current--
             videoView.setVideoURI(videosUris[current])
             videoView.start()
         }
@@ -102,7 +110,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 addVideoAfterDownloaded(videosLinks, projectDir)
             }
         } else {
-            Toast.makeText(this, "An error occurred while loading project.", Toast.LENGTH_LONG).show()
+            showToast("An error occurred while loading project.")
         }
 
         // make the back button in the title bar work
@@ -135,14 +143,14 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         // set the controller buttons to play next/prev video
         controller.setPrevNextListeners({ next ->
-            readVideo(current + 1, videoView)
+            readNextVideo()
         }, { prev ->
-            readVideo(current - 1, videoView)
+            readPrevVideo()
         })
 
         // play the next video when the video is finished
         videoView.setOnCompletionListener {
-            readVideo(current + 1, videoView)
+            readNextVideo()
         }
 
         // resize the video view to use full width (with original ratio)
@@ -157,13 +165,9 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun addVideoAfterDownloaded(videosLinks: List<String>, projectDir: File) {
         videosLinks.forEach { link ->
             fileDB.getFile(link, projectDir, { file ->
-                addVideo(Uri.fromFile(file), videoView)
+                addVideo(Uri.fromFile(file))
             }, {
-                Toast.makeText(
-                    this,
-                    "An error occurred while downloading a video.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("An error occurred while downloading a video.")
             })
         }
     }
@@ -184,6 +188,14 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         // Allow user to click on link
         description.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun showToast(error: String) {
+        Toast.makeText(
+            this,
+            error,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
      // return a pair of (text without video tag, and a list of theses videos links)
@@ -239,19 +251,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                             htmlTextView.text = htmlTextView.text
                         }
                     } else {
-                        Toast.makeText(
-                            context,
-                            "An error occurred while loading image.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("An error occurred while loading image.")
                     }
                 }
             }, {
-                Toast.makeText(
-                    context,
-                    "An error occurred while downloading image.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast("An error occurred while downloading image.")
             })
             return holder
         }
