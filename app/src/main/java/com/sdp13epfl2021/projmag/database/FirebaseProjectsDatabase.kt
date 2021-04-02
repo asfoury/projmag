@@ -36,17 +36,14 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             teacher = doc["teacher"] as String,
             TA = doc["TA"] as String,
             nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-            assigned = (doc["assigned"] as? List<String>) ?: listOf(),
+            assigned = (doc["assigned"] as List<String>),
             masterProject = doc["masterProject"] as Boolean,
             bachelorProject = doc["bachelorProject"] as Boolean,
-            tags = (doc["tags"] as? List<String>) ?: listOf(),
+            tags = (doc["tags"] as List<String>),
             isTaken = doc["isTaken"] as Boolean,
             description = doc["description"] as String,
-            videoURI = doc["videoURI"]?.let {
-                when (val uri = (it as String)) {
-                    "" -> null
-                    else -> Uri.parse(uri)
-                }
+            videoURI = (doc["videoURI"] as List<String>).map {
+                Uri.parse(it)
             }
         )
 
@@ -190,10 +187,18 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         onFailure: (Exception) -> Unit
     ) {
         val docRef = firestore.collection(ROOT).document(id)
-        docRef
-            .update("videoUri", uri)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener(onFailure)
+        getProjectFromId(
+            id,
+            {
+                it?.let { project ->
+                    docRef
+                        .update("videoUri", project.videoURI + uri)
+                        .addOnSuccessListener { onSuccess() }
+                        .addOnFailureListener(onFailure)
+                }
+            },
+            onFailure
+        )
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {

@@ -23,7 +23,7 @@ data class ImmutableProject constructor(
     val tags: List<String>,
     val isTaken: Boolean,
     val description: String,
-    val videoURI: Uri? = null
+    val videoURI: List<Uri> = listOf()
 ) : Parcelable {
     companion object {
          const val MAX_PROJECT_NAME_SIZE = 120
@@ -43,7 +43,7 @@ data class ImmutableProject constructor(
             tags: List<String>,
             isTaken: Boolean,
             description: String,
-            videoURI: Uri? = null
+            videoURI: List<Uri> = listOf()
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -133,7 +133,7 @@ data class ImmutableProject constructor(
         "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
         "isTaken" to isTaken,
         "description" to description,
-        "videoURI" to (videoURI?.toString() ?: "")
+        "videoURI" to videoURI
     )
 
 
