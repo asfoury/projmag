@@ -113,17 +113,18 @@ class ProjectInformationActivityTest {
     fun videoIsLoadedAndCanBePaused() {
         lateinit var videoView: VideoView
 
-        Thread.sleep(4000)
         scenario.onActivity {
             videoView = it.findViewById(R.id.info_video)
         }
+        Thread.sleep(10000) //sleep 10sec to wait the download
+
         assertFalse(videoView.isPlaying)
-        Thread.sleep(1000)
+        Thread.sleep(100)
         onView(withId(R.id.info_scroll_view)).perform(ViewActions.swipeUp())
-        Thread.sleep(1000)
+        Thread.sleep(100)
 
         onView(withId(R.id.info_video)).perform(click())
-        Thread.sleep(1000)
+        Thread.sleep(100)
         assertTrue(videoView.isPlaying)
     }
 }
