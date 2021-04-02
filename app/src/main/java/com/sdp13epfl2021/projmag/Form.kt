@@ -130,12 +130,10 @@ class Form : AppCompatActivity() {
      */
     private fun submit(view: View) = Firebase.auth.let { auth ->
         setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
+        val utils = Utils(this)
         ProjectUploader(
-            Utils(this).projectsDatabase,
-            FirebaseFileDatabase(
-                FirebaseStorage.getInstance(),
-                auth
-            ),
+            utils.projectsDatabase,
+            utils.fileDatabase,
             ::showToast,
             { setSubmitButtonEnabled(true) },
             ::finishFromOtherThread
