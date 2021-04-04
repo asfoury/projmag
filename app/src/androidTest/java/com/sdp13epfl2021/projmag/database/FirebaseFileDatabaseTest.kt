@@ -44,6 +44,7 @@ class FirebaseFileDatabaseTest {
     private val mockFileRef = Mockito.mock(StorageReference::class.java)
     private val mockFolder = Mockito.mock(File::class.java)
     private val mockFile = Mockito.mock(File::class.java)
+    private val mockUri = Mockito.mock(Uri::class.java)
 
     private val mockFileUri = Mockito.mock(Uri::class.java)
 
@@ -163,7 +164,8 @@ class FirebaseFileDatabaseTest {
             .`when`(mockFileRef.delete())
             .thenReturn(mockTask as Task<Void>?)
 
-
+        // mockUri
+        Mockito.`when`(mockUri.toString()).thenReturn(filename)
     }
 
     @After
@@ -221,6 +223,18 @@ class FirebaseFileDatabaseTest {
         assertTrue(tempFile.createNewFile())
         val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
         db.pushFile(tempFile, onSuccessPush, onFailureNotExpected)
+
+        while (onSuccessPushUri == null);
+
+        assertEquals(mockFileUri, onSuccessPushUri)
+
+    }
+
+    @Test(timeout = 1000)
+    fun pushFromUriWorks() {
+        assertTrue(tempFile.createNewFile())
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuth)
+        db.pushFileFromUri(mockUri, onSuccessPush, onFailureNotExpected)
 
         while (onSuccessPushUri == null);
 

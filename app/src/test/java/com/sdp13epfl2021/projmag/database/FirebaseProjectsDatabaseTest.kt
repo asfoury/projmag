@@ -4,11 +4,13 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import com.sdp13epfl2021.projmag.JavaToKotlinHelper
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import java.net.URI
 
 
 /**
@@ -23,6 +25,8 @@ class FirebaseProjectsDatabaseTest {
     val mockTaskCol: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
     val mockTaskDoc: Task<DocumentSnapshot> =
         Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
+    val mockTaskVoid: Task<Void> =
+        Mockito.mock(Task::class.java) as Task<Void>
     val mockQS: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
     val mockDS: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQDS: QueryDocumentSnapshot = Mockito.mock(QueryDocumentSnapshot::class.java)
@@ -94,6 +98,15 @@ class FirebaseProjectsDatabaseTest {
             .`when`(mockDocRef.get())
             .thenReturn(mockTaskDoc)
 
+        Mockito
+            .`when`(
+                mockDocRef.update(
+                    JavaToKotlinHelper.anyObject<String>(),
+                    JavaToKotlinHelper.anyObject()
+                )
+            )
+            .thenReturn(mockTaskVoid)
+
         // --- mockTaskCol ---
         Mockito
             .`when`(mockTaskCol.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
@@ -120,6 +133,17 @@ class FirebaseProjectsDatabaseTest {
             .`when`(mockTaskDoc.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
             .thenReturn(mockTaskDoc)
 
+        // --- mockTaskDoc ---
+        Mockito
+            .`when`(mockTaskVoid.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .then {
+                mockTaskVoid
+            }
+
+        Mockito
+            .`when`(mockTaskVoid.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
+            .thenReturn(mockTaskVoid)
+
         // --- mockDS ---
         Mockito.`when`(mockDS.id).thenReturn(project.id)
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
@@ -133,6 +157,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
+        Mockito.`when`(mockDS["videoURI"]).thenReturn(project.videoURI)
 
         // --- mockQS ---
         Mockito
@@ -154,35 +179,13 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
+        Mockito.`when`(mockQDS["videoURI"]).thenReturn(project.videoURI)
 
         // ---  mockQuery ---
         Mockito
             .`when`(mockQuery.get())
             .thenReturn(mockTaskCol)
     }
-
-    /**
-     * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
-     * a `NullPointerException` caused by Java to Kotlin type cast
-     */
-    object JavaToKotlinHelper {
-        fun <T> anyObject(): T {
-            Mockito.anyObject<T>()
-            return uninitialized()
-        }
-
-        private fun <T> uninitialized(): T = null as T
-    }
-
-    /*
-    /**
-     * test that no unexpected behaviour when passing null
-     */
-    @Test
-    fun pushNullProjectShouldNotCrash() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
-        db.pushProject(null, {}, {})
-    }*/
 
     @Test
     fun getAllIdsIsCorrect() {
@@ -240,6 +243,17 @@ class FirebaseProjectsDatabaseTest {
         db.getProjectsFromTags(
             project.tags,
             { lp -> assertEquals(listOf(project), lp) },
+            {}
+        )
+    }
+
+    @Test
+    fun updateVideoWithProjectWorks() {
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.updateVideoWithProject(
+            ID,
+            "",
+            {},
             {}
         )
     }

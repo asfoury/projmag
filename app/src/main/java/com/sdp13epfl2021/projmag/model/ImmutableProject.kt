@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.model
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.util.*
@@ -9,7 +10,7 @@ data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
 @Parcelize
- data class ImmutableProject  constructor(
+data class ImmutableProject constructor(
     val id: String,
     val name: String,
     val lab: String,
@@ -21,7 +22,8 @@ data class Failure<T>(val reason: String) : Result<T>()
     val bachelorProject: Boolean,
     val tags: List<String>,
     val isTaken: Boolean,
-    val description: String
+    val description: String,
+    val videoURI: List<Uri> = listOf()
 ) : Parcelable {
     companion object {
          const val MAX_PROJECT_NAME_SIZE = 120
@@ -40,7 +42,8 @@ data class Failure<T>(val reason: String) : Result<T>()
             bachelorProject: Boolean,
             tags: List<String>,
             isTaken: Boolean,
-            description: String
+            description: String,
+            videoURI: List<Uri> = listOf()
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -67,6 +70,7 @@ data class Failure<T>(val reason: String) : Result<T>()
                         tags,
                         isTaken,
                         description,
+                        videoURI
                     )
                 )
             }
@@ -128,7 +132,8 @@ data class Failure<T>(val reason: String) : Result<T>()
         "tags" to tags,
         "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
         "isTaken" to isTaken,
-        "description" to description
+        "description" to description,
+        "videoURI" to videoURI
     )
 
 
