@@ -9,6 +9,7 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
     var projects: List<ImmutableProject> = projectsBeginning
     var listeners: List<((ProjectChange) -> Unit)> = emptyList()
     var nextId: Int = 90000
+    var lastUpdate: Pair<ProjectId, String>? = null
 
     fun add(project: ImmutableProject) {
         projects = projects + project
@@ -96,7 +97,8 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not implemented yet")
+        lastUpdate = id to uri
+        onSuccess()
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {

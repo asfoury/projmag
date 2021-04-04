@@ -36,6 +36,12 @@ class OfflineProjectsDatabaseTest {
 
         val invalidFile = File(validDir, "project.data")
         invalidFile.mkdir()
+
+        val validDir2 = File(projectsDir, "validDirWithInvalidProject")
+        validDir2.mkdirs()
+
+        val invalidFile2 = File(validDir2, "project.data")
+        invalidFile2.writeText("This is obviously not a Map serialized")
     }
 
     @After
@@ -202,6 +208,20 @@ class OfflineProjectsDatabaseTest {
         db.deleteProjectWithId(p2.id, {}, onFailureNotExpected)
         Thread.sleep(100)
         assertEquals(listOf(p1), fakeDB.projects)
+    }
+
+    @Test(timeout = 4000)
+    fun updateVideoWithProjectIsCorrectlyCalled() {
+        val projectsList = listOf(p1, p2)
+        val fakeDB = FakeDatabaseTest(projectsList)
+        val db = OfflineProjectDatabase(fakeDB, projectsDir)
+        Thread.sleep(500)
+
+        val uriString = "fakeUriVideo"
+
+        db.updateVideoWithProject(p1.id, uriString, {}, onFailureNotExpected)
+        Thread.sleep(100)
+        assertEquals(fakeDB.lastUpdate, p1.id to uriString)
     }
 
     @Test(timeout = 4000)

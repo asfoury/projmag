@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 import android.net.Uri
+import androidx.core.net.toFile
 import java.io.File
 import java.util.*
 
@@ -21,9 +22,19 @@ class FakeFileDatabaseTest(var files: Map<String, File>) : FileDatabase {
     }
 
     override fun pushFile(file: File, onSuccess: (Uri) -> Unit, onFailure: (Exception) -> Unit) {
-        val uriString = "${UUID.randomUUID()}_${file.name}"
+        val uriString = "https://fakelink/${UUID.randomUUID()}_${file.name}"
         files = files + (uriString to file)
         onSuccess(Uri.parse(uriString))
+    }
+
+    override fun pushFileFromUri(
+        uri: Uri,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val uriString = "https://fakelink/${UUID.randomUUID()}"
+        files = files + (uriString to uri.toFile())
+        onSuccess(uri)
     }
 
     override fun deleteFile(

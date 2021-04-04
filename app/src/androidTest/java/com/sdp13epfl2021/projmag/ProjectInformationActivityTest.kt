@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag
 
 
 import android.content.Intent
+import android.widget.MediaController
 import android.widget.VideoView
 import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
@@ -17,6 +18,7 @@ import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import junit.framework.Assert.*
+import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -59,10 +61,8 @@ class ProjectInformationActivityTest {
                 "<img src=\"$notWorkingImageUrl\">" +
                 "<img src=\"$emptyImageUrl\">" +
                 "<ul><li>test1</li><li>test2</li></ul>" +
-                "<p>This is a small image : </p><img src=\"$imageSOUrl\">" +
-                "<video>$videoUrl</video>" +
-                "<video>$videoUrl</video>" +
-                "<video>$notWorkingVideoUrl</video>"
+                "<p>This is a small image : </p><img src=\"$imageSOUrl\">",
+        listOf(videoUrl, notWorkingVideoUrl)
     )
 
 
