@@ -2,7 +2,6 @@ package com.sdp13epfl2021.projmag.activities
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -36,6 +35,8 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private lateinit var fileDB: FileDatabase
     private lateinit var videoView: VideoView
+    private lateinit var descriptionView: TextView
+    private lateinit var projectDir: File
     private val videosUris: MutableList<Uri> = ArrayList()
     private var current: Int = -1
 
@@ -74,7 +75,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
         val lab = findViewById<TextView>(R.id.info_lab_name)
-        val description = findViewById<TextView>(R.id.info_description)
+        descriptionView = findViewById<TextView>(R.id.info_description)
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
@@ -96,18 +97,17 @@ class ProjectInformationActivity : AppCompatActivity() {
                 else if (project.masterProject) getString(R.string.display_master_only)
                 else getString(R.string.display_not_found)
 
-            val projectDir = File(File(filesDir, "projects"), project.id)
-            val (cleanDescription, videosLinks) = extractVideos(project.description)
+            projectDir = File(File(filesDir, "projects"), project.id)
 
-            setupDescriptionWithHTML(description, cleanDescription, projectDir)
+            setupDescriptionWithHTML(project.description)
 
             videoView.isInvisible = true // hide the videoView before a video is loaded
-            if (videosLinks.isNotEmpty()) {
+            if (project.videoURI.isNotEmpty()) {
                 val controller = MediaController(this)
 
                 addPauseOnTouchListener(controller)
                 setupPlayerListeners(controller)
-                addVideoAfterDownloaded(videosLinks, projectDir)
+                addVideoAfterDownloaded(project.videoURI)
             }
         } else {
             showToast("An error occurred while loading project.")
@@ -162,7 +162,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     // download all videos and add them to the video player
-    private fun addVideoAfterDownloaded(videosLinks: List<String>, projectDir: File) {
+    private fun addVideoAfterDownloaded(videosLinks: List<String>) {
         videosLinks.forEach { link ->
             fileDB.getFile(link, projectDir, { file ->
                 addVideo(Uri.fromFile(file))
@@ -172,22 +172,23 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupDescriptionWithHTML(description: TextView, cleanDescription: String, projectDir: File) {
-        val imageGetter = ImageGetter2(this, projectDir, description)
+    private fun setupDescriptionWithHTML(cleanDescription: String) {
+        val imageGetter = ImageGetter2(resources, projectDir)
+        val tagHandler = TagHandler2()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            description.text = Html.fromHtml(
+            descriptionView.text = Html.fromHtml(
                 cleanDescription,
                 Html.FROM_HTML_MODE_LEGACY,
                 imageGetter,
-                TagHandler2()
+                tagHandler
             )
         } else {
-            description.text = Html.fromHtml(cleanDescription, imageGetter, TagHandler2())
+            descriptionView.text = Html.fromHtml(cleanDescription, imageGetter, tagHandler)
         }
 
         // Allow user to click on link
-        description.movementMethod = LinkMovementMethod.getInstance()
+        descriptionView.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun showToast(error: String) {
@@ -200,35 +201,13 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-     // return a pair of (text without video tag, and a list of theses videos links)
-    private fun extractVideos(text: CharSequence): Pair<String, List<String>> {
-        var newText = text
-        var links = emptyList<String>()
-
-        val startString = "<video>"
-        val endString = "</video>"
-
-        while (newText.isNotEmpty()) {
-            val start = newText.indexOf(startString)
-            val end = newText.indexOf(endString)
-            if (start < 0 || end < 0) {
-                break
-            }
-            links = links + newText.substring(start + startString.length, end)
-            newText = newText.removeRange(start, end + endString.length)
-        }
-
-        return Pair(newText.toString(), links)
-    }
 
     private inner class ImageGetter2(
-        private val context: Context,
-        private val projectDir: File,
-        private val htmlTextView: TextView
+        private val res: Resources,
+        private val projectDir: File
     ) : Html.ImageGetter {
 
         override fun getDrawable(source: String): Drawable {
-            val res = context.resources
             val holder = BitmapDrawablePlaceHolder(res, null)
 
             fileDB.getFile(source, projectDir, { file ->
@@ -250,7 +229,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
                         // force view update
                         withContext(Dispatchers.Main) {
-                            htmlTextView.text = htmlTextView.text
+                            descriptionView.text = descriptionView.text
                         }
                     } else {
                         showToast("An error occurred while loading image.")
