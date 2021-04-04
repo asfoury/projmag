@@ -81,26 +81,13 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
     private fun readProject(file: File): ImmutableProject? {
         synchronized(file) {
             if (file.exists() && file.isFile) {
+                val id: ProjectId? = file.parentFile?.name
+                if (id == null) {
+                    return null
+                }
                 ObjectInputStream(FileInputStream(file)).use {
                     val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
-                    val result = ImmutableProject.build(
-                        id = file.parentFile.name,
-                        name = map["name"] as String,
-                        lab = map["lab"] as String,
-                        teacher = map["teacher"] as String,
-                        TA = map["TA"] as String,
-                        nbParticipant = map["nbParticipant"] as Int,
-                        assigned = (map["assigned"] as? List<String>) ?: listOf(),
-                        masterProject = map["masterProject"] as Boolean,
-                        bachelorProject = map["bachelorProject"] as Boolean,
-                        tags = (map["tags"] as? List<String>) ?: listOf(),
-                        isTaken = map["isTaken"] as Boolean,
-                        description = map["description"] as String
-                    )
-                    return when (result) {
-                        is Success -> result.value
-                        is Failure -> null
-                    }
+                    return ImmutableProject.buildFromMap(map, id)
                 }
             } else {
                 return null
