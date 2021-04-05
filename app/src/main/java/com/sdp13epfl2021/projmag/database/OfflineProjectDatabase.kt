@@ -1,8 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
-import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,7 +41,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
             .listFiles()
             ?.let {
                 it.map { child -> child.name to File(child, PROJECT_DATA_FILE) }
-                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile }
+                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(data) != null }
                 .toMap()
             } ?: emptyMap()
     }
@@ -78,16 +76,18 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun readProject(file: File): ImmutableProject? {
         synchronized(file) {
             if (file.exists() && file.isFile) {
-                val id: ProjectId? = file.parentFile?.name
-                if (id == null) {
+                try {
+                    val id: ProjectId = file.parentFile!!.name
+                    ObjectInputStream(FileInputStream(file)).use {
+                        val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
+                        return ImmutableProject.buildFromMap(map, id)
+                    }
+                } catch (e: Exception) {
                     return null
-                }
-                ObjectInputStream(FileInputStream(file)).use {
-                    val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
-                    return ImmutableProject.buildFromMap(map, id)
                 }
             } else {
                 return null

@@ -1,9 +1,8 @@
 package com.sdp13epfl2021.projmag.model
 
-import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.*
 import org.junit.Assert
 import org.junit.Test
-import kotlin.random.Random
 
 class ImmutableProjectTest {
     @Test
@@ -136,6 +135,60 @@ class ImmutableProjectTest {
         assertEquals(project, projectRebuilt)
     }
 
+    @Test
+    fun buildFromMapWorks() {
+        val project = ImmutableProject(
+            "11111",
+            "Real-time reconstruction of deformable objects",
+            "CVLAB",
+            "Teacher2",
+            "TA2",
+            1,
+            emptyList(),
+            false,
+            true,
+            listOf("Computer Vision","ML"),
+            false,
+            "Description of project2",
+            emptyList()
+        )
+        val validMap: Map<String, Any?> = mapOf(
+            "name" to project.name,
+            "lab" to project.lab,
+            "teacher" to project.teacher,
+            "TA" to project.TA,
+            "nbParticipant" to project.nbParticipant,
+            "assigned" to project.assigned,
+            "masterProject" to project.masterProject,
+            "bachelorProject" to project.bachelorProject,
+            "tags" to project.tags,
+            "isTaken" to project.isTaken,
+            "description" to project.description,
+            "videoURI" to project.videoURI
+        )
 
+
+        assertNull(ImmutableProject.buildFromMap(emptyMap(), project.id))
+
+        assertNull(ImmutableProject.buildFromMap(validMap - "name", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "lab", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "teacher", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "TA", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "nbParticipant", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "assigned", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "masterProject", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "bachelorProject", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "tags", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "isTaken", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "description", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "tags", project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap - "videoURI", project.id))
+
+        assertNull(ImmutableProject.buildFromMap(validMap + ("name" to 2000), project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap + ("assigned" to "one"), project.id))
+        assertNull(ImmutableProject.buildFromMap(validMap + ("isTaken" to "True"), project.id))
+
+        assertEquals(project, ImmutableProject.buildFromMap(validMap, project.id))
+    }
 
 }

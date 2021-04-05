@@ -36,6 +36,12 @@ class OfflineProjectsDatabaseTest {
 
         val invalidFile = File(validDir, "project.data")
         invalidFile.mkdir()
+
+        val validDir2 = File(projectsDir, "validDirWithInvalidProject")
+        validDir2.mkdirs()
+
+        val invalidFile2 = File(validDir2, "project.data")
+        invalidFile2.writeText("This is obviously not a Map serialized")
     }
 
     @After
