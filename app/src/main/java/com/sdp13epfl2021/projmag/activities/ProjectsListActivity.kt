@@ -12,7 +12,9 @@ import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.ProfilePageActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
+import com.sdp13epfl2021.projmag.adapter.TagAdapter
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.model.TagsBaseManager
 
 class ProjectsListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ItemAdapter
@@ -27,6 +29,7 @@ class ProjectsListActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //trying out stuff for the tags selector
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
@@ -68,5 +71,11 @@ class ProjectsListActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun switchToTagsSelectionActivity(){
+        //why do i need to do the :: class.java to make it work
+        val intent = Intent(this, tagsSelectorActivity::class.java)
+        startActivity(intent)
     }
 }
