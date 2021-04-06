@@ -1,8 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
-import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -40,10 +38,12 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
     @Synchronized
     private fun loadProjects() {
         projectsFiles = projectsDir
-            .listFiles()!!
-            .map { child -> child.name to File(child, PROJECT_DATA_FILE) }
-            .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile }
-            .toMap()
+            .listFiles()
+            ?.let {
+                it.map { child -> child.name to File(child, PROJECT_DATA_FILE) }
+                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(data) != null }
+                .toMap()
+            } ?: emptyMap()
     }
 
     @Synchronized
@@ -76,29 +76,18 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun readProject(file: File): ImmutableProject? {
         synchronized(file) {
             if (file.exists() && file.isFile) {
-                ObjectInputStream(FileInputStream(file)).use {
-                    val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
-                    val result = ImmutableProject.build(
-                        id = file.parentFile.name,
-                        name = map["name"] as String,
-                        lab = map["lab"] as String,
-                        teacher = map["teacher"] as String,
-                        TA = map["TA"] as String,
-                        nbParticipant = map["nbParticipant"] as Int,
-                        assigned = (map["assigned"] as? List<String>) ?: listOf(),
-                        masterProject = map["masterProject"] as Boolean,
-                        bachelorProject = map["bachelorProject"] as Boolean,
-                        tags = (map["tags"] as? List<String>) ?: listOf(),
-                        isTaken = map["isTaken"] as Boolean,
-                        description = map["description"] as String
-                    )
-                    return when (result) {
-                        is Success -> result.value
-                        is Failure -> null
+                try {
+                    val id: ProjectId = file.parentFile!!.name
+                    ObjectInputStream(FileInputStream(file)).use {
+                        val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
+                        return ImmutableProject.buildFromMap(map, id)
                     }
+                } catch (e: Exception) {
+                    return null
                 }
             } else {
                 return null

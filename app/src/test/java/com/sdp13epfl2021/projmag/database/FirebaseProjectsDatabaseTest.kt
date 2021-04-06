@@ -23,6 +23,8 @@ class FirebaseProjectsDatabaseTest {
     val mockTaskCol: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
     val mockTaskDoc: Task<DocumentSnapshot> =
         Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
+    val mockTaskVoid: Task<Void> =
+        Mockito.mock(Task::class.java) as Task<Void>
     val mockQS: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
     val mockDS: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQDS: QueryDocumentSnapshot = Mockito.mock(QueryDocumentSnapshot::class.java)
@@ -94,6 +96,15 @@ class FirebaseProjectsDatabaseTest {
             .`when`(mockDocRef.get())
             .thenReturn(mockTaskDoc)
 
+        Mockito
+            .`when`(
+                mockDocRef.update(
+                    JavaToKotlinHelper.anyObject<String>(),
+                    JavaToKotlinHelper.anyObject()
+                )
+            )
+            .thenReturn(mockTaskVoid)
+
         // --- mockTaskCol ---
         Mockito
             .`when`(mockTaskCol.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
@@ -120,8 +131,34 @@ class FirebaseProjectsDatabaseTest {
             .`when`(mockTaskDoc.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
             .thenReturn(mockTaskDoc)
 
+        // --- mockTaskDoc ---
+        Mockito
+            .`when`(mockTaskVoid.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .then {
+                mockTaskVoid
+            }
+
+        Mockito
+            .`when`(mockTaskVoid.addOnFailureListener { Mockito.any(OnFailureListener::class.java) })
+            .thenReturn(mockTaskVoid)
+
         // --- mockDS ---
         Mockito.`when`(mockDS.id).thenReturn(project.id)
+        Mockito.`when`(mockDS.data).thenReturn(mapOf(
+            "name" to project.name,
+            "lab" to project.lab,
+            "teacher" to project.teacher,
+            "TA" to project.TA,
+            "nbParticipant" to project.nbParticipant,
+            "assigned" to project.assigned,
+            "masterProject" to project.masterProject,
+            "bachelorProject" to project.bachelorProject,
+            "tags" to project.tags,
+            "isTaken" to project.isTaken,
+            "description" to project.description,
+            "videoURI" to project.videoURI
+        ))
+        /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockDS["lab"]).thenReturn(project.lab)
         Mockito.`when`(mockDS["teacher"]).thenReturn(project.teacher)
@@ -133,7 +170,8 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
-
+        Mockito.`when`(mockDS["videoURI"]).thenReturn(project.videoURI)
+        */
         // --- mockQS ---
         Mockito
             .`when`(mockQS.iterator())
@@ -143,6 +181,21 @@ class FirebaseProjectsDatabaseTest {
         Mockito
             .`when`(mockQDS.id)
             .thenReturn(ID)
+        Mockito.`when`(mockQDS.data).thenReturn(mapOf(
+            "name" to project.name,
+            "lab" to project.lab,
+            "teacher" to project.teacher,
+            "TA" to project.TA,
+            "nbParticipant" to project.nbParticipant,
+            "assigned" to project.assigned,
+            "masterProject" to project.masterProject,
+            "bachelorProject" to project.bachelorProject,
+            "tags" to project.tags,
+            "isTaken" to project.isTaken,
+            "description" to project.description,
+            "videoURI" to project.videoURI
+        ))
+        /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockQDS["lab"]).thenReturn(project.lab)
         Mockito.`when`(mockQDS["teacher"]).thenReturn(project.teacher)
@@ -154,7 +207,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
-
+        */
         // ---  mockQuery ---
         Mockito
             .`when`(mockQuery.get())
