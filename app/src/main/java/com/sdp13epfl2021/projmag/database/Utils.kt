@@ -28,5 +28,4 @@ class Utils(private val context: Context) {
             )
         )
 
-
 }
