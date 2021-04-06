@@ -160,9 +160,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="add tags"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/form_button_sub"
+            app:layout_constraintEnd_toEndOf="@id/form_button_sub"
+            app:layout_constraintStart_toStartOf="@id/form_button_sub" />
 
 
 

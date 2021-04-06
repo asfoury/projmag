@@ -73,9 +73,5 @@ class ProjectsListActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun switchToTagsSelectionActivity(){
-        //why do i need to do the :: class.java to make it work
-        val intent = Intent(this, tagsSelectorActivity::class.java)
-        startActivity(intent)
-    }
+
 }
