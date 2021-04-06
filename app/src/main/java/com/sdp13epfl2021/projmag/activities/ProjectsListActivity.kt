@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
-import com.sdp13epfl2021.projmag.ProfilePageActivity
+import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ItemAdapter
 import com.sdp13epfl2021.projmag.adapter.TagAdapter

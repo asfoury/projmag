@@ -7,6 +7,7 @@ import android.os.Handler
 import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import android.os.Looper
+import com.sdp13epfl2021.projmag.activities.SignInActivity
 
 class MainActivity : AppCompatActivity() {
 
