@@ -38,10 +38,12 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
     @Synchronized
     private fun loadProjects() {
         projectsFiles = projectsDir
-            .listFiles()!!
-            .map { child -> child.name to File(child, PROJECT_DATA_FILE) }
-            .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(data) != null}
-            .toMap()
+            .listFiles()
+            ?.let {
+                it.map { child -> child.name to File(child, PROJECT_DATA_FILE) }
+                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(data) != null }
+                .toMap()
+            } ?: emptyMap()
     }
 
     @Synchronized
@@ -181,15 +183,6 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         onFailure: (Exception) -> Unit
     ) {
         db.deleteProjectWithId(id, onSuccess, onFailure)
-    }
-
-    override fun updateVideoWithProject(
-        id: ProjectId,
-        uri: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        db.updateVideoWithProject(id, uri, onSuccess, onFailure)
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
