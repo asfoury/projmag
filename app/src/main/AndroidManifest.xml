@@ -16,7 +16,7 @@
         <activity android:name=".activities.tagsSelectorActivity"></activity>
         <activity android:name=".activities.ProfilePageActivity" />
         <activity
-            android:name=".curriculumvitae.CVCreationActivity"
+            android:name=".activities.CVCreationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ProjectInformationActivity"

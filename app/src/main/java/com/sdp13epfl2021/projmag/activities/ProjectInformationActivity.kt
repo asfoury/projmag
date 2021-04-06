@@ -20,7 +20,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
-        val tagButton : Button = findViewById(R.id.addTagsButton)
+
 
         // get the project
         val project: ImmutableProject? = intent.getParcelableExtra("project")
@@ -38,16 +38,8 @@ class ProjectInformationActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        tagButton.setOnClickListener {
-            switchToTagsSelectionActivity()
-        }
+
     }
 
 
-    fun switchToTagsSelectionActivity(){
-        //why do i need to do the :: class.java to make it work
-        System.out.println("helllloooooooooooooo")
-        val intent = Intent(this, tagsSelectorActivity::class.java)
-        startActivity(intent)
-    }
 }
