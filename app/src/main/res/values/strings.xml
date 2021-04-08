@@ -32,6 +32,7 @@
     <string name="email">example@epfl.ch</string>
     <string name="search">search</string>
     <string name="profile">profileButton</string>
+    <string name="share">shareButton</string>
     <string name="submit">Add a new project to the list</string>
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
