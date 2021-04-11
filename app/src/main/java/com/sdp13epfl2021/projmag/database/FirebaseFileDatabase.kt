@@ -70,29 +70,6 @@ class FirebaseFileDatabase(
             onSuccess,
             onFailure
         )
-
-/*        val user = auth.currentUser
-        if (user == null) {
-            GlobalScope.launch { onFailure(SecurityException("Pushing file can only be done by authenticated user.")) }
-            return
-        }
-
-        val fileRef = rootRef
-            .child(user.uid)
-            .child("${UUID.randomUUID()}_${file.name}")
-
-        fileRef
-            .putFile(file.toUri())
-            .continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    task.exception?.let {
-                        throw it
-                    }
-                }
-                fileRef.downloadUrl
-            }
-            .addOnSuccessListener(onSuccess)
-            .addOnFailureListener(onFailure)*/
     }
 
     override fun pushFileFromUri(
