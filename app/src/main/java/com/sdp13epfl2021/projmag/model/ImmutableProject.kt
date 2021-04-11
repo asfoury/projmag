@@ -2,8 +2,10 @@ package com.sdp13epfl2021.projmag.model
 
 import android.net.Uri
 import android.os.Parcelable
+import com.sdp13epfl2021.projmag.database.ProjectId
 import kotlinx.parcelize.Parcelize
 import java.util.*
+import kotlin.Exception
 
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
@@ -23,7 +25,7 @@ data class ImmutableProject constructor(
     val tags: List<String>,
     val isTaken: Boolean,
     val description: String,
-    val videoURI: List<Uri> = listOf()
+    val videoURI: List<String> = listOf()
 ) : Parcelable {
     companion object {
          const val MAX_PROJECT_NAME_SIZE = 120
@@ -43,7 +45,7 @@ data class ImmutableProject constructor(
             tags: List<String>,
             isTaken: Boolean,
             description: String,
-            videoURI: List<Uri> = listOf()
+            videoURI: List<String> = listOf()
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -73,6 +75,42 @@ data class ImmutableProject constructor(
                         videoURI
                     )
                 )
+            }
+        }
+
+        /**
+         * Build a project from the given map
+         *
+         * @param map : a map containing all fields of the project
+         * @param projectId : the id of the project
+         *
+         * @return an ImmutableProject if the build succeed, null otherwise
+         */
+        @Suppress("UNCHECKED_CAST")
+        fun buildFromMap(map: Map<String, Any?>, projectId: ProjectId): ImmutableProject? {
+            try {
+                val result = build(
+                    id = projectId,
+                    name = map["name"] as String,
+                    lab = map["lab"] as String,
+                    teacher = map["teacher"] as String,
+                    TA = map["TA"] as String,
+                    nbParticipant = (map["nbParticipant"] as Number).toInt(),
+                    assigned = map["assigned"] as List<String>,
+                    masterProject = map["masterProject"] as Boolean,
+                    bachelorProject = map["bachelorProject"] as Boolean,
+                    tags = map["tags"] as List<String>,
+                    isTaken = map["isTaken"] as Boolean,
+                    description = map["description"] as String,
+                    videoURI = map["videoURI"] as List<String>
+                )
+                return when (result) {
+                    is Success -> result.value
+                    is Failure -> null
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
             }
         }
     }

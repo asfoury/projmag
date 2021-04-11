@@ -45,4 +45,9 @@
     <string name="cv_skills_hint">Your skill</string>
     <string name="cv_skills_title">Your Skills</string>
     <string name="cv_cardview_close">close</string>
+    <string name="display_number_student">Number of participant : %d</string>
+    <string name="display_bachelor_only">Bachelor semester</string>
+    <string name="display_master_only">Master semester</string>
+    <string name="display_bachelor_and_master">Bachelor &amp; Master semester</string>
+    <string name="display_not_found">Project not found</string>
 </resources>

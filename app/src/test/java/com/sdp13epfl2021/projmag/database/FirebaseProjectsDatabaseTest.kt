@@ -146,6 +146,21 @@ class FirebaseProjectsDatabaseTest {
 
         // --- mockDS ---
         Mockito.`when`(mockDS.id).thenReturn(project.id)
+        Mockito.`when`(mockDS.data).thenReturn(mapOf(
+            "name" to project.name,
+            "lab" to project.lab,
+            "teacher" to project.teacher,
+            "TA" to project.TA,
+            "nbParticipant" to project.nbParticipant,
+            "assigned" to project.assigned,
+            "masterProject" to project.masterProject,
+            "bachelorProject" to project.bachelorProject,
+            "tags" to project.tags,
+            "isTaken" to project.isTaken,
+            "description" to project.description,
+            "videoURI" to project.videoURI
+        ))
+        /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockDS["lab"]).thenReturn(project.lab)
         Mockito.`when`(mockDS["teacher"]).thenReturn(project.teacher)
@@ -158,7 +173,8 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
         Mockito.`when`(mockDS["videoURI"]).thenReturn(project.videoURI)
-
+        */
+      
         // --- mockQS ---
         Mockito
             .`when`(mockQS.iterator())
@@ -168,6 +184,21 @@ class FirebaseProjectsDatabaseTest {
         Mockito
             .`when`(mockQDS.id)
             .thenReturn(ID)
+        Mockito.`when`(mockQDS.data).thenReturn(mapOf(
+            "name" to project.name,
+            "lab" to project.lab,
+            "teacher" to project.teacher,
+            "TA" to project.TA,
+            "nbParticipant" to project.nbParticipant,
+            "assigned" to project.assigned,
+            "masterProject" to project.masterProject,
+            "bachelorProject" to project.bachelorProject,
+            "tags" to project.tags,
+            "isTaken" to project.isTaken,
+            "description" to project.description,
+            "videoURI" to project.videoURI
+        ))
+        /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockQDS["lab"]).thenReturn(project.lab)
         Mockito.`when`(mockQDS["teacher"]).thenReturn(project.teacher)
@@ -180,6 +211,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
         Mockito.`when`(mockQDS["videoURI"]).thenReturn(project.videoURI)
+        */
 
         // ---  mockQuery ---
         Mockito

@@ -27,41 +27,12 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
      * @param doc the Firebase document
      * @return a Project built from the given document
      */
-    @Suppress("UNCHECKED_CAST")
     private fun documentToProject(doc: DocumentSnapshot): ImmutableProject? =
-        if (listOf(
-                doc["name"],
-                doc["lab"],
-                doc["teacher"],
-                doc["TA"],
-                doc["nbParticipant"],
-                doc["assigned"],
-                doc["masterProject"],
-                doc["bachelorProject"],
-                doc["tags"],
-                doc["isTaken"],
-                doc["description"],
-                doc["videoURI"]
-            ).all { elem -> elem != null }
-        ) {
-            ImmutableProject(
-                id = doc.id,
-                name = doc["name"] as String,
-                lab = doc["lab"] as String,
-                teacher = doc["teacher"] as String,
-                TA = doc["TA"] as String,
-                nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-                assigned = (doc["assigned"] as List<String>),
-                masterProject = doc["masterProject"] as Boolean,
-                bachelorProject = doc["bachelorProject"] as Boolean,
-                tags = (doc["tags"] as List<String>),
-                isTaken = doc["isTaken"] as Boolean,
-                description = doc["description"] as String,
-                videoURI = (doc["videoURI"] as List<String>).map {
-                    Uri.parse(it)
-                }
-            )
-        } else null
+        if (doc.data == null) {
+            null
+        } else {
+            ImmutableProject.buildFromMap(doc.data!!, doc.id)
+        }
 
     /**
      * Perform a firebase query filtering from a specific `field`
