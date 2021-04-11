@@ -18,5 +18,7 @@ class tagsSelectorActivity : AppCompatActivity() {
         val tagRecyclerView = findViewById<RecyclerView>(R.id.recycler_tag_view)
         tagRecyclerView.adapter = TagAdapter(this, tagsDataset.toList())
         tagRecyclerView.setHasFixedSize(true)
+
+
     }
 }

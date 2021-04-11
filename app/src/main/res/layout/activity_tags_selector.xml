@@ -10,19 +10,19 @@
         android:id="@+id/title_form"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Adding tags to the project"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="project tags"
+        android:textSize="25sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_tag_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
+        android:layout_height="wrap_content"
+        app:layoutManager="GridLayoutManager"
+        app:spanCount="2"
         android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/title_form"
         tools:layout_editor_absoluteX="206dp"
         tools:layout_editor_absoluteY="233dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
