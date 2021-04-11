@@ -18,8 +18,8 @@ import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
-class ItemAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView) :
-    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
+class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView) :
+    RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>(), Filterable {
 
     var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()

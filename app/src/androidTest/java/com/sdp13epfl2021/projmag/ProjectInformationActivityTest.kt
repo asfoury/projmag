@@ -3,13 +3,11 @@ package com.sdp13epfl2021.projmag
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
-import com.sdp13epfl2021.projmag.adapter.ItemAdapter
-import org.hamcrest.Matchers
+import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,7 +19,7 @@ class ProjectInformationActivityTest {
     @Test
     fun userCanPressOnProject() {
         onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ItemViewHolder>(
                 0,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )
@@ -33,7 +31,7 @@ class ProjectInformationActivityTest {
     fun userCanPressOnProjectAndGoBackUsingBackButton() {
         // press on first project
         onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ItemViewHolder>(
                 0,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )
@@ -42,7 +40,7 @@ class ProjectInformationActivityTest {
         pressBack()
         // press on second project
         onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ItemViewHolder>(
                 1,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )

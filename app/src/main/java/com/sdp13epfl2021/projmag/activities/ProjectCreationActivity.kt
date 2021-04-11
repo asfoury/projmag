@@ -9,17 +9,23 @@ import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.activities.tagsSelectorActivity
+import com.sdp13epfl2021.projmag.model.Tag
 
 
 class Form : AppCompatActivity() {
     private val REQUEST_VIDEO_ACCESS = 1
+    //private lateinit var tagAdapter : TagAdapter
+    private lateinit var tagRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form)
         val addVideoButton: Button = findViewById(R.id.add_video)
-        val tagButton : Button = findViewById(R.id.addTagsButton)
+        val addtagButton : Button = findViewById(R.id.addTagsButton)
 
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
@@ -29,11 +35,25 @@ class Form : AppCompatActivity() {
             )
         }
 
-        tagButton.setOnClickListener {
+
+
+        addtagButton.setOnClickListener {
             switchToTagsSelectionActivity()
         }
     }
 
+    /**
+     * Function that initializes the tagAdapter and tagRecycler view
+     * For now, will not update in live the tags from the tagsbase
+     */
+    fun createTagAddActivity(){
+        setContentView(R.layout.activity_tags_selector)
+
+        tagRecyclerView = findViewById<RecyclerView>(R.id.recycler_tag_view)
+        //tagAdapter = TagAdapter(this, listOf(Tag("hello"), Tag("bye")))
+        //tagRecyclerView.adapter = tagAdapter
+        tagRecyclerView.setHasFixedSize(false)
+    }
 
     /**
      * This function is called after the user comes back

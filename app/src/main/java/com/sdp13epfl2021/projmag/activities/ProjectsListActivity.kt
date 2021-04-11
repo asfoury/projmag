@@ -9,18 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
-import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.adapter.ItemAdapter
-import com.sdp13epfl2021.projmag.adapter.TagAdapter
+import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.model.TagsBaseManager
 
 class ProjectsListActivity : AppCompatActivity() {
-    private lateinit var itemAdapter: ItemAdapter
+    private lateinit var itemAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
 
-    public fun getItemAdapter(): ItemAdapter {
+    public fun getItemAdapter(): ProjectAdapter {
         return itemAdapter
     }
 
@@ -29,11 +26,11 @@ class ProjectsListActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //trying out stuff for the tags selector
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        itemAdapter = ItemAdapter(this, Utils(this), recyclerView)
+        itemAdapter = ProjectAdapter(this, Utils(this), recyclerView)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(false)
 
