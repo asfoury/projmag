@@ -18,8 +18,8 @@ class ProjectInformationActivityTest {
 
     @Test
     fun userCanPressOnProject() {
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ItemViewHolder>(
+        onView(withId(R.id.recycler_view_project)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 0,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )
@@ -30,8 +30,8 @@ class ProjectInformationActivityTest {
     @Test
     fun userCanPressOnProjectAndGoBackUsingBackButton() {
         // press on first project
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ItemViewHolder>(
+        onView(withId(R.id.recycler_view_project)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 0,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )
@@ -39,8 +39,8 @@ class ProjectInformationActivityTest {
         // go back to list of project
         pressBack()
         // press on second project
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ItemViewHolder>(
+        onView(withId(R.id.recycler_view_project)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 1,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )

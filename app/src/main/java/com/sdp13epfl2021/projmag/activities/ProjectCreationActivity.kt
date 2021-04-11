@@ -42,18 +42,7 @@ class Form : AppCompatActivity() {
         }
     }
 
-    /**
-     * Function that initializes the tagAdapter and tagRecycler view
-     * For now, will not update in live the tags from the tagsbase
-     */
-    fun createTagAddActivity(){
-        setContentView(R.layout.activity_tags_selector)
 
-        tagRecyclerView = findViewById<RecyclerView>(R.id.recycler_tag_view)
-        //tagAdapter = TagAdapter(this, listOf(Tag("hello"), Tag("bye")))
-        //tagRecyclerView.adapter = tagAdapter
-        tagRecyclerView.setHasFixedSize(false)
-    }
 
     /**
      * This function is called after the user comes back
@@ -84,7 +73,6 @@ class Form : AppCompatActivity() {
 
     fun switchToTagsSelectionActivity(){
         //why do i need to do the :: class.java to make it work
-        System.out.println("helllloooooooooooooo")
         val intent = Intent(this, tagsSelectorActivity::class.java)
         startActivity(intent)
     }

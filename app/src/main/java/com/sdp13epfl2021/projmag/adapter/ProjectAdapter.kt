@@ -19,7 +19,7 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView) :
-    RecyclerView.Adapter<ProjectAdapter.ItemViewHolder>(), Filterable {
+    RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
@@ -59,7 +59,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         dataset.remove(project)
     }
 
-    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    class ProjectViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
@@ -69,14 +69,14 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
 
     override fun getItemCount() = dataset.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_project, parent, false)
-        return ItemViewHolder(adapterLayout)
+        return ProjectViewHolder(adapterLayout)
     }
 
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
         val project = dataset[position]
         // set the project name
         holder.textView.text = project.name

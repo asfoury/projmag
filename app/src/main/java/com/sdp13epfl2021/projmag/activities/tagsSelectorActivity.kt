@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.adapter.ItemAdapter
 
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
 
@@ -14,9 +15,8 @@ class tagsSelectorActivity : AppCompatActivity() {
 
         val manager = TagsBaseManager()
         val tagsDataset = manager.getAllTags()
-        System.out.println(tagsDataset)
         val tagRecyclerView = findViewById<RecyclerView>(R.id.recycler_tag_view)
-        //tagRecyclerView.adapter = TagAdapter(this, tagsDataset.toList())
+        tagRecyclerView.adapter = ItemAdapter(this, tagsDataset.toList())
         tagRecyclerView.setHasFixedSize(true)
     }
 }

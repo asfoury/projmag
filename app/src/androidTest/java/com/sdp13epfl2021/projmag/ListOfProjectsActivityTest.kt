@@ -26,7 +26,7 @@ class ListOfProjectsActivityTest {
 
     @Test
     fun userCanScroll() {
-        onView(withId(R.id.recycler_view))
+        onView(withId(R.id.recycler_view_project))
             .perform(ViewActions.swipeUp())
     }
 
