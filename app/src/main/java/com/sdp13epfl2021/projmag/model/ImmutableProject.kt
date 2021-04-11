@@ -3,7 +3,10 @@ package com.sdp13epfl2021.projmag.model
 import android.net.Uri
 import android.os.Parcelable
 import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
+import java.lang.ClassCastException
+import java.lang.NullPointerException
 import java.util.*
 import kotlin.Exception
 
@@ -28,10 +31,28 @@ data class ImmutableProject constructor(
     val videoURI: List<String> = listOf()
 ) : Parcelable {
     companion object {
-         const val MAX_PROJECT_NAME_SIZE = 120
-         const val MAX_NAME_SIZE = 40
-         const val MAX_DESCRIPTION_SIZE = 4000
+
+        object FieldNames {
+            fun String.toSearchName(): String = "${this}-search"
+            const val NAME = "name"
+            const val LAB = "lab"
+            const val TEACHER = "teacher"
+            const val TA = "TA"
+            const val NB_PARTICIPANT = "nbParticipant"
+            const val ASSIGNED = "assigned"
+            const val MASTER_PROJECT = "masterProject"
+            const val BACHELOR_PROJECT = "bachelorProject"
+            const val TAGS = "tags"
+            const val IS_TAKEN = "isTaken"
+            const val DESCRIPTION = "description"
+            const val VIDEO_URI = "videoURI"
+        }
+
+        const val MAX_PROJECT_NAME_SIZE = 120
+        const val MAX_NAME_SIZE = 40
+        const val MAX_DESCRIPTION_SIZE = 4000
         private const val MAX_STUDENT_NUMBER = 10
+
         fun build(
             id: String,
             name: String,
@@ -91,24 +112,28 @@ data class ImmutableProject constructor(
             try {
                 val result = build(
                     id = projectId,
-                    name = map["name"] as String,
-                    lab = map["lab"] as String,
-                    teacher = map["teacher"] as String,
-                    TA = map["TA"] as String,
-                    nbParticipant = (map["nbParticipant"] as Number).toInt(),
-                    assigned = map["assigned"] as List<String>,
-                    masterProject = map["masterProject"] as Boolean,
-                    bachelorProject = map["bachelorProject"] as Boolean,
-                    tags = map["tags"] as List<String>,
-                    isTaken = map["isTaken"] as Boolean,
-                    description = map["description"] as String,
-                    videoURI = map["videoURI"] as List<String>
+                    name = map[FieldNames.NAME] as String,
+                    lab = map[FieldNames.LAB] as String,
+                    teacher = map[FieldNames.TEACHER] as String,
+                    TA = map[FieldNames.TA] as String,
+                    nbParticipant = (map[FieldNames.NB_PARTICIPANT] as Number).toInt(),
+                    assigned = map[FieldNames.ASSIGNED] as List<String>,
+                    masterProject = map[FieldNames.MASTER_PROJECT] as Boolean,
+                    bachelorProject = map[FieldNames.BACHELOR_PROJECT] as Boolean,
+                    tags = map[FieldNames.TAGS] as List<String>,
+                    isTaken = map[FieldNames.IS_TAKEN] as Boolean,
+                    description = map[FieldNames.DESCRIPTION] as String,
+                    videoURI = map[FieldNames.VIDEO_URI] as List<String>
                 )
                 return when (result) {
                     is Success -> result.value
                     is Failure -> null
                 }
-            } catch (e: Exception) {
+                /* These two exceptions occur only with corrupted Projects so should be ignored */
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+                return null
+            } catch (e: ClassCastException) {
                 e.printStackTrace()
                 return null
             }
@@ -155,23 +180,23 @@ data class ImmutableProject constructor(
      *  Give a Map<String,Any> the maps name of members to their values.
      */
     fun toMapString() = hashMapOf(
-        "name" to name,
-        "name-search" to name.toLowerCase(Locale.ROOT).split(" "),
-        "lab" to lab,
-        "lab-search" to lab.toLowerCase(Locale.ROOT),
-        "teacher" to teacher,
-        "teacher-search" to teacher.toLowerCase(Locale.ROOT).split(" "),
-        "TA" to TA,
-        "TA-search" to TA.toLowerCase(Locale.ROOT),
-        "nbParticipant" to nbParticipant,
-        "assigned" to assigned,
-        "masterProject" to masterProject,
-        "bachelorProject" to bachelorProject,
-        "tags" to tags,
-        "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
-        "isTaken" to isTaken,
-        "description" to description,
-        "videoURI" to videoURI
+        FieldNames.NAME to name,
+        FieldNames.NAME.toSearchName() to name.toLowerCase(Locale.ROOT).split(" "),
+        FieldNames.LAB to lab,
+        FieldNames.LAB.toSearchName() to lab.toLowerCase(Locale.ROOT),
+        FieldNames.TEACHER to teacher,
+        FieldNames.TEACHER.toSearchName() to teacher.toLowerCase(Locale.ROOT).split(" "),
+        FieldNames.TA to TA,
+        FieldNames.TA.toSearchName() to TA.toLowerCase(Locale.ROOT),
+        FieldNames.NB_PARTICIPANT to nbParticipant,
+        FieldNames.ASSIGNED to assigned,
+        FieldNames.MASTER_PROJECT to masterProject,
+        FieldNames.BACHELOR_PROJECT to bachelorProject,
+        FieldNames.TAGS to tags,
+        FieldNames.TAGS.toSearchName() to tags.map { it.toLowerCase(Locale.ROOT) },
+        FieldNames.IS_TAKEN to isTaken,
+        FieldNames.DESCRIPTION to description,
+        FieldNames.VIDEO_URI to videoURI
     )
 
 

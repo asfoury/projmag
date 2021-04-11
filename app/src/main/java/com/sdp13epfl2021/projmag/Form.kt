@@ -46,7 +46,7 @@ class Form : AppCompatActivity() {
     private fun setSubmitButtonEnabled(enabled: Boolean) = runOnUiThread {
         findViewById<Button>(R.id.form_button_sub)?.apply {
             isEnabled = enabled
-            text = if (enabled) getString(R.string.submission) else "Loading"
+            text = if (enabled) getString(R.string.submission) else getString(R.string.loading)
         }
     }
 
@@ -128,7 +128,7 @@ class Form : AppCompatActivity() {
      * Submit project and video with information in the view.
      * Expected to be called when clicking on a submission button on the view
      */
-    private fun submit(view: View) = Firebase.auth.let { auth ->
+    private fun submit(view: View) = Firebase.auth.uid?.let {
         setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
         val utils = Utils(this)
         ProjectUploader(

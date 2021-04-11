@@ -10,7 +10,6 @@ import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
-import java.net.URI
 
 
 /**
@@ -172,7 +171,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
-        Mockito.`when`(mockDS["videoURI"]).thenReturn(project.videoURI)
+        Mockito.`when`(mockDS["videoUri"]).thenReturn(project.videoUri)
         */
       
         // --- mockQS ---
@@ -210,7 +209,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
-        Mockito.`when`(mockQDS["videoURI"]).thenReturn(project.videoURI)
+        Mockito.`when`(mockQDS["videoUri"]).thenReturn(project.videoUri)
         */
 
         // ---  mockQuery ---
