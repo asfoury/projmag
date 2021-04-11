@@ -11,7 +11,6 @@ import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.activities.tagsSelectorActivity
-import com.sdp13epfl2021.projmag.model.Tag
 
 
 class Form : AppCompatActivity() {
@@ -23,7 +22,7 @@ class Form : AppCompatActivity() {
 
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_form)
+        setContentView(R.layout.activity_project_creation)
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addtagButton : Button = findViewById(R.id.addTagsButton)
 
