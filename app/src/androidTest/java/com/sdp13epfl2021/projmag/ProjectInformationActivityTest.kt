@@ -143,13 +143,6 @@ class ProjectInformationActivityTest {
             Matchers.allOf(
                 withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
                 withContentDescription("Previous track"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
-                        0
-                    ),
-                    0
-                ),
                 isDisplayed()
             )
         )
@@ -161,13 +154,6 @@ class ProjectInformationActivityTest {
             Matchers.allOf(
                 withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
                 withContentDescription("Next track"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
-                        0
-                    ),
-                    4
-                ),
                 isDisplayed()
             )
         )
