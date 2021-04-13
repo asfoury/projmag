@@ -2,12 +2,17 @@ package com.sdp13epfl2021.projmag
 
 
 import android.content.Intent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.MediaController
 import android.widget.VideoView
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -18,7 +23,10 @@ import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import junit.framework.Assert.*
+import org.hamcrest.Description
+import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -62,7 +70,7 @@ class ProjectInformationActivityTest {
                 "<img src=\"$emptyImageUrl\">" +
                 "<ul><li>test1</li><li>test2</li></ul>" +
                 "<p>This is a small image : </p><img src=\"$imageSOUrl\">",
-        listOf(videoUrl, notWorkingVideoUrl)
+        listOf(videoUrl, videoUrl, notWorkingVideoUrl)
     )
 
 
@@ -120,14 +128,76 @@ class ProjectInformationActivityTest {
         scenario.onActivity {
             videoView = it.findViewById(R.id.info_video)
         }
-        Thread.sleep(10000) //sleep 10sec to wait the download
 
+        Thread.sleep(10000) //sleep 10sec to wait the download
         assertFalse(videoView.isPlaying)
+        assertTrue(videoView.isVisible)
         Thread.sleep(100)
-        if (videoView.isVisible) { // else the video is still not downloaded
-            onView(withId(R.id.info_video)).perform(scrollTo()).perform(click())
-            Thread.sleep(100)
-            assertTrue(videoView.isPlaying)
+
+        onView(withId(R.id.info_video)).perform(scrollTo()).perform(click())
+        Thread.sleep(100)
+        assertTrue(videoView.isPlaying)
+
+        //try to play prev video (should failed)
+        val prevButton = onView(
+            Matchers.allOf(
+                withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
+                withContentDescription("Previous track"),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        0
+                    ),
+                    0
+                ),
+                isDisplayed()
+            )
+        )
+        prevButton.perform(click())
+        Thread.sleep(100)
+
+        //try to play next video (should succeed and start the next video)
+        val nextButton = onView(
+            Matchers.allOf(
+                withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
+                withContentDescription("Next track"),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        0
+                    ),
+                    4
+                ),
+                isDisplayed()
+            )
+        )
+        nextButton.perform(click())
+        Thread.sleep(100)
+        assertTrue(videoView.isPlaying)
+
+        nextButton.perform(click())
+        Thread.sleep(100)
+        prevButton.perform(click())
+        Thread.sleep(100)
+        assertTrue(videoView.isPlaying)
+    }
+
+
+    private fun childAtPosition(
+        parentMatcher: Matcher<View>, position: Int
+    ): Matcher<View> {
+
+        return object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText("Child at position $position in parent ")
+                parentMatcher.describeTo(description)
+            }
+
+            public override fun matchesSafely(view: View): Boolean {
+                val parent = view.parent
+                return parent is ViewGroup && parentMatcher.matches(parent)
+                        && view == parent.getChildAt(position)
+            }
         }
     }
 }

@@ -6,12 +6,15 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
 
 class OfflineProjectsDatabaseTest {
 
     private val projectsDir = Files.createTempDirectory("offline_test").toFile()
+    private val unreadableDir = Files.createTempDirectory("offline_test_invalid").toFile()
 
     private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
     private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
@@ -28,6 +31,10 @@ class OfflineProjectsDatabaseTest {
     fun setup() {
         projectsDir.mkdirs()
 
+        unreadableDir.mkdirs()
+        unreadableDir.setReadable(false)
+        unreadableDir.setWritable(false)
+
         val validDir = File(projectsDir, "testDir55555")
         validDir.mkdirs()
 
@@ -42,11 +49,40 @@ class OfflineProjectsDatabaseTest {
 
         val invalidFile2 = File(validDir2, "project.data")
         invalidFile2.writeText("This is obviously not a Map serialized")
+
+        val validDir3 = File(projectsDir, "validDirWithInvalidMap")
+        validDir3.mkdirs()
+
+        val invalidFile3 = File(validDir3, "project.data")
+        val invalidMap: Map<Int, Int> = mapOf(1 to 1, 2 to 2)
+        ObjectOutputStream(FileOutputStream(invalidFile3)).use {
+            it.writeObject(invalidMap)
+        }
     }
 
     @After
     fun clean() {
         projectsDir.deleteRecursively()
+        unreadableDir.deleteRecursively()
+    }
+
+    // Because the database dir is not readable/writable, no projets should be stored
+    @Test(timeout = 4000)
+    fun shouldNotCrashWithInvalidDir() {
+        val projectsList = listOf(p1, p2)
+        val fakeDB = FakeDatabaseTest(projectsList)
+        OfflineProjectDatabase(fakeDB, unreadableDir)
+        Thread.sleep(500)
+
+        val emptyDB = FakeDatabaseTest(listOf())
+        val db2 = OfflineProjectDatabase(emptyDB, unreadableDir)
+        var result: List<ImmutableProject>? = null
+        db2.getAllProjects({
+            result = it
+        }, onFailureNotExpected)
+
+        while (result == null);
+        assertEquals(emptyList<ImmutableProject>(), result)
     }
 
     @Test(timeout = 4000)
@@ -60,7 +96,7 @@ class OfflineProjectsDatabaseTest {
         fakeDB.remove(p1)
         Thread.sleep(100)
         fakeDB.modify(p3)
-        Thread.sleep(100)
+        Thread.sleep(500)
 
         val emptyDB = FakeDatabaseTest(listOf())
         val db2 = OfflineProjectDatabase(emptyDB, projectsDir)
@@ -209,6 +245,24 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
         assertEquals(listOf(p1), fakeDB.projects)
     }
+
+    @Test(timeout = 4000)
+    fun updateVideoWithProjectIsCorrectlyCalled() {
+        val projectsList = listOf(p1)
+        val fakeDB = FakeDatabaseTest(projectsList)
+        val db = OfflineProjectDatabase(fakeDB, projectsDir)
+        Thread.sleep(500)
+
+        val uri_1: String = "https://remote/uri/1"
+        val uri_2: String = "https://remote/uri/2"
+
+        db.updateVideoWithProject(p1.id, uri_1, {}, onFailureNotExpected)
+        db.updateVideoWithProject(p1.id, uri_2, {}, onFailureNotExpected)
+        Thread.sleep(500)
+        assertEquals(1, fakeDB.projects.size)
+        assertEquals(listOf(uri_1, uri_2).sorted(), fakeDB.projects[0].videoURI.sorted())
+    }
+
 
     @Test(timeout = 4000)
     fun listenersWorks() {
