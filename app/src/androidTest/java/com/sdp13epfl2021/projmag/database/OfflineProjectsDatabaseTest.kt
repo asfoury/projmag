@@ -131,6 +131,33 @@ class OfflineProjectsDatabaseTest {
         }, onFailureNotExpected)
         while (result == null);
         assertEquals(listOf(p2, p3).sortedBy { p -> p.id }, result!!.sortedBy { p -> p.id })
+
+
+        val p2File = File(File(projectsDir, p2.id), "project.data")
+        p2File.delete()
+
+        var result2: List<ImmutableProject>? = null
+        db2.getAllProjects({
+            result2 = it
+        }, onFailureNotExpected)
+        while (result2 == null);
+        assertEquals(listOf(p3), result2)
+
+
+
+        val p3File = File(File(projectsDir, p3.id), "project.data")
+        p3File.delete()
+        p3File.mkdirs()
+
+        var result3: List<ImmutableProject>? = null
+        db2.getAllProjects({
+            result3 = it
+        }, onFailureNotExpected)
+        while (result3 == null);
+        assertEquals(emptyList<ImmutableProject>(), result3)
+
+        emptyDB.remove(p2)
+        emptyDB.remove(p3)
     }
 
     @Test(timeout = 4000)
