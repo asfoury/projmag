@@ -26,6 +26,14 @@ class FakeFileDatabaseTest(var files: Map<String, File>) : FileDatabase {
         onSuccess(Uri.parse(uriString))
     }
 
+    override fun pushFileFromUri(
+        uri: Uri,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun deleteFile(
         fileUrl: String,
         onSuccess: () -> Unit,

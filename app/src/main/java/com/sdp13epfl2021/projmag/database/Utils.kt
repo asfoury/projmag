@@ -8,7 +8,6 @@ import com.google.firebase.storage.ktx.storage
 import java.io.File
 
 class Utils(private val context: Context) {
-    
     private val firestore = Firebase.firestore
     // Uncomment to disable firebase cache
     /* val settings = firestoreSettings {
@@ -27,5 +26,4 @@ class Utils(private val context: Context) {
                 File(context.filesDir, "projects")
             )
         )
-
 }

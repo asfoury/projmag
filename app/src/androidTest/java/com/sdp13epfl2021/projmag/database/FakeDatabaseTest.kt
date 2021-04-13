@@ -86,8 +86,17 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        projects.find {p -> p.id == id}?.let { remove(it) }
+        projects.find { p -> p.id == id }?.let { remove(it) }
         onSuccess()
+    }
+
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not implemented yet")
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {

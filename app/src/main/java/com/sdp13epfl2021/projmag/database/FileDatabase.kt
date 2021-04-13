@@ -44,6 +44,22 @@ interface FileDatabase {
     )
 
     /**
+     * Asynchronously push the file from uri to the database
+     * If the file already exist, it will overwrite it
+     * Call `onSuccess` with the Uri if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param uri the File to push
+     * @param onSuccess the consumer for success
+     * @param onFailure the consumer for failures
+     */
+    fun pushFileFromUri(
+        uri: Uri,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
      * Asynchronously delete a file from the database
      *
      * Call `onSuccess` if the operation succeeded or if the file doesn't exist

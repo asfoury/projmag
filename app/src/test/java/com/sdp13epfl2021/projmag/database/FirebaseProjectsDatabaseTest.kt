@@ -4,6 +4,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
+import com.sdp13epfl2021.projmag.JavaToKotlinHelper
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -170,8 +171,9 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
-        Mockito.`when`(mockDS["videoURI"]).thenReturn(project.videoURI)
+        Mockito.`when`(mockDS["videoUri"]).thenReturn(project.videoUri)
         */
+      
         // --- mockQS ---
         Mockito
             .`when`(mockQS.iterator())
@@ -207,35 +209,14 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS["tags"]).thenReturn(project.tags)
         Mockito.`when`(mockQDS["isTaken"]).thenReturn(project.isTaken)
         Mockito.`when`(mockQDS["description"]).thenReturn(project.description)
+        Mockito.`when`(mockQDS["videoUri"]).thenReturn(project.videoUri)
         */
+
         // ---  mockQuery ---
         Mockito
             .`when`(mockQuery.get())
             .thenReturn(mockTaskCol)
     }
-
-    /**
-     * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
-     * a `NullPointerException` caused by Java to Kotlin type cast
-     */
-    object JavaToKotlinHelper {
-        fun <T> anyObject(): T {
-            Mockito.anyObject<T>()
-            return uninitialized()
-        }
-
-        private fun <T> uninitialized(): T = null as T
-    }
-
-    /*
-    /**
-     * test that no unexpected behaviour when passing null
-     */
-    @Test
-    fun pushNullProjectShouldNotCrash() {
-        val db = FirebaseProjectsDatabase(mockFirebaseFirestore)
-        db.pushProject(null, {}, {})
-    }*/
 
     @Test
     fun getAllIdsIsCorrect() {
@@ -293,6 +274,17 @@ class FirebaseProjectsDatabaseTest {
         db.getProjectsFromTags(
             project.tags,
             { lp -> assertEquals(listOf(project), lp) },
+            {}
+        )
+    }
+
+    @Test
+    fun updateVideoWithProjectWorks() {
+        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        db.updateVideoWithProject(
+            ID,
+            "",
+            {},
             {}
         )
     }

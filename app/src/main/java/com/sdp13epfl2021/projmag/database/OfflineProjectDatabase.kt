@@ -1,6 +1,8 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -185,6 +187,15 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         db.deleteProjectWithId(id, onSuccess, onFailure)
     }
 
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        db.updateVideoWithProject(id, uri, onSuccess, onFailure)
+    }
+  
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
         db.addProjectsChangeListener(changeListener)
     }
