@@ -155,6 +155,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+
         <Button
             android:id="@+id/addTagsButton"
             android:layout_width="match_parent"
@@ -170,3 +171,4 @@
 
 
 </ScrollView>
+

@@ -5,6 +5,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import java.util.*
 
 /**
@@ -26,27 +28,14 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
      * @param doc the Firebase document
      * @return a Project built from the given document
      */
-    @Suppress("UNCHECKED_CAST")
-    private fun documentToProject(doc: DocumentSnapshot): ImmutableProject {
-        /*return ImmutableProject(
-            "5", "hello", "laboratory", "arnaud", "asfoury",
-            2, listOf("kaou"), true, true, listOf(), false, "description"
-        )*/
-            return ImmutableProject(
-            id = doc.id,
-            name = doc["name"] as String,
-            lab = doc["lab"] as String,
-            teacher = doc["teacher"] as String,
-            TA = doc["TA"] as String,
-            nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-            assigned = (doc["assigned"] as? List<String>) ?: listOf(),
-            masterProject = doc["masterProject"] as Boolean,
-            bachelorProject = doc["bachelorProject"] as Boolean,
-            tags = (doc["tags"] as? List<String>) ?: listOf(),
-            isTaken = doc["isTaken"] as Boolean,
-            description = doc["description"] as String
-        )
-    }
+
+    private fun documentToProject(doc: DocumentSnapshot): ImmutableProject? =
+        if (doc.data == null) {
+            null
+        } else {
+            ImmutableProject.buildFromMap(doc.data!!, doc.id)
+        }
+
     /**
      * Perform a firebase query filtering from a specific `field`
      * that is a list of strings with the given `elements` (any of them match).
@@ -62,13 +51,13 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         field: String,
         onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
-    ){
+    ) {
         val queryRef = firestore.collection(ROOT)
             .whereArrayContainsAny(field, elements)
         queryRef
             .get()
             .addOnSuccessListener { query ->
-                val project = query?.map { documentToProject(it) } ?: listOf()
+                val project = query?.mapNotNull { documentToProject(it) } ?: listOf()
                 onSuccess(project)
             }.addOnFailureListener {
                 onFailure(it)
@@ -117,7 +106,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .get()
             .addOnSuccessListener { query ->
                 val project =
-                    query?.map { doc ->
+                    query?.mapNotNull { doc ->
                         documentToProject(doc)
                     } ?: listOf()
                 onSuccess(project)
@@ -133,7 +122,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     ) {
         getProjectsFrom(
             name.toLowerCase(Locale.ROOT).split(" "),
-            "name-search",
+            FieldNames.NAME.toSearchName(),
             onSuccess,
             onFailure
         )
@@ -147,7 +136,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         val listOfTags = tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
         getProjectsFrom(
             listOfTags,
-            "tags-search",
+            FieldNames.TAGS.toSearchName(),
             onSuccess,
             onFailure
         )
@@ -180,18 +169,44 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .addOnFailureListener { onFailure(it) }
     }
 
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val docRef = firestore.collection(ROOT).document(id)
+        getProjectFromId(
+            id,
+            {
+                it?.let { project ->
+                    docRef
+                        .update(
+                            FieldNames.VIDEO_URI,
+                            project.videoURI + uri
+                        )
+                        .addOnSuccessListener { onSuccess() }
+                        .addOnFailureListener(onFailure)
+                }
+            },
+            onFailure
+        )
+    }
+
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
         val listener = firestore
             .collection(ROOT)
             .addSnapshotListener { snapshot, _ ->
                 for (doc in snapshot!!.documentChanges) {
-                    val project: ImmutableProject = documentToProject(doc.document)
-                    val type = when (doc.type) {
-                        DocumentChange.Type.ADDED -> ProjectChange.Type.ADDED
-                        DocumentChange.Type.MODIFIED -> ProjectChange.Type.MODIFIED
-                        DocumentChange.Type.REMOVED -> ProjectChange.Type.REMOVED
+                    documentToProject(doc.document)?.let {
+                        val project: ImmutableProject = it
+                        val type = when (doc.type) {
+                            DocumentChange.Type.ADDED -> ProjectChange.Type.ADDED
+                            DocumentChange.Type.MODIFIED -> ProjectChange.Type.MODIFIED
+                            DocumentChange.Type.REMOVED -> ProjectChange.Type.REMOVED
+                        }
+                        changeListener(ProjectChange(type, project))
                     }
-                    changeListener(ProjectChange(type, project))
                 }
             }
         synchronized(this) {

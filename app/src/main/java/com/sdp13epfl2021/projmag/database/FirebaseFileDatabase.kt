@@ -64,6 +64,34 @@ class FirebaseFileDatabase(
             return
         }
 
+        pushFileFromUriWithName(
+            file.toUri(),
+            "${UUID.randomUUID()}_${file.name}",
+            onSuccess,
+            onFailure
+        )
+    }
+
+    override fun pushFileFromUri(
+        uri: Uri,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        pushFileFromUriWithName(
+            uri,
+            UUID.randomUUID().toString(),
+            onSuccess,
+            onFailure
+        )
+    }
+
+    private fun pushFileFromUriWithName(
+        uri: Uri,
+        filename: String,
+        onSuccess: (Uri) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+
         val user = auth.currentUser
         if (user == null) {
             GlobalScope.launch { onFailure(SecurityException("Pushing file can only be done by authenticated user.")) }
@@ -72,10 +100,10 @@ class FirebaseFileDatabase(
 
         val fileRef = rootRef
             .child(user.uid)
-            .child("${UUID.randomUUID()}_${file.name}")
+            .child(filename)
 
         fileRef
-            .putFile(file.toUri())
+            .putFile(uri)
             .continueWithTask { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
