@@ -5,6 +5,8 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import java.util.*
 
 /**
@@ -119,7 +121,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
     ) {
         getProjectsFrom(
             name.toLowerCase(Locale.ROOT).split(" "),
-            "name-search",
+            FieldNames.NAME.toSearchName(),
             onSuccess,
             onFailure
         )
@@ -133,7 +135,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
         val listOfTags = tags.flatMap { tag -> tag.toLowerCase(Locale.ROOT).split(" ") }
         getProjectsFrom(
             listOfTags,
-            "tags-search",
+            FieldNames.TAGS.toSearchName(),
             onSuccess,
             onFailure
         )
@@ -164,6 +166,30 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
             .delete()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
+    }
+
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val docRef = firestore.collection(ROOT).document(id)
+        getProjectFromId(
+            id,
+            {
+                it?.let { project ->
+                    docRef
+                        .update(
+                            FieldNames.VIDEO_URI,
+                            project.videoURI + uri
+                        )
+                        .addOnSuccessListener { onSuccess() }
+                        .addOnFailureListener(onFailure)
+                }
+            },
+            onFailure
+        )
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
