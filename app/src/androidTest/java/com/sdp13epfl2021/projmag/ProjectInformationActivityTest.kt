@@ -25,6 +25,7 @@ import org.hamcrest.Matchers
 import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -117,6 +118,7 @@ class ProjectInformationActivityTest {
     }
 
     //it should play the first video, continue with next, play prev, play next, pause
+    @Ignore
     @Test
     fun videoIsLoadedAndCanBePaused() {
         lateinit var videoView: VideoView
@@ -153,7 +155,7 @@ class ProjectInformationActivityTest {
         Thread.sleep(100)
         assertTrue(videoView.isPlaying)
 
-        /*val nextButton = onView(
+        val nextButton = onView(
             Matchers.allOf(
                 withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
                 withContentDescription("Next track")
@@ -170,7 +172,7 @@ class ProjectInformationActivityTest {
         Thread.sleep(3100)
         video.perform(click())
         Thread.sleep(100)
-        assertFalse(videoView.isPlaying)*/
+        assertFalse(videoView.isPlaying)
 
     }
 
