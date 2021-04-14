@@ -3,9 +3,11 @@ package com.sdp13epfl2021.projmag
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
@@ -16,10 +18,16 @@ import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
+import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 
+
+const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FROM_TO_SUBTITLE_MESSAGE"
 
 class Form : AppCompatActivity() {
-    private val REQUEST_VIDEO_ACCESS = 1
+    companion object {
+        private const val REQUEST_VIDEO_ACCESS = 1
+        private const val REQUEST_VIDEO_SUBTITLING = 2
+    }
 
     private var videoUri: Uri? = null
 
@@ -35,6 +43,8 @@ class Form : AppCompatActivity() {
             )
         }
 
+        findViewById<TextView>(R.id.title_form)?.requestFocus()
+        findViewById<Button>(R.id.form_add_subtitle)?.setOnClickListener(::onClickSubtitleButton)
         findViewById<Button>(R.id.form_button_sub)?.setOnClickListener(::submit)
     }
 
@@ -50,6 +60,16 @@ class Form : AppCompatActivity() {
         }
     }
 
+    private fun onClickSubtitleButton(view: View) {
+        val intent = Intent(this, VideoSubtitlingActivity::class.java).apply {
+            putExtra(FORM_TO_SUBTITLE_MESSAGE, videoUri.toString())
+        }
+        startActivityForResult(
+            intent,
+            REQUEST_VIDEO_SUBTITLING
+        )
+    }
+
 
     /**
      * This function is called after the user comes back
@@ -63,11 +83,13 @@ class Form : AppCompatActivity() {
                 videoUri = data.data
 
                 val playVidButton = findViewById<Button>(R.id.play_video)
+                val subtitleButton = findViewById<Button>(R.id.form_add_subtitle)
                 val vidView = findViewById<VideoView>(R.id.videoView)
                 val mediaController = MediaController(this)
 
                 FormHelper.playVideoFromLocalPath(
                     playVidButton,
+                    subtitleButton,
                     vidView,
                     mediaController,
                     videoUri!!
@@ -144,20 +166,23 @@ class Form : AppCompatActivity() {
     }
 }
 
-class FormHelper() {
-    companion object {
-        public fun playVideoFromLocalPath(
-            playVidButton: Button,
-            vidView: VideoView,
-            mediaController: MediaController,
-            uri: Uri
-        ) {
-            playVidButton.isEnabled = true
-            playVidButton.setOnClickListener {
-                vidView.setMediaController(mediaController)
-                vidView.setVideoURI(uri)
-                vidView.start()
-            }
+
+object FormHelper {
+    fun playVideoFromLocalPath(
+        playVidButton: Button,
+        subtitleButton: Button,
+        vidView: VideoView,
+        mediaController: MediaController,
+        uri: Uri
+    ) {
+        playVidButton.isEnabled = true
+        playVidButton.setOnClickListener {
+            vidView.setMediaController(mediaController)
+            vidView.setVideoURI(uri)
+            vidView.start()
+            vidView.visibility = VISIBLE
         }
+        subtitleButton.isEnabled = true
     }
 }
+
