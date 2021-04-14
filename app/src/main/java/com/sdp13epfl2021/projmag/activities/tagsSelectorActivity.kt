@@ -1,9 +1,13 @@
 package com.sdp13epfl2021.projmag.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.listenerClass.RecyclerItemClickListenr
 import com.sdp13epfl2021.projmag.adapter.TagAdapter
 
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
@@ -18,6 +22,18 @@ class tagsSelectorActivity : AppCompatActivity() {
         val tagRecyclerView = findViewById<RecyclerView>(R.id.recycler_tag_view)
         tagRecyclerView.adapter = TagAdapter(this, tagsDataset.toList())
         tagRecyclerView.setHasFixedSize(true)
+
+
+        tagRecyclerView.addOnItemTouchListener(
+            RecyclerItemClickListenr(this, tagRecyclerView, object : RecyclerItemClickListenr.OnItemClickListener {
+
+            override fun onItemClick(view: View, position: Int) {
+                
+            }
+            override fun onItemLongClick(view: View?, position: Int) {
+
+            }
+        }))
 
 
     }

@@ -24,6 +24,7 @@ class TagAdapter(private val context : Context, private val tags : List<Tag>)
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val tag = tags[position]
         holder.textView.text =  tag.name
+
     }
 
     override fun getItemCount(): Int = tags.size
