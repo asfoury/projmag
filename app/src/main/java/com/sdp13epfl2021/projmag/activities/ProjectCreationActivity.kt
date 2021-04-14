@@ -31,6 +31,7 @@ class Form : AppCompatActivity() {
 
     //video related variables
     private val REQUEST_VIDEO_ACCESS = 1
+    private val REQUEST_TAG_ACCESS = 2
     private var videoUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +91,11 @@ class Form : AppCompatActivity() {
                 )
             }
         }
+        else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS){
+
+        }
     }
+
 
     /**
      * Extract string text content form an EditText view

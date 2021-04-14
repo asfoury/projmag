@@ -38,6 +38,8 @@ class tagsSelectorActivity : AppCompatActivity() {
             }
         }))
 
-
+    }
+    fun allSelectedTags() : MutableSet<Tag>{
+        return selectedTags
     }
 }
