@@ -1,5 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
+import junit.framework.TestCase
+import junit.framework.TestCase.assertEquals
 import org.junit.Assert
 import org.junit.Test
 
@@ -48,5 +50,21 @@ class TagsBaseManagerTest {
         assert(tags.contains(Tag("softwareengineering")))
 
 
+    }
+
+    @Test
+    fun isTagBaseManagerThreadSafe() {
+        val tagBase = TagsBaseManager()
+        val initialSize = tagBase.getAllTags().size
+        val threads: MutableList<Thread> = ArrayList()
+        for (i in 1..40) {
+            threads.add(Thread {
+                val resulta = tagBase.addTag(Tag("a".repeat(i)))
+                assertEquals(TagsBaseManager.InputResult.OK, resulta)
+            })
+        }
+        threads.forEach(Thread::start)
+        threads.forEach(Thread::join)
+        assertEquals(40 + initialSize, tagBase.getAllTags().size)
     }
 }

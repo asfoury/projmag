@@ -59,13 +59,15 @@ import java.util.regex.Pattern
             return InputResult.ContainsSpecialChar
         }
 
-        //various other checks :
-        if(tags.contains(tag)){
-            return InputResult.AlreadyExists
-        }
-        else{
-            tags.add(tag)
-            return InputResult.OK
+        synchronized(tags) {
+            //various other checks :
+            if(tags.contains(tag)){
+                return InputResult.AlreadyExists
+            }
+            else{
+                tags.add(tag)
+                return InputResult.OK
+            }
         }
 
     }
