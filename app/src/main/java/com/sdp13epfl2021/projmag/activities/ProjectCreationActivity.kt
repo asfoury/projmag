@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.protobuf.LazyStringArrayList
 import com.sdp13epfl2021.projmag.activities.tagsSelectorActivity
 import com.sdp13epfl2021.projmag.database.FirebaseFileDatabase
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
+import com.sdp13epfl2021.projmag.model.Tag
 
 
 class Form : AppCompatActivity() {
@@ -33,6 +35,8 @@ class Form : AppCompatActivity() {
     private val REQUEST_VIDEO_ACCESS = 1
     private val REQUEST_TAG_ACCESS = 2
     private var videoUri: Uri? = null
+
+    private lateinit var listTags : Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +96,10 @@ class Form : AppCompatActivity() {
             }
         }
         else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS){
+            if (data != null) {
+                listTags = data.getStringArrayExtra("tagsList")!!
+            }
+
 
         }
     }
@@ -132,7 +140,7 @@ class Form : AppCompatActivity() {
             isTaken = false,
             description = getTextFromEditText(R.id.form_project_description),
             assigned = listOf(),
-            tags = listOf("Default-tag")
+            tags = listTags.toList()
         )
     }
 
@@ -167,7 +175,8 @@ class Form : AppCompatActivity() {
     fun switchToTagsSelectionActivity() {
         //why do i need to do the :: class.java to make it work
         val intent = Intent(this, tagsSelectorActivity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent,  REQUEST_TAG_ACCESS)
+
     }
 }
 

@@ -81,4 +81,12 @@ import java.util.regex.Pattern
         return tags.toSet()
     }
 
+     fun tagsListToStringList(tags : Set<Tag>) : List<String>{
+         var listString = mutableListOf<String>()
+         for(tag in tags){
+             listString.add(tag.name)
+         }
+         return listString
+     }
+
 }

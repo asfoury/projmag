@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 import java.lang.ClassCastException
 import java.lang.NullPointerException
 import java.util.*
