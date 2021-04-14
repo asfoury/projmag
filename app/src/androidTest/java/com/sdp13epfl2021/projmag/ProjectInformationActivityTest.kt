@@ -141,7 +141,7 @@ class ProjectInformationActivityTest {
         Thread.sleep(6000)
         assertTrue(videoView.isPlaying)
 
-        /*val prevButton = onView(
+        val prevButton = onView(
             Matchers.allOf(
                 withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
                 withContentDescription("Previous track")
@@ -153,7 +153,7 @@ class ProjectInformationActivityTest {
         Thread.sleep(100)
         assertTrue(videoView.isPlaying)
 
-        val nextButton = onView(
+        /*val nextButton = onView(
             Matchers.allOf(
                 withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
                 withContentDescription("Next track")
