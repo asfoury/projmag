@@ -47,10 +47,6 @@ class SubtitleBuilder {
         subtitle.add(SubtitlePart(content, start, end))
     }
 
-    fun clear() {
-        subtitle.clear()
-    }
-
     fun build(): String {
         val str = "$WEBVTT\n\n"
         return subtitle.fold(str) { s, e -> s + (e.toString()) }

@@ -1,19 +1,21 @@
 package com.sdp13epfl2021.projmag.video
 
+import android.content.Intent
 import android.media.MediaFormat
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE_MESSAGE
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
-import org.w3c.dom.Text
 import java.util.*
 
 class VideoSubtitlingActivity : AppCompatActivity() {
 
+    companion object {
+        const val RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"
+    }
 
     private var videoUri: Uri? = null
 
@@ -24,13 +26,19 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_video_subtitling)
 
         videoUri = intent.getStringExtra(FORM_TO_SUBTITLE_MESSAGE)?.let { Uri.parse(it) }
+
         findViewById<Button>(R.id.video_subtitling_set_start_button)?.setOnClickListener {
             setStartOrEnd(SubtitleBuilder.START)
         }
+
         findViewById<Button>(R.id.video_subtitling_set_end_button)?.setOnClickListener {
             setStartOrEnd(SubtitleBuilder.END)
         }
+
         findViewById<Button>(R.id.video_subtitling_add)?.setOnClickListener { addButtonPressed() }
+
+        findViewById<Button>(R.id.video_subtitling_submit_button)?.setOnClickListener { submit() }
+
         handleVideoUri()
         updateTimeTextView()
     }
@@ -42,7 +50,6 @@ class VideoSubtitlingActivity : AppCompatActivity() {
                 getString(R.string.video_subtitling_cant_open_video),
                 Toast.LENGTH_LONG
             ).show()
-            finish()
         } else {
             val mediaController = MediaController(this)
             val videoView = findViewById<VideoView>(R.id.video_subtitling_videoview)
@@ -51,10 +58,17 @@ class VideoSubtitlingActivity : AppCompatActivity() {
             mediaController.setMediaPlayer(videoView)
             videoView.setVideoURI(videoUri)
             videoView.setMediaController(mediaController)
-            //val sub = "WEBVTT\n\n00:00:00.800 --> 00:00:04.115\nSubtitling Text".byteInputStream()
+            showInstruction()
             videoView.start()
         }
     }
+
+    private fun showInstruction() =
+        Toast.makeText(
+            this,
+            getString(R.string.video_subtitling_instruction),
+            Toast.LENGTH_LONG
+        ).show()
 
     private fun updateTimeTextView() {
         findViewById<TextView>(R.id.video_subtitling_start_time)?.apply {
@@ -65,26 +79,32 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateSubs() =
+        findViewById<VideoView>(R.id.video_subtitling_videoview)?.addSubtitleSource(
+            builder.build().byteInputStream(),
+            MediaFormat.createSubtitleFormat("text/vtt", Locale.ENGLISH.language)
+        )
+
     private fun addButtonPressed() =
         findViewById<EditText>(R.id.video_subtitling_subtitle_text)?.let {
             builder.add(it.text.toString())
-            Log.d("test", builder.build())
-            findViewById<VideoView>(R.id.video_subtitling_videoview)?.let { vv ->
-                Log.d("test", builder.build())
-                vv.addSubtitleSource(
-                    builder.build().byteInputStream(),
-                    MediaFormat.createSubtitleFormat("text/vtt", Locale.ENGLISH.language)
-                )
-                vv.start()
-            }
+            updateSubs()
         }
-
 
     private fun setStartOrEnd(or: Boolean) {
         findViewById<VideoView>(R.id.video_subtitling_videoview)?.let { videoView ->
-            videoView.pause()
+            if (or == SubtitleBuilder.END) {
+                videoView.pause()
+            }
             builder.setStartOrEnd(or, videoView.currentPosition)
             updateTimeTextView()
         }
+    }
+
+    private fun submit() {
+        val data = Intent()
+        data.putExtra(RESULT_KEY, builder.build())
+        setResult(RESULT_OK, data)
+        finish()
     }
 }

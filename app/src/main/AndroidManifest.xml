@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".video.VideoSubtitlingActivity"></activity>
+        <activity
+            android:name=".video.VideoSubtitlingActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ProfilePageActivity" />
         <activity
             android:name=".curriculumvitae.CVCreationActivity"
@@ -22,7 +24,9 @@
             android:name=".activities.ProjectInformationActivity"
             android:parentActivityName=".activities.ProjectsListActivity" />
         <activity android:name=".SignInActivity" />
-        <activity android:name=".Form" />
+        <activity
+            android:name=".Form"
+            android:screenOrientation="portrait" />
         <activity android:name=".activities.ProjectsListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

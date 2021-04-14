@@ -30,6 +30,7 @@ class Form : AppCompatActivity() {
     }
 
     private var videoUri: Uri? = null
+    private var subtitles: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +96,10 @@ class Form : AppCompatActivity() {
                     videoUri!!
                 )
             }
+        } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_SUBTITLING) {
+            if (data != null) {
+                subtitles = data.getStringExtra(VideoSubtitlingActivity.RESULT_KEY)
+            }
         }
     }
 
@@ -156,12 +161,14 @@ class Form : AppCompatActivity() {
         ProjectUploader(
             utils.projectsDatabase,
             utils.fileDatabase,
+            utils.metadataDatabase,
             ::showToast,
             { setSubmitButtonEnabled(true) },
             ::finishFromOtherThread
         ).checkProjectAndThenUpload(
             constructProject(),
-            videoUri
+            videoUri,
+            subtitles
         )
     }
 }

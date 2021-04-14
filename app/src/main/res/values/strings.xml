@@ -59,4 +59,7 @@
     <string name="video_subtitling_add">Add</string>
     <string name="form_add_subtitle_button">Add Subtitle</string>
     <string name="video_subtitling_cant_open_video">"Can't open video for subtitling"</string>
+    <string name="video_subtitling_instruction">"To see subtitles you have to turn on the captions (currently only in English) in your device settings !"</string>
+    <string name="clear">Clear</string>
+    <string name="ok">OK</string>
 </resources>
