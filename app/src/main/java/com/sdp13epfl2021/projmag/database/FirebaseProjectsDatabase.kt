@@ -28,24 +28,24 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
      */
     @Suppress("UNCHECKED_CAST")
     private fun documentToProject(doc: DocumentSnapshot): ImmutableProject {
-        return ImmutableProject(
+        /*return ImmutableProject(
             "5", "hello", "laboratory", "arnaud", "asfoury",
             2, listOf("kaou"), true, true, listOf(), false, "description"
+        )*/
+            return ImmutableProject(
+            id = doc.id,
+            name = doc["name"] as String,
+            lab = doc["lab"] as String,
+            teacher = doc["teacher"] as String,
+            TA = doc["TA"] as String,
+            nbParticipant = (doc["nbParticipant"] as Long).toInt(),
+            assigned = (doc["assigned"] as? List<String>) ?: listOf(),
+            masterProject = doc["masterProject"] as Boolean,
+            bachelorProject = doc["bachelorProject"] as Boolean,
+            tags = (doc["tags"] as? List<String>) ?: listOf(),
+            isTaken = doc["isTaken"] as Boolean,
+            description = doc["description"] as String
         )
-        /*ImmutableProject(
-        id = doc.id,
-        name = doc["name"] as String,
-        lab = doc["lab"] as String,
-        teacher = doc["teacher"] as String,
-        TA = doc["TA"] as String,
-        nbParticipant = (doc["nbParticipant"] as Long).toInt(),
-        assigned = (doc["assigned"] as? List<String>) ?: listOf(),
-        masterProject = doc["masterProject"] as Boolean,
-        bachelorProject = doc["bachelorProject"] as Boolean,
-        tags = (doc["tags"] as? List<String>) ?: listOf(),
-        isTaken = doc["isTaken"] as Boolean,
-        description = doc["description"] as String
-    )*/
     }
     /**
      * Perform a firebase query filtering from a specific `field`
