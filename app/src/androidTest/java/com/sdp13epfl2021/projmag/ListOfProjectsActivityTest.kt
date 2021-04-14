@@ -93,7 +93,7 @@ class ListOfProjectsActivityTest {
 
     @Test
     fun profileButtonOpensSignActivity() {
-        onView(withId(R.id.shareButton)).perform(click())
+        onView(withId(R.id.profileButton)).perform(click())
 
     }
 
