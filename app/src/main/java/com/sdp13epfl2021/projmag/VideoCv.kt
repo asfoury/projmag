@@ -1,6 +1,8 @@
 package com.sdp13epfl2021.projmag
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -24,21 +26,22 @@ class VideoCv : AppCompatActivity() {
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)
         vidButton.setOnClickListener {
-           val gallery = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, pickVideo)
+            if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                startActivityForResult(intent, pickVideo)
+            }
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == RESULT_OK && requestCode == pickVideo) {
-            if (data?.data != null) {
-                val uriPathHelper = URIPathHelper()
-                val videoPath = uriPathHelper.getPath(this, data?.data!!)
-                VideoUri = data?.data
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == Activity.RESULT_OK && requestCode == pickVideo) {
+            if (intent?.data != null) {
+                VideoUri = intent?.data
                 videoView.setVideoURI(VideoUri)
                 videoView.start();
             }
         }
     }
+
 
 }
