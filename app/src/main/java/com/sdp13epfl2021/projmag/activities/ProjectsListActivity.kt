@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +31,6 @@ class ProjectsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_projects_list)
 
         val fromLink = intent.getBooleanExtra("fromLink", false)
-        if (!fromLink) Toast.makeText(applicationContext, "not fromLink", Toast.LENGTH_LONG).show()
         var projectId = ""
         if (fromLink) {
             var temp = intent.getStringExtra("projectId")
