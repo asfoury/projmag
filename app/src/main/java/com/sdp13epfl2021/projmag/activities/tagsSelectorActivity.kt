@@ -9,18 +9,20 @@ import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.listenerClass.RecyclerItemClickListenr
 import com.sdp13epfl2021.projmag.adapter.TagAdapter
+import com.sdp13epfl2021.projmag.model.Tag
 
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
 
 class tagsSelectorActivity : AppCompatActivity() {
+    private val selectedTags : MutableSet<Tag> = mutableSetOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tags_selector)
 
         val manager = TagsBaseManager()
-        val tagsDataset = manager.getAllTags()
+        val tagsDataset = manager.getAllTags().toList()
         val tagRecyclerView = findViewById<RecyclerView>(R.id.recycler_tag_view)
-        tagRecyclerView.adapter = TagAdapter(this, tagsDataset.toList())
+        tagRecyclerView.adapter = TagAdapter(this, tagsDataset)
         tagRecyclerView.setHasFixedSize(true)
 
 
@@ -28,7 +30,8 @@ class tagsSelectorActivity : AppCompatActivity() {
             RecyclerItemClickListenr(this, tagRecyclerView, object : RecyclerItemClickListenr.OnItemClickListener {
 
             override fun onItemClick(view: View, position: Int) {
-                
+                selectedTags.add(tagsDataset[position])
+
             }
             override fun onItemLongClick(view: View?, position: Int) {
 

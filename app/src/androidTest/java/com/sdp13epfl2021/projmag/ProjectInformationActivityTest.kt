@@ -8,15 +8,6 @@ import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-<<<<<<< HEAD
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
-import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
-import org.junit.Rule
-=======
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -30,7 +21,6 @@ import junit.framework.Assert.*
 import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Before
->>>>>>> main
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -41,14 +31,6 @@ import java.nio.file.StandardCopyOption
 @RunWith(AndroidJUnit4::class)
 class ProjectInformationActivityTest {
 
-<<<<<<< HEAD
-    @Test
-    fun userCanPressOnProject() {
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                0,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
-=======
     /*
     private val videoUrl = "https://fakeVideoLink/abc?def"
     private val imageArchUrl = "https://fakeImageLink/Arch Linux > Debian/4K"
@@ -90,7 +72,6 @@ class ProjectInformationActivityTest {
     private val inputStreamSNK = javaClass.classLoader!!.getResourceAsStream("30a0704e-8ed3-40a8-8621-ea69a6b7fe3e_SNK The Final Season OP.mp4")
     private val inputStreamArch = javaClass.classLoader!!.getResourceAsStream("A4k.png")
     private val inputStreamSO = javaClass.classLoader!!.getResourceAsStream("SO_1avril.png")
-
     private val videoFile: File = Files.createTempFile("SNK OP", ".mp4").toFile()
     private val imageArchFile: File = Files.createTempFile("Arch", ".png").toFile()
     private val imageSOFile: File = Files.createTempFile("Arch", ".png").toFile()
@@ -104,7 +85,6 @@ class ProjectInformationActivityTest {
         Files.copy(inputStreamSNK, videoFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamArch, imageArchFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamSO, imageSOFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
-
         //TODO find a way to mock the database
         Utils.projectsDatabase = CachedProjectsDatabase(FakeDatabaseTest(listOf(project)))
         Utils.fileDatabase = FakeFileDatabaseTest(
@@ -113,7 +93,6 @@ class ProjectInformationActivityTest {
                 imageArchUrl to imageArchFile,
                 imageSOUrl to imageSOFile,
                 emptyImageUrl to emptyFile
->>>>>>> main
             )
         )
         */
@@ -133,27 +112,6 @@ class ProjectInformationActivityTest {
     }
 
     @Test
-<<<<<<< HEAD
-    fun userCanPressOnProjectAndGoBackUsingBackButton() {
-        // press on first project
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                0,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
-            )
-        )
-        // go back to list of project
-        pressBack()
-        // press on second project
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                1,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
-            )
-        )
-        // go back to list of projects
-        pressBack()
-=======
     fun videoIsLoadedAndCanBePaused() {
         lateinit var videoView: VideoView
 
@@ -169,6 +127,5 @@ class ProjectInformationActivityTest {
             Thread.sleep(100)
             assertTrue(videoView.isPlaying)
         }
->>>>>>> main
     }
 }
