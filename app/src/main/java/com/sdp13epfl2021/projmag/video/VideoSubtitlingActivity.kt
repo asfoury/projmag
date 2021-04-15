@@ -44,29 +44,24 @@ class VideoSubtitlingActivity : AppCompatActivity() {
     }
 
     private fun handleVideoUri() {
+        val mediaController = MediaController(this)
+        val videoView = findViewById<VideoView>(R.id.video_subtitling_videoview)
+        mediaController.setAnchorView(videoView)
+        mediaController.setMediaPlayer(videoView)
+        videoView.setMediaController(mediaController)
         if (videoUri == null) {
-            Toast.makeText(
-                this,
-                getString(R.string.video_subtitling_cant_open_video),
-                Toast.LENGTH_LONG
-            ).show()
+            showToast(getString(R.string.video_subtitling_cant_open_video))
         } else {
-            val mediaController = MediaController(this)
-            val videoView = findViewById<VideoView>(R.id.video_subtitling_videoview)
-
-            mediaController.setAnchorView(videoView)
-            mediaController.setMediaPlayer(videoView)
             videoView.setVideoURI(videoUri)
-            videoView.setMediaController(mediaController)
-            showInstruction()
+            showToast(getString(R.string.video_subtitling_instruction))
             videoView.start()
         }
     }
 
-    private fun showInstruction() =
+    private fun showToast(msg: String) =
         Toast.makeText(
             this,
-            getString(R.string.video_subtitling_instruction),
+            msg,
             Toast.LENGTH_LONG
         ).show()
 
