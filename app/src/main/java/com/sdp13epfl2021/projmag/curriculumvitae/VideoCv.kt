@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.curriculumvitae
 
 import android.app.Activity
 import android.content.Intent
@@ -10,10 +10,16 @@ import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
+import com.sdp13epfl2021.projmag.R
 
 
 class VideoCv : AppCompatActivity() {
+
+    companion object {
+        const val RESULT_KEY = "com.sdp13epfl2021.projmag.curriculumvitea.VideoCV"
+    }
     lateinit var vidButton: Button
+    lateinit var subButton: Button
     lateinit var videoView: VideoView
     private var VideoUri: Uri? = null
     private val pickVideo = 0
@@ -22,6 +28,7 @@ class VideoCv : AppCompatActivity() {
         setContentView(R.layout.activity_video_cv)
         videoView = findViewById(R.id.videoViewCv)
         vidButton = findViewById(R.id.videoButtonCV)
+        subButton = findViewById(R.id.videoButtonCVSub)
         val mediaController = MediaController(this)
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)
@@ -30,6 +37,13 @@ class VideoCv : AppCompatActivity() {
                 val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                 startActivityForResult(intent, pickVideo)
             }
+        }
+        subButton.setOnClickListener{
+            if(VideoUri != null){
+            val data = Intent()
+            data.putExtra(RESULT_KEY, VideoUri.toString())
+            setResult(RESULT_OK, data)
+            finish()}
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
