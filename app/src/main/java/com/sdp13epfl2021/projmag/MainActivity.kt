@@ -12,6 +12,10 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 
 class MainActivity : AppCompatActivity() {
+    companion object MainActivityCompanion {
+        const val fromLinkString: String = "fromLink"
+        const val projectIdString: String = "projectId"
+    }
 
     private lateinit var mAuth: FirebaseAuth
 
@@ -33,20 +37,20 @@ class MainActivity : AppCompatActivity() {
         }, 2000)
     }
 
-    fun goToSignIn() {
+    private fun goToSignIn() {
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    fun goToList(addExtras: (Intent) -> Unit) {
+    private fun goToList(addExtras: (Intent) -> Unit) {
         val intent = Intent(this, ProjectsListActivity::class.java)
         addExtras(intent)
         startActivity(intent)
         finish()
     }
 
-    fun handleLink() {
+    private fun handleLink() {
         FirebaseDynamicLinks.getInstance().getDynamicLink(intent).addOnSuccessListener {
                 pendingDynamicLinkData ->
             var dynamicLink: Uri? = null
@@ -61,12 +65,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             goToList { i ->
-                i.putExtra("fromLink", fromLink)
-                i.putExtra("projectId", projectId)
+                i.putExtra(fromLinkString, fromLink)
+                i.putExtra(fromLinkString, projectId)
             }
 
         }.addOnFailureListener {
-            Toast.makeText(applicationContext, "failure", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, getString(R.string.failure), Toast.LENGTH_LONG).show()
             goToList({})
         }
     }

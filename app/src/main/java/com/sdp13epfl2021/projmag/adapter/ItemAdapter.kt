@@ -22,6 +22,10 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
     , private val fromLink: Boolean, private val projectIdLink: String) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
 
+    companion object ItemAdapterCompanion {
+        private const val projectString = "project"
+    }
+
     var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
@@ -79,7 +83,7 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
     fun openProject(holder: ItemViewHolder, project: ImmutableProject) {
         val context = holder.view.context
         val intent = Intent(context, ProjectInformationActivity::class.java)
-        intent.putExtra("project", project)
+        intent.putExtra(projectString, project)
         context.startActivity(intent)
     }
 
