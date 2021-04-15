@@ -1,7 +1,9 @@
 # Summary for week 5
 
 ## Mohamed
-
+This week, my tasks were to fix some bugs with the video view in the project submission form, I started working on my tasks but after a standup meeting that we had Paul told me that to be able to work on his task he had to also fix the same bugs so we ended up just using his code and so I did not have a PR this sprint.
+Next time we should think if the bug fixes we assign will prevent someone from being able to work on his task or maybe assign the bug to the same person working on the task that needs the bugs to be fixed.
+The time estimate for this sprint was not accurate at all the bugs were fairly easy to fix and did not require much effort.
 ## Giovanni (Scrum Master)
 This week , first  I finish my task of last week which was to allow user to use camera to add a video to their Cv. Then I implemented a classe to separate profile user of student and professor. My main problem with the first task was the coverage of testing because I can't find a way of testing the code for recording a video with camera. My time estimation was accurate for the first task but for the second I take less time then expected.
 
