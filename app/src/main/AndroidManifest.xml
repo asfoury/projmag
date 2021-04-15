@@ -26,10 +26,11 @@
 
 
         <activity
+            android:name=".ProfilePageActivity"
+            android:parentActivityName=".activities.ProjectsListActivity"/>
+        <activity
             android:name=".video.VideoSubtitlingActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ProfilePageActivity" />
         <activity
             android:name=".curriculumvitae.CVCreationActivity"
             android:screenOrientation="portrait" />
