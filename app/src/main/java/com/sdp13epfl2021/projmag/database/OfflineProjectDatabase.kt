@@ -86,9 +86,14 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
                     val id: ProjectId = file.parentFile!!.name
                     ObjectInputStream(FileInputStream(file)).use {
                         val map: HashMap<String, Any> = it.readObject() as HashMap<String, Any>
-                        return ImmutableProject.buildFromMap(map, id)
+                        val project = ImmutableProject.buildFromMap(map, id)
+                        if (project == null) {
+                            deleteProject(id)
+                        }
+                        return project
                     }
                 } catch (e: Exception) {
+                    file.delete()
                     return null
                 }
             } else {
