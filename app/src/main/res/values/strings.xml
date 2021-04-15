@@ -51,4 +51,15 @@
     <string name="display_master_only">Master semester</string>
     <string name="display_bachelor_and_master">Bachelor &amp; Master semester</string>
     <string name="display_not_found">Project not found</string>
+    <string name="video_subtitling_title">Video Subtitling</string>
+    <string name="video_subtitling_begin_end_time">Begin/End Time</string>
+    <string name="video_subtitling_set_start">Set Start</string>
+    <string name="video_subtitling_set_end">Set End</string>
+    <string name="video_subtitling_field">Subtitling Text</string>
+    <string name="video_subtitling_add">Add</string>
+    <string name="form_add_subtitle_button">Add Subtitle</string>
+    <string name="video_subtitling_cant_open_video">"Can't open video for subtitling"</string>
+    <string name="video_subtitling_instruction">"To see subtitles you have to turn on the captions (currently only in English) in your device settings !"</string>
+    <string name="clear">Clear</string>
+    <string name="ok">OK</string>
 </resources>

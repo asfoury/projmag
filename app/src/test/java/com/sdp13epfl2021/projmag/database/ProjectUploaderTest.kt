@@ -1,8 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
 import android.net.Uri
-import androidx.core.net.toFile
-import com.google.firebase.storage.FirebaseStorage
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -10,17 +8,17 @@ import com.sdp13epfl2021.projmag.model.Success
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito
-import java.io.File
-import kotlin.math.PI
 
 class ProjectUploaderTest {
     val mockProjectDB = Mockito.mock(ProjectsDatabase::class.java)
 
-    val mockFileDatabase = Mockito.mock(FileDatabase::class.java)
+    val mockFileDB = Mockito.mock(FileDatabase::class.java)
+
+    val mockMetadataDB = Mockito.mock(MetadataDatabase::class.java)
 
     val mockUri = Mockito.mock(Uri::class.java)
+    val subtitles = "not formatted subtitles, but we do not really care here"
 
     val PID = "pid"
     val reason = "some reason"
@@ -70,7 +68,7 @@ class ProjectUploaderTest {
 
         /* MOCK_FILE_DB */
         Mockito.`when`(
-            mockFileDatabase.pushFileFromUri(
+            mockFileDB.pushFileFromUri(
                 JavaToKotlinHelper.anyObject(),
                 JavaToKotlinHelper.anyObject(),
                 JavaToKotlinHelper.anyObject()
@@ -80,18 +78,31 @@ class ProjectUploaderTest {
             onSuccess(mockUri)
         }
 
+        /* MOCK_METADATA_DB */
+        Mockito.`when`(
+            mockMetadataDB.addSubtitlesToVideo(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.anyString(),
+                JavaToKotlinHelper.anyObject(),
+                JavaToKotlinHelper.anyObject()
+            )
+        ).then {}
+
     }
 
     @Test
     fun checkProjectAndThenUploadWorksWithFailure() {
         ProjectUploader(
             mockProjectDB,
-            mockFileDatabase,
+            mockFileDB,
+            mockMetadataDB,
             { msg -> assertEquals(reason, msg) },
             {},
             {}).checkProjectAndThenUpload(
             Failure(reason),
             null,
+            null
         )
     }
 
@@ -99,11 +110,13 @@ class ProjectUploaderTest {
     fun checkProjectAndThenUploadWorks() {
         ProjectUploader(
             mockProjectDB,
-            mockFileDatabase,
+            mockFileDB,
+            mockMetadataDB,
             { msg -> assertEquals("Project pushed (without video) with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
             Success(exampleProject),
+            null,
             null
         )
     }
@@ -112,12 +125,29 @@ class ProjectUploaderTest {
     fun checkProjectAndThenUploadWithURIWorks() {
         ProjectUploader(
             mockProjectDB,
-            mockFileDatabase,
+            mockFileDB,
+            mockMetadataDB,
             { msg -> assertEquals("Project pushed with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
             Success(exampleProject),
-            mockUri
+            mockUri,
+            null
+        )
+    }
+
+    @Test
+    fun checkProjectAndThenUploadWithURIAndSubtitlesWorks() {
+        ProjectUploader(
+            mockProjectDB,
+            mockFileDB,
+            mockMetadataDB,
+            { msg -> assertEquals("Project pushed with ID : $PID", msg) },
+            {},
+            {}).checkProjectAndThenUpload(
+            Success(exampleProject),
+            mockUri,
+            subtitles
         )
     }
 }

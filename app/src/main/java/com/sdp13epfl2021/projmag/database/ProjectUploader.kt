@@ -18,18 +18,19 @@ import com.sdp13epfl2021.projmag.model.Success
 class ProjectUploader(
     private val projectDB: ProjectsDatabase,
     private val fileDB: FileDatabase,
+    private val metadataDB: MetadataDatabase,
     private val showMsg: (String) -> Unit,
     private val onFailure: () -> Unit,
     private val onSuccess: () -> Unit
 ) {
-
     /**
      * Upload a video to firebase and edit the link of the video in the project corresponding
      * to the given ProjectId
      */
     private fun uploadVideo(
         id: ProjectId,
-        videoUri: Uri
+        videoUri: Uri,
+        subtitles: String?
     ) = fileDB.pushFileFromUri(
         videoUri,
         { newUri ->
@@ -46,6 +47,15 @@ class ProjectUploader(
                     onSuccess() // call onSuccess because the project has been pushed
                 }
             )
+            subtitles?.let { sub ->
+                metadataDB.addSubtitlesToVideo(
+                    newUri.toString(),
+                    "en",
+                    sub,
+                    {},
+                    {}
+                )
+            }
         },
         {
             showMsg("Can't push video")
@@ -60,13 +70,14 @@ class ProjectUploader(
      */
     private fun upload(
         project: ImmutableProject,
-        videoUri: Uri?
+        videoUri: Uri?,
+        subtitles: String?
     ) {
         projectDB.pushProject(
             project,
             { id ->
                 videoUri?.let { uri ->
-                    uploadVideo(id, uri)
+                    uploadVideo(id, uri, subtitles)
                 }
                     ?: run {
                         showMsg("Project pushed (without video) with ID : $id")
@@ -87,13 +98,15 @@ class ProjectUploader(
      */
     fun checkProjectAndThenUpload(
         maybeProject: Result<ImmutableProject>,
-        videoUri: Uri?
+        videoUri: Uri?,
+        subtitles: String?
     ) =
         when (maybeProject) {
             is Success<*> -> {
                 upload(
                     maybeProject.value as ImmutableProject,
-                    videoUri
+                    videoUri,
+                    subtitles
                 )
             }
             is Failure<*> -> {

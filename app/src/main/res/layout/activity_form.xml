@@ -2,12 +2,14 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/project_submission_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/project_submission_scrollview"
+    android:scrollX="0dp"
     tools:context=".Form">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/form_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -16,9 +18,9 @@
             android:id="@+id/title_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:text="@string/project_Submission"
             android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +34,8 @@
             android:hint="@string/lab"
 
             android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/form_edit_text_project_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_edit_text_project_name" />
 
         <EditText
@@ -42,6 +45,7 @@
             android:autofillHints=""
             android:hint="@string/project_name"
             android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_form" />
 
@@ -52,7 +56,8 @@
             android:autofillHints=""
             android:hint="@string/teacher"
             android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/form_edit_text_laboratory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_edit_text_laboratory" />
 
         <EditText
@@ -63,7 +68,8 @@
 
             android:hint="@string/project_TA"
             android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/form_edit_text_teacher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_edit_text_teacher" />
 
         <EditText
@@ -73,7 +79,8 @@
             android:autofillHints=""
             android:hint="@string/numberOfParticipant"
             android:inputType="number"
-            app:layout_constraintStart_toStartOf="@+id/form_edit_text_project_TA"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_edit_text_project_TA" />
 
         <CheckBox
@@ -96,8 +103,11 @@
 
         <EditText
             android:id="@+id/form_project_description"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
             android:autofillHints=""
             android:hint="@string/project_description"
             android:inputType="textMultiLine"
@@ -107,55 +117,66 @@
             app:layout_constraintTop_toBottomOf="@+id/form_check_box_SP" />
 
         <VideoView
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:foregroundGravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/form_project_description" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/add_video"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@id/form_project_description">
+            android:layout_marginTop="32dp"
+            android:text="@string/add_video"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.831"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
-            <Button
-                android:id="@+id/add_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/add_video"
-                app:layout_constraintBottom_toTopOf="@+id/form_button_sub"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/form_project_description" />
+        <Button
+            android:id="@+id/play_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:enabled="false"
+            android:text="@string/play_video"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.137"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/play_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:text="@string/play_video" />
-        </LinearLayout>
+        <Button
+            android:id="@+id/form_add_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:enabled="false"
+            android:text="@string/form_add_subtitle_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_video" />
 
         <Button
             android:id="@+id/form_button_sub"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
             android:text="@string/submission"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/form_add_subtitle" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </ScrollView>
