@@ -3,33 +3,23 @@ package com.sdp13epfl2021.projmag
 
 import android.app.Activity
 import android.content.Intent
-import android.media.MediaFormat
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.protobuf.LazyStringArrayList
-import com.sdp13epfl2021.projmag.activities.tagsSelectorActivity
-import com.sdp13epfl2021.projmag.database.FirebaseFileDatabase
+import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
-import com.sdp13epfl2021.projmag.model.Tag
 import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
-import java.util.*
-
 
 
 const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FROM_TO_SUBTITLE_MESSAGE"
@@ -219,7 +209,7 @@ class Form : AppCompatActivity() {
      */
     fun switchToTagsSelectionActivity() {
         //why do i need to do the :: class.java to make it work
-        val intent = Intent(this, tagsSelectorActivity::class.java)
+        val intent = Intent(this, TagsSelectorActivity::class.java)
         startActivityForResult(intent,  REQUEST_TAG_ACCESS)
 
     }

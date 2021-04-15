@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".activities.tagsSelectorActivity"></activity>
+        <activity android:name=".activities.TagsSelectorActivity"></activity>
         <activity android:name=".activities.ProfilePageActivity" />
         <activity
             android:name=".video.VideoSubtitlingActivity"

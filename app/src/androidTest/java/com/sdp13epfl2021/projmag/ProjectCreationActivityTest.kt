@@ -18,7 +18,7 @@ import org.junit.Test
 import java.io.File
 
 
-class FormTest {
+class ProjectCreationActivityTest {
     @get:Rule
     var activityRule: ActivityScenarioRule<Form> =
         ActivityScenarioRule(Form::class.java)
