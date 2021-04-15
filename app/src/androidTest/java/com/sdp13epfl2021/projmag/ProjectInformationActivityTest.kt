@@ -117,6 +117,38 @@ class ProjectInformationActivityTest {
         */
     }
 
+    @Test
+    fun videoIsLoadedAndCanBePaused_LimitedTestVersionBecauseOfCirrus() {
+        lateinit var videoView: VideoView
+
+        scenario.onActivity {
+            videoView = it.findViewById(R.id.info_video)
+        }
+
+        Thread.sleep(10000) //sleep 10sec to wait the download
+        assertFalse(videoView.isPlaying)
+        assertFalse(videoView.isPlaying)
+        Thread.sleep(100)
+
+        val video = onView(withId(R.id.info_video))
+        video.perform(scrollTo())
+        Thread.sleep(500)
+        video.perform(click())
+        Thread.sleep(500)
+        assertTrue(videoView.isPlaying)
+        Thread.sleep(9000)
+        assertTrue(videoView.isPlaying)
+
+        video.perform(click())
+        Thread.sleep(500)
+        assertFalse(videoView.isPlaying)
+
+        Thread.sleep(3000)
+        video.perform(click())
+        Thread.sleep(3000)
+        assertFalse(videoView.isPlaying)
+    }
+
     //it should play the first video, continue with next, play prev, play next, pause
     @Ignore
     @Test
