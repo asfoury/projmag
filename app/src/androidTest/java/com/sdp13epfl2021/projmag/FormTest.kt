@@ -80,14 +80,22 @@ class FormTest {
 
     @Test
     fun testFormHelperFunctions() {
-        val button = Button(instrumentationContext)
+        val vidButton = Button(instrumentationContext)
+        val subButton = Button(instrumentationContext)
         val mediaController = MediaController(instrumentationContext)
         val fakeStringPath = Uri.fromFile(File("test"))
         val vidView = VideoView(instrumentationContext)
 
-        FormHelper.playVideoFromLocalPath(button, vidView, mediaController, fakeStringPath)
-        assert(button.isEnabled)
-        assert(button.hasOnClickListeners())
+        FormHelper.playVideoFromLocalPath(
+            vidButton,
+            subButton,
+            vidView,
+            mediaController,
+            fakeStringPath
+        )
+        assert(vidButton.isEnabled)
+        assert(subButton.isEnabled)
+        assert(vidButton.hasOnClickListeners())
         assert(!vidView.isPlaying)
     }
 }
