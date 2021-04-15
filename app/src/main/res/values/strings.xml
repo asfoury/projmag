@@ -7,11 +7,12 @@
     <string name="project_name">Project name</string>
     <string name="teacher">Teacher</string>
     <string name="project_TA">Project TA</string>
-    <string name="numberOfParticipant">Number of participant</string>
+    <string name="numberOfParticipant">Number of participants</string>
     <string name="semester_project">Semester project</string>
     <string name="master_project">Master project</string>
     <string name="project_description">Project Description</string>
-    <string name="submission">Submission</string>
+    <string name="submission">Submit</string>
+    <string name="loading">Loading…</string>
     <string name="cv_creation_intro_title">CV creation</string>
     <string name="cv_creation_intro_body">Let\'s create your curriculum vitae step by step</string>
     <string name="cv_creation_intro_instruction">Just swipe to go through the forms</string>
@@ -33,6 +34,8 @@
     <string name="search">search</string>
     <string name="profile">profileButton</string>
     <string name="submit">Add a new project to the list</string>
+    <string name="play_video">Play Video</string>
+    <string name="add_video">Add Video</string>
     <string name="cv_period_description">Description</string>
     <string name="cv_period_school_name">School Name</string>
     <string name="cv_period_period_title">Period (to change)</string>
@@ -43,6 +46,25 @@
     <string name="cv_skills_hint">Your skill</string>
     <string name="cv_skills_title">Your Skills</string>
     <string name="cv_cardview_close">close</string>
+
     <string name="add_a_video_to_cvd">Add a video to your CV</string>
     <string name="add">Add</string>
+
+    <string name="display_number_student">Number of participant : %d</string>
+    <string name="display_bachelor_only">Bachelor semester</string>
+    <string name="display_master_only">Master semester</string>
+    <string name="display_bachelor_and_master">Bachelor &amp; Master semester</string>
+    <string name="display_not_found">Project not found</string>
+    <string name="video_subtitling_title">Video Subtitling</string>
+    <string name="video_subtitling_begin_end_time">Begin/End Time</string>
+    <string name="video_subtitling_set_start">Set Start</string>
+    <string name="video_subtitling_set_end">Set End</string>
+    <string name="video_subtitling_field">Subtitling Text</string>
+    <string name="video_subtitling_add">Add</string>
+    <string name="form_add_subtitle_button">Add Subtitle</string>
+    <string name="video_subtitling_cant_open_video">"Can't open video for subtitling"</string>
+    <string name="video_subtitling_instruction">"To see subtitles you have to turn on the captions (currently only in English) in your device settings !"</string>
+    <string name="clear">Clear</string>
+    <string name="ok">OK</string>
+
 </resources>
