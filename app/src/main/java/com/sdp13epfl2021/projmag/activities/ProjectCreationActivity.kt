@@ -3,10 +3,13 @@ package com.sdp13epfl2021.projmag
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaFormat
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -23,18 +26,31 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.model.Tag
+import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
+import com.sdp13epfl2021.projmag.video.VideoUtils
+import java.util.*
 
+
+
+const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FROM_TO_SUBTITLE_MESSAGE"
 
 class Form : AppCompatActivity() {
+
+    companion object {
+        private const val REQUEST_VIDEO_ACCESS = 1
+        private const val REQUEST_VIDEO_SUBTITLING = 2
+        private const val REQUEST_TAG_ACCESS = 3
+    }
+
 
     //tag selection related variables
     private lateinit var tagRecyclerView: RecyclerView
 
 
     //video related variables
-    private val REQUEST_VIDEO_ACCESS = 1
-    private val REQUEST_TAG_ACCESS = 2
+
     private var videoUri: Uri? = null
+    private var subtitles: String? = null
 
     private lateinit var listTags : Array<String>
 
@@ -52,11 +68,12 @@ class Form : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.form_button_sub)?.setOnClickListener(::submit)
-
-
         addtagButton.setOnClickListener {
             switchToTagsSelectionActivity()
         }
+        findViewById<TextView>(R.id.title_form).requestFocus()
+        findViewById<Button>(R.id.form_add_subtitle).setOnClickListener(::onClickSubtitleButton)
+        findViewById<Button>(R.id.form_button_sub).setOnClickListener(::submit)
     }
 
 
@@ -65,10 +82,20 @@ class Form : AppCompatActivity() {
      * Useful to submit only one project at time
      */
     private fun setSubmitButtonEnabled(enabled: Boolean) = runOnUiThread {
-        findViewById<Button>(R.id.form_button_sub)?.apply {
+        findViewById<Button>(R.id.form_button_sub).apply {
             isEnabled = enabled
             text = if (enabled) getString(R.string.submission) else getString(R.string.loading)
         }
+    }
+
+    private fun onClickSubtitleButton(view: View) {
+        val intent = Intent(this, VideoSubtitlingActivity::class.java).apply {
+            putExtra(FORM_TO_SUBTITLE_MESSAGE, videoUri.toString())
+        }
+        startActivityForResult(
+            intent,
+            REQUEST_VIDEO_SUBTITLING
+        )
     }
 
 
@@ -78,21 +105,33 @@ class Form : AppCompatActivity() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val vidView = findViewById<VideoView>(R.id.videoView)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
             if (data?.data != null) {
                 // THIS IS THE VID URI
                 videoUri = data.data
 
                 val playVidButton = findViewById<Button>(R.id.play_video)
-                val vidView = findViewById<VideoView>(R.id.videoView)
+                val subtitleButton = findViewById<Button>(R.id.form_add_subtitle)
                 val mediaController = MediaController(this)
 
                 FormHelper.playVideoFromLocalPath(
                     playVidButton,
+                    subtitleButton,
                     vidView,
                     mediaController,
                     videoUri!!
                 )
+            }
+        } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_SUBTITLING) {
+            if (data != null) {
+                data.getStringExtra(VideoSubtitlingActivity.RESULT_KEY)?.let {
+                    subtitles = it
+                    vidView.addSubtitleSource(
+                        it.byteInputStream(),
+                        VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
+                    )
+                }
             }
         }
         else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS){
@@ -163,12 +202,14 @@ class Form : AppCompatActivity() {
         ProjectUploader(
             utils.projectsDatabase,
             utils.fileDatabase,
+            utils.metadataDatabase,
             ::showToast,
             { setSubmitButtonEnabled(true) },
             ::finishFromOtherThread
         ).checkProjectAndThenUpload(
             constructProject(),
-            videoUri
+            videoUri,
+            subtitles
         )
     }
 
@@ -186,20 +227,25 @@ class Form : AppCompatActivity() {
 
 
 
-class FormHelper() {
-    companion object {
-        public fun playVideoFromLocalPath(
-            playVidButton: Button,
-            vidView: VideoView,
-            mediaController: MediaController,
-            uri: Uri
-        ) {
-            playVidButton.isEnabled = true
-            playVidButton.setOnClickListener {
-                vidView.setMediaController(mediaController)
-                vidView.setVideoURI(uri)
-                vidView.start()
-            }
+
+
+
+object FormHelper {
+    fun playVideoFromLocalPath(
+        playVidButton: Button,
+        subtitleButton: Button,
+        vidView: VideoView,
+        mediaController: MediaController,
+        uri: Uri
+    ) {
+        playVidButton.isEnabled = true
+        playVidButton.setOnClickListener {
+            vidView.setMediaController(mediaController)
+            vidView.setVideoURI(uri)
+            vidView.start()
+            vidView.visibility = VISIBLE
         }
+        subtitleButton.isEnabled = true
     }
 }
+

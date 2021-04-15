@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.xml.sax.XMLReader
 import java.io.File
+import java.nio.charset.Charset
 
 class ProjectInformationActivity : AppCompatActivity() {
 

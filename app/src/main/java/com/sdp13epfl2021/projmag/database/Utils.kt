@@ -17,6 +17,7 @@ class Utils(private val context: Context) {
 
     val userDatabase: UserDataDatabase = UserDataFirebase(firestore, Firebase.auth)
     val fileDatabase: FileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
+    val metadataDatabase: MetadataDatabase = MetadataFirebase(firestore)
     val projectsDatabase: CachedProjectsDatabase =
         CachedProjectsDatabase(
             OfflineProjectDatabase(

@@ -40,7 +40,7 @@ class tagsSelectorActivity : AppCompatActivity() {
                         if(selectedTags.contains(tagsDataset[position])) {
                             println("REMOVED TAG AND CHANGED COLOUR TO RED")
                             selectedTags.remove(tagsDataset[position])
-                            tagRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?
+                            //need to add color change somehow
                         }
                         else{
                             selectedTags.add(tagsDataset[position])
