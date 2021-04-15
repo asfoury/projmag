@@ -92,7 +92,7 @@ class ListOfProjectsActivityTest {
     }
 
     @Test
-    fun profileButtonOpensSignActivity() {
+    fun pressProfileButtonOpens() {
         onView(withId(R.id.profileButton)).perform(click())
 
     }
