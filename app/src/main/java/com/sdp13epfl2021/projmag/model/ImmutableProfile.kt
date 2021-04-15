@@ -31,7 +31,7 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
                 firstName.length > MAX_FIRST_NAME_SIZE -> Failure("first name is more than $MAX_FIRST_NAME_SIZE characters")
                 age > MAX_AGE -> Failure("age is more than $MAX_AGE")
                 age <  MIN_AGE -> Failure("age is less than $MIN_AGE")
-                (sciper!! < 0) -> Failure("sciper can't be a negative value")
+                (sciper != null && sciper < 0) -> Failure("sciper can't be a negative value")
                 else -> Success(ImmutableProfile(lastName,  firstName,
                     age,  gender,  sciper,  phoneNumber,role))
 
