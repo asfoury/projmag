@@ -23,9 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
 
-        <activity android:name=".VideoCv">
 
-        </activity>
 
         <activity
             android:name=".video.VideoSubtitlingActivity"
