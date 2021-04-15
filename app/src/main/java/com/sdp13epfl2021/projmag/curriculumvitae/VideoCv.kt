@@ -21,7 +21,7 @@ class VideoCv : AppCompatActivity() {
     lateinit var vidButton: Button
     lateinit var subButton: Button
     lateinit var videoView: VideoView
-    private var VideoUri: Uri? = null
+    private var videoUri: Uri? = null
     private val pickVideo = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
