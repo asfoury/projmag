@@ -48,25 +48,6 @@ class ProjectsListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-//        if (fromLink) {
-//            val projectId = intent.getStringExtra("projectId")
-//            if (projectId == null) {
-//                Toast.makeText(applicationContext, "Sorry, that project does not exist.", Toast.LENGTH_SHORT).show()
-//                return
-//            }
-//
-//            val database = itemAdapter.datasetAll
-//            if (database.isEmpty()) Toast.makeText(applicationContext, projectId, Toast.LENGTH_SHORT).show()
-//            for (proj in database) {
-//                if (proj.id.equals(projectId)) {
-//                    val intent = Intent(this, ProjectInformationActivity::class.java)
-//                    intent.putExtra("project", proj)
-//                    startActivity(intent)
-//                    return
-//                }
-//            }
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
