@@ -25,7 +25,7 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_subtitling)
 
-        videoUri = intent.getStringExtra(FORM_TO_SUBTITLE_MESSAGE).let { Uri.parse(it) }
+        videoUri = intent.getStringExtra(FORM_TO_SUBTITLE_MESSAGE)?.let { Uri.parse(it) }
 
         findViewById<Button>(R.id.video_subtitling_set_start_button).setOnClickListener {
             setStartOrEnd(SubtitleBuilder.START)
@@ -71,16 +71,16 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         ).show()
 
     private fun updateTimeTextView() {
-        findViewById<TextView>(R.id.video_subtitling_start_time)?.apply {
+        findViewById<TextView>(R.id.video_subtitling_start_time).apply {
             text = builder.start.webvttTime()
         }
-        findViewById<TextView>(R.id.video_subtitling_end_time)?.apply {
+        findViewById<TextView>(R.id.video_subtitling_end_time).apply {
             text = builder.end.webvttTime()
         }
     }
 
     private fun updateSubs() =
-        findViewById<VideoView>(R.id.video_subtitling_videoview)?.addSubtitleSource(
+        findViewById<VideoView>(R.id.video_subtitling_videoview).addSubtitleSource(
             builder.build().byteInputStream(),
             MediaFormat.createSubtitleFormat("text/vtt", Locale.ENGLISH.language)
         )
