@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -40,12 +39,16 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-
+    fun goToList(addExtras: (Intent) -> Unit) {
+        val intent = Intent(this, ProjectsListActivity::class.java)
+        addExtras(intent)
+        startActivity(intent)
+        finish()
+    }
 
     fun handleLink() {
         FirebaseDynamicLinks.getInstance().getDynamicLink(intent).addOnSuccessListener {
                 pendingDynamicLinkData ->
-            Log.i("MainActivity", "We have a dynamic link!")
             var dynamicLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 dynamicLink = pendingDynamicLinkData.link!!
@@ -53,25 +56,19 @@ class MainActivity : AppCompatActivity() {
             var fromLink = false
             var projectId: String? = ""
             if (dynamicLink != null) {
-                Log.i("MainActivity", "Here's the deep link URL:\n" + dynamicLink.toString())
                 projectId = dynamicLink.path?.substring(11)
                 fromLink = true
             }
 
-            val intent = Intent(this, ProjectsListActivity::class.java)
-            intent.putExtra("fromLink", fromLink)
-            intent.putExtra("projectId", projectId)
-            startActivity(intent)
-            finish()
+            goToList { i ->
+                i.putExtra("fromLink", fromLink)
+                i.putExtra("projectId", projectId)
+            }
+
         }.addOnFailureListener {
             Toast.makeText(applicationContext, "failure", Toast.LENGTH_LONG).show()
-            val intent = Intent(this, ProjectsListActivity::class.java)
-            startActivity(intent)
-            finish()
+            goToList({})
         }
-
-
     }
-
 }
 
