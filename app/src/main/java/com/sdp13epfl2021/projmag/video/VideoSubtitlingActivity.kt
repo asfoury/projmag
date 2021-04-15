@@ -25,19 +25,19 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_subtitling)
 
-        videoUri = intent.getStringExtra(FORM_TO_SUBTITLE_MESSAGE)?.let { Uri.parse(it) }
+        videoUri = intent.getStringExtra(FORM_TO_SUBTITLE_MESSAGE).let { Uri.parse(it) }
 
-        findViewById<Button>(R.id.video_subtitling_set_start_button)?.setOnClickListener {
+        findViewById<Button>(R.id.video_subtitling_set_start_button).setOnClickListener {
             setStartOrEnd(SubtitleBuilder.START)
         }
 
-        findViewById<Button>(R.id.video_subtitling_set_end_button)?.setOnClickListener {
+        findViewById<Button>(R.id.video_subtitling_set_end_button).setOnClickListener {
             setStartOrEnd(SubtitleBuilder.END)
         }
 
-        findViewById<Button>(R.id.video_subtitling_add)?.setOnClickListener { addButtonPressed() }
+        findViewById<Button>(R.id.video_subtitling_add).setOnClickListener { addButtonPressed() }
 
-        findViewById<Button>(R.id.video_subtitling_submit_button)?.setOnClickListener { submit() }
+        findViewById<Button>(R.id.video_subtitling_submit_button).setOnClickListener { submit() }
 
         handleVideoUri()
         updateTimeTextView()
@@ -86,13 +86,13 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         )
 
     private fun addButtonPressed() =
-        findViewById<EditText>(R.id.video_subtitling_subtitle_text)?.let {
+        findViewById<EditText>(R.id.video_subtitling_subtitle_text).let {
             builder.add(it.text.toString())
             updateSubs()
         }
 
     private fun setStartOrEnd(or: Boolean) {
-        findViewById<VideoView>(R.id.video_subtitling_videoview)?.let { videoView ->
+        findViewById<VideoView>(R.id.video_subtitling_videoview).let { videoView ->
             if (or == SubtitleBuilder.END) {
                 videoView.pause()
             }

@@ -44,9 +44,9 @@ class Form : AppCompatActivity() {
             )
         }
 
-        findViewById<TextView>(R.id.title_form)?.requestFocus()
-        findViewById<Button>(R.id.form_add_subtitle)?.setOnClickListener(::onClickSubtitleButton)
-        findViewById<Button>(R.id.form_button_sub)?.setOnClickListener(::submit)
+        findViewById<TextView>(R.id.title_form).requestFocus()
+        findViewById<Button>(R.id.form_add_subtitle).setOnClickListener(::onClickSubtitleButton)
+        findViewById<Button>(R.id.form_button_sub).setOnClickListener(::submit)
     }
 
 
@@ -55,7 +55,7 @@ class Form : AppCompatActivity() {
      * Useful to submit only one project at time
      */
     private fun setSubmitButtonEnabled(enabled: Boolean) = runOnUiThread {
-        findViewById<Button>(R.id.form_button_sub)?.apply {
+        findViewById<Button>(R.id.form_button_sub).apply {
             isEnabled = enabled
             text = if (enabled) getString(R.string.submission) else getString(R.string.loading)
         }
