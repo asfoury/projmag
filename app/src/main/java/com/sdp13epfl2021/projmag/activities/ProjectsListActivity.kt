@@ -33,12 +33,7 @@ class ProjectsListActivity : AppCompatActivity() {
         val fromLink = intent.getBooleanExtra("fromLink", false)
         var projectId = ""
         if (fromLink) {
-            var temp = intent.getStringExtra("projectId")
-            if (temp == null) {
-                projectId = ""
-            } else {
-                projectId = temp
-            }
+            projectId = intent.getStringExtra("projectId") ?: ""
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
