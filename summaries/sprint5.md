@@ -7,6 +7,8 @@ This week , first  I finish my task of last week which was to allow user to use 
 ## Luke 
 
 ## Arnaud
+This week, I finished my previous task, which was adding videos to the project information view and HTML support for description.  
+I also fixed some bugs such as the app crashing if a project was invalid, and add some tests.  
 
 ## Kaourintin 
  
