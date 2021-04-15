@@ -3,7 +3,7 @@
 ## Mohamed
 
 ## Giovanni (Scrum Master)
-
+This week , first  I finish my task of last week which was to allow user to use camera to add a video to their Cv. Then I implemented a classe to separate profile user of student and professor. My main problem with the first task was the coverage of testing because I can't find a way of testing the code for recording a video with camera. My time estimation was accurate for the first task but for the second I take less time then expected.
 ## Luke 
 
 ## Arnaud
