@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
             goToList { i ->
                 i.putExtra(fromLinkString, fromLink)
-                i.putExtra(fromLinkString, projectId)
+                i.putExtra(projectIdString, projectId)
             }
 
         }.addOnFailureListener {
