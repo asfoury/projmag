@@ -1,14 +1,18 @@
 package com.sdp13epfl2021.projmag
 
+import android.view.View
 import android.widget.AutoCompleteTextView
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
+import com.sdp13epfl2021.projmag.adapter.ItemAdapter
 import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
@@ -75,10 +79,13 @@ class ListOfProjectsActivityTest {
             val recyclerView = projectListActivity.getRecyclerView()
             for (project in dataset) {
                 val i = dataset.indexOf(project)
-                if (project.isTaken) {
-                    assert(recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha == 0.5f)
-                } else {
-                    assert(recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha == 1f)
+                val iv: View? = recyclerView.findViewHolderForLayoutPosition(i)?.itemView
+                if (iv != null) {
+                    if (project.isTaken) {
+                        assert(iv.alpha == 0.5f)
+                    } else {
+                        assert(iv.alpha == 1f)
+                    }
                 }
             }
         }
@@ -97,5 +104,36 @@ class ListOfProjectsActivityTest {
             .perform(ViewActions.click())
     }
 
+    @Test
+    fun userCanPressOnProject() {
+        onView(withId(R.id.recycler_view)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+                0,
+                MyViewAction.clickChildViewWithId(R.id.project_title)
+            )
+        )
+    }
 
+
+    @Test
+    fun userCanPressOnProjectAndGoBackUsingBackButton() {
+        // press on first project
+        onView(withId(R.id.recycler_view)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+                0,
+                MyViewAction.clickChildViewWithId(R.id.project_title)
+            )
+        )
+        // go back to list of project
+        Espresso.pressBack()
+        // press on second project
+        onView(withId(R.id.recycler_view)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+                1,
+                MyViewAction.clickChildViewWithId(R.id.project_title)
+            )
+        )
+        // go back to list of projects
+        Espresso.pressBack()
+    }
 }

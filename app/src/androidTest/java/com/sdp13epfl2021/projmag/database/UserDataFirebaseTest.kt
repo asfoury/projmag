@@ -12,6 +12,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
 
 @Suppress("UNCHECKED_CAST")
 class UserDataFirebaseTest {
@@ -36,18 +37,6 @@ class UserDataFirebaseTest {
     private val database: UserDataDatabase =
         UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
 
-    /**
-     * Workaround found on [StackOverflow][https://stackoverflow.com/a/30308199] to avoid
-     * a `NullPointerException` caused by Java to Kotlin type cast
-     */
-    object JavaToKotlinHelper {
-        fun <T> anyObject(): T {
-            Mockito.anyObject<T>()
-            return uninitialized()
-        }
-
-        private fun <T> uninitialized(): T = null as T
-    }
 
     @Before
     fun setupMocks() {
@@ -61,13 +50,23 @@ class UserDataFirebaseTest {
 
         //DocRef
         Mockito
-            .`when`(mockDocRef.set(JavaToKotlinHelper.anyObject(), JavaToKotlinHelper.anyObject()))
+            .`when`(
+                mockDocRef.set(
+                    JavaToKotlinHelperAndroidTest.anyObject(),
+                    JavaToKotlinHelperAndroidTest.anyObject()
+                )
+            )
             .thenReturn(mockVoidTask)
         Mockito
             .`when`(mockDocRef.get())
             .thenReturn(mockDSTask)
         Mockito
-            .`when`(mockDocRef.update(Mockito.anyString(), JavaToKotlinHelper.anyObject()))
+            .`when`(
+                mockDocRef.update(
+                    Mockito.anyString(),
+                    JavaToKotlinHelperAndroidTest.anyObject()
+                )
+            )
             .thenReturn(mockVoidTask)
 
         //DocumentSnapshot
@@ -88,19 +87,19 @@ class UserDataFirebaseTest {
 
         //Task<Void>
         Mockito
-            .`when`(mockVoidTask.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockVoidTask.addOnSuccessListener(JavaToKotlinHelperAndroidTest.anyObject()))
             .then {
                 val osl = it.arguments[0] as? OnSuccessListener<Void>
                 osl?.onSuccess(null)
                 mockVoidTask
             }
         Mockito
-            .`when`(mockVoidTask.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockVoidTask.addOnSuccessListener(JavaToKotlinHelperAndroidTest.anyObject()))
             .thenReturn(mockVoidTask)
 
         //Task<DocumentSnapshot>
         Mockito
-            .`when`(mockDSTask.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockDSTask.addOnSuccessListener(JavaToKotlinHelperAndroidTest.anyObject()))
             .then {
                 val osl = it.arguments[0] as? OnSuccessListener<DocumentSnapshot>
                 osl?.onSuccess(mockDS)

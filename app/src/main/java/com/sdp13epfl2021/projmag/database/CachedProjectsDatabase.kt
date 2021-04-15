@@ -63,11 +63,18 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         GlobalScope.launch { onSuccess(projects.map { p -> p.id }) }
     }
 
-    override fun getProjectFromId(id: ProjectId, onSuccess: (ImmutableProject?) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getProjectFromId(
+        id: ProjectId,
+        onSuccess: (ImmutableProject?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch { onSuccess(projects.find { p -> p.id == id }) }
     }
 
-    override fun getAllProjects(onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getAllProjects(
+        onSuccess: (List<ImmutableProject>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch { onSuccess(projects) }
     }
 
@@ -84,12 +91,29 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         }
     }
 
-    override fun pushProject(project: ImmutableProject, onSuccess: (ProjectId) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun pushProject(
+        project: ImmutableProject,
+        onSuccess: (ProjectId) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         db.pushProject(project, onSuccess, onFailure)
     }
 
-    override fun deleteProjectWithId(id: ProjectId, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    override fun deleteProjectWithId(
+        id: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         db.deleteProjectWithId(id, onSuccess, onFailure)
+    }
+
+    override fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        db.updateVideoWithProject(id, uri, onSuccess, onFailure)
     }
 
     @Synchronized

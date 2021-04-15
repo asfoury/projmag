@@ -114,6 +114,21 @@ interface ProjectsDatabase {
     )
 
     /**
+     * Update the video link along a project.
+     *
+     * @param id the project id
+     * @param uri the new video uri
+     * @param onSuccess function called on success
+     * @param onFailure function called when an exception arise
+     */
+    fun updateVideoWithProject(
+        id: ProjectId,
+        uri: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
      * Attaches the 'changeListener' to the projects collection.
      * It will be trigger at every creation, modification and deletion of project.
      */

@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sdp13epfl2021.projmag">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+     android:required="true"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -12,6 +14,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,9 +22,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
+
         <activity android:name=".VideoCv">
 
         </activity>
+
+        <activity
+            android:name=".video.VideoSubtitlingActivity"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".ProfilePageActivity" />
         <activity
             android:name=".curriculumvitae.CVCreationActivity"
@@ -30,7 +39,9 @@
             android:name=".activities.ProjectInformationActivity"
             android:parentActivityName=".activities.ProjectsListActivity" />
         <activity android:name=".SignInActivity" />
-        <activity android:name=".Form" />
+        <activity
+            android:name=".Form"
+            android:screenOrientation="portrait" />
         <activity android:name=".activities.ProjectsListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

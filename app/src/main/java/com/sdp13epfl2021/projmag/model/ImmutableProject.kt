@@ -1,15 +1,21 @@
 package com.sdp13epfl2021.projmag.model
 
+import android.net.Uri
 import android.os.Parcelable
+import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
+import java.lang.ClassCastException
+import java.lang.NullPointerException
 import java.util.*
+import kotlin.Exception
 
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
 @Parcelize
- data class ImmutableProject  constructor(
+data class ImmutableProject constructor(
     val id: String,
     val name: String,
     val lab: String,
@@ -21,12 +27,32 @@ data class Failure<T>(val reason: String) : Result<T>()
     val bachelorProject: Boolean,
     val tags: List<String>,
     val isTaken: Boolean,
-    val description: String
+    val description: String,
+    val videoURI: List<String> = listOf()
 ) : Parcelable {
     companion object {
-         const val MAX_NAME_SIZE = 40
-         const val MAX_DESCRIPTION_SIZE = 300
+
+        object FieldNames {
+            fun String.toSearchName(): String = "${this}-search"
+            const val NAME = "name"
+            const val LAB = "lab"
+            const val TEACHER = "teacher"
+            const val TA = "TA"
+            const val NB_PARTICIPANT = "nbParticipant"
+            const val ASSIGNED = "assigned"
+            const val MASTER_PROJECT = "masterProject"
+            const val BACHELOR_PROJECT = "bachelorProject"
+            const val TAGS = "tags"
+            const val IS_TAKEN = "isTaken"
+            const val DESCRIPTION = "description"
+            const val VIDEO_URI = "videoURI"
+        }
+
+        const val MAX_PROJECT_NAME_SIZE = 120
+        const val MAX_NAME_SIZE = 40
+        const val MAX_DESCRIPTION_SIZE = 4000
         private const val MAX_STUDENT_NUMBER = 10
+
         fun build(
             id: String,
             name: String,
@@ -39,10 +65,11 @@ data class Failure<T>(val reason: String) : Result<T>()
             bachelorProject: Boolean,
             tags: List<String>,
             isTaken: Boolean,
-            description: String
+            description: String,
+            videoURI: List<String> = listOf()
         ): Result<ImmutableProject> {
             return when {
-                name.length > MAX_NAME_SIZE -> Failure("name is more than $MAX_NAME_SIZE characters")
+                name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
                 lab.length > MAX_NAME_SIZE -> Failure("lab name is more than $MAX_NAME_SIZE characters")
                 TA.length > MAX_NAME_SIZE -> Failure("project manager name is more than $MAX_NAME_SIZE characters")
                 teacher.length > MAX_NAME_SIZE -> Failure("teacher name is more than $MAX_NAME_SIZE characters")
@@ -66,8 +93,49 @@ data class Failure<T>(val reason: String) : Result<T>()
                         tags,
                         isTaken,
                         description,
+                        videoURI
                     )
                 )
+            }
+        }
+
+        /**
+         * Build a project from the given map
+         *
+         * @param map : a map containing all fields of the project
+         * @param projectId : the id of the project
+         *
+         * @return an ImmutableProject if the build succeed, null otherwise
+         */
+        @Suppress("UNCHECKED_CAST")
+        fun buildFromMap(map: Map<String, Any?>, projectId: ProjectId): ImmutableProject? {
+            try {
+                val result = build(
+                    id = projectId,
+                    name = map[FieldNames.NAME] as String,
+                    lab = map[FieldNames.LAB] as String,
+                    teacher = map[FieldNames.TEACHER] as String,
+                    TA = map[FieldNames.TA] as String,
+                    nbParticipant = (map[FieldNames.NB_PARTICIPANT] as Number).toInt(),
+                    assigned = map[FieldNames.ASSIGNED] as List<String>,
+                    masterProject = map[FieldNames.MASTER_PROJECT] as Boolean,
+                    bachelorProject = map[FieldNames.BACHELOR_PROJECT] as Boolean,
+                    tags = map[FieldNames.TAGS] as List<String>,
+                    isTaken = map[FieldNames.IS_TAKEN] as Boolean,
+                    description = map[FieldNames.DESCRIPTION] as String,
+                    videoURI = map[FieldNames.VIDEO_URI] as List<String>
+                )
+                return when (result) {
+                    is Success -> result.value
+                    is Failure -> null
+                }
+                /* These two exceptions occur only with corrupted Projects so should be ignored */
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+                return null
+            } catch (e: ClassCastException) {
+                e.printStackTrace()
+                return null
             }
         }
     }
@@ -112,22 +180,23 @@ data class Failure<T>(val reason: String) : Result<T>()
      *  Give a Map<String,Any> the maps name of members to their values.
      */
     fun toMapString() = hashMapOf(
-        "name" to name,
-        "name-search" to name.toLowerCase(Locale.ROOT).split(" "),
-        "lab" to lab,
-        "lab-search" to lab.toLowerCase(Locale.ROOT),
-        "teacher" to teacher,
-        "teacher-search" to teacher.toLowerCase(Locale.ROOT).split(" "),
-        "TA" to TA,
-        "TA-search" to TA.toLowerCase(Locale.ROOT),
-        "nbParticipant" to nbParticipant,
-        "assigned" to assigned,
-        "masterProject" to masterProject,
-        "bachelorProject" to bachelorProject,
-        "tags" to tags,
-        "tags-search" to tags.map { it.toLowerCase(Locale.ROOT) },
-        "isTaken" to isTaken,
-        "description" to description
+        FieldNames.NAME to name,
+        FieldNames.NAME.toSearchName() to name.toLowerCase(Locale.ROOT).split(" "),
+        FieldNames.LAB to lab,
+        FieldNames.LAB.toSearchName() to lab.toLowerCase(Locale.ROOT),
+        FieldNames.TEACHER to teacher,
+        FieldNames.TEACHER.toSearchName() to teacher.toLowerCase(Locale.ROOT).split(" "),
+        FieldNames.TA to TA,
+        FieldNames.TA.toSearchName() to TA.toLowerCase(Locale.ROOT),
+        FieldNames.NB_PARTICIPANT to nbParticipant,
+        FieldNames.ASSIGNED to assigned,
+        FieldNames.MASTER_PROJECT to masterProject,
+        FieldNames.BACHELOR_PROJECT to bachelorProject,
+        FieldNames.TAGS to tags,
+        FieldNames.TAGS.toSearchName() to tags.map { it.toLowerCase(Locale.ROOT) },
+        FieldNames.IS_TAKEN to isTaken,
+        FieldNames.DESCRIPTION to description,
+        FieldNames.VIDEO_URI to videoURI
     )
 
 
