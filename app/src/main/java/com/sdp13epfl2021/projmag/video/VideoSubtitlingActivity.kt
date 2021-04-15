@@ -49,12 +49,12 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         mediaController.setAnchorView(videoView)
         mediaController.setMediaPlayer(videoView)
         videoView.setMediaController(mediaController)
+        showToast(getString(R.string.video_subtitling_instruction))
+        videoView.setVideoURI(videoUri)
+        videoView.start()
+
         if (videoUri == null) {
             showToast(getString(R.string.video_subtitling_cant_open_video))
-        } else {
-            videoView.setVideoURI(videoUri)
-            showToast(getString(R.string.video_subtitling_instruction))
-            videoView.start()
         }
     }
 
