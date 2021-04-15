@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,10 @@ class TagAdapter(private val context : Context, private val tags : List<Tag>)
         val tag = tags[position]
         holder.textView.text =  tag.name
 
+
     }
+
+
 
     override fun getItemCount(): Int = tags.size
 

@@ -172,6 +172,10 @@ class Form : AppCompatActivity() {
         )
     }
 
+    /**
+     * Switch to the tag selection activity that will then comeback to this activity
+     * And update the project list if the activity finishes properly
+     */
     fun switchToTagsSelectionActivity() {
         //why do i need to do the :: class.java to make it work
         val intent = Intent(this, tagsSelectorActivity::class.java)
