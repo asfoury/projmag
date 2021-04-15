@@ -117,6 +117,7 @@ class ProjectInformationActivityTest {
         */
     }
 
+    @Ignore
     @Test
     fun videoIsLoadedAndCanBePaused_LimitedTestVersionBecauseOfCirrus() {
         lateinit var videoView: VideoView
