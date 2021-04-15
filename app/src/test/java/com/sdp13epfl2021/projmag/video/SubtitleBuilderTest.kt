@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.video
 
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.END

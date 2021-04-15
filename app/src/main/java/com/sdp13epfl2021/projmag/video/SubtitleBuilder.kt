@@ -52,11 +52,7 @@ class SubtitleBuilder {
         return subtitle.fold(str) { s, e -> s + (e.toString()) }
     }
 
-    private data class SubtitlePart(
-        val content: String,
-        val start: Int,
-        val end: Int
-    ) {
+    private data class SubtitlePart(val content: String, val start: Int, val end: Int) {
         override fun toString(): String {
             return "${start.webvttTime()} --> ${end.webvttTime()}\n$content\n\n"
         }
