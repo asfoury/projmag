@@ -13,7 +13,8 @@ This week, I finished my previous task, which was adding videos to the project i
 I also fixed some bugs such as the app crashing if a project was invalid, and add some tests.  
 
 ## Kaourintin 
- 
+I added a tagSelection activity that allows the user to view the list of allowed tags and choose which he wants to add to the project in the project build activity. My main issue is coverage and I am working on it.
+The time stamp was accurate.
 ## Paul
 This week, I finished my task of last week, which was to push a project with its video to Firebase.
 I also started and finished my first task for this week which was implementing an activity to add subtitling to a video. Currently this activity is only used by the Form activity to subtitle a project presentation video.
