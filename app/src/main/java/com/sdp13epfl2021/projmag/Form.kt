@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaFormat
 import android.net.Uri
 import android.opengl.Visibility
 import android.os.Bundle
@@ -19,6 +20,8 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
+import com.sdp13epfl2021.projmag.video.VideoUtils
+import java.util.*
 
 
 const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FROM_TO_SUBTITLE_MESSAGE"
@@ -78,6 +81,7 @@ class Form : AppCompatActivity() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val vidView = findViewById<VideoView>(R.id.videoView)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
             if (data?.data != null) {
                 // THIS IS THE VID URI
@@ -85,7 +89,6 @@ class Form : AppCompatActivity() {
 
                 val playVidButton = findViewById<Button>(R.id.play_video)
                 val subtitleButton = findViewById<Button>(R.id.form_add_subtitle)
-                val vidView = findViewById<VideoView>(R.id.videoView)
                 val mediaController = MediaController(this)
 
                 FormHelper.playVideoFromLocalPath(
@@ -98,7 +101,13 @@ class Form : AppCompatActivity() {
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_SUBTITLING) {
             if (data != null) {
-                subtitles = data.getStringExtra(VideoSubtitlingActivity.RESULT_KEY)
+                data.getStringExtra(VideoSubtitlingActivity.RESULT_KEY)?.let {
+                    subtitles = it
+                    vidView.addSubtitleSource(
+                        it.byteInputStream(),
+                        VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
+                    )
+                }
             }
         }
     }

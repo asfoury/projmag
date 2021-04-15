@@ -77,7 +77,7 @@ class VideoSubtitlingActivity : AppCompatActivity() {
     private fun updateSubs() =
         findViewById<VideoView>(R.id.video_subtitling_videoview).addSubtitleSource(
             builder.build().byteInputStream(),
-            MediaFormat.createSubtitleFormat("text/vtt", Locale.ENGLISH.language)
+            VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
         )
 
     private fun addButtonPressed() =
