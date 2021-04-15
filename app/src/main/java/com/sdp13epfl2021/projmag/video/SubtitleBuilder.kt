@@ -19,7 +19,7 @@ class SubtitleBuilder {
             val hour = TimeUnit.MILLISECONDS.toHours(this.toLong())
                 .toString()
                 .padStart(2, '0')
-            val millis = (this % 1000)
+            val millis = ((this / 10) % 1000)
                 .toString()
                 .padStart(3, '0')
             return "$hour:$min:$sec.$millis"
