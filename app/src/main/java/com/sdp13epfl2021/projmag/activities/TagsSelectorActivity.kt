@@ -38,11 +38,12 @@ class TagsSelectorActivity : AppCompatActivity() {
 
                     override fun onItemClick(view: View, position: Int) {
                         if(selectedTags.contains(tagsDataset[position])) {
-                            println("REMOVED TAG AND CHANGED COLOUR TO RED")
+                            tagRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.alpha = 0.5f
                             selectedTags.remove(tagsDataset[position])
                             //need to add color change somehow
                         }
                         else{
+                            tagRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.alpha = 1f
                             selectedTags.add(tagsDataset[position])
 
                         }
