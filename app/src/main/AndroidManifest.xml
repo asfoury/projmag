@@ -17,9 +17,6 @@
         android:required="false" />
 
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:required="true" />
 
 
 
