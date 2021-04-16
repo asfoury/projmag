@@ -4,8 +4,7 @@ import android.content.Intent
 import android.nfc.Tag
 import android.widget.Button
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
@@ -41,7 +40,7 @@ class TagsSelectorActivityTest {
 
         //perform a click action on an element of a tag view
         onView(withId(R.id.recycler_tag_view)).perform(actionOnItemAtPosition<TagAdapter.TagViewHolder>(3, click()))
-
+        onView(withId(R.id.recycler_tag_view)).perform(actionOnItemAtPosition<TagAdapter.TagViewHolder>(3, longClick()))
         //scroll to an element of a tag view
         onView(withId(R.id.recycler_tag_view)).perform(RecyclerViewActions.scrollToPosition<TagAdapter.TagViewHolder>(4))
 
