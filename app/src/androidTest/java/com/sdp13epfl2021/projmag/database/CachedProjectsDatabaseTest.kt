@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import junit.framework.TestCase
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
@@ -187,6 +188,23 @@ class CachedProjectsDatabaseTest {
         while (result == null);
         assertEquals(2, result!!.size)
         assertFalse(result!!.contains(p3))
+    }
+
+    @Test(timeout = 4000)
+    fun updateVideoWithProjectIsCorrectlyCalled() {
+        val projectsList = listOf(p1)
+        val fakeDB = FakeDatabaseTest(projectsList)
+        val db = CachedProjectsDatabase(fakeDB)
+        Thread.sleep(500)
+
+        val uri_1: String = "https://remote/uri/1"
+        val uri_2: String = "https://remote/uri/2"
+
+        db.updateVideoWithProject(p1.id, uri_1, {}, { assertTrue(false) })
+        db.updateVideoWithProject(p1.id, uri_2, {}, { assertTrue(false) })
+        Thread.sleep(500)
+        TestCase.assertEquals(1, fakeDB.projects.size)
+        TestCase.assertEquals(listOf(uri_1, uri_2).sorted(), fakeDB.projects[0].videoURI.sorted())
     }
 
     @Test

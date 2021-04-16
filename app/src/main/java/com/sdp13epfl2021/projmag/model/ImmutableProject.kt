@@ -171,10 +171,11 @@ data class ImmutableProject constructor(
         bachelorProject: Boolean = this.bachelorProject,
         tags: List<String> = this.tags,
         isTaken: Boolean = this.isTaken,
-        description: String = this.description
+        description: String = this.description,
+        videoURI: List<String> = this.videoURI
     ) = build(
         id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
-        tags, isTaken, description,
+        tags, isTaken, description, videoURI
     )
 
     /**

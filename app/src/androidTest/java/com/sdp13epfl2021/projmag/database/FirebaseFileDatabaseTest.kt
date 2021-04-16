@@ -16,6 +16,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import java.io.File
 import java.nio.file.Files
+import java.util.concurrent.CompletableFuture
 
 
 class FirebaseFileDatabaseTest {
@@ -36,6 +37,7 @@ class FirebaseFileDatabaseTest {
 
 
     private val mockFirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
+    private val mockFirebaseAuthFailed = Mockito.mock(FirebaseAuth::class.java)
     private val mockFirebaseUser = Mockito.mock(FirebaseUser::class.java)
     private val mockFirebaseStorage = Mockito.mock(FirebaseStorage::class.java)
     private val mockRootRef = Mockito.mock(StorageReference::class.java)
@@ -124,6 +126,11 @@ class FirebaseFileDatabaseTest {
         Mockito
             .`when`(mockFirebaseAuth.currentUser)
             .thenReturn(mockFirebaseUser)
+
+        //FirebaseAuth without authenticated user
+        Mockito
+            .`when`(mockFirebaseAuthFailed.currentUser)
+            .thenReturn(null)
 
         //FirebaseUser
         Mockito
@@ -248,5 +255,16 @@ class FirebaseFileDatabaseTest {
         db.deleteFile(fileUrl, {}, {})
     }
 
+    @Test(timeout = 1000)
+    fun pushShouldFailedSuccessfullyWithUnauthenticatedUser() {
+        val db = FirebaseFileDatabase(mockFirebaseStorage, mockFirebaseAuthFailed)
+        val result: CompletableFuture<Exception> = CompletableFuture()
+        db.pushFile(tempFile, {
+            assertTrue(false)
+        }, {
+            result.complete(it)
+        })
+        assertNotNull(result.get())
+    }
 
 }

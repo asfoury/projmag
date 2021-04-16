@@ -33,6 +33,16 @@ class FirebaseProjectsDatabaseTest {
 
     val mockListener = Mockito.mock(ListenerRegistration::class.java)
 
+    val mockFirebaseFirestoreEmtpy = Mockito.mock(FirebaseFirestore::class.java)
+    val mockColRefEmpty = Mockito.mock(CollectionReference::class.java)
+    val mockTaskColEmpty: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
+    val mockQSEmpty: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
+    val mockDocRefEmpty = Mockito.mock(DocumentReference::class.java)
+    val mockTaskDocEmpty: Task<DocumentSnapshot> = Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
+    val mockDSEmpty: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
+    val mockQueryEmpty: Query = Mockito.mock(Query::class.java)
+
+
     val ID = "some-id"
     val project = ImmutableProject(
         id = ID,
@@ -216,6 +226,46 @@ class FirebaseProjectsDatabaseTest {
         Mockito
             .`when`(mockQuery.get())
             .thenReturn(mockTaskCol)
+
+
+        // an empty firestore instance
+        Mockito
+            .`when`(mockFirebaseFirestoreEmtpy.collection(FirebaseProjectsDatabase.ROOT))
+            .thenReturn(mockColRefEmpty)
+        Mockito
+            .`when`(mockColRefEmpty.get())
+            .thenReturn(mockTaskColEmpty)
+        Mockito
+            .`when`(mockTaskColEmpty.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .then {
+                val a = it.arguments[0] as OnSuccessListener<QuerySnapshot>
+                a.onSuccess(null)
+                mockTaskColEmpty
+            }
+        Mockito
+            .`when`(mockColRefEmpty.document(ID))
+            .thenReturn(mockDocRefEmpty)
+        Mockito
+            .`when`(mockDocRefEmpty.get())
+            .thenReturn(mockTaskDocEmpty)
+        Mockito
+            .`when`(mockTaskDocEmpty.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .then {
+                val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
+                a.onSuccess(null)
+                mockTaskDocEmpty
+            }
+        Mockito
+            .`when`(
+                mockColRefEmpty.whereArrayContainsAny(
+                    Mockito.anyString(),
+                    Mockito.anyListOf(String::class.java)
+                )
+            )
+            .thenReturn(mockQueryEmpty)
+        Mockito
+            .`when`(mockQueryEmpty.get())
+            .thenReturn(mockTaskColEmpty)
     }
 
     @Test
@@ -223,6 +273,12 @@ class FirebaseProjectsDatabaseTest {
         val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
         db.getAllIds(
             { list -> assertEquals(listOf(ID), list) },
+            {}
+        )
+
+        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        dbEmpty.getAllIds(
+            { list -> assertEquals(emptyList<ProjectId>(), list) },
             {}
         )
     }
@@ -235,6 +291,13 @@ class FirebaseProjectsDatabaseTest {
             ID,
             { p -> assertEquals(project, p) },
             {}
+        )
+
+        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        dbEmpty.getProjectFromId(
+            ID,
+            { p -> assertEquals(null, p) },
+            { assert(false) }
         )
     }
 
@@ -256,6 +319,12 @@ class FirebaseProjectsDatabaseTest {
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
+
+        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        dbEmpty.getAllProjects(
+            { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
+            { assert(false) }
+        )
     }
 
     @Test
@@ -265,6 +334,13 @@ class FirebaseProjectsDatabaseTest {
             project.name,
             { lp -> assertEquals(listOf(project), lp) },
             {}
+        )
+
+        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        dbEmpty.getProjectsFromName(
+            project.name,
+            { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
+            { assert(false) }
         )
     }
 
