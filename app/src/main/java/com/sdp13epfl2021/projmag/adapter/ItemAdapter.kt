@@ -18,8 +18,13 @@ import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
-class ItemAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView) :
+class ItemAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView
+    , private val fromLink: Boolean, private val projectIdLink: String) :
     RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
+
+    companion object ItemAdapterCompanion {
+        private const val projectString = "project"
+    }
 
     var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
@@ -75,6 +80,12 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
         return ItemViewHolder(adapterLayout)
     }
 
+    fun openProject(holder: ItemViewHolder, project: ImmutableProject) {
+        val context = holder.view.context
+        val intent = Intent(context, ProjectInformationActivity::class.java)
+        intent.putExtra(projectString, project)
+        context.startActivity(intent)
+    }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val project = dataset[position]
@@ -101,12 +112,11 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
 
         // make the projects pressable
         holder.textView.setOnClickListener {
-            val context = holder.view.context
-            val intent = Intent(context, ProjectInformationActivity::class.java)
-            var projectString = ""
-            projectString += project.name
-            intent.putExtra("project", project)
-            context.startActivity(intent)
+            openProject(holder, project)
+        }
+
+        if (projectIdLink == project.id) {
+            openProject(holder, project)
         }
 
     }

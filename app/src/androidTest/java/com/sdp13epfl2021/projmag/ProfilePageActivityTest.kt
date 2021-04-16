@@ -161,7 +161,6 @@ class ProfilePageActivityTest {
                 isDisplayed()
             )
         )
-        appCompatEditText9.perform(replaceText("student"), closeSoftKeyboard())
     }
 
     private fun childAtPosition(
