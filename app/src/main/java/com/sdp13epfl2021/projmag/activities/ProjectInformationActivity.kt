@@ -302,8 +302,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
-=======
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_information, menu)
         return true
@@ -326,5 +325,5 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
->>>>>>> main
+
 }

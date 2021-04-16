@@ -10,11 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
-<<<<<<< HEAD
-import android.os.Looper
-import com.sdp13epfl2021.projmag.activities.SignInActivity
-=======
->>>>>>> main
 
 class MainActivity : AppCompatActivity() {
     companion object MainActivityCompanion {
@@ -69,10 +64,6 @@ class MainActivity : AppCompatActivity() {
                 fromLink = true
             }
 
-<<<<<<< HEAD
-
-
-=======
             goToList { i ->
                 i.putExtra(fromLinkString, fromLink)
                 i.putExtra(projectIdString, projectId)
@@ -83,6 +74,4 @@ class MainActivity : AppCompatActivity() {
             goToList({})
         }
     }
->>>>>>> main
 }
-
