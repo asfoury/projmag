@@ -182,7 +182,7 @@
             android:id="@+id/addTagsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="add tags"
+            android:text='@string/tag_add_button_title'
 
             app:layout_constraintBottom_toBottomOf="@+id/form_project_description"
             app:layout_constraintEnd_toEndOf="@id/play_video"
