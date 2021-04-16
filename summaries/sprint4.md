@@ -1,4 +1,4 @@
-# Summary for week 3
+# Summary for week 4
 
 ## Mohamed(Scrum Master)
 This week I added some tests for the video selection when submitting a project and updated the UI of the project form submission to support the addition of the video and a space to play the video once it's selected. The main problem I encountered with this sprint is with the coverage of the testing. To test my code I need to select a video from the phone gallery which is not possible to do using Cirrus. Another problem I encountered is copying the video from the phone gallery to the apps internal storage as the information available online is either very new or uses deprecated code or does not work foll all versions of android, in the end we decided not to copy the video to the local app storage and upload it directly to FireBase. My time estimate was accurate this sprint.
