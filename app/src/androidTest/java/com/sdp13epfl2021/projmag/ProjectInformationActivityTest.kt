@@ -208,13 +208,15 @@ class ProjectInformationActivityTest {
         assertFalse(videoView.isPlaying)
 
     }
-<<<<<<< HEAD
-}
-=======
 
     @Test
     fun clickOnShareButton() {
         onView(withId(R.id.shareButton)).perform(click())
     }
+
 }
->>>>>>> main
+
+
+
+
+
