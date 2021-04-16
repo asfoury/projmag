@@ -14,7 +14,7 @@ data class Tag(var name: String) {
         name = name.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
     }
 
-        
+
       fun equals(other: Tag): Boolean {
         return other.name == this.name
       }
