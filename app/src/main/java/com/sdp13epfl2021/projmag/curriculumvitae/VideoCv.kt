@@ -39,7 +39,7 @@ class VideoCv : AppCompatActivity() {
             }
         }
         subButton.setOnClickListener{
-            if(VideoUri != null){
+            if(videoUri != null){
             val data = Intent()
             data.putExtra(RESULT_KEY, VideoUri.toString())
             setResult(RESULT_OK, data)
