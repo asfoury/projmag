@@ -1,15 +1,26 @@
 package com.sdp13epfl2021.projmag
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
+<<<<<<< HEAD
 import android.os.Looper
 import com.sdp13epfl2021.projmag.activities.SignInActivity
+=======
+>>>>>>> main
 
 class MainActivity : AppCompatActivity() {
+    companion object MainActivityCompanion {
+        const val fromLinkString: String = "fromLink"
+        const val projectIdString: String = "projectId"
+    }
 
     private lateinit var mAuth: FirebaseAuth
 
@@ -24,27 +35,54 @@ class MainActivity : AppCompatActivity() {
          * Else send him to DashboardActivity*/
         Handler(Looper.getMainLooper()).postDelayed({
             if (user != null) {
-                goToProjectsList()
+                handleLink()
             } else {
                 goToSignIn()
             }
         }, 2000)
     }
 
-    fun goToSignIn() {
+    private fun goToSignIn() {
         val intent = Intent(this, SignInActivity::class.java)
         startActivity(intent)
         finish()
     }
 
-    fun goToProjectsList() {
+    private fun goToList(addExtras: (Intent) -> Unit) {
         val intent = Intent(this, ProjectsListActivity::class.java)
+        addExtras(intent)
         startActivity(intent)
         finish()
     }
 
+    private fun handleLink() {
+        FirebaseDynamicLinks.getInstance().getDynamicLink(intent).addOnSuccessListener {
+                pendingDynamicLinkData ->
+            var dynamicLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                dynamicLink = pendingDynamicLinkData.link!!
+            }
+            var fromLink = false
+            var projectId: String? = ""
+            if (dynamicLink != null) {
+                projectId = dynamicLink.path?.substring(11)
+                fromLink = true
+            }
+
+<<<<<<< HEAD
 
 
+=======
+            goToList { i ->
+                i.putExtra(fromLinkString, fromLink)
+                i.putExtra(projectIdString, projectId)
+            }
 
+        }.addOnFailureListener {
+            Toast.makeText(applicationContext, getString(R.string.failure), Toast.LENGTH_LONG).show()
+            goToList({})
+        }
+    }
+>>>>>>> main
 }
 

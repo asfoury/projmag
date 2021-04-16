@@ -33,6 +33,7 @@
     <string name="email">example@epfl.ch</string>
     <string name="search">search</string>
     <string name="profile">profileButton</string>
+    <string name="share">shareButton</string>
     <string name="submit">Add a new project to the list</string>
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
@@ -47,6 +48,11 @@
     <string name="cv_skills_title">Your Skills</string>
     <string name="cv_cardview_close">close</string>
 
+<<<<<<< HEAD
+=======
+    <string name="add_a_video_to_cvd">Add a video to your CV</string>
+    <string name="add">Add</string>
+>>>>>>> main
 
     <string name="display_number_student">Number of participant : %d</string>
     <string name="display_bachelor_only">Bachelor semester</string>
@@ -67,8 +73,13 @@
     <string name="clear">Clear</string>
     <string name="ok">OK</string>
 
+<<<<<<< HEAD
 
 
 
     <string name="tag_selection_instructions">"Add tags : select the right tags for your project and add/remove by clicking on them"</string>
+=======
+    <string name="failure">failure</string>
+
+>>>>>>> main
 </resources>

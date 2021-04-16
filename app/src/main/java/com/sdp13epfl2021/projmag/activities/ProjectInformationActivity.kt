@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.activities
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -14,6 +15,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.view.Menu
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.MediaController
 
@@ -22,6 +25,10 @@ import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
+import com.google.firebase.dynamiclinks.ktx.androidParameters
+import com.google.firebase.dynamiclinks.ktx.dynamicLink
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.FileDatabase
 import com.sdp13epfl2021.projmag.database.Utils
@@ -36,6 +43,7 @@ import java.nio.charset.Charset
 
 class ProjectInformationActivity : AppCompatActivity() {
 
+    private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
@@ -88,6 +96,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         // get the project
         val project: ImmutableProject? = intent.getParcelableExtra("project")
         if (project != null) {
+            projectVar = project
             // set the text views
             title.text = project.name
             lab.text = project.lab
@@ -250,7 +259,10 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private class BitmapDrawablePlaceHolder(res: Resources, bitmap: Bitmap?) : BitmapDrawable(res, bitmap) {
+    private class BitmapDrawablePlaceHolder(res: Resources, bitmap: Bitmap?) : BitmapDrawable(
+        res,
+        bitmap
+    ) {
         private var drawable: Drawable? = null
 
         override fun draw(canvas: Canvas) {
@@ -290,4 +302,29 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+<<<<<<< HEAD
+=======
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.menu_project_information, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.shareButton) {
+            val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+                link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
+                domainUriPrefix = "https://projmag.page.link/"
+                androidParameters {}
+            }
+            val linkToSend = dynamicLink.uri
+
+            val sendIntent = Intent(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_TEXT, linkToSend.toString())
+            sendIntent.type = "text/plain"
+            startActivity(sendIntent)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+>>>>>>> main
 }

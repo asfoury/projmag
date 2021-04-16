@@ -12,8 +12,9 @@ class ImmutableProfileTest {
         val gender = Gender.MALE
         val sciper = 287746
         val phoneNumber = "0763030355"
+        val role = Role.STUDENT
 
-        val result = ImmutableProfile.build(lastName, firstName, age, gender, sciper,  phoneNumber)
+        val result = ImmutableProfile.build(lastName, firstName, age, gender, sciper,  phoneNumber,role)
 
         when(result){
             is Success->{

@@ -2,30 +2,24 @@ package com.sdp13epfl2021.projmag
 
 
 import android.content.Intent
-import android.widget.MediaController
 import android.widget.VideoView
 import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
-import com.sdp13epfl2021.projmag.database.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import junit.framework.Assert.*
-import org.hamcrest.Matchers
 import org.junit.After
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
@@ -128,4 +122,13 @@ class ProjectInformationActivityTest {
             assertTrue(videoView.isPlaying)
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    @Test
+    fun clickOnShareButton() {
+        onView(withId(R.id.shareButton)).perform(click())
+    }
+}
+>>>>>>> main
