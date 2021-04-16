@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
 
-    android:required="true"/>
+        android:required="true"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -28,20 +28,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
 
-        <activity android:name=".activities.TagsSelectorActivity"></activity>
-        <activity android:name=".activities.ProfilePageActivity" />
-        <activity
-            android:name=".video.VideoSubtitlingActivity"
-            android:screenOrientation="portrait" />
 
         <activity android:name=".curriculumvitae.VideoCv">
 
         </activity>
 
 
+
+
+
+        <activity android:name=".activities.TagsSelectorActivity"></activity>
+        <activity
+            android:name=".activities.ProfilePageActivity"
+            android:parentActivityName=".activities.ProjectsListActivity"/>
+        <activity
             android:name=".video.VideoSubtitlingActivity"
             android:screenOrientation="portrait" />
-
 
         <activity
             android:name=".activities.CVCreationActivity"
