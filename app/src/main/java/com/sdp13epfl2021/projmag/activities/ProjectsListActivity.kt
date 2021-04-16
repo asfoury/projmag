@@ -9,11 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
-
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
-
-
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.Utils
@@ -31,13 +28,8 @@ class ProjectsListActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
-
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-        itemAdapter = ProjectAdapter(this, Utils(this), recyclerView)
-
 
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
         var projectId = ""
@@ -45,8 +37,8 @@ class ProjectsListActivity : AppCompatActivity() {
             projectId = intent.getStringExtra(projectIdString) ?: ""
         }
 
-
-
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+        itemAdapter = ProjectAdapter(this, Utils(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(false)
 
@@ -85,10 +77,4 @@ class ProjectsListActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
-
 }
-
-
-
