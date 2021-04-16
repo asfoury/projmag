@@ -1,7 +1,10 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.Success
 import java.util.*
+import kotlin.NoSuchElementException
 
 
 class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsDatabase {
@@ -96,7 +99,20 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not implemented yet")
+        val oldProject = projects.find { p -> p.id == id }
+        if (oldProject != null) {
+            projects = projects - oldProject
+            val newProject = oldProject.buildCopy( videoURI = oldProject.videoURI + uri)
+            when (newProject) {
+                is Success -> {
+                    projects = projects + newProject.value
+                    onSuccess()
+                }
+                is Failure -> onFailure(Exception(newProject.reason))
+            }
+        } else {
+            onFailure(NoSuchElementException("No project with id : $id"))
+        }
     }
 
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
