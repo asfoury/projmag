@@ -18,7 +18,7 @@
             android:id="@+id/tag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.5"
+            android:alpha="1"
             android:padding="16dp"
             android:textAppearance="?attr/textAppearanceHeadline5"
             android:textColor="#FF0000">
