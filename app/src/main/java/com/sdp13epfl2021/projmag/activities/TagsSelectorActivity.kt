@@ -2,14 +2,13 @@ package com.sdp13epfl2021.projmag.activities
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Color.blue
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.activities.listenerClass.RecyclerItemClickListenr
+import com.sdp13epfl2021.projmag.activities.listenerClass.MakeRecyclerListItemsClickListenable
 import com.sdp13epfl2021.projmag.adapter.TagAdapter
 import com.sdp13epfl2021.projmag.model.Tag
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
@@ -31,10 +30,10 @@ class TagsSelectorActivity : AppCompatActivity() {
 
 
         tagRecyclerView.addOnItemTouchListener(
-            RecyclerItemClickListenr(
+            MakeRecyclerListItemsClickListenable(
                 this,
                 tagRecyclerView,
-                object : RecyclerItemClickListenr.OnItemClickListener {
+                object : MakeRecyclerListItemsClickListenable.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
                         val holder = tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
