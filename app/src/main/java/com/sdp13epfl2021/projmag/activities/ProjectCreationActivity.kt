@@ -42,7 +42,7 @@ class Form : AppCompatActivity() {
     private var videoUri: Uri? = null
     private var subtitles: String? = null
 
-    private lateinit var listTags : Array<String>
+    private  var listTags : Array<String> = emptyArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,7 +126,11 @@ class Form : AppCompatActivity() {
         }
         else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS){
             if (data != null) {
-                listTags = data.getStringArrayExtra("tagsList")!!
+                listTags = data.getStringArrayExtra("tagsList") as Array<String>
+                //handle the case of listTags being null
+                if(listTags == null){
+                    listTags = emptyArray()
+                }
             }
 
 
