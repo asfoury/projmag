@@ -126,12 +126,11 @@ class Form : AppCompatActivity() {
         }
         else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS){
             if (data != null) {
-                listTags = data.getStringArrayExtra("tagsList") as Array<String>
-                //handle the case of listTags being null
-                if(listTags == null){
-                    listTags = emptyArray()
+                val tagData = data.getStringArrayExtra("tagsList")
+                if(tagData != null){
+                    listTags = tagData
                 }
-            }
+
 
 
         }
