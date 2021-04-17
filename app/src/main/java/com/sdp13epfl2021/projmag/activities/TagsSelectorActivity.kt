@@ -37,13 +37,15 @@ class TagsSelectorActivity : AppCompatActivity() {
                 object : RecyclerItemClickListenr.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
+                        val holder = tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
                         if(selectedTags.contains(tagsDataset[position])) {
-                            tagRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.alpha = 0.5f
+                            holder.itemView.alpha = 0.5f
+                            holder.textView.setTextColor(Color.RED)
                             selectedTags.remove(tagsDataset[position])
-                            //need to add color change somehow
                         }
                         else{
-                            tagRecyclerView.findViewHolderForLayoutPosition(position)?.itemView?.alpha = 1f
+                            holder.itemView.alpha = 1f
+                            holder.textView.setTextColor(Color.GREEN)
                             selectedTags.add(tagsDataset[position])
 
                         }
