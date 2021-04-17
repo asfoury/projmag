@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag.model
+    package com.sdp13epfl2021.projmag.model
 
 import android.net.Uri
 import android.os.Parcelable
