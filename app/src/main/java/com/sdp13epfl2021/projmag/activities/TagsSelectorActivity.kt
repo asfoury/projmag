@@ -29,7 +29,30 @@ class TagsSelectorActivity : AppCompatActivity() {
         tagRecyclerView.adapter = TagAdapter(this, tagsDataset)
         tagRecyclerView.setHasFixedSize(true)
 
+        handleListeningOnElementsOfTagRecyclerView(tagRecyclerView, tagsDataset )
 
+
+        saveButton.setOnClickListener{
+            val returnIntent = Intent()
+            val tagsManager = TagsBaseManager()
+            val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
+
+            //This should work because String is inherently serializable but I could get crashes
+            returnIntent.putExtra("tagsList",  tags as Serializable)
+            setResult(RESULT_OK, returnIntent)
+            finish()
+        }
+
+
+    }
+
+    /**
+     * Functionn that handles the click and long click of elements of the tag recycler view
+     *
+     * @param tagRecyclerView : the tag recycler view
+     * @param tagsDataset : the dataset of tags
+     */
+    private fun handleListeningOnElementsOfTagRecyclerView(tagRecyclerView: RecyclerView, tagsDataset: List<Tag>){
         tagRecyclerView.addOnItemTouchListener(
             MakeRecyclerListItemsClickListenable(
                 this,
@@ -54,22 +77,7 @@ class TagsSelectorActivity : AppCompatActivity() {
                     }
                 })
         )
-
-        saveButton.setOnClickListener{
-            val returnIntent = Intent()
-            val tagsManager = TagsBaseManager()
-            val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
-
-            //This should work because String is inherently serializable but I could get crashes
-            returnIntent.putExtra("tagsList",  tags as Serializable)
-            setResult(RESULT_OK, returnIntent)
-            finish()
-        }
-
-
     }
-
-
     fun allSelectedTags() : MutableSet<Tag>{
         return selectedTags
     }
