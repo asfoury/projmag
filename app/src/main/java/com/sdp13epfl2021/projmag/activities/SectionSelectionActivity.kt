@@ -23,8 +23,7 @@ class SectionSelectionActivity : AppCompatActivity() {
         val manager = SectionBaseManager()
         val sectionDatabaset = manager.sectionList()
         val sectionRecyclerView = findViewById<RecyclerView>(R.id.recycler_section_view)
-        val saveButton = findViewById<Button>(R.id.addSectionButton)
-
+        val saveButton = findViewById<Button>(R.id.doneSectionButton)
         sectionRecyclerView.adapter = SectionAdapter(this, sectionDatabaset)
         sectionRecyclerView.setHasFixedSize(true)
 

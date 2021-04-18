@@ -29,19 +29,11 @@ class TagsSelectorActivity : AppCompatActivity() {
         tagRecyclerView.adapter = TagAdapter(this, tagsDataset)
         tagRecyclerView.setHasFixedSize(true)
 
+        //handling of the buttons and the app
         handleListeningOnElementsOfTagRecyclerView(tagRecyclerView, tagsDataset )
+        saveButtonHandling(saveButton)
 
 
-        saveButton.setOnClickListener{
-            val returnIntent = Intent()
-            val tagsManager = TagsBaseManager()
-            val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
-
-            //This should work because String is inherently serializable but I could get crashes
-            returnIntent.putExtra("tagsList",  tags as Serializable)
-            setResult(RESULT_OK, returnIntent)
-            finish()
-        }
 
 
     }
@@ -77,6 +69,24 @@ class TagsSelectorActivity : AppCompatActivity() {
                     }
                 })
         )
+    }
+
+    /**
+     * Function responsible for handling the save button behaviour
+     * returns the list of selected tags to the previous activity for project creation
+     * @param saveButton : the button the user presses to save a project
+     */
+    private fun saveButtonHandling(saveButton: Button){
+        saveButton.setOnClickListener{
+            val returnIntent = Intent()
+            val tagsManager = TagsBaseManager()
+            val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
+
+            //This should work because String is inherently serializable but I could get crashes
+            returnIntent.putExtra("tagsList",  tags as Serializable)
+            setResult(RESULT_OK, returnIntent)
+            finish()
+        }
     }
     fun allSelectedTags() : MutableSet<Tag>{
         return selectedTags
