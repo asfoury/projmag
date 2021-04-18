@@ -91,4 +91,13 @@ import java.util.regex.Pattern
          return listString
      }
 
+     fun isListOfStringsValidTags(listTags : List<String>) : Boolean{
+         for(tag in listTags){
+             if(!tags.contains(Tag(tag))){
+                 return false
+             }
+         }
+         return true
+     }
+
 }

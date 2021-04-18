@@ -171,7 +171,9 @@ class Form : AppCompatActivity() {
                 isTaken = false,
                 description = getTextFromEditText(R.id.form_project_description),
                 assigned = listOf(),
-                tags = listTags.toList()
+                tags = listTags.toList(),
+                //TODO : modify this with the actual view values when the view is created
+                allowedSections = listOf()
             )
         }
 

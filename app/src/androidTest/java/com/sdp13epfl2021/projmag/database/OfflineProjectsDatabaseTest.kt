@@ -16,9 +16,48 @@ class OfflineProjectsDatabaseTest {
     private val projectsDir = Files.createTempDirectory("offline_test").toFile()
     private val unreadableDir = Files.createTempDirectory("offline_test_invalid").toFile()
 
-    private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
-    private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
-    private val p3 = ImmutableProject("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
+    private val p1 = ImmutableProject(
+        "12345",
+        "What fraction of Google searches are answered by Wikipedia?",
+        "DLAB",
+        "Robert West",
+        "TA1",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf("data analysis","large datasets","database","systems","database","systems"),
+        false,
+        "Description of project1",
+    )
+    private val p2 = ImmutableProject(
+        "11111",
+        "Real-time reconstruction of deformable objects",
+        "CVLAB",
+        "Teacher2",
+        "TA2",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf("Computer Vision","ML"),
+        false,
+        "Description of project2",
+    )
+    private val p3 = ImmutableProject(
+        "00000",
+        "Implement a fast driver for a 100 Gb/s network card",
+        "DSLAB",
+        "Teacher5",
+        "TA5",
+        3,
+        listOf<String>(),
+        false,
+        true,
+        listOf("Low Level","Networking","Driver"),
+        false,
+        "Description of project5",
+    )
 
     private val onFailureNotExpected: ((Exception) -> Unit) = { e ->
         e.printStackTrace()
