@@ -188,6 +188,17 @@
             app:layout_constraintEnd_toEndOf="@id/play_video"
             app:layout_constraintStart_toStartOf="@id/form_button_sub" />
 
+        <Button
+            android:id="@+id/addSectionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text='@string/section_add_button_title'
+
+            app:layout_constraintBottom_toBottomOf="@+id/form_project_description"
+            app:layout_constraintEnd_toEndOf="@id/addTagsButton"
+            app:layout_constraintStart_toStartOf="@id/form_button_sub" />
+
+
 
 
 

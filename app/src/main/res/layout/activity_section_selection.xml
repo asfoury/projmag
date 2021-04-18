@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".activities.SectionSelectionActivity">
     <TextView
-        android:id="@+id/title_form"
+        android:id="@+id/section_title_form"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
-
+        android:paddingBottom="15dp"
         android:text="@string/section_selection_instructions"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -18,14 +18,17 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_section_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="GridLayoutManager"
-        app:spanCount="2"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:scrollbars="vertical"
-        tools:layout_editor_absoluteX="259dp"
-        tools:layout_editor_absoluteY="245dp" />
-
+        app:layoutManager="GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/section_title_form"
+        app:spanCount="2" />
 
     <Button
         android:id="@+id/DoneTagButton"

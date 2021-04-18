@@ -17,17 +17,13 @@ class SectionAdapter(private val context : Context, private val sections : List<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
         //tag item is not yet defined
-        val adapterLayout = LayoutInflater.from(parent.context).inflate(R.layout.list_tag, parent, false)
+        val adapterLayout = LayoutInflater.from(parent.context).inflate(R.layout.list_section, parent, false)
         return SectionViewHolder(adapterLayout)
     }
 
     override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
         val section = sections[position]
         holder.textView.text =  section
-
-
-
-
     }
 
 

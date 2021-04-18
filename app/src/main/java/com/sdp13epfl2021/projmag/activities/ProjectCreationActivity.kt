@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
 import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
@@ -30,6 +31,7 @@ class Form : AppCompatActivity() {
         private const val REQUEST_VIDEO_ACCESS = 1
         private const val REQUEST_VIDEO_SUBTITLING = 2
         private const val REQUEST_TAG_ACCESS = 3
+        private const val REQUEST_SELECTION_ACCESS = 4
     }
 
 
@@ -49,6 +51,7 @@ class Form : AppCompatActivity() {
         setContentView(R.layout.activity_project_creation)
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addtagButton: Button = findViewById(R.id.addTagsButton)
+        val addSectionButton : Button = findViewById(R.id.addSectionButton)
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(
@@ -60,6 +63,9 @@ class Form : AppCompatActivity() {
         findViewById<Button>(R.id.form_button_sub)?.setOnClickListener(::submit)
         addtagButton.setOnClickListener {
             switchToTagsSelectionActivity()
+        }
+        addSectionButton.setOnClickListener{
+            switchToSectionSelectionActivity()
         }
         findViewById<TextView>(R.id.title_form).requestFocus()
         findViewById<Button>(R.id.form_add_subtitle).setOnClickListener(::onClickSubtitleButton)
@@ -218,7 +224,10 @@ class Form : AppCompatActivity() {
 
         }
 
-        
+        private fun switchToSectionSelectionActivity(){
+            val intent = Intent(this, SectionSelectionActivity::class.java)
+            startActivityForResult(intent, REQUEST_SELECTION_ACCESS)
+        }
 
 
     }

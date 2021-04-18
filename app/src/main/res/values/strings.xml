@@ -79,6 +79,7 @@
     <string name="failure">failure</string>
     <string name="section_selection_instructions">Choose the sections which can take this project</string>
     <string name="section_save_button">Save</string>
+    <string name="section_add_button_title">\"add Section\"</string>
 
 
 </resources>
