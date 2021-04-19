@@ -1,6 +1,6 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package com.sdp13epfl2021.projmag.curriculumvitae
+package com.sdp13epfl2021.projmag.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

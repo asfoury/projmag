@@ -19,6 +19,13 @@ data class Tag(var name: String) {
         return other.name == this.name
       }
 
+    /*
+    When the tag is transformed into a string, it has to be only his name that is transmitted
+     */
+    override fun toString(): String {
+        return name
+    }
+
 }
 
 

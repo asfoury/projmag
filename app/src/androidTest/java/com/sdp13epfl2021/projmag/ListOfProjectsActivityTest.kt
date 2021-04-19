@@ -12,7 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
-import com.sdp13epfl2021.projmag.adapter.ItemAdapter
+import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +29,7 @@ class ListOfProjectsActivityTest {
 
     @Test
     fun userCanScroll() {
-        onView(withId(R.id.recycler_view))
+        onView(withId(R.id.recycler_view_project))
             .perform(ViewActions.swipeUp())
     }
 
@@ -106,8 +106,8 @@ class ListOfProjectsActivityTest {
 
     @Test
     fun userCanPressOnProject() {
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+        onView(withId(R.id.recycler_view_project)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 0,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )
@@ -118,8 +118,8 @@ class ListOfProjectsActivityTest {
     @Test
     fun userCanPressOnProjectAndGoBackUsingBackButton() {
         // press on first project
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+        onView(withId(R.id.recycler_view_project)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 0,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )
@@ -127,8 +127,8 @@ class ListOfProjectsActivityTest {
         // go back to list of project
         Espresso.pressBack()
         // press on second project
-        onView(withId(R.id.recycler_view)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ItemAdapter.ItemViewHolder>(
+        onView(withId(R.id.recycler_view_project)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 1,
                 MyViewAction.clickChildViewWithId(R.id.project_title)
             )

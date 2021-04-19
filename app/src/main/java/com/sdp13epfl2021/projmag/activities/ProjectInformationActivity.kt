@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.activities
 
 
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
@@ -18,6 +19,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.MediaController
+
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
@@ -90,6 +92,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
         videoView = findViewById<VideoView>(R.id.info_video)
 
+
         // get the project
         val project: ImmutableProject? = intent.getParcelableExtra("project")
         if (project != null) {
@@ -126,7 +129,11 @@ class ProjectInformationActivity : AppCompatActivity() {
         // make the back button in the title bar work
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+
     }
+
 
     // pause/start when we touch the video
     @SuppressLint("ClickableViewAccessibility")
@@ -295,6 +302,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_information, menu)
         return true
@@ -317,4 +325,5 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

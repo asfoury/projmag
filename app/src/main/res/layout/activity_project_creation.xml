@@ -134,10 +134,10 @@
             android:id="@+id/add_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:text="@string/add_video"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.831"
+            app:layout_constraintHorizontal_bias="0.925"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
@@ -145,11 +145,11 @@
             android:id="@+id/play_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:enabled="false"
             android:text="@string/play_video"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.137"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
@@ -157,7 +157,7 @@
             android:id="@+id/form_add_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:enabled="false"
             android:text="@string/form_add_subtitle_button"
             app:layout_constraintEnd_toEndOf="parent"
@@ -176,7 +176,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_add_subtitle" />
 
+
+
+        <Button
+            android:id="@+id/addTagsButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text='@string/tag_add_button_title'
+
+            app:layout_constraintBottom_toBottomOf="@+id/form_project_description"
+            app:layout_constraintEnd_toEndOf="@id/play_video"
+            app:layout_constraintStart_toStartOf="@id/form_button_sub" />
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </ScrollView>
+

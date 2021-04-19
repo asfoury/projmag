@@ -78,7 +78,6 @@ class ProjectInformationActivityTest {
     private val inputStreamSNK = javaClass.classLoader!!.getResourceAsStream("30a0704e-8ed3-40a8-8621-ea69a6b7fe3e_SNK The Final Season OP.mp4")
     private val inputStreamArch = javaClass.classLoader!!.getResourceAsStream("A4k.png")
     private val inputStreamSO = javaClass.classLoader!!.getResourceAsStream("SO_1avril.png")
-
     private val videoFile: File = Files.createTempFile("SNK OP", ".mp4").toFile()
     private val imageArchFile: File = Files.createTempFile("Arch", ".png").toFile()
     private val imageSOFile: File = Files.createTempFile("Arch", ".png").toFile()
@@ -92,7 +91,6 @@ class ProjectInformationActivityTest {
         Files.copy(inputStreamSNK, videoFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamArch, imageArchFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamSO, imageSOFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
-
         //TODO find a way to mock the database
         Utils.projectsDatabase = CachedProjectsDatabase(FakeDatabaseTest(listOf(project)))
         Utils.fileDatabase = FakeFileDatabaseTest(
@@ -215,4 +213,10 @@ class ProjectInformationActivityTest {
     fun clickOnShareButton() {
         onView(withId(R.id.shareButton)).perform(click())
     }
+
 }
+
+
+
+
+

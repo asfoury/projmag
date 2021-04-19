@@ -18,9 +18,9 @@ import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
-class ItemAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView
-    , private val fromLink: Boolean, private val projectIdLink: String) :
-    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
+
+class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView, private val fromLink: Boolean, private val projectIdLink: String) :
+    RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     companion object ItemAdapterCompanion {
         private const val projectString = "project"
@@ -64,7 +64,7 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
         dataset.remove(project)
     }
 
-    class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    class ProjectViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
@@ -74,20 +74,20 @@ class ItemAdapter(private val context: Context, private val utils: Utils, privat
 
     override fun getItemCount() = dataset.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_project, parent, false)
-        return ItemViewHolder(adapterLayout)
+        return ProjectViewHolder(adapterLayout)
     }
 
-    fun openProject(holder: ItemViewHolder, project: ImmutableProject) {
+    fun openProject(holder: ProjectViewHolder, project: ImmutableProject) {
         val context = holder.view.context
         val intent = Intent(context, ProjectInformationActivity::class.java)
         intent.putExtra(projectString, project)
         context.startActivity(intent)
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProjectViewHolder, position: Int) {
         val project = dataset[position]
         // set the project name
         holder.textView.text = project.name

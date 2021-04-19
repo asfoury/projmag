@@ -28,6 +28,7 @@ class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : Proje
      * @param doc the Firebase document
      * @return a Project built from the given document
      */
+
     private fun documentToProject(doc: DocumentSnapshot): ImmutableProject? =
         if (doc.data == null) {
             null

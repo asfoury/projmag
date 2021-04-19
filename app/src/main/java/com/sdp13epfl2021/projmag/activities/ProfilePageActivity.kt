@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.activities
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.sdp13epfl2021.projmag.R
 
 
 class ProfilePageActivity : AppCompatActivity() {

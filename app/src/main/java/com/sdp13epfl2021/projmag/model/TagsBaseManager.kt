@@ -8,7 +8,12 @@ import java.util.regex.Pattern
 
     //this should be thread safe
     companion object TagsBase{
-        private val tags: MutableSet<Tag> = mutableSetOf()
+        private val tags: MutableSet<Tag> = mutableSetOf(Tag("roblox"),
+                                                         Tag("signals"),
+                                                         Tag("software"),
+                                                            Tag("vhdl"),
+                                                          Tag("crypto")
+                                                            , Tag("aerodynamics"))
 
 
     }
@@ -77,5 +82,9 @@ import java.util.regex.Pattern
         //defensive copy
         return tags.toSet()
     }
+
+     fun tagsListToStringList(tags : Set<Tag>) : List<String>{
+         return tags.toList().map(Tag::name)
+     }
 
 }
