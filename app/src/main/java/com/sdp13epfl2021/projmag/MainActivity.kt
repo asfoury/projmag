@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     companion object MainActivityCompanion {
         const val fromLinkString: String = "fromLink"
         const val projectIdString: String = "projectId"
+        const val cv: String = "CV"
+        const val profile: String = "profile"
     }
 
     private lateinit var mAuth: FirebaseAuth
