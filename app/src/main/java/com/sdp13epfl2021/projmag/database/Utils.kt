@@ -16,6 +16,7 @@ class Utils private constructor(context: Context, fb: Firebase) {
     firestore.firestoreSettings = settings*/
 
     val userDatabase: UserDataDatabase = UserDataFirebase(firestore, fb.auth)
+    val candidatureDatabase: CandidatureDatabase = DummyCandidatureDatabase() //TODO implements a CandidatureDatabase (after CV/Profile are available)
     val fileDatabase: FileDatabase = FirebaseFileDatabase(fb.storage, fb.auth)
     val metadataDatabase: MetadataDatabase = MetadataFirebase(firestore)
     val projectsDatabase: CachedProjectsDatabase =
