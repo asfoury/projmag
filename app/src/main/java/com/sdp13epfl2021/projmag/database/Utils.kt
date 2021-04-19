@@ -7,16 +7,16 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 
-class Utils(private val context: Context) {
-    private val firestore = Firebase.firestore
+class Utils private constructor(context: Context, fb: Firebase) {
+    val firestore = fb.firestore
     // Uncomment to disable firebase cache
     /* val settings = firestoreSettings {
         isPersistenceEnabled = false
     }
     firestore.firestoreSettings = settings*/
 
-    val userDatabase: UserDataDatabase = UserDataFirebase(firestore, Firebase.auth)
-    val fileDatabase: FileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth)
+    val userDatabase: UserDataDatabase = UserDataFirebase(firestore, fb.auth)
+    val fileDatabase: FileDatabase = FirebaseFileDatabase(fb.storage, fb.auth)
     val metadataDatabase: MetadataDatabase = MetadataFirebase(firestore)
     val projectsDatabase: CachedProjectsDatabase =
         CachedProjectsDatabase(
@@ -27,4 +27,16 @@ class Utils(private val context: Context) {
                 File(context.filesDir, "projects")
             )
         )
+
+    companion object {
+        private var instance: Utils? = null
+
+        @Synchronized
+        fun getInstance(context: Context, fb: Firebase = Firebase): Utils {
+            if (instance == null) {
+                instance = Utils(context.applicationContext, fb)
+            }
+            return instance!!
+        }
+    }
 }

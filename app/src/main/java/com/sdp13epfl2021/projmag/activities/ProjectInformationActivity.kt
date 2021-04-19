@@ -81,7 +81,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
-        fileDB = Utils(this).fileDatabase
+        fileDB = Utils.getInstance(this).fileDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
