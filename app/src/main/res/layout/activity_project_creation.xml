@@ -106,13 +106,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:autofillHints=""
             android:hint="@string/project_description"
             android:inputType="textMultiLine"
             android:lines="10"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_check_box_SP" />
 
@@ -134,72 +135,70 @@
             android:id="@+id/add_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
             android:text="@string/add_video"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.925"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoView" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/addSectionButton"
+            app:layout_constraintTop_toBottomOf="@+id/form_project_description" />
+
 
         <Button
             android:id="@+id/play_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:enabled="false"
             android:text="@string/play_video"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.234"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoView" />
+            app:layout_constraintTop_toBottomOf="@+id/addTagsButton"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/form_add_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:enabled="false"
             android:text="@string/form_add_subtitle_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_video" />
+            app:layout_constraintHorizontal_bias="0.618"
+            app:layout_constraintStart_toEndOf="@+id/play_video"
+            tools:layout_editor_absoluteY="643dp" />
 
         <Button
             android:id="@+id/form_button_sub"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
             android:text="@string/submission"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.462"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/form_add_subtitle" />
-
-
+            app:layout_constraintTop_toBottomOf="@+id/play_video"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/addTagsButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@string/tag_add_button_title'
 
-            app:layout_constraintBottom_toBottomOf="@+id/form_project_description"
-            app:layout_constraintEnd_toEndOf="@id/play_video"
-            app:layout_constraintStart_toStartOf="@id/form_button_sub" />
+            android:layout_marginStart="16dp"
+            android:text='@string/tag_add_button_title'
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/form_project_description" />
 
         <Button
             android:id="@+id/addSectionButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@string/section_add_button_title'
 
-            app:layout_constraintBottom_toBottomOf="@+id/form_project_description"
-            app:layout_constraintEnd_toEndOf="@id/addTagsButton"
-            app:layout_constraintStart_toStartOf="@id/form_button_sub" />
-
-
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.045"
+            app:layout_constraintStart_toEndOf="@+id/addTagsButton"
+            app:layout_constraintTop_toBottomOf="@+id/form_project_description" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
