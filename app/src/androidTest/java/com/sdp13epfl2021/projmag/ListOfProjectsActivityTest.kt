@@ -73,7 +73,7 @@ class ListOfProjectsActivityTest {
     @Test
     fun takenProjectsGreyedOut() {
         val search = onView(withId(R.id.searchButton))
-        search.perform(ViewActions.click())
+        search.perform(click())
         activityRule.scenario.onActivity { projectListActivity ->
             val dataset = projectListActivity.getItemAdapter().dataset
             val recyclerView = projectListActivity.getRecyclerView()
@@ -92,16 +92,15 @@ class ListOfProjectsActivityTest {
     }
 
     @Test
-    fun pressProfileButtonOpens() {
+    fun pressProfileButton() {
         onView(withId(R.id.profileButton)).perform(click())
-
     }
 
     @Test
     fun professorCanNavigateToTheFormToSubmitAProject() {
         Assume.assumeTrue("The user is a professor", userIsAProfessor)
         onView(withId(R.id.fab))
-            .perform(ViewActions.click())
+            .perform(click())
     }
 
     @Test
@@ -109,7 +108,7 @@ class ListOfProjectsActivityTest {
         onView(withId(R.id.recycler_view_project)).perform(
             RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 0,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
+                click()
             )
         )
     }
