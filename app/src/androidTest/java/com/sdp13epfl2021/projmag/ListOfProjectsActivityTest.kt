@@ -120,7 +120,7 @@ class ListOfProjectsActivityTest {
         onView(withId(R.id.recycler_view_project)).perform(
             RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 0,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
+                click()
             )
         )
         // go back to list of project
@@ -129,7 +129,7 @@ class ListOfProjectsActivityTest {
         onView(withId(R.id.recycler_view_project)).perform(
             RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
                 1,
-                MyViewAction.clickChildViewWithId(R.id.project_title)
+                click()
             )
         )
         // go back to list of projects
