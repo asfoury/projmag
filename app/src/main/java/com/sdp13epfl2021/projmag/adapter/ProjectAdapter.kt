@@ -105,11 +105,11 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         holder.chipGroupView.removeAllViews()
 
         // add the tags to the project
-            for (tag in project.tags) {
-                val chipView: Chip = Chip(context)
-                chipView.text = tag
-                holder.chipGroupView.addView(chipView)
-            }
+        for (tag in project.tags) {
+            val chipView: Chip = Chip(context)
+            chipView.text = tag
+            holder.chipGroupView.addView(chipView)
+        }
 
         if (dataset[position].isTaken) {
             holder.view.alpha = 0.5f
@@ -118,7 +118,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         }
 
         // make the projects pressable
-        holder.textView.setOnClickListener {
+        holder.view.setOnClickListener {
             openProject(holder, project)
         }
 
