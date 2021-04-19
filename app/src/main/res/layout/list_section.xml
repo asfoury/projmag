@@ -19,8 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="1"
-            android:padding="16dp"
+            android:padding="10dp"
             android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textSize ="20dp"
             android:textColor="@color/black">
 
 
