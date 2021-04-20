@@ -14,6 +14,18 @@ data class Candidature(
     val state: State
 ) : Parcelable {
 
-    enum class State { Waiting, Accepted, Rejected }
+    enum class State {
+        Waiting, Accepted, Rejected;
+        companion object {
+            fun enumOf(s: String?): State? {
+                return when (s) {
+                    Waiting.name -> Waiting
+                    Accepted.name -> Accepted
+                    Rejected.name -> Rejected
+                    else -> null
+                }
+            }
+        }
+    }
 }
 

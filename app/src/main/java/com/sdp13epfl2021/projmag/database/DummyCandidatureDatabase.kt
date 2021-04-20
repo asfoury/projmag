@@ -29,7 +29,8 @@ class DummyCandidatureDatabase: CandidatureDatabase {
                         emptyList(),
                         emptyList(),
                         emptyList()
-                    )
+                    ),
+                    Candidature.State.Rejected
                 ),
                 Candidature(
                     "mLaBLchyYVzxkRQZDhew",
@@ -47,7 +48,8 @@ class DummyCandidatureDatabase: CandidatureDatabase {
                         emptyList(),
                         emptyList(),
                         emptyList()
-                    )
+                    ),
+                    Candidature.State.Waiting
                 )
             )
         )
