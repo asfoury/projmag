@@ -45,6 +45,7 @@ class Form : AppCompatActivity() {
     private var subtitles: String? = null
 
     private var listTags: Array<String> = emptyArray()
+    private var listSections : Array<String> = emptyArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,8 +136,14 @@ class Form : AppCompatActivity() {
                 if (tagData != null) {
                     listTags = tagData
                 }
-
-
+            }
+        }
+        else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECTION_ACCESS){
+            if (data != null) {
+                val secList = data.getStringArrayExtra("sectionsList")
+                if (secList != null) {
+                    listSections = secList
+                }
             }
         }
     }
@@ -162,7 +169,7 @@ class Form : AppCompatActivity() {
          */
         private fun constructProject(): Result<ImmutableProject> {
             return ImmutableProject.build(
-                id = "",
+                id = "", //id is defined by firebase itself
                 name = getTextFromEditText(R.id.form_edit_text_project_name),
                 lab = getTextFromEditText(R.id.form_edit_text_laboratory),
                 teacher = getTextFromEditText(R.id.form_edit_text_teacher),
@@ -178,8 +185,7 @@ class Form : AppCompatActivity() {
                 description = getTextFromEditText(R.id.form_project_description),
                 assigned = listOf(),
                 tags = listTags.toList(),
-                //TODO : modify this with the actual view values when the view is created
-                allowedSections = listOf()
+                allowedSections = listSections.toList()
             )
         }
 

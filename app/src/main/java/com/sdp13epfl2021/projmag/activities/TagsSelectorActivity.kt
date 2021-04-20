@@ -39,7 +39,7 @@ class TagsSelectorActivity : AppCompatActivity() {
     }
 
     /**
-     * Functionn that handles the click and long click of elements of the tag recycler view
+     * Function that handles the click and long click of elements of the tag recycler view
      *
      * @param tagRecyclerView : the tag recycler view
      * @param tagsDataset : the dataset of tags

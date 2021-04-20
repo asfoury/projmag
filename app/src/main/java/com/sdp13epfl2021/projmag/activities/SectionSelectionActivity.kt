@@ -73,7 +73,7 @@ class SectionSelectionActivity : AppCompatActivity() {
             val returnIntent = Intent()
             val sections  = chosenSections.toTypedArray()
 
-            //This should work because String is inherently serializable but I could get crashes
+
             returnIntent.putExtra("sectionsList",  sections as Serializable)
             setResult(AppCompatActivity.RESULT_OK, returnIntent)
             finish()
