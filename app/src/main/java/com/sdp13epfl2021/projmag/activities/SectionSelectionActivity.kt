@@ -10,10 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.listenerClass.MakeRecyclerListItemsClickListenable
 import com.sdp13epfl2021.projmag.adapter.SectionAdapter
-import com.sdp13epfl2021.projmag.adapter.TagAdapter
 import com.sdp13epfl2021.projmag.model.SectionBaseManager
-import com.sdp13epfl2021.projmag.model.Tag
-import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import java.io.Serializable
 
 class SectionSelectionActivity : AppCompatActivity() {
@@ -25,13 +22,13 @@ class SectionSelectionActivity : AppCompatActivity() {
 
 
         val manager = SectionBaseManager()
-        val sectionDatabaset = manager.sectionList()
+        val sectionDataset = manager.sectionList()
         val sectionRecyclerView = findViewById<RecyclerView>(R.id.recycler_section_view)
         val saveButton = findViewById<Button>(R.id.doneSectionButton)
-        sectionRecyclerView.adapter = SectionAdapter(this, sectionDatabaset)
+        sectionRecyclerView.adapter = SectionAdapter(this, sectionDataset)
         sectionRecyclerView.setHasFixedSize(true)
 
-
+        handleListeningOnElementsOfSectionRecyclerView(sectionRecyclerView, sectionDataset)
         saveButtonHandling(saveButton)
 
 
