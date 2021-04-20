@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,8 @@ import com.sdp13epfl2021.projmag.model.ImmutableProfile
 class CandidatureAdapter(activity: Activity, private val utils: Utils, private val projectId: ProjectId) :
     RecyclerView.Adapter<CandidatureAdapter.CandidatureHolder>() {
 
-    private var candidatures: MutableList<Candidature> = ArrayList()
+    private val candidatures: MutableList<Candidature> = ArrayList()
+    private val resources: Resources = activity.resources
 
     init {
         utils.candidatureDatabase.getListOfCandidatures(
@@ -45,10 +47,9 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
 
     override fun onBindViewHolder(holder: CandidatureHolder, position: Int) {
         val candidature = candidatures[position]
-
-        holder.firstnameView.text = candidature.profile.firstName
-        holder.lastnameView.text = candidature.profile.lastName
-        holder.sectionView.text = "IC" // TODO change when added : candidature.profile.section
+        holder.firstnameView.text = resources.getString(R.string.waiting_firstname, candidature.profile.firstName)
+        holder.lastnameView.text = resources.getString(R.string.waiting_lastname, candidature.profile.lastName)
+        holder.sectionView.text = resources.getString(R.string.waiting_section, "IC") // TODO change when added : candidature.profile.section
         setColor(holder, candidature.state)
 
         val context = holder.view.context
