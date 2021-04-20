@@ -49,6 +49,7 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
         holder.firstnameView.text = candidature.profile.firstName
         holder.lastnameView.text = candidature.profile.lastName
         holder.sectionView.text = "IC" // TODO change when added : candidature.profile.section
+        setColor(holder, candidature.state)
 
         val context = holder.view.context
         holder.profileButton.setOnClickListener { openProfile(context, candidature.profile) }
@@ -59,7 +60,7 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
                 candidature.userID,
                 {
                     showToast("Candidature accepted.")
-                    (holder.itemView as? CardView)?.setCardBackgroundColor(Color.GREEN)
+                    setColor(holder, Candidature.State.Accepted)
                 },
                 { showToast("An error has occurred while accepting.\n$it") }
             )
@@ -70,9 +71,21 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
                 candidature.userID,
                 {
                     showToast("Candidature rejected.")
-                    (holder.itemView as? CardView)?.setCardBackgroundColor(Color.RED)
+                    setColor(holder, Candidature.State.Rejected)
                 },
                 { showToast("An error has occurred while rejecting.\n$it") }
+            )
+        }
+    }
+
+    private fun setColor(holder: CandidatureHolder, state: Candidature.State) {
+        if (holder.itemView is CardView) {
+            holder.itemView.setCardBackgroundColor(
+                when (state) {
+                    Candidature.State.Waiting -> Color.WHITE
+                    Candidature.State.Accepted -> Color.GREEN
+                    Candidature.State.Rejected -> Color.RED
+                }
             )
         }
     }
