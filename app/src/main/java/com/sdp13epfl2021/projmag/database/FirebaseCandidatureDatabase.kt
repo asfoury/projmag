@@ -7,6 +7,7 @@ import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.model.*
 import kotlinx.coroutines.*
+import java.util.*
 import java.util.concurrent.*
 
 /**
@@ -50,30 +51,33 @@ class FirebaseCandidatureDatabase(
         val candidatures = ConcurrentLinkedQueue<Candidature>()
         runBlocking {
             dataMap.map {
-                val userID = it.key
-                val state = Candidature.State.enumOf(it.value as? String)
                 launch(Dispatchers.IO) {
+                    val userID = it.key
+                    val state = Candidature.State.enumOf(it.value as? String)
                     if (state != null) {
-                        var waiting = true
-                        var profile: ImmutableProfile? = null
-                        var cv: CurriculumVitae? = null
-                        /*userDataDatabase.getProfile(userID, { profile = it }, { waiting = false})*/ //TODO add when implemented
-                        /*userDataDatabase.getCV(userID, { cv = it }, { waiting = false })*/ //TODO add when implemented
-                        profile = dummyProfile(userID)
-                        cv = dummyCV(userID)
-
-                        while (waiting && (profile == null || cv == null)) {
-                            delay(10)
-                        }
-                        if (profile != null && cv != null) {
-                            candidatures.add(Candidature(projectID, userID, profile, cv, state))
-                        }
+                        addCandidature(candidatures, projectID, userID, state)
                     }
                 }
             }.forEach { it.join() }
         }
-        println("testing * queue to list : ${candidatures.size}")
         return candidatures.toList()
+    }
+
+    private suspend fun addCandidature(candidatures: Queue<Candidature>, projectID: ProjectId, userID: String, state: Candidature.State) {
+        var waiting = true
+        var profile: ImmutableProfile? = null
+        var cv: CurriculumVitae? = null
+        /*userDataDatabase.getProfile(userID, { profile = it }, { waiting = false})*/ //TODO add when implemented
+        /*userDataDatabase.getCV(userID, { cv = it }, { waiting = false })*/ //TODO add when implemented
+        profile = dummyProfile(userID)
+        cv = dummyCV(userID)
+
+        while (waiting && (profile == null || cv == null)) {
+            delay(10)
+        }
+        if (profile != null && cv != null) {
+            candidatures.add(Candidature(projectID, userID, profile, cv, state))
+        }
     }
 
     //TODO Remove after Profile/CV are implemented

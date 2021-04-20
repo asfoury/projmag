@@ -55,6 +55,10 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
         val context = holder.view.context
         holder.profileButton.setOnClickListener { openProfile(context, candidature.profile) }
         holder.cvButton.setOnClickListener { openCV(context, candidature.cv) }
+        setupButton(holder, candidature)
+    }
+
+    private fun setupButton(holder: CandidatureHolder, candidature: Candidature) {
         holder.acceptButton.setOnClickListener {
             utils.candidatureDatabase.acceptCandidature(
                 projectId,
