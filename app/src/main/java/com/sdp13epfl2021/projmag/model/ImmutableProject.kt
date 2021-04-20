@@ -81,8 +81,8 @@ data class ImmutableProject(
                     "there are ${assigned.size} " +
                             "students currently assigned but only $nbParticipant allowed to work for the project"
                 )
-                sectionsManager.isListContained(allowedSections) -> Failure("a section in the section list doesn't exist")
-                tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist")
+                !sectionsManager.isListValid(allowedSections) -> Failure("a section in the section list doesn't exist$allowedSections")
+                 !tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist")
 
                 else -> Success(
                     ImmutableProject(

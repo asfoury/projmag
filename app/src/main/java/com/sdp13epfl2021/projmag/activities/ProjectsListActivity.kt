@@ -16,11 +16,11 @@ import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.Utils
 
 class ProjectsListActivity : AppCompatActivity() {
-    private lateinit var itemAdapter: ProjectAdapter
+    private lateinit var projectAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
 
     public fun getItemAdapter(): ProjectAdapter {
-        return itemAdapter
+        return projectAdapter
     }
 
     public fun getRecyclerView(): RecyclerView {
@@ -38,8 +38,8 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-        itemAdapter = ProjectAdapter(this, Utils(this), recyclerView, fromLink, projectId)
-        recyclerView.adapter = itemAdapter
+        projectAdapter = ProjectAdapter(this, Utils(this), recyclerView, fromLink, projectId)
+        recyclerView.adapter = projectAdapter
         recyclerView.setHasFixedSize(false)
 
         // get the fab and make it go to the Form activity
@@ -61,7 +61,7 @@ class ProjectsListActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                itemAdapter.filter.filter(newText)
+                projectAdapter.filter.filter(newText)
                 return false
             }
         })
