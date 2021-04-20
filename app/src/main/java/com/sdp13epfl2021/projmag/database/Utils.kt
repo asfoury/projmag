@@ -8,16 +8,17 @@ import com.google.firebase.storage.ktx.storage
 import java.io.File
 
 class Utils private constructor(context: Context, fb: Firebase) {
-    val firestore = fb.firestore
+    private val firestore = fb.firestore
+    private val auth = fb.auth
     // Uncomment to disable firebase cache
     /* val settings = firestoreSettings {
         isPersistenceEnabled = false
     }
     firestore.firestoreSettings = settings*/
 
-    val userDatabase: UserDataDatabase = UserDataFirebase(firestore, fb.auth)
-    val candidatureDatabase: CandidatureDatabase = DummyCandidatureDatabase() //TODO implements a CandidatureDatabase (after CV/Profile are available)
-    val fileDatabase: FileDatabase = FirebaseFileDatabase(fb.storage, fb.auth)
+    val userDatabase: UserDataDatabase = UserDataFirebase(firestore, auth)
+    val candidatureDatabase: CandidatureDatabase = FirebaseCandidatureDatabase(firestore, auth, userDatabase)
+    val fileDatabase: FileDatabase = FirebaseFileDatabase(fb.storage, auth)
     val metadataDatabase: MetadataDatabase = MetadataFirebase(firestore)
     val projectsDatabase: CachedProjectsDatabase =
         CachedProjectsDatabase(
