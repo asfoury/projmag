@@ -18,11 +18,26 @@ class ImmutableProjectTest {
         val bachelorSemesterProject = true
         val masterSemesterProject = true
         val listStudents = listOf("epic robloxxx programmer")
-        val tags = listOf("robloxprog")
+        val tagManager = TagsBaseManager()
+        val tagList = TagsBaseManager().getAllTags().toList()
+        val sectionManager = SectionBaseManager()
+        val sectionList = SectionBaseManager().sectionList().toList()
 
-        
+
+
+        val tags = mutableListOf<String>()
+        val sections = mutableListOf<String>()
+        if(tagList.isNotEmpty()) {
+            tags.add(tagList[0].name)
+        }
+        if(sectionList.isNotEmpty()){
+            sections.add(sectionList[0])
+        }
+
+
         val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
-            listStudents, true, true, tags, false, description)
+            listStudents, true, true, tags, false, description,
+            tags, sections)
         when(result){
             is Success -> {
 
@@ -39,6 +54,8 @@ class ImmutableProjectTest {
                 Assert.assertEquals(true, project.bachelorProject)
                 Assert.assertEquals(true, project.masterProject)
                 Assert.assertEquals(listStudents, project.assigned)
+                Assert.assertEquals(tags, project.tags)
+                Assert.assertEquals(sections, project.allowedSections)
                 //testing the limit of functions
                 val longName = "ultra epic robloxx coder ultimate guy but with a name that's long aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                 when (project.rebuild(name = longName)) {
