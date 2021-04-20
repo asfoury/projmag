@@ -7,36 +7,36 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
 
-class Utils private constructor(context: Context, fb: Firebase) {
-    private val firestore = fb.firestore
-    private val auth = fb.auth
-    // Uncomment to disable firebase cache
-    /* val settings = firestoreSettings {
-        isPersistenceEnabled = false
-    }
-    firestore.firestoreSettings = settings*/
-
-    val userDatabase: UserDataDatabase = UserDataFirebase(firestore, auth)
-    val candidatureDatabase: CandidatureDatabase = FirebaseCandidatureDatabase(firestore, auth, userDatabase)
-    val fileDatabase: FileDatabase = FirebaseFileDatabase(fb.storage, auth)
-    val metadataDatabase: MetadataDatabase = MetadataFirebase(firestore)
-    val projectsDatabase: CachedProjectsDatabase =
-        CachedProjectsDatabase(
-            OfflineProjectDatabase(
-                FirebaseProjectsDatabase(
-                    firestore
-                ),
-                File(context.filesDir, "projects")
-            )
-        )
+class Utils(
+    context: Context,
+    val userDataDatabase: UserDataDatabase,
+    val candidatureDatabase: CandidatureDatabase,
+    val fileDatabase: FileDatabase,
+    val metadataDatabase: MetadataDatabase,
+    val projectsDatabase: CachedProjectsDatabase,
+) {
 
     companion object {
         private var instance: Utils? = null
 
         @Synchronized
-        fun getInstance(context: Context, fb: Firebase = Firebase): Utils {
+        fun getInstance(
+            context: Context,
+            userDataDB: UserDataDatabase = UserDataFirebase(Firebase.firestore, Firebase.auth),
+            candidatureDB: CandidatureDatabase = FirebaseCandidatureDatabase(Firebase.firestore, Firebase.auth, userDataDB),
+            fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth),
+            metadataDB: MetadataDatabase = MetadataFirebase(Firebase.firestore),
+            projectsDB: CachedProjectsDatabase = CachedProjectsDatabase(
+                OfflineProjectDatabase(
+                    FirebaseProjectsDatabase(
+                        Firebase.firestore
+                    ),
+                    File(context.filesDir, "projects")
+                )
+            )
+        ): Utils {
             if (instance == null) {
-                instance = Utils(context.applicationContext, fb)
+                instance = Utils(context.applicationContext, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
             }
             return instance!!
         }
