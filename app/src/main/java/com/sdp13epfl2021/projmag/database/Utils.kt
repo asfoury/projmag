@@ -8,7 +8,6 @@ import com.google.firebase.storage.ktx.storage
 import java.io.File
 
 class Utils(
-    context: Context,
     val userDataDatabase: UserDataDatabase,
     val candidatureDatabase: CandidatureDatabase,
     val fileDatabase: FileDatabase,
@@ -32,12 +31,12 @@ class Utils(
                     FirebaseProjectsDatabase(
                         Firebase.firestore
                     ),
-                    File(context.filesDir, "projects")
+                    File(context.applicationContext.filesDir, "projects")
                 )
             )
         ): Utils {
             if (instance == null || reset) {
-                instance = Utils(context.applicationContext, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
+                instance = Utils(userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
             }
             return instance!!
         }
