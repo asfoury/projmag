@@ -2,8 +2,11 @@ package com.sdp13epfl2021.projmag
 
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.runner.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.SignInActivity
@@ -19,7 +22,15 @@ class SignInActivityTest {
 
     @Test
     fun testSignInButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.signInButton)).perform(ViewActions.click())
+        Thread.sleep(1000) // wait for pop-up
+        onView(withId(android.R.id.button2)).perform(click())
+        onView(withId(R.id.signInButton)).perform(click())
+    }
+
+    @Test
+    fun testOpenCaptionSettings() {
+        Thread.sleep(1000) // wait for pop-up
+        onView(withId(android.R.id.button1)).perform(click())
     }
 }
 

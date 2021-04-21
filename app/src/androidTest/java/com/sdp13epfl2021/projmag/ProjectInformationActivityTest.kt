@@ -1,10 +1,12 @@
 package com.sdp13epfl2021.projmag
 
 
-import android.content.Context
 import android.content.Intent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.VideoView
+import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -13,19 +15,26 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.UiThreadTestRule
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.video.VideoUtils
+import junit.framework.Assert.*
+import org.hamcrest.Description
+import junit.framework.Assert.*
 import org.hamcrest.Matchers
-import org.junit.*
+import org.hamcrest.TypeSafeMatcher
+import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class ProjectInformationActivityTest {
+
     /*
     private val videoUrl = "https://fakeVideoLink/abc?def"
     private val imageArchUrl = "https://fakeImageLink/Arch Linux > Debian/4K"
@@ -208,25 +217,9 @@ class ProjectInformationActivityTest {
 
     }
 
-    @Before
-    @After
-    fun setUpSharedPreferences() {
-        val pref = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences(
-            VideoUtils.FIRST_TIME_CAPTIONS_SETTINGS_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
-        pref.edit().clear().commit()
-    }
-
     @Test
     fun clickOnShareButton() {
-        onView(withId(android.R.id.button2)).perform(click());
         onView(withId(R.id.shareButton)).perform(click())
-    }
-
-    @Test
-    fun clickOnSettingsCaption() {
-        onView(withId(android.R.id.button1)).perform(click());
     }
 
 }

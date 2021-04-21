@@ -101,8 +101,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
 
-        VideoUtils.showInstructionDialogIfFirstTime(this)
-
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
         val lab = findViewById<TextView>(R.id.info_lab_name)
