@@ -2,7 +2,9 @@ package com.sdp13epfl2021.projmag.activities
 
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,10 +13,10 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -43,6 +45,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 class ProjectInformationActivity : AppCompatActivity() {
 
     private lateinit var projectVar: ImmutableProject
@@ -51,12 +54,12 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
-    private val videosUris: MutableList<Uri> = ArrayList()
+    private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
 
     @Synchronized
-    private fun addVideo(videoUri: Uri) {
-        videosUris.add(videoUri)
+    private fun addVideo(videoUri: Uri, subtitle: String?) {
+        videosUris.add(Pair(videoUri, subtitle))
         if (current < 0) {
             readNextVideo()
             videoView.isInvisible = false
@@ -79,31 +82,15 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private fun updateVideoState() {
-        val localUri = videosUris[current]
-        /* onlineUri is used as unique identifier for subtitles */
-        val onlineUri = projectVar.videoURI[current]
-        videoView.setVideoURI(localUri)
-        metadataDB.getSubtitlesFromVideo(
-            onlineUri,
-            Locale.ENGLISH.language,
-            { subs ->
-                subs?.let {
-                    videoView.addSubtitleSource(
-                        it.byteInputStream(),
-                        VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
-                    )
-                    videoView.start()
-                } ?: run {
-                    showToast("No subtitles could be found !")
-                    videoView.start()
-                }
-            },
-            {
-                showToast("Subtitles could not be fetched !")
-                videoView.start()
-            }
-        )
-
+        val uri = videosUris[current].first
+        val sub = videosUris[current].second
+        videoView.setVideoURI(uri)
+        sub?.let {
+            videoView.addSubtitleSource(
+                it.byteInputStream(),
+                VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,6 +101,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
 
+        VideoUtils.showInstructionDialogIfFirstTime(this)
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
@@ -161,8 +149,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         // make the back button in the title bar work
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-
-
     }
 
 
@@ -213,9 +199,24 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun addVideoAfterDownloaded(videosLinks: List<String>) {
         videosLinks.forEach { link ->
             fileDB.getFile(link, projectDir, { file ->
-                addVideo(Uri.fromFile(file))
+                metadataDB.getSubtitlesFromVideo(
+                    link,
+                    Locale.ENGLISH.language,
+                    { subs ->
+                        subs?.let {
+                            addVideo(Uri.fromFile(file), it)
+                        } ?: run {
+                            showToast(getString(R.string.no_subtitles_found))
+                            addVideo(Uri.fromFile(file), null)
+                        }
+                    },
+                    {
+                        showToast(getString(R.string.could_not_download_subtitles))
+                        addVideo(Uri.fromFile(file), null)
+                    }
+                )
             }, {
-                showToast("An error occurred while downloading a video.")
+                showToast(getString(R.string.could_not_download_video))
             })
         }
     }
@@ -244,7 +245,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             Toast.makeText(
                 this,
                 error,
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_LONG
             ).show()
         }
     }

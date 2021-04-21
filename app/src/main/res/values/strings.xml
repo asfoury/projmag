@@ -37,6 +37,9 @@
     <string name="submit">Add a new project to the list</string>
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
+    <string name="could_not_download_video">An error occurred while downloading a video.</string>
+    <string name="could_not_download_subtitles">Subtitles could not be fetched !</string>
+    <string name="no_subtitles_found">No subtitles could be found a video !</string>
     <string name="cv_period_description">Description</string>
     <string name="cv_period_school_name">School Name</string>
     <string name="cv_period_period_title">Period (to change)</string>
@@ -71,6 +74,7 @@
     <string name="video_subtitling_instruction">"To see subtitles you have to turn on the captions (currently only in English) in your device settings !"</string>
     <string name="clear">Clear</string>
     <string name="ok">OK</string>
+    <string name="settings">Settings</string>
 
 
 

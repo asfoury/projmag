@@ -1,12 +1,10 @@
 package com.sdp13epfl2021.projmag
 
 
+import android.content.Context
 import android.content.Intent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.VideoView
-import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -15,40 +13,38 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.rule.UiThreadTestRule
+import androidx.test.platform.app.InstrumentationRegistry
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import junit.framework.Assert.*
-import org.hamcrest.Description
-import junit.framework.Assert.*
+import com.sdp13epfl2021.projmag.video.VideoUtils
 import org.hamcrest.Matchers
-import org.hamcrest.TypeSafeMatcher
-import org.junit.After
+import org.junit.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
 import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class ProjectInformationActivityTest {
-
     /*
     private val videoUrl = "https://fakeVideoLink/abc?def"
     private val imageArchUrl = "https://fakeImageLink/Arch Linux > Debian/4K"
     private val imageSOUrl = "https://fakeImageLink/StackOverflowOn1Avril"
     */
 
-    private val epflUrl = "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fc1758313-31b0-4880-8381-4723c17ae9e4?alt=media&token=64a07385-6ec4-4d90-8e56-293d409cb026"
-    private val snkUrl = "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2F641a85c7-2944-4ffa-a18f-7ee5cf501df5?alt=media&token=32b1a560-7ae9-4f01-ba6b-fdfb8748f21c"
-    private val imageArchUrl = "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fec855899-e73b-4977-a3f8-054f38e966ed_Arch_4k.png?alt=media&token=db39b754-8537-4d8c-a854-abd6a3cadf1b"
-    private val imageSOUrl = "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2F70e3321e-670d-47a1-9b36-25a6d72ad3b7_SO.png?alt=media&token=7c90acdc-5a4b-4594-a0fc-0d35b9e50b6a"
+    private val epflUrl =
+        "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fc1758313-31b0-4880-8381-4723c17ae9e4?alt=media&token=64a07385-6ec4-4d90-8e56-293d409cb026"
+    private val snkUrl =
+        "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2F641a85c7-2944-4ffa-a18f-7ee5cf501df5?alt=media&token=32b1a560-7ae9-4f01-ba6b-fdfb8748f21c"
+    private val imageArchUrl =
+        "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fec855899-e73b-4977-a3f8-054f38e966ed_Arch_4k.png?alt=media&token=db39b754-8537-4d8c-a854-abd6a3cadf1b"
+    private val imageSOUrl =
+        "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2F70e3321e-670d-47a1-9b36-25a6d72ad3b7_SO.png?alt=media&token=7c90acdc-5a4b-4594-a0fc-0d35b9e50b6a"
 
     private val notWorkingVideoUrl = "https://thisLinkWillNotWork.mp4"
     private val notWorkingImageUrl = "https://thisLinkWillNotWork.jpeg"
-    private val emptyImageUrl = "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fea77c6b0-0f93-4b25-80ae-808fc6d70c78_empty.jpeg?alt=media&token=11762a74-a0b9-4ba8-aed3-e82fb981dab0"
+    private val emptyImageUrl =
+        "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fea77c6b0-0f93-4b25-80ae-808fc6d70c78_empty.jpeg?alt=media&token=11762a74-a0b9-4ba8-aed3-e82fb981dab0"
 
     private val project = ImmutableProject(
         "fakeProjectIdDoNotUse",
@@ -103,7 +99,10 @@ class ProjectInformationActivityTest {
         )
         */
 
-        intent = Intent(ApplicationProvider.getApplicationContext(), ProjectInformationActivity::class.java)
+        intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            ProjectInformationActivity::class.java
+        )
         intent.putExtra("project", project)
         scenario = ActivityScenario.launch(intent)
     }
@@ -209,9 +208,25 @@ class ProjectInformationActivityTest {
 
     }
 
+    @Before
+    @After
+    fun setUpSharedPreferences() {
+        val pref = InstrumentationRegistry.getInstrumentation().targetContext.getSharedPreferences(
+            VideoUtils.FIRST_TIME_CAPTIONS_SETTINGS_PREFERENCES,
+            Context.MODE_PRIVATE
+        )
+        pref.edit().clear().commit()
+    }
+
     @Test
     fun clickOnShareButton() {
+        onView(withId(android.R.id.button2)).perform(click());
         onView(withId(R.id.shareButton)).perform(click())
+    }
+
+    @Test
+    fun clickOnSettingsCaption() {
+        onView(withId(android.R.id.button1)).perform(click());
     }
 
 }
