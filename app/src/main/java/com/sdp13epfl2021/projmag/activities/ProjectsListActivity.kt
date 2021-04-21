@@ -38,7 +38,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-        itemAdapter = ProjectAdapter(this, Utils(this), recyclerView, fromLink, projectId)
+        itemAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(false)
 
