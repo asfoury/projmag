@@ -3,7 +3,7 @@ package com.sdp13epfl2021.projmag.model
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
- class TagsBaseManager{
+ class xTagsBaseManager{
      val MAX_TAG_SIZE: Int = 40
 
     //this should be thread safe
@@ -70,7 +70,7 @@ import java.util.regex.Pattern
                 return InputResult.AlreadyExists
             }
             else{
-                tags.add(tag)
+                tags.add(tag.copy())
                 return InputResult.OK
             }
         }

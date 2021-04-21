@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.SectionBaseManager
+import com.sdp13epfl2021.projmag.model.Tag
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import junit.framework.TestCase.*
 import org.junit.After
@@ -70,6 +71,8 @@ class OfflineProjectsDatabaseTest {
         listOf(),
         listOf(sectionList[2])
     )
+
+
 
     private val onFailureNotExpected: ((Exception) -> Unit) = { e ->
         e.printStackTrace()
