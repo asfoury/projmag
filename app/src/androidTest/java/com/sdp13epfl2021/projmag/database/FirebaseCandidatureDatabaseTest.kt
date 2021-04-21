@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.database.fake.FakeUserDataDatabase
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.Assert.*
 import org.junit.Before
