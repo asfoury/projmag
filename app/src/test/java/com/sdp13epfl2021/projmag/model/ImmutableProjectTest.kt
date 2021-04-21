@@ -6,30 +6,33 @@ import org.junit.Ignore
 import org.junit.Test
 
 class ImmutableProjectTest {
+    private val id = "zoerjfoerfj"
+    private val name = "epic roblox coding"
+    private val labName = "roblox labs"
+    private val projectManager = "kaou el roblox master"
+    private val teacher = "kaou el roblox master"
+    private val description = "epic roblox coding alll freaking day DAMN SON"
+    private val numberStudents = 3
+    private val masterProject = true
+    private val bachelorSemesterProject = true
+    private val masterSemesterProject = true
+    private val listStudents = listOf("epic robloxxx programmer")
+    private val tagManager = TagsBaseManager()
+    private val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
+    private val sectionManager = SectionBaseManager()
+    private val sectionList = SectionBaseManager().sectionList().toList()
+
+
+    val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
+        listStudents, true, true, tagList, false, description,
+        listOf(), sectionList) as Success<ImmutableProject>
+    val project = result.value
     @Test
     fun initializationAndSanitizationTests(){
-        val id = "zoerjfoerfj"
-        val name = "epic roblox coding"
-        val labName = "roblox labs"
-        val projectManager = "kaou el roblox master"
-        val teacher = "kaou el roblox master"
-        val description = "epic roblox coding alll freaking day DAMN SON"
-        val numberStudents = 3
-        val masterProject = true
-        val bachelorSemesterProject = true
-        val masterSemesterProject = true
-        val listStudents = listOf("epic robloxxx programmer")
-        val tagManager = TagsBaseManager()
-        val tagList = TagsBaseManager().getAllTags().toList()
-        val sectionManager = SectionBaseManager()
-        val sectionList = SectionBaseManager().sectionList().toList()
-
-
-
         val tags = mutableListOf<String>()
         val sections = mutableListOf<String>()
         if(tagList.isNotEmpty()) {
-            tags.add(tagList[0].name)
+            tags.add(tagList[0])
         }
         if(sectionList.isNotEmpty()){
             sections.add(sectionList[0])
@@ -115,20 +118,7 @@ class ImmutableProjectTest {
     @Test
     fun toMapStringIsCorrect() {
         val default_id = ""
-        val project = ImmutableProject(
-            id = default_id,
-            name = "some project",
-            lab = "some lab",
-            teacher = "some teacher",
-            TA = "some TA",
-            nbParticipant = 2345,
-            assigned = listOf("a student", "an other student"),
-            masterProject = false,
-            bachelorProject = true,
-            tags = listOf("tag1", "tag2", "tag3"),
-            isTaken = false,
-            description = "some description of the project",
-        )
+
 
         val fooMap = project.toMapString()
 
@@ -147,29 +137,16 @@ class ImmutableProjectTest {
                 tags = get("tags") as List<String>,
                 isTaken = get("isTaken") as Boolean,
                 description = get("description") as String,
+                allowedSections = get("allowedSections") as List<String>
             )
         }
 
         assertEquals(project, projectRebuilt)
     }
 
-    @Test @Ignore
+    @Test
     fun buildFromMapWorks() {
-        val project = ImmutableProject(
-            "11111",
-            "Real-time reconstruction of deformable objects",
-            "CVLAB",
-            "Teacher2",
-            "TA2",
-            1,
-            emptyList(),
-            false,
-            true,
-            listOf("Computer Vision","ML"),
-            false,
-            "Description of project2",
-            emptyList(),
-        )
+
 
         val validMap: Map<String, Any?> = mapOf(
             "name" to project.name,
