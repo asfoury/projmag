@@ -72,7 +72,7 @@ class WaitingListTest {
     val cand3 = dummyCandidature(pid, uid3, Candidature.State.Rejected)
     val cand4 = dummyCandidature(pid, uid4, Candidature.State.Accepted)
 
-    val projectsDB = CachedProjectsDatabase(FakeProjectsDatabase(listOf(project)))
+    val projectsDB = FakeProjectsDatabase(listOf(project))
     val userdataDB = FakeUserDataDatabase()
     val fileDB = FakeFileDatabase()
     val candidatureDB = FakeCandidatureDatabase(
