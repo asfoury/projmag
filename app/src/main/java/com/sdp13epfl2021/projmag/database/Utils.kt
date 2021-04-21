@@ -22,6 +22,7 @@ class Utils(
         @Synchronized
         fun getInstance(
             context: Context,
+            reset: Boolean = false,
             userDataDB: UserDataDatabase = UserDataFirebase(Firebase.firestore, Firebase.auth),
             candidatureDB: CandidatureDatabase = FirebaseCandidatureDatabase(Firebase.firestore, Firebase.auth, userDataDB),
             fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth),
@@ -35,7 +36,7 @@ class Utils(
                 )
             )
         ): Utils {
-            if (instance == null) {
+            if (instance == null || reset) {
                 instance = Utils(context.applicationContext, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
             }
             return instance!!
