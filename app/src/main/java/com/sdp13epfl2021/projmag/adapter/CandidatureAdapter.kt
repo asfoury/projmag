@@ -34,7 +34,7 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
                 candidatures.addAll(it)
                 notifyDataSetChanged()
             },
-            { showToast("Failed to load applications.\n$it") }
+            { showToast(resources.getString(R.string.db_error_msg, it)) }
         )
     }
 
@@ -55,30 +55,20 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
         val context = holder.view.context
         holder.profileButton.setOnClickListener { openProfile(context, candidature.profile) }
         holder.cvButton.setOnClickListener { openCV(context, candidature.cv) }
-        setupButton(holder, candidature)
+        holder.acceptButton.setOnClickListener(createListener(holder, candidature, Candidature.State.Accepted, resources.getString(R.string.waiting_accepted_msg)))
+        holder.rejectButton.setOnClickListener(createListener(holder, candidature, Candidature.State.Rejected, resources.getString(R.string.waiting_rejected_msg)))
     }
 
-    private fun setupButton(holder: CandidatureHolder, candidature: Candidature) {
-        holder.acceptButton.setOnClickListener {
-            utils.candidatureDatabase.acceptCandidature(
-                projectId,
-                candidature.userID,
+    private fun createListener(holder: CandidatureHolder, candidature: Candidature, state: Candidature.State, successMsg: String): (View) -> Unit {
+        return { view: View ->
+            utils.candidatureDatabase.pushCandidature(
+                candidature,
+                state,
                 {
-                    showToast("Candidature accepted.")
-                    setColor(holder, Candidature.State.Accepted)
+                    showToast(successMsg)
+                    setColor(holder, state)
                 },
-                { showToast("An error has occurred while accepting.\n$it") }
-            )
-        }
-        holder.rejectButton.setOnClickListener {
-            utils.candidatureDatabase.rejectCandidature(
-                projectId,
-                candidature.userID,
-                {
-                    showToast("Candidature rejected.")
-                    setColor(holder, Candidature.State.Rejected)
-                },
-                { showToast("An error has occurred while rejecting.\n$it") }
+                { showToast(resources.getString(R.string.waiting_error_msg, it)) }
             )
         }
     }

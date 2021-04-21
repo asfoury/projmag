@@ -34,19 +34,6 @@ class FirebaseCandidatureDatabase(
             .document(projectID)
     }
 
-    private fun updateCandidature(
-        projectID: ProjectId,
-        userID: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit,
-        newState: Candidature.State
-    ) {
-        getDoc(projectID)
-            .set(mapOf(userID to newState), SetOptions.merge())
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener(onFailure)
-    }
-
     private fun buildCandidature(dataMap: Map<String, Any>, projectID: ProjectId): List<Candidature> {
         val candidatures = ConcurrentLinkedQueue<Candidature>()
         runBlocking {
@@ -119,8 +106,8 @@ class FirebaseCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        projectID: ProjectId,
         candidature: Candidature,
+        newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -130,42 +117,10 @@ class FirebaseCandidatureDatabase(
             return
         }
 
-        updateCandidature(
-            projectID,
-            user.uid,
-            onSuccess,
-            onFailure,
-            Candidature.State.Waiting
-        )
+        getDoc(candidature.projectId)
+            .set(mapOf(user.uid to newState), SetOptions.merge())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener(onFailure)
     }
 
-    override fun acceptCandidature(
-        projectID: ProjectId,
-        userID: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        updateCandidature(
-            projectID,
-            userID,
-            onSuccess,
-            onFailure,
-            Candidature.State.Accepted
-        )
-    }
-
-    override fun rejectCandidature(
-        projectID: ProjectId,
-        userID: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        updateCandidature(
-            projectID,
-            userID,
-            onSuccess,
-            onFailure,
-            Candidature.State.Rejected
-        )
-    }
 }

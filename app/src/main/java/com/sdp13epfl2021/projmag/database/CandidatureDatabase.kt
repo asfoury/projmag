@@ -21,46 +21,17 @@ interface CandidatureDatabase {
     )
 
     /**
-     * Push a candidature to a project
+     * Push a candidature to a project and edit its state if present
+     * Waiting should be used for new candidature.
      *
-     * @param projectID the ID of the project
      * @param candidature the candidature of this user
+     * @param newState the new state of the candidature
      * @param onSuccess called on success
      * @param onFailure called with an exception on failure
      */
     fun pushCandidature(
-        projectID: ProjectId,
         candidature: Candidature,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    )
-
-    /**
-     * Accept a candidature to a project
-     *
-     * @param projectID the ID of the project
-     * @param userID the ID of the student accepted
-     * @param onSuccess called on success
-     * @param onFailure called with an exception on failure
-     */
-    fun acceptCandidature(
-        projectID: ProjectId,
-        userID: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    )
-
-    /**
-     * Reject a candidature to a project
-     *
-     * @param projectID the ID of the project
-     * @param userID the ID of the student rejected
-     * @param onSuccess called on success
-     * @param onFailure called with an exception on failure
-     */
-    fun rejectCandidature(
-        projectID: ProjectId,
-        userID: String,
+        newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )

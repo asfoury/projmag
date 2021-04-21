@@ -18,38 +18,17 @@ class FakeCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        projectID: ProjectId,
         candidature: Candidature,
+        newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
+        val projectID = candidature.projectId
         val userID = candidature.userID
         val newMap1 = candidaturesState[projectID] ?: emptyMap()
         val newMap2 = candidatures[projectID] ?: emptyMap()
-        candidaturesState[projectID] = newMap1 + (userID to Candidature.State.Waiting)
+        candidaturesState[projectID] = newMap1 + (userID to newState)
         candidatures[projectID] = newMap2 + (userID to candidature)
-        onSuccess()
-    }
-
-    override fun acceptCandidature(
-        projectID: ProjectId,
-        userID: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val newMap = candidaturesState[projectID] ?: emptyMap()
-        candidaturesState[projectID] = newMap + (userID to Candidature.State.Accepted)
-        onSuccess()
-    }
-
-    override fun rejectCandidature(
-        projectID: ProjectId,
-        userID: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        val newMap = candidaturesState[projectID] ?: emptyMap()
-        candidaturesState[projectID] = newMap + (userID to Candidature.State.Rejected)
         onSuccess()
     }
 }

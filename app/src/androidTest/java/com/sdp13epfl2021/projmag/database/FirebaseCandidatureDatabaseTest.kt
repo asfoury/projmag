@@ -158,7 +158,7 @@ class FirebaseCandidatureDatabaseTest {
     @Test(timeout = 1000)
     fun pushCandidatureFailedSuccessfully() {
         val result: CompletableFuture<Exception> = CompletableFuture()
-        candidatureDBWithoutAuth.pushCandidature(PID, candidature, {
+        candidatureDBWithoutAuth.pushCandidature(candidature, Candidature.State.Waiting, {
             assertTrue(false)
         }, {
             result.complete(it)
@@ -172,15 +172,15 @@ class FirebaseCandidatureDatabaseTest {
         val result2: CompletableFuture<Int> = CompletableFuture()
         val result3: CompletableFuture<Int> = CompletableFuture()
 
-        candidatureDB.acceptCandidature(PID, userIDAccepted, {
+        candidatureDB.pushCandidature(candidature, Candidature.State.Accepted, {
             result1.complete(1)
         }, onFailureNotExpected)
 
-        candidatureDB.rejectCandidature(PID, userIDAccepted, {
+        candidatureDB.pushCandidature(candidature, Candidature.State.Accepted, {
             result2.complete(2)
         }, onFailureNotExpected)
 
-        candidatureDB.pushCandidature(PID, candidature, {
+        candidatureDB.pushCandidature(candidature, Candidature.State.Waiting, {
             result3.complete(3)
         }, onFailureNotExpected)
 
