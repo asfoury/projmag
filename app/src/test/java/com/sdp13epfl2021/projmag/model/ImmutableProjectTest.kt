@@ -117,7 +117,7 @@ class ImmutableProjectTest {
 
     @Test
     fun toMapStringIsCorrect() {
-        val default_id = ""
+
 
 
         val fooMap = project.toMapString()
@@ -125,7 +125,7 @@ class ImmutableProjectTest {
         @Suppress("UNCHECKED_CAST")
         val projectRebuilt = fooMap.run {
             ImmutableProject(
-                id = default_id,
+                id = id,
                 name = get("name") as String,
                 lab = get("lab") as String,
                 teacher = get("teacher") as String,
@@ -144,7 +144,7 @@ class ImmutableProjectTest {
         assertEquals(project, projectRebuilt)
     }
 
-    @Test
+    @Test @Ignore
     fun buildFromMapWorks() {
 
 
