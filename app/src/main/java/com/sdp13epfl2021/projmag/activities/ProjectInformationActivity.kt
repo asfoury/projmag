@@ -40,6 +40,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.xml.sax.XMLReader
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ProjectInformationActivity : AppCompatActivity() {
 
@@ -83,7 +85,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         videoView.setVideoURI(localUri)
         metadataDB.getSubtitlesFromVideo(
             onlineUri,
-            VideoUtils.ENGLISH_LANG,
+            Locale.ENGLISH.language,
             { subs ->
                 subs?.let {
                     videoView.addSubtitleSource(

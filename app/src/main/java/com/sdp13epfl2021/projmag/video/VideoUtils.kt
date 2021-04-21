@@ -7,8 +7,6 @@ object VideoUtils {
     private const val format = "text/vtt"
     private fun createVtt(lang: String) = MediaFormat.createSubtitleFormat(format, lang)
 
-    val ENGLISH_LANG = Locale.ENGLISH.language
-
-    val ENGLISH_WEBVTT_SUBTITLE_FORMAT = createVtt(ENGLISH_LANG)
+    val ENGLISH_WEBVTT_SUBTITLE_FORMAT = createVtt(Locale.ENGLISH.language)
 
 }
