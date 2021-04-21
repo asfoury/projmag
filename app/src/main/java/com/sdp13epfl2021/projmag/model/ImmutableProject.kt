@@ -8,9 +8,9 @@ import java.lang.ClassCastException
 import java.lang.NullPointerException
 import java.util.*
 
-    sealed class Result<T>
-data class Success<T>(val value: T) : Result<T>()
-data class Failure<T>(val reason: String) : Result<T>()
+    sealed class ImmutableProjectResult<T>
+data class Success<T>(val value: T) : ImmutableProjectResult<T>()
+data class Failure<T>(val reason: String) : ImmutableProjectResult<T>()
 
 @Parcelize
 data class ImmutableProject(
@@ -32,7 +32,7 @@ data class ImmutableProject(
     companion object {
         private val sectionsManager = SectionBaseManager()
         private val tagsManager = TagsBaseManager()
-        object FieldNames {
+        public object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
@@ -69,7 +69,7 @@ data class ImmutableProject(
             description: String,
             videoURI: List<String> = listOf(),
             allowedSections: List<String>
-        ): Result<ImmutableProject> {
+        ): ImmutableProjectResult<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
                 lab.length > MAX_NAME_SIZE -> Failure("lab name is more than $MAX_NAME_SIZE characters")

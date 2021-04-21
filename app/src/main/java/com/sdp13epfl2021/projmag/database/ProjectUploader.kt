@@ -3,7 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import android.net.Uri
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.Result
+import com.sdp13epfl2021.projmag.model.ImmutableProjectResult
 import com.sdp13epfl2021.projmag.model.Success
 
 /**
@@ -97,7 +97,7 @@ class ProjectUploader(
      * Otherwise begin the upload process
      */
     fun checkProjectAndThenUpload(
-        maybeProject: Result<ImmutableProject>,
+        maybeProject: ImmutableProjectResult<ImmutableProject>,
         videoUri: Uri?,
         subtitles: String?
     ) =
