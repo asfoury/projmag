@@ -43,7 +43,6 @@ class FirebaseProjectsDatabaseTest {
     val mockDSEmpty: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQueryEmpty: Query = Mockito.mock(Query::class.java)
 
-    val id = ""
     val name = "epic roblox coding"
     val labName = "roblox labs"
     val projectManager = "kaou el roblox master"
@@ -60,27 +59,14 @@ class FirebaseProjectsDatabaseTest {
     val sectionList = SectionBaseManager().sectionList().toList()
 
     val ID = "some-id"
-    lateinit var validProject : ImmutableProject
 
-    //TODO: why can't I extract the value from the god damn build
-    val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
+
+    val result = ImmutableProject.build(ID, name, labName, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList)
+        listOf(), sectionList) as Success<ImmutableProject>
+    val project = result.value
 
-    val project = ImmutableProject(
-        id = ID,
-        name = "Some test project",
-        description = "some description",
-        tags = listOf("t1", "t2"),
-        isTaken = false,
-        bachelorProject = false,
-        masterProject = true,
-        assigned = listOf("s1", "s2"),
-        nbParticipant = 2,
-        TA = "Some TA",
-        teacher = "Some Teacher",
-        lab = "some lab"
-    )
+
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
         private var nb = 1
@@ -190,7 +176,9 @@ class FirebaseProjectsDatabaseTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
+
         ))
         /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
@@ -228,7 +216,8 @@ class FirebaseProjectsDatabaseTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
         ))
         /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)

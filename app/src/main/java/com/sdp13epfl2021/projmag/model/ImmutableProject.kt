@@ -8,9 +8,9 @@ import java.lang.ClassCastException
 import java.lang.NullPointerException
 import java.util.*
 
-    sealed class ImmutableProjectResult<T>
-data class Success<T>(val value: T) : ImmutableProjectResult<T>()
-data class Failure<T>(val reason: String) : ImmutableProjectResult<T>()
+    sealed class Result<T>
+data class Success<T>(val value: T) : Result<T>()
+data class Failure<T>(val reason: String) : Result<T>()
 
 @Parcelize
 data class ImmutableProject(
@@ -18,6 +18,7 @@ data class ImmutableProject(
     val name: String,
     val lab: String,
     val teacher: String,
+
     val TA: String,
     val nbParticipant: Int,
     val assigned: List<String>,
@@ -69,7 +70,7 @@ data class ImmutableProject(
             description: String,
             videoURI: List<String> = listOf(),
             allowedSections: List<String>
-        ): ImmutableProjectResult<ImmutableProject> {
+        ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
                 lab.length > MAX_NAME_SIZE -> Failure("lab name is more than $MAX_NAME_SIZE characters")

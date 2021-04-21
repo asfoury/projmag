@@ -18,7 +18,7 @@ import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.ImmutableProjectResult
+import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
 
@@ -167,7 +167,7 @@ class Form : AppCompatActivity() {
         /**
          * Construct a Project with data present in the view
          */
-        private fun constructProject(): ImmutableProjectResult<ImmutableProject> {
+        private fun constructProject(): Result<ImmutableProject> {
             return ImmutableProject.build(
                 id = "", //id is defined by firebase itself
                 name = getTextFromEditText(R.id.form_edit_text_project_name),

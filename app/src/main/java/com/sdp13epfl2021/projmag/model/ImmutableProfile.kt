@@ -25,7 +25,7 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
          * @return Success(profile) or failure(String explanation)
          */
         fun build(lastName : String, firstName : String,
-                  age : Int, gender : Gender, sciper : Int?, phoneNumber :String, role : Role) : ImmutableProjectResult<ImmutableProfile> {
+                  age : Int, gender : Gender, sciper : Int?, phoneNumber :String, role : Role) : Result<ImmutableProfile> {
             return when{
                 lastName.length > MAX_LAST_NAME_SIZE ->  Failure("last name is more than $MAX_LAST_NAME_SIZE characters")
                 firstName.length > MAX_FIRST_NAME_SIZE -> Failure("first name is more than $MAX_FIRST_NAME_SIZE characters")
@@ -56,7 +56,7 @@ class ImmutableProfile private constructor(val lastName : String, val firstName 
      */
     fun buildCopy(lastName: String = this.lastName, firstName : String = this.firstName,
                   age : Int = this.age, gender : Gender = this.gender, sciper : Int? = this.sciper,
-                  phoneNumber :String = this.phoneNumber, role : Role = this.role) : ImmutableProjectResult<ImmutableProfile>{
+                  phoneNumber :String = this.phoneNumber, role : Role = this.role) : Result<ImmutableProfile>{
         return ImmutableProfile.build(lastName,  firstName,
             age,  gender,  sciper,  phoneNumber,role)
 
