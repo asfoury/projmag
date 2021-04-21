@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.activities
 
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
@@ -15,11 +14,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.MediaController
-
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
@@ -31,20 +30,22 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.FileDatabase
+import com.sdp13epfl2021.projmag.database.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.xml.sax.XMLReader
 import java.io.File
-import java.nio.charset.Charset
 
 class ProjectInformationActivity : AppCompatActivity() {
 
     private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
+    private lateinit var metadataDB: MetadataDatabase
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
@@ -64,33 +65,61 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun readNextVideo() {
         if (current + 1 < videosUris.size) {
             current++
-            videoView.setVideoURI(videosUris[current])
-            videoView.start()
+            updateVideoState()
         }
     }
 
     private fun readPrevVideo() {
         if (current > 0) {
             current--
-            videoView.setVideoURI(videosUris[current])
-            videoView.start()
+            updateVideoState()
         }
+    }
+
+    private fun updateVideoState() {
+        val localUri = videosUris[current]
+        /* onlineUri is used as unique identifier for subtitles */
+        val onlineUri = projectVar.videoURI[current]
+        videoView.setVideoURI(localUri)
+        metadataDB.getSubtitlesFromVideo(
+            onlineUri,
+            VideoUtils.ENGLISH_LANG,
+            { subs ->
+                subs?.let {
+                    videoView.addSubtitleSource(
+                        it.byteInputStream(),
+                        VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
+                    )
+                    videoView.start()
+                } ?: run {
+                    showToast("No subtitles could be found !")
+                    videoView.start()
+                }
+            },
+            {
+                showToast("Subtitles could not be fetched !")
+                videoView.start()
+            }
+        )
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
-        fileDB = Utils(this).fileDatabase
+        val utils = Utils(this)
+        fileDB = utils.fileDatabase
+        metadataDB = utils.metadataDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
         val lab = findViewById<TextView>(R.id.info_lab_name)
-        descriptionView = findViewById<TextView>(R.id.info_description)
+        descriptionView = findViewById(R.id.info_description)
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
-        videoView = findViewById<VideoView>(R.id.info_video)
+        videoView = findViewById(R.id.info_video)
 
 
         // get the project
@@ -129,7 +158,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         // make the back button in the title bar work
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-
 
 
     }
