@@ -39,7 +39,11 @@ class CVCreationActivity : AppCompatActivity() {
         val cv = buildCV()
         val utils = Utils.getInstance(this)
         val userDataFirebase = utils.userDataDatabase
-        userDataFirebase.pushCv(cv, { Toast.makeText(this, "Success!", Toast.LENGTH_LONG)}, {Toast.makeText(this, "Failure!", Toast.LENGTH_LONG)})
+        userDataFirebase.pushCv(cv, {
+            Toast.makeText(this, "Success!", Toast.LENGTH_LONG).show()
+        }, {
+            Toast.makeText(this, "Failure!", Toast.LENGTH_LONG).show()
+        })
         finish()
     }
 
