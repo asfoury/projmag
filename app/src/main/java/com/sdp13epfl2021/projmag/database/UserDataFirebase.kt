@@ -26,6 +26,11 @@ class UserDataFirebase(
          *  The field containing favorites
          */
         const val FAVORITES_FIELD = "favorites"
+
+        /**
+         *  The field containing cv
+         */
+        const val CV_FIELD = "cv"
     }
 
     /**
@@ -118,7 +123,7 @@ class UserDataFirebase(
         getUserDoc()?.let {
             doc ->
             doc.set(
-                hashMapOf("cv" to cv),
+                hashMapOf(CV_FIELD to cv),
                 SetOptions.merge()
             ).addOnSuccessListener { onSuccess }
                 .addOnFailureListener(onFailure)

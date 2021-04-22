@@ -67,6 +67,15 @@ interface UserDataDatabase {
         onFailure: (Exception) -> Unit
     )
 
+    /**
+     * Push the given cv to the database
+     * Call `onSuccess` if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param cv the cv to push to the database
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
     fun pushCv(
         cv: CurriculumVitae,
         onSuccess: () -> Unit,
