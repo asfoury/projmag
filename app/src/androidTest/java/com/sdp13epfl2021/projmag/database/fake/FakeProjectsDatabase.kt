@@ -1,5 +1,8 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.fake
 
+import com.sdp13epfl2021.projmag.database.ProjectChange
+import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.database.ProjectsDatabase
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Success
@@ -7,7 +10,8 @@ import java.util.*
 import kotlin.NoSuchElementException
 
 
-class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsDatabase {
+class FakeProjectsDatabase(projectsBeginning: List<ImmutableProject> = emptyList()) :
+    ProjectsDatabase {
 
     var projects: List<ImmutableProject> = projectsBeginning
     var listeners: List<((ProjectChange) -> Unit)> = emptyList()
