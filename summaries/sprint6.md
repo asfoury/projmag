@@ -1,7 +1,8 @@
 # Summary for week 6
 
 ## Mohamed
-
+This week I had to connect the UI of the users profile to firebase this was my first time using firebase so it took me more time than I expected and I did not have
+the time to write tests, I started learning how to use mockito but was not able to implement the tests before the end of the sprint, I worked about 9 hours on my task. Next time I think that I will spend a lot less time when using Firebase as I now understand how to work with it.
 ## Giovanni
 This week I improve the pathing between diffrent activity in the projet, alow user to create a profil when they connected for the first time. This task take me more time than expected because I had to try to solve a bug of pathing with deep linking. I don't have enough time to implement 
 my second task which is make a clear distinction between student and teacher user.
