@@ -144,7 +144,7 @@ class ImmutableProjectTest {
         assertEquals(project, projectRebuilt)
     }
 
-    @Test @Ignore
+    @Test 
     fun buildFromMapWorks() {
 
 
