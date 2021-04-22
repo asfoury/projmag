@@ -42,22 +42,23 @@ class UserProfileDatabase(private val firestore: FirebaseFirestore, private val 
                 .document(user.uid)
         }
 
-    public fun uploadProfile(profile : ImmutableProfile) {
+    public fun uploadProfile(profile : ImmutableProfile, onSuccess: () -> Unit, onFaliure :(Exception) -> Unit) {
         val profile = hashMapOf(
             "firstName" to profile.firstName,
             "lastName" to profile.lastName,
             "age" to profile.age,
-            "gender" to profile.gender.toString(),
+            "gender" to profile.gender.name,
             "phoneNumber" to profile.phoneNumber,
-            "role" to profile.role.toString(),
+            "role" to profile.role.name,
             "sciper" to profile.sciper
         )
         firestore.collection(ROOT).document(getUser()?.uid!!)
             .set(profile)
             .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot added with ID:")
+               onSuccess()
             }
             .addOnFailureListener {
+                onFaliure(it)
             }
     }
 
@@ -66,32 +67,45 @@ class UserProfileDatabase(private val firestore: FirebaseFirestore, private val 
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                    val firstName = document.data?.get("firstName")
-                    val lastName = document.data?.get("lastName")
-                    val ageLong = document.data?.get("age")
-                    val genderString = document.data?.get("gender")
-                    val gender = if(genderString?.equals(Gender.MALE.toString())!!) Gender.MALE else if(genderString?.equals(Gender.FEMALE.toString())!!)  Gender.FEMALE else Gender.OTHER
-                    val phoneNumber = document.data?.get("phoneNumber")
-                    val roleString = document.data?.get("role")
-                    val sciperLong = document.data?.get("sciper")
-                    val role = if (roleString == "Teacher") Role.TEACHER else if (roleString == "Student") Role.STUDENT else Role.OTHER
-                    val age = Integer.valueOf(ageLong.toString())
-                    var sciper : Int = 0
-                    try {
-                        sciper = Integer.valueOf(sciperLong.toString())
-                    } catch(exep : NumberFormatException) {
-                        sciper = 123456
+                    val firstName = document["firstName"] as? String
+                    val lastName = document["lastName"] as? String
+                    val ageLong = document["age"]
+
+                    val gender = when(document["gender"] as? String) {
+                        Gender.MALE.name -> Gender.MALE
+                        Gender.FEMALE.name -> Gender.FEMALE
+                        else -> Gender.OTHER
+                    }
+                    val phoneNumber = document["phoneNumber"] as? String
+                    val roleString = document["role"] as? String
+                    val sciperLong =  document["sciper"]
+
+                    val role = when(roleString) {
+                        Role.TEACHER.name -> Role.TEACHER
+                        Role.STUDENT.name -> Role.STUDENT
+                        else -> Role.OTHER
                     }
 
 
-                    val resProfile = ImmutableProfile.build(lastName as String, firstName as String, age, gender, sciper, phoneNumber as String, role)
-                    when(resProfile) {
+                    var age : Int =  try {
+                        Integer.valueOf(ageLong.toString())
+                    }catch (excep : NumberFormatException) {
+                        0
+                    }
+
+                    var sciper : Int = try {
+                        Integer.valueOf(sciperLong.toString())
+                    } catch(exep : NumberFormatException) {
+                        0
+                    }
+
+
+                    when(val resProfile = ImmutableProfile.build(lastName ?: "null", firstName ?: "null", age, gender, sciper, phoneNumber ?: "null", role)) {
                         is Success -> {
                             onSuccess(resProfile.value)
                         }
                         is Failure -> {
-                            null
+                            Log.d(TAG, "Failure reason : ${resProfile.reason}")
                         }
                     }
 
