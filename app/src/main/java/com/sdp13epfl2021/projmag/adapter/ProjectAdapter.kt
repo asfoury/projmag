@@ -19,7 +19,7 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 
-class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView, private val fromLink: Boolean, private val projectIdLink: String) :
+class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView, private val fromLink: Boolean, private var projectIdLink: String) :
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     companion object ItemAdapterCompanion {
@@ -29,8 +29,15 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
     var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
+    fun sortDataset() {
+        dataset.sortBy{ project -> project.isTaken }
+        if (fromLink) {
+            dataset.sortByDescending { project -> projectIdLink == project.id }
+        }
+    }
+
     init {
-        dataset.sortBy{ project -> project.isTaken}
+        sortDataset()
         utils.projectsDatabase.addProjectsChangeListener { change ->
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
@@ -55,7 +62,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
             }
         }
         greyOut()
-        dataset.sortBy{ p -> p.isTaken}
+        sortDataset()
     }
 
     @Synchronized
@@ -98,11 +105,11 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         holder.chipGroupView.removeAllViews()
 
         // add the tags to the project
-            for (tag in project.tags) {
-                val chipView: Chip = Chip(context)
-                chipView.text = tag
-                holder.chipGroupView.addView(chipView)
-            }
+        for (tag in project.tags) {
+            val chipView: Chip = Chip(context)
+            chipView.text = tag
+            holder.chipGroupView.addView(chipView)
+        }
 
             for(section in project.allowedSections){
                 val chipView: Chip = Chip(context)
@@ -117,12 +124,13 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         }
 
         // make the projects pressable
-        holder.textView.setOnClickListener {
+        holder.view.setOnClickListener {
             openProject(holder, project)
         }
 
         if (projectIdLink == project.id) {
             openProject(holder, project)
+            projectIdLink = ""
         }
 
     }
@@ -156,7 +164,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 dataset.clear()
                 dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
-                dataset.sortBy{ project -> project.isTaken}
+                sortDataset()
                 greyOut()
                 notifyDataSetChanged()
             }

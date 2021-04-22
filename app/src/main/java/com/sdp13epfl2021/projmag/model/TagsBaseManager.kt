@@ -84,12 +84,9 @@ import java.util.regex.Pattern
     }
 
      fun tagsListToStringList(tags : Set<Tag>) : List<String>{
-         var listString = mutableListOf<String>()
-         for(tag in tags){
-             listString.add(tag.name)
-         }
-         return listString
+         return tags.toList().map(Tag::name)
      }
+
 
      fun isListOfStringsValidTags(listTags : List<String>) : Boolean{
          for(tag in listTags){
@@ -101,3 +98,6 @@ import java.util.regex.Pattern
      }
 
 }
+
+
+

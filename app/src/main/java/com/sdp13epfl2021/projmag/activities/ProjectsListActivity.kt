@@ -38,8 +38,10 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-        projectAdapter = ProjectAdapter(this, Utils(this), recyclerView, fromLink, projectId)
+
+        projectAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
+
         recyclerView.setHasFixedSize(false)
 
         // get the fab and make it go to the Form activity
