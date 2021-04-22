@@ -82,8 +82,8 @@ data class ImmutableProject(
                     "there are ${assigned.size} " +
                             "students currently assigned but only $nbParticipant allowed to work for the project"
                 )
-                !sectionsManager.isListValid(allowedSections) -> Failure("a section in the section list doesn't exist$allowedSections")
-                 !tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist")
+                //!sectionsManager.isListValid(allowedSections) -> Failure("a section in the section list doesn't exist $allowedSections")
+                 //!tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist $tags")
 
                 else -> Success(
                     ImmutableProject(
@@ -135,7 +135,10 @@ data class ImmutableProject(
                 )
                 return when (result) {
                     is Success -> result.value
-                    is Failure -> null
+                    is Failure -> {
+                        println(result.reason)
+                        null
+                    }
                 }
                 /* These two exceptions occur only with corrupted Projects so should be ignored */
             } catch (e: NullPointerException) {
