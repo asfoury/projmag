@@ -14,6 +14,11 @@ It took me more time than estimated, because I also add the firebase implementat
 ## Kaourintin 
 
 ## Paul
+This sprint, I had two task, but due to difficulties in testing I only finished one.
+I added the ability to play subtiles, and to show a message that tell the user how to setup their device for subtitling. The implementation went well. However testing was more difficult as I experienced some wierd behavior with dialog in tests. I also had coverage issues.
+I expect to begin and finish my next task (improving project filtering) in the next sprint.
+
+
 
 ## Overall Team
 We had some problems about tasks that were nearly impossible to be finished this week.  
