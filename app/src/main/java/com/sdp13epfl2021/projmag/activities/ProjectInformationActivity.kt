@@ -2,9 +2,7 @@ package com.sdp13epfl2021.projmag.activities
 
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -13,7 +11,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -82,10 +79,8 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private fun updateVideoState() {
-        val uri = videosUris[current].first
-        val sub = videosUris[current].second
-        videoView.setVideoURI(uri)
-        sub?.let {
+        videoView.setVideoURI(videosUris[current].first)
+        videosUris[current].second?.let {
             videoView.addSubtitleSource(
                 it.byteInputStream(),
                 VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
