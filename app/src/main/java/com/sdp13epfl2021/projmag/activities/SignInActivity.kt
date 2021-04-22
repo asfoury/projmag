@@ -84,10 +84,19 @@ class SignInActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
+                        val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser;
                         Log.d("SignInActivity", "signInWithCredential:success")
-                        val intent = Intent(this, ProjectsListActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        if(isNew == true){
+                            val intent = Intent(this, ProfilePageActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else if(isNew == false) {
+                            val intent = Intent(this, ProjectsListActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
+                        }
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
