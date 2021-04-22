@@ -9,9 +9,10 @@ import java.io.File
 
 class Utils(
     val userDataDatabase: UserDataDatabase,
+    val candidatureDatabase: CandidatureDatabase,
     val fileDatabase: FileDatabase,
     val metadataDatabase: MetadataDatabase,
-    val projectsDatabase: CachedProjectsDatabase,
+    val projectsDatabase: ProjectsDatabase,
 ) {
 
     companion object {
@@ -20,10 +21,21 @@ class Utils(
         @Synchronized
         fun getInstance(
             context: Context,
+            reset: Boolean = false,
             userDataDB: UserDataDatabase = UserDataFirebase(Firebase.firestore, Firebase.auth),
+            candidatureDB: CandidatureDatabase = FirebaseCandidatureDatabase(Firebase.firestore, Firebase.auth, userDataDB),
             fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, Firebase.auth),
             metadataDB: MetadataDatabase = MetadataFirebase(Firebase.firestore),
-            projectsDB: CachedProjectsDatabase = CachedProjectsDatabase(
+            projectsDB: ProjectsDatabase? = null //avoid creating an offline database every time the function is called
+        ): Utils {
+            if (instance == null || reset) {
+                instance = Utils(userDataDB, candidatureDB, fileDB, metadataDB, projectsDB ?: createProjectsDB(context))
+            }
+            return instance!!
+        }
+
+        private fun createProjectsDB(context: Context): ProjectsDatabase {
+            return CachedProjectsDatabase(
                 OfflineProjectDatabase(
                     FirebaseProjectsDatabase(
                         Firebase.firestore
@@ -31,11 +43,6 @@ class Utils(
                     File(context.applicationContext.filesDir, "projects")
                 )
             )
-        ): Utils {
-            if (instance == null) {
-                instance = Utils(userDataDB, fileDB, metadataDB, projectsDB)
-            }
-            return instance!!
         }
     }
 }

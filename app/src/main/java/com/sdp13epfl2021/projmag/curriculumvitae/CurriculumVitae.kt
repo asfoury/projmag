@@ -3,18 +3,21 @@
 package com.sdp13epfl2021.projmag.curriculumvitae
 
 import android.net.Uri
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 
 /**
  * A curriculum vitae
  */
+@Parcelize
 data class CurriculumVitae(
     val summary: String,
     val education: List<PeriodDescription>,
     val jobExperience: List<PeriodDescription>,
     val languages: List<LanguageLevel>,
     val skills: List<SkillDescription>,
-) {
+) : Parcelable {
 
     var uri: Uri? = null
         set(value) {
@@ -33,13 +36,14 @@ data class CurriculumVitae(
         /**
          * Description a job/school over a period of time
          */
+        @Parcelize
         data class PeriodDescription(
             val name: String,
             val location: String,
             val description: String,
             val from: Int,
             val to: Int
-        ) : Validate {
+        ) : Validate, Parcelable {
             override fun isValid(): Boolean = name.isNotEmpty() &&
                     location.isNotEmpty() &&
                     description.isNotEmpty() &&
@@ -54,10 +58,11 @@ data class CurriculumVitae(
         /**
          * A language with the level
          */
+        @Parcelize
         data class LanguageLevel(
             val language: String,
             val level: Level
-        ) : Validate {
+        ) : Validate, Parcelable {
             companion object {
                 /**
                  * Possible language levels
@@ -94,10 +99,11 @@ data class CurriculumVitae(
         /**
          * Skill and the level at it
          */
+        @Parcelize
         data class SkillDescription(
             val name: String,
             val skillLevel: SkillLevel
-        ) : Validate {
+        ) : Validate, Parcelable {
             /**
              * Possible language levels
              */
