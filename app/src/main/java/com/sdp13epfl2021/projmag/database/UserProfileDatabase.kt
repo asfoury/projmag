@@ -9,7 +9,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.sdp13epfl2021.projmag.model.*
 
-class UserProfileDatabase(private val firestore: FirebaseFirestore, private val auth: FirebaseAuth) {
+class UserProfileDatabase(
+    private val firestore: FirebaseFirestore,
+    private val auth: FirebaseAuth
+) {
     companion object {
         /**
          * Root collection for user-profile
@@ -42,7 +45,11 @@ class UserProfileDatabase(private val firestore: FirebaseFirestore, private val 
                 .document(user.uid)
         }
 
-    public fun uploadProfile(profile : ImmutableProfile, onSuccess: () -> Unit, onFaliure :(Exception) -> Unit) {
+    public fun uploadProfile(
+        profile: ImmutableProfile,
+        onSuccess: () -> Unit,
+        onFaliure: (Exception) -> Unit
+    ) {
         val profile = hashMapOf(
             "firstName" to profile.firstName,
             "lastName" to profile.lastName,
@@ -52,18 +59,23 @@ class UserProfileDatabase(private val firestore: FirebaseFirestore, private val 
             "role" to profile.role.name,
             "sciper" to profile.sciper
         )
-        firestore.collection(ROOT).document(getUser()?.uid!!)
-            .set(profile)
-            .addOnSuccessListener {
-               onSuccess()
-            }
-            .addOnFailureListener {
-                onFaliure(it)
-            }
+        val id = getUser()?.uid
+        if(id != null) {
+            firestore.collection(ROOT).document(id)
+                .set(profile)
+                .addOnSuccessListener {
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    onFaliure(it)
+                }
+        } else {
+            Log.d(TAG,"Unable to get the uid from firebase")
+        }
     }
 
-    public fun getProfile(onSuccess: (profile : ImmutableProfile?) -> Unit) {
-        val docRef =  firestore.collection(ROOT).document(getUser()?.uid!!)
+    public fun getProfile(onSuccess: (profile: ImmutableProfile?) -> Unit) {
+        val docRef = firestore.collection(ROOT).document(getUser()?.uid!!)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -71,36 +83,44 @@ class UserProfileDatabase(private val firestore: FirebaseFirestore, private val 
                     val lastName = document["lastName"] as? String
                     val ageLong = document["age"]
 
-                    val gender = when(document["gender"] as? String) {
+                    val gender = when (document["gender"] as? String) {
                         Gender.MALE.name -> Gender.MALE
                         Gender.FEMALE.name -> Gender.FEMALE
                         else -> Gender.OTHER
                     }
                     val phoneNumber = document["phoneNumber"] as? String
                     val roleString = document["role"] as? String
-                    val sciperLong =  document["sciper"]
+                    val sciperLong = document["sciper"]
 
-                    val role = when(roleString) {
+                    val role = when (roleString) {
                         Role.TEACHER.name -> Role.TEACHER
                         Role.STUDENT.name -> Role.STUDENT
                         else -> Role.OTHER
                     }
 
 
-                    var age : Int =  try {
+                    var age: Int = try {
                         Integer.valueOf(ageLong.toString())
-                    }catch (excep : NumberFormatException) {
+                    } catch (excep: NumberFormatException) {
                         0
                     }
 
-                    var sciper : Int = try {
+                    var sciper: Int = try {
                         Integer.valueOf(sciperLong.toString())
-                    } catch(exep : NumberFormatException) {
+                    } catch (exep: NumberFormatException) {
                         0
                     }
 
 
-                    when(val resProfile = ImmutableProfile.build(lastName ?: "null", firstName ?: "null", age, gender, sciper, phoneNumber ?: "null", role)) {
+                    when (val resProfile = ImmutableProfile.build(
+                        lastName ?: "null",
+                        firstName ?: "null",
+                        age,
+                        gender,
+                        sciper,
+                        phoneNumber ?: "null",
+                        role
+                    )) {
                         is Success -> {
                             onSuccess(resProfile.value)
                         }
@@ -117,8 +137,6 @@ class UserProfileDatabase(private val firestore: FirebaseFirestore, private val 
                 Log.d(TAG, "get failed with ", exception)
             }
     }
-
-
 
 
 }
