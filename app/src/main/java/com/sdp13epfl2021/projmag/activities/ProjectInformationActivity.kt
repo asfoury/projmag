@@ -197,25 +197,17 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun addVideoAfterDownloaded(videosLinks: List<String>) {
         videosLinks.forEach { link ->
             fileDB.getFile(link, projectDir, { file ->
+                val uri = Uri.fromFile(file)
                 metadataDB.getSubtitlesFromVideo(
                     link,
                     Locale.ENGLISH.language,
                     { subs ->
                         subs?.let {
-                            addVideo(Uri.fromFile(file), it)
-                        } ?: run {
-                            showToast(getString(R.string.no_subtitles_found))
-                            addVideo(Uri.fromFile(file), null)
-                        }
-                    },
-                    {
-                        showToast(getString(R.string.could_not_download_subtitles))
-                        addVideo(Uri.fromFile(file), null)
-                    }
+                            addVideo(uri, it)
+                        } ?: run { addVideo(uri, null) }
+                    }, { addVideo(uri, null) }
                 )
-            }, {
-                showToast(getString(R.string.could_not_download_video))
-            })
+            }, {})
         }
     }
 
