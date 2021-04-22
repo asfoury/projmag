@@ -25,7 +25,7 @@ interface MetadataDatabase {
     /**
      * Get subtitles, corresponding to a language, to a videoUri
      * @param videoUri the uri which the subtitles is related to
-     * @param language the language code linked with the video
+     * @param language the language code linked with the video. (Found in VideoUtils.kt)
      * @param onSuccess called with the subtitles when operation succeed or with null if nothing could be found
      * @param onFailure called with an exception in case of failure
      */

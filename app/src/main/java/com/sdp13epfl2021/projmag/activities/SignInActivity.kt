@@ -13,6 +13,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.video.VideoUtils
 
 
 /**
@@ -36,11 +37,17 @@ class SignInActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        /*
+         * Tell the user that app uses caption
+         * Propose to change settings
+         */
+        VideoUtils.showInstructionDialog(this)
 
         button.setOnClickListener {
             signIn()
