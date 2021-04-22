@@ -125,7 +125,7 @@ class UserDataFirebase(
             doc.set(
                 hashMapOf(CV_FIELD to cv),
                 SetOptions.merge()
-            ).addOnSuccessListener { onSuccess }
+            ).addOnSuccessListener { onSuccess() }
                 .addOnFailureListener(onFailure)
         }
     }
