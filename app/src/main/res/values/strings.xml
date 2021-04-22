@@ -83,5 +83,14 @@
     <string name="tag_save_button">Save</string>
     <string name="failure">failure</string>
 
+    <string name="waiting_projectid_null">The ProjectId was not valid</string>
+    <string name="waiting_firstname">First name : %s</string>
+    <string name="waiting_lastname">Last name : %s</string>
+    <string name="waiting_section">Section : %s</string>
+    <string name="waiting_error_msg">An error has occurred while updating candidature : %s</string>
+    <string name="waiting_accepted_msg">"Candidature accepted."</string>
+    <string name="waiting_rejected_msg">"Candidature rejected."</string>
+
+    <string name="db_error_msg">An error has occurred while loading database : %s</string>
 
 </resources>

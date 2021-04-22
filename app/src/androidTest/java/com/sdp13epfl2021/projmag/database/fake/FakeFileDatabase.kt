@@ -1,10 +1,11 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.fake
 
 import android.net.Uri
+import com.sdp13epfl2021.projmag.database.FileDatabase
 import java.io.File
 import java.util.*
 
-class FakeFileDatabaseTest(var files: Map<String, File>) : FileDatabase {
+class FakeFileDatabase(var files: Map<String, File> = emptyMap()) : FileDatabase {
 
     override fun getFile(
         fileUrl: String,
