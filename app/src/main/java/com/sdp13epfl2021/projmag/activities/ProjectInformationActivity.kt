@@ -202,7 +202,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                         } ?: run { addVideo(uri, null) }
                     }, { addVideo(uri, null) }
                 )
-            }, {})
+            }, { showToast(getString(R.string.could_not_download_video)) })
         }
     }
 
