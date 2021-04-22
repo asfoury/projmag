@@ -4,12 +4,14 @@ package com.sdp13epfl2021.projmag.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
+import com.sdp13epfl2021.projmag.database.Utils
 
 class CVCreationActivity : AppCompatActivity() {
 
@@ -35,7 +37,9 @@ class CVCreationActivity : AppCompatActivity() {
 
     private fun onFinish() {
         val cv = buildCV()
-        /* DO SOMETHING WITH IT */
+        val utils = Utils.getInstance(this)
+        val userDataFirebase = utils.userDataDatabase
+        userDataFirebase.pushCv(cv, { Toast.makeText(this, "Success!", Toast.LENGTH_LONG)}, {Toast.makeText(this, "Failure!", Toast.LENGTH_LONG)})
         finish()
     }
 

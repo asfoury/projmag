@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 
 /**
  * An implementation of a user-data database
@@ -66,7 +67,7 @@ class UserDataFirebase(
         getUserDoc()?.let { doc ->
             getListOfFavoriteProjects(
                 { ls ->
-                    val newList = (ls.toSet().union(projectIDs.toSet())).toList()
+                    val newList: List<ProjectId> = (ls.toSet().union(projectIDs.toSet())).toList()
                     doc.set(
                         hashMapOf(
                             "favorites" to newList
@@ -106,6 +107,21 @@ class UserDataFirebase(
                 },
                 onFailure
             )
+        }
+    }
+
+    override fun pushCv(
+        cv: CurriculumVitae,
+        onSuccess: () -> Unit,
+        onFailure: (java.lang.Exception) -> Unit
+    ) {
+        getUserDoc()?.let {
+            doc ->
+            doc.set(
+                hashMapOf("cv" to cv),
+                SetOptions.merge()
+            ).addOnSuccessListener { onSuccess }
+                .addOnFailureListener(onFailure)
         }
     }
 }

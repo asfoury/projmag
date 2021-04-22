@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import java.lang.Exception
 
 /**
@@ -62,6 +63,12 @@ interface UserDataDatabase {
      */
     fun removeFromFavorite(
         projectID: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    fun pushCv(
+        cv: CurriculumVitae,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
