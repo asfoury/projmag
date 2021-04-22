@@ -29,7 +29,7 @@
         android:theme="@style/Theme.Projmag">
 
 
-        <activity android:name=".curriculumvitae.VideoCv">
+        <activity android:name=".curriculumvitae.VideoCv"
             android:parentActivityName=".activities.ProfilePageActivity">
         </activity>
 
