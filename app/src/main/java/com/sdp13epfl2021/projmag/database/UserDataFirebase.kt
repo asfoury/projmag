@@ -113,7 +113,7 @@ class UserDataFirebase(
     override fun pushCv(
         cv: CurriculumVitae,
         onSuccess: () -> Unit,
-        onFailure: (java.lang.Exception) -> Unit
+        onFailure: (Exception) -> Unit
     ) {
         getUserDoc()?.let {
             doc ->
