@@ -14,10 +14,11 @@ import com.sdp13epfl2021.projmag.activities.SignInActivity
 
 class MainActivity : AppCompatActivity() {
     companion object MainActivityCompanion {
-        const val fromLinkString: String = "fromLink"
-        const val projectIdString: String = "projectId"
-        const val cv: String = "CV"
-        const val profile: String = "profile"
+        //These are used as name for extra in Intent
+        const val fromLinkString: String = "fromLink"   //Boolean
+        const val projectIdString: String = "projectId" //ProjectId
+        const val cv: String = "CV"                     //CurriculumVitae
+        const val profile: String = "profile"           //ImmutableProfile
     }
 
     private lateinit var mAuth: FirebaseAuth
