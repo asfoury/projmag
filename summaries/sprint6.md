@@ -3,7 +3,8 @@
 ## Mohamed
 
 ## Giovanni
-
+This week I improve the pathing between diffrent activity in the projet, alow user to create a profil when they connected for the first time. This task take me more time than expected because I had to try to solve a bug of pathing with deep linking. I don't have enough time to implement 
+my second task which is make a clear distinction between student and teacher user.
 ## Luke 
 
 ## Arnaud (Scrum Master)
