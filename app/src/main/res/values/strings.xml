@@ -69,5 +69,6 @@
     <string name="ok">OK</string>
 
     <string name="failure">failure</string>
+    <string name="save">Save</string>
 
 </resources>
