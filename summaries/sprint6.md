@@ -13,7 +13,9 @@ I change how "Utils" (object with databases) is instancied for allowing dummy da
 It took me more time than estimated, because I also add the firebase implementation for candidatures.
 
 ## Kaourintin 
-
+I finished the tagUI merge of last week, Did a massive refactor to improve readability and did my task of this week on the section model and UI, I also made sure that it is updated on firebase.
+It took me a bit more over eight hours (ten or more) but I expected it. 
+For next week, I want to be given time to polish the UI and solve stuff that I have identified to be ugly/unwieldy.
 ## Paul
 This sprint, I had two task, but due to difficulties in testing I only finished one.
 I added the ability to play subtiles, and to show a message that tell the user how to setup their device for subtitling. The implementation went well. However testing was more difficult as I experienced some wierd behavior with dialog in tests. I also had coverage issues.
