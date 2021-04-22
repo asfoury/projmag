@@ -1,0 +1,22 @@
+# Summary for week 6
+
+## Mohamed
+
+## Giovanni
+
+## Luke 
+
+## Arnaud (Scrum Master)
+I added a Waiting list UI for teacher that display all candidatures to a specific project, where they can accept/reject students.  
+I change how "Utils" (object with databases) is instancied for allowing dummy databases for testing.  
+It took me more time than estimated, because I also add the firebase implementation for candidatures.
+
+## Kaourintin 
+
+## Paul
+
+## Overall Team
+We had some problems about tasks that were nearly impossible to be finished this week.  
+For example automatic subtitles (not only speech-to-text, but timed text), or firebases rules (we were still modifying firestore structures, so rules would break our code).  
+We did 4 standup meetings, but we were quite short on time to finish and merge our tasks.  
+Next time we should try to select tasks that are really currently realizable.
