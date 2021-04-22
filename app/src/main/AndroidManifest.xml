@@ -30,7 +30,7 @@
 
 
         <activity android:name=".curriculumvitae.VideoCv">
-
+            android:parentActivityName=".activities.ProfilePageActivity">
         </activity>
 
 
