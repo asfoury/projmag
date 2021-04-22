@@ -14,6 +14,8 @@ class ProfilePageActivity : AppCompatActivity() {
 
     lateinit var imageView: ImageView
     lateinit var button: Button
+    lateinit var buttonAddCv: Button
+    lateinit var buttonSubChange: Button
     private val pickImage = 0
     private var imageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +24,21 @@ class ProfilePageActivity : AppCompatActivity() {
 
         imageView = findViewById(R.id.image_profile)
         button = findViewById(R.id.button_edit_profile)
-
+        buttonAddCv = findViewById(R.id.button_add_cv)
+        buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
         button.setOnClickListener {
             val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             startActivityForResult(gallery, pickImage)
+        }
+        buttonAddCv.setOnClickListener{
+            val intent = Intent(this,CVCreationActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        buttonSubChange.setOnClickListener{
+            val intent = Intent(this,ProjectsListActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
