@@ -82,6 +82,8 @@
     <string name="tag_add_button_title">add tags</string>
     <string name="tag_save_button">Save</string>
     <string name="failure">failure</string>
+    <string name="create_cv">create cv</string>
+    <string name="sub_change">Submit change</string>
 
     <string name="waiting_projectid_null">The ProjectId was not valid</string>
     <string name="waiting_firstname">First name : %s</string>
