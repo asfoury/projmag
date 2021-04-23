@@ -24,5 +24,8 @@ class TagTest {
         //hashcode is the same between duplicates
         Assert.assertEquals(tag0.hashCode(), duplicateTag0.hashCode())
 
+        Assert.assertFalse(tag0.equals(tag1))
+        Assert.assertTrue(tag0.equals(duplicateTag0))
+
     }
 }

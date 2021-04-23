@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
+import com.sdp13epfl2021.projmag.database.fake.FakeProjectsDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.SectionBaseManager
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
@@ -67,7 +68,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getAllProjectWorksWhenTheDBIsUpdated() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
 
         var all = cachedDB.getAllProjects()
@@ -115,7 +116,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectFromIdWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: ImmutableProject? = null
 
@@ -131,7 +132,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectsFromNameWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -148,7 +149,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getAllIdsWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ProjectId>? = null
 
@@ -168,7 +169,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 2000)
     fun getAllProjectsAsyncWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -189,7 +190,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectsFromTagsWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -208,7 +209,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun pushIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: ProjectId? = null
 
@@ -226,7 +227,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun deleteProjectWithIdIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
@@ -244,7 +245,7 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 4000)
     fun updateVideoWithProjectIsCorrectlyCalled() {
         val projectsList = listOf(p1)
-        val fakeDB = FakeDatabaseTest(projectsList)
+        val fakeDB = FakeProjectsDatabase(projectsList)
         val db = CachedProjectsDatabase(fakeDB)
         Thread.sleep(500)
 
@@ -261,7 +262,7 @@ class CachedProjectsDatabaseTest {
     @Test
     fun listenersWorks() {
         val allBeginning = listOf(p1, p2)
-        val fakeDB = FakeDatabaseTest(allBeginning)
+        val fakeDB = FakeProjectsDatabase(allBeginning)
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var count: AtomicInteger = AtomicInteger(0)
 

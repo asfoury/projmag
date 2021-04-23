@@ -26,7 +26,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         private const val projectString = "project"
     }
 
-    var datasetAll: List<ImmutableProject> = utils.projectsDatabase.getAllProjects()
+    var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
     fun sortDataset() {
@@ -37,7 +37,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
     }
 
     init {
-        sortDataset()
+        utils.projectsDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
         utils.projectsDatabase.addProjectsChangeListener { change ->
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)

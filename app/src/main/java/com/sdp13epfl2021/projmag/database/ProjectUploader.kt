@@ -5,6 +5,8 @@ import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.model.Success
+import com.sdp13epfl2021.projmag.video.VideoUtils
+import java.util.*
 
 /**
  * Helper class to push a project
@@ -50,7 +52,7 @@ class ProjectUploader(
             subtitles?.let { sub ->
                 metadataDB.addSubtitlesToVideo(
                     newUri.toString(),
-                    "en",
+                    Locale.ENGLISH.language,
                     sub,
                     {},
                     {}
