@@ -76,9 +76,11 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
         val pid = nextId.toString()
         nextId += 1
         val newProject = project.let {
-            ImmutableProject(pid,
-            it.name, it.lab, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
-            it.bachelorProject, it.tags, it.isTaken, it.description)
+            ImmutableProject(
+                pid,
+                it.name, it.lab, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
+                it.bachelorProject, it.tags, it.isTaken, it.description,
+            )
         }
         add(newProject)
         onSuccess(pid)
@@ -102,7 +104,7 @@ class FakeDatabaseTest(projectsBeginning: List<ImmutableProject>) : ProjectsData
         val oldProject = projects.find { p -> p.id == id }
         if (oldProject != null) {
             projects = projects - oldProject
-            val newProject = oldProject.buildCopy( videoURI = oldProject.videoURI + uri)
+            val newProject = oldProject.rebuild( videoURI = oldProject.videoURI + uri)
             when (newProject) {
                 is Success -> {
                     projects = projects + newProject.value

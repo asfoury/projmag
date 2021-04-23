@@ -111,6 +111,12 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
             holder.chipGroupView.addView(chipView)
         }
 
+            for(section in project.allowedSections){
+                val chipView: Chip = Chip(context)
+                chipView.text = section
+                holder.chipGroupView.addView(chipView)
+            }
+
         if (dataset[position].isTaken) {
             holder.view.alpha = 0.5f
         } else {

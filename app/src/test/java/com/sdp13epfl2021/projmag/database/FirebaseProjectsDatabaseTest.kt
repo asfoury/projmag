@@ -5,8 +5,9 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
-import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -42,22 +43,30 @@ class FirebaseProjectsDatabaseTest {
     val mockDSEmpty: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQueryEmpty: Query = Mockito.mock(Query::class.java)
 
+    val name = "epic roblox coding"
+    val labName = "roblox labs"
+    val projectManager = "kaou el roblox master"
+    val teacher = "kaou el roblox master"
+    val description = "epic roblox coding alll freaking day DAMN SON"
+    val numberStudents = 3
+    val masterProject = true
+    val bachelorSemesterProject = true
+    val masterSemesterProject = true
+    val listStudents = listOf("epic robloxxx programmer")
+    val tagManager = TagsBaseManager()
+    val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
+    val sectionManager = SectionBaseManager()
+    val sectionList = SectionBaseManager().sectionList().toList()
 
     val ID = "some-id"
-    val project = ImmutableProject(
-        id = ID,
-        name = "Some test project",
-        description = "some description",
-        tags = listOf("t1", "t2"),
-        isTaken = false,
-        bachelorProject = false,
-        masterProject = true,
-        assigned = listOf("s1", "s2"),
-        nbParticipant = 2,
-        TA = "Some TA",
-        teacher = "Some Teacher",
-        lab = "some lab"
-    )
+
+
+    val result = ImmutableProject.build(ID, name, labName, projectManager, teacher, numberStudents,
+        listStudents, true, true, tagList, false, description,
+        listOf(), sectionList) as Success<ImmutableProject>
+    val project = result.value
+
+
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
         private var nb = 1
@@ -167,7 +176,9 @@ class FirebaseProjectsDatabaseTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
+
         ))
         /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
@@ -183,7 +194,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
         Mockito.`when`(mockDS["videoUri"]).thenReturn(project.videoUri)
         */
-      
+
         // --- mockQS ---
         Mockito
             .`when`(mockQS.iterator())
@@ -205,7 +216,8 @@ class FirebaseProjectsDatabaseTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
         ))
         /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)

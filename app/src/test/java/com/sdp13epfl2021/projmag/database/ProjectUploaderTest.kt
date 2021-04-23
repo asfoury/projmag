@@ -25,16 +25,16 @@ class ProjectUploaderTest {
     val exampleProject = ImmutableProject(
         id = PID,
         name = "Some test project",
-        description = "some description",
+        lab = "some lab",
+        teacher = "Some Teacher",
+        TA = "Some TA",
+        nbParticipant = 2,
+        assigned = listOf("s1", "s2"),
+        masterProject = true,
+        bachelorProject = false,
         tags = listOf("t1", "t2"),
         isTaken = false,
-        bachelorProject = false,
-        masterProject = true,
-        assigned = listOf("s1", "s2"),
-        nbParticipant = 2,
-        TA = "Some TA",
-        teacher = "Some Teacher",
-        lab = "some lab"
+        description = "some description",
     )
 
     @Suppress("UNCHECKED_CAST")

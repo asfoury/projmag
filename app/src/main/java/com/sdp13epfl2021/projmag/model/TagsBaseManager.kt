@@ -70,7 +70,7 @@ import java.util.regex.Pattern
                 return InputResult.AlreadyExists
             }
             else{
-                tags.add(tag)
+                tags.add(tag.copy())
                 return InputResult.OK
             }
         }
@@ -87,4 +87,17 @@ import java.util.regex.Pattern
          return tags.toList().map(Tag::name)
      }
 
+
+     fun isListOfStringsValidTags(listTags : List<String>) : Boolean{
+         for(tag in listTags){
+             if(!tags.contains(Tag(tag))){
+                 return false
+             }
+         }
+         return true
+     }
+
 }
+
+
+
