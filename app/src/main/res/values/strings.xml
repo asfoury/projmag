@@ -94,5 +94,6 @@
     <string name="waiting_rejected_msg">"Candidature rejected."</string>
 
     <string name="db_error_msg">An error has occurred while loading database : %s</string>
+    <string name="generate_barcode">Generate Barcode</string>
 
 </resources>

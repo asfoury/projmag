@@ -14,13 +14,11 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.widget.MediaController
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.VideoView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -37,7 +35,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -319,6 +319,15 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun getDynamicLink() : Uri {
+        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+            link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
+            domainUriPrefix = "https://projmag.page.link/"
+            androidParameters {}
+        }
+        return dynamicLink.uri
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_information, menu)
@@ -327,17 +336,25 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
-            val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-                link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
-                domainUriPrefix = "https://projmag.page.link/"
-                androidParameters {}
-            }
-            val linkToSend = dynamicLink.uri
+            val linkToSend = getDynamicLink()
 
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, linkToSend.toString())
             sendIntent.type = "text/plain"
             startActivity(sendIntent)
+            return true
+        }
+        else if(item.itemId == R.id.generateQRCodeButton) {
+            val linkToSend = getDynamicLink()
+
+            val qrImage = QRCode.from(linkToSend.toString()).withSize(800,800)
+            val stream = ByteArrayOutputStream()
+            qrImage.bitmap().compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val byteArray: ByteArray = stream.toByteArray()
+
+            val intent = Intent(this, QRCodeActivity::class.java)
+            intent.putExtra("qrcode",byteArray)
+            startActivity(intent)
             return true
         }
         return super.onOptionsItemSelected(item)

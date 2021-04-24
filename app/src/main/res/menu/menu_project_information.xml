@@ -8,4 +8,10 @@
         app:showAsAction="ifRoom"
         />
 
+    <item android:id="@+id/generateQRCodeButton"
+        android:title="@string/share"
+        android:icon="@drawable/ic_baseline_qr_code_24"
+        app:showAsAction="ifRoom"
+        />
+
 </menu>
