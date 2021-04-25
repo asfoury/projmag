@@ -59,6 +59,7 @@ class ProjectInformationActivityTest {
         "fakeProjectIdDoNotUse",
         "A simple project for test (with a video)",
         "labName",
+        "authorID7",
         "Teacher5",
         "TA5",
         3,

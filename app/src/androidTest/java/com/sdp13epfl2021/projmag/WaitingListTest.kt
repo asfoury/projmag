@@ -45,6 +45,7 @@ class WaitingListTest {
         pid,
         "What fraction of Google searches are answered by Wikipedia?",
         "DLAB",
+        "authorID11",
         "Robert West",
         "TA1",
         1,
