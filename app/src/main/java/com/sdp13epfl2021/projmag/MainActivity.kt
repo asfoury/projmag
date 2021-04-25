@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         const val projectIdString: String = "projectId" //ProjectId
         const val cv: String = "CV"                     //CurriculumVitae
         const val profile: String = "profile"           //ImmutableProfile
+        const val tagsList: String = "tagsList"         //Array string (originally of tags)
+        const val  sectionsList:String = "sectionsList" //Array string
     }
 
     private lateinit var mAuth: FirebaseAuth

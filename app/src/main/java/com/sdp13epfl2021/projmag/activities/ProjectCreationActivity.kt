@@ -132,7 +132,7 @@ class Form : AppCompatActivity() {
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS) {
             if (data != null) {
-                val tagData = data.getStringArrayExtra("tagsList")
+                val tagData = data.getStringArrayExtra(MainActivity.tagsList)
                 if (tagData != null) {
                     listTags = tagData
                 }
@@ -140,7 +140,7 @@ class Form : AppCompatActivity() {
         }
         else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECTION_ACCESS){
             if (data != null) {
-                val secList = data.getStringArrayExtra("sectionsList")
+                val secList = data.getStringArrayExtra(MainActivity.sectionsList)
                 if (secList != null) {
                     listSections = secList
                 }

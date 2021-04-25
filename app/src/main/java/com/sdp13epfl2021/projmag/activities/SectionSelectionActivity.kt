@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.listenerClass.MakeRecyclerListItemsClickListenable
 import com.sdp13epfl2021.projmag.adapter.SectionAdapter
@@ -51,11 +52,11 @@ class SectionSelectionActivity : AppCompatActivity() {
                     override fun onItemClick(view: View, position: Int) {
                         val holder = sectionRecyclerView.findViewHolderForLayoutPosition(position) as SectionAdapter.SectionViewHolder
                         if(chosenSections.contains(sectionDataset[position])) {
-                            holder.textView.setTextColor(Color.RED)
+                            holder.textView.setBackgroundColor(Color.RED)
                             chosenSections.remove(sectionDataset[position])
                         }
                         else{
-                            holder.textView.setTextColor(Color.GREEN)
+                            holder.textView.setBackgroundColor(Color.GREEN)
                             chosenSections.add(sectionDataset[position])
 
                         }
@@ -74,7 +75,7 @@ class SectionSelectionActivity : AppCompatActivity() {
             val sections  = chosenSections.toTypedArray()
 
 
-            returnIntent.putExtra("sectionsList",  sections as Serializable)
+            returnIntent.putExtra(MainActivity.sectionsList,  sections as Serializable)
             setResult(AppCompatActivity.RESULT_OK, returnIntent)
             finish()
         }

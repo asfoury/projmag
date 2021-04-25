@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.listenerClass.MakeRecyclerListItemsClickListenable
 import com.sdp13epfl2021.projmag.adapter.TagAdapter
@@ -54,11 +55,11 @@ class TagsSelectorActivity : AppCompatActivity() {
                     override fun onItemClick(view: View, position: Int) {
                         val holder = tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
                         if(selectedTags.contains(tagsDataset[position])) {
-                            holder.textView.setTextColor(Color.RED)
+                            holder.textView.setBackgroundColor(Color.RED)
                             selectedTags.remove(tagsDataset[position])
                         }
                         else{
-                            holder.textView.setTextColor(Color.GREEN)
+                            holder.textView.setBackgroundColor(Color.GREEN)
                             selectedTags.add(tagsDataset[position])
 
                         }
@@ -83,7 +84,7 @@ class TagsSelectorActivity : AppCompatActivity() {
             val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
 
             //This should work because String is inherently serializable but I could get crashes
-            returnIntent.putExtra("tagsList",  tags as Serializable)
+            returnIntent.putExtra(MainActivity.tagsList,  tags as Serializable)
             setResult(RESULT_OK, returnIntent)
             finish()
         }
