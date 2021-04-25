@@ -6,13 +6,15 @@ class SectionBaseManager {
             "Math", "Chemistry","Physics","CS", "Systems Communication","EE","Mechanical","Microtechnics"
             ,"Material","Life Sciences","Architecture", "Civil","Environmental"
         )
+
+        fun isListValid(listToBeChecked : List<String>) : Boolean = listToBeChecked.all(sectionsList::contains)
     }
 
     fun sectionList(): List<String> {
         return sectionsList
     }
 
-    fun isListValid(listToBeChecked : List<String>) : Boolean = listToBeChecked.all(sectionsList::contains)
+
 
 
 }
