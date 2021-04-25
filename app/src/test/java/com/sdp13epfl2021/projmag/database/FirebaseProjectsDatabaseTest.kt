@@ -49,14 +49,10 @@ class FirebaseProjectsDatabaseTest {
     val teacher = "kaou el roblox master"
     val description = "epic roblox coding alll freaking day DAMN SON"
     val numberStudents = 3
-    val masterProject = true
-    val bachelorSemesterProject = true
-    val masterSemesterProject = true
     val listStudents = listOf("epic robloxxx programmer")
     val tagManager = TagsBaseManager()
     val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
-    val sectionManager = SectionBaseManager()
-    val sectionList = SectionBaseManager().sectionList().toList()
+    val sectionList = SectionBaseManager.sectionList().toList()
 
     val ID = "some-id"
 

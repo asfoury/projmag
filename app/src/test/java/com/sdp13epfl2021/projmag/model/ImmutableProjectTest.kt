@@ -20,7 +20,7 @@ class ImmutableProjectTest {
     private val tagManager = TagsBaseManager()
     private val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
     private val sectionManager = SectionBaseManager()
-    private val sectionList = SectionBaseManager().sectionList().toList()
+    private val sectionList = SectionBaseManager.sectionList().toList()
 
 
     val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,

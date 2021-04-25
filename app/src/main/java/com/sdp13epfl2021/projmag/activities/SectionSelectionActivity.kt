@@ -22,8 +22,8 @@ class SectionSelectionActivity : AppCompatActivity() {
 
 
 
-        val manager = SectionBaseManager()
-        val sectionDataset = manager.sectionList()
+
+        val sectionDataset = SectionBaseManager.sectionList()
         val sectionRecyclerView = findViewById<RecyclerView>(R.id.recycler_section_view)
         val saveButton = findViewById<Button>(R.id.doneSectionButton)
         sectionRecyclerView.adapter = SectionAdapter(this, sectionDataset)
