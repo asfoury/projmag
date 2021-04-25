@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:id="@+id/waitingListButton"
+        android:title="@string/waitinglistbutton"
+        android:icon="@drawable/waiting_list_icon_24"
+        app:showAsAction="ifRoom"
+        />
+
     <item android:id="@+id/shareButton"
         android:title="@string/share"
         android:icon="@drawable/ic_baseline_share_24"
