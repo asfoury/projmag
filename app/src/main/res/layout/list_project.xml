@@ -33,9 +33,10 @@
             android:padding="16dp"
             android:textAppearance="?attr/textAppearanceHeadline6" />
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chip_group"
+            android:id="@+id/tags_chip_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
     </LinearLayout>

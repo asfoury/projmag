@@ -2,6 +2,8 @@ package com.sdp13epfl2021.projmag.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -75,7 +78,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
-        val chipGroupView : ChipGroup = view.findViewById(R.id.chip_group)
+        val chipGroupView : ChipGroup = view.findViewById(R.id.tags_chip_group)
     }
 
 
@@ -108,12 +111,14 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         for (tag in project.tags) {
             val chipView: Chip = Chip(context)
             chipView.text = tag
+            chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.light_green))
             holder.chipGroupView.addView(chipView)
         }
 
             for(section in project.allowedSections){
                 val chipView: Chip = Chip(context)
                 chipView.text = section
+                chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.red))
                 holder.chipGroupView.addView(chipView)
             }
 
