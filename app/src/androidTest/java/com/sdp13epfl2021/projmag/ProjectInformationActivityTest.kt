@@ -172,7 +172,7 @@ class ProjectInformationActivityTest {
         video.perform(click())
         Thread.sleep(500)
 
-        val prevButton = onView(
+        /*val prevButton = onView(
             Matchers.allOf(
                 withClassName(Matchers.`is`("androidx.appcompat.widget.AppCompatImageButton")),
                 withContentDescription("Previous track")
@@ -201,7 +201,7 @@ class ProjectInformationActivityTest {
         Thread.sleep(3100)
         video.perform(click())
         Thread.sleep(100)
-        assertFalse(videoView.isPlaying)
+        assertFalse(videoView.isPlaying)*/
 
     }
 
