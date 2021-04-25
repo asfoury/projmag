@@ -55,6 +55,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var projectDir: File
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
+    private var userID: String? = null
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -96,6 +97,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_project_information)
 
         val utils = Utils.getInstance(this)
+        userID = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
 
@@ -322,12 +324,9 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun getUserID() : String? {
-        return Firebase.auth.currentUser?.uid
-    }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.waitingListButton)?.isVisible = (getUserID() == projectVar.authorId)
+        menu.findItem(R.id.waitingListButton)?.isVisible = (userID == projectVar.authorId)
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -352,7 +351,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             startActivity(sendIntent)
             return true
         } else if (item.itemId == R.id.waitingListButton) {
-            if (getUserID() == projectVar.authorId) {
+            if (userID == projectVar.authorId) {
                 val intent = Intent(this, WaitingListActivity::class.java)
                 intent.putExtra(MainActivity.projectIdString, projectVar.id)
                 startActivity(intent)

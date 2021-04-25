@@ -116,13 +116,7 @@ class ProjectInformationActivityTest {
     private fun getIntent(): Intent {
         val intent = Intent(context, ProjectInformationActivity::class.java)
         intent.putExtra(MainActivity.projectString, project)
-        return intent
-    }
 
-    @get:Rule var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
-
-    @Before
-    fun setup() {
         Mockito
             .`when`(auth.currentUser)
             .thenReturn(user)
@@ -135,7 +129,12 @@ class ProjectInformationActivityTest {
         Files.copy(inputStreamArch, imageArchFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamSO, imageSOFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamEmpty, emptyFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
+
+        return intent
     }
+
+    @get:Rule var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
+
 
     @After
     fun clean() {

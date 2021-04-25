@@ -16,6 +16,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
@@ -37,7 +38,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 
-
+@LargeTest
 @RunWith(AndroidJUnit4::class)
 class WaitingListTest {
 
