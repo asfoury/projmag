@@ -222,6 +222,11 @@ class ProjectInformationActivityTest {
         onView(withId(R.id.shareButton)).perform(click())
     }
 
+    @Test
+    fun clickOnGenQRButton() {
+        onView(withId(R.id.generateQRCodeButton)).perform(click())
+    }
+
 }
 
 
