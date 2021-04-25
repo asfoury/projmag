@@ -88,6 +88,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
             )
         }
+        videoView.start()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,7 +110,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
         // get the project
-        val project: ImmutableProject? = intent.getParcelableExtra("project")
+        val project: ImmutableProject? = intent.getParcelableExtra(MainActivity.projectString)
         if (project != null) {
             projectVar = project
             // set the text views
