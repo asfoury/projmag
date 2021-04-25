@@ -157,8 +157,7 @@ class ProjectInformationActivityTest {
             scrollView = it.findViewById(R.id.info_scroll_view)
         }
 
-        Thread.sleep(5000) //sleep 10sec to wait the download
-        assertFalse(videoView.isPlaying)
+        Thread.sleep(500) //sleep 0.5sec to wait the download
         assertFalse(videoView.isPlaying)
         Thread.sleep(100)
 
@@ -168,8 +167,10 @@ class ProjectInformationActivityTest {
         video.perform(click())
         Thread.sleep(500)
         assertTrue(videoView.isPlaying)
-        Thread.sleep(6000)
+        Thread.sleep(8000)
         assertTrue(videoView.isPlaying)
+        video.perform(click())
+        Thread.sleep(500)
 
         val prevButton = onView(
             Matchers.allOf(
