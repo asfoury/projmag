@@ -94,6 +94,10 @@ class FirebaseCandidatureDatabaseTest {
 
         //DocumentSnapshot
         Mockito
+            .`when`(mockDS.exists())
+            .thenReturn(true)
+        
+        Mockito
             .`when`(mockDS.data)
             .thenReturn(mapOf(
                 userIDAccepted to "Accepted",
