@@ -23,10 +23,12 @@ import android.widget.Toast
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.FileDatabase
 import com.sdp13epfl2021.projmag.database.MetadataDatabase
@@ -319,6 +321,15 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun getUserID() : String? {
+        return Firebase.auth.currentUser?.uid
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.waitingListButton)?.isVisible = (getUserID() == projectVar.authorId)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_information, menu)
@@ -339,6 +350,15 @@ class ProjectInformationActivity : AppCompatActivity() {
             sendIntent.type = "text/plain"
             startActivity(sendIntent)
             return true
+        } else if (item.itemId == R.id.waitingListButton) {
+            if (getUserID() == projectVar.authorId) {
+                val intent = Intent(this, WaitingListActivity::class.java)
+                intent.putExtra(MainActivity.projectIdString, projectVar.id)
+                startActivity(intent)
+            } else {
+                //this should not happen, unless the user was disconnected after loading the project view
+                showToast(resources.getString(R.string.waiting_not_allowed))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
