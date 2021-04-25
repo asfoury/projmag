@@ -37,10 +37,10 @@ class SectionSelectionActivity : AppCompatActivity() {
 
     }
     /**
-     * Function that han dles the click and long click of elements of the tag recycler view
+     * Handling of what happens when you click on sections in the UI for the app phone backend
      *
-     * @param tagRecyclerView : the tag recycler view
-     * @param tagsDataset : the dataset of tags
+     * @param sectionRecyclerView : the section recycler view
+     * @param sectionDataset : the dataset of sections
      */
     private fun handleListeningOnElementsOfSectionRecyclerView(sectionRecyclerView: RecyclerView, sectionDataset:List<String>){
         sectionRecyclerView.addOnItemTouchListener(
@@ -69,6 +69,11 @@ class SectionSelectionActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Handling of the save button inside of the section selection activity
+     *
+     * @param saveButton
+     */
     private fun saveButtonHandling(saveButton: Button){
         saveButton.setOnClickListener{
             val returnIntent = Intent()

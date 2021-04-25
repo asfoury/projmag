@@ -107,26 +107,16 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         // remove all tags to keep them from being duplicated
         holder.chipGroupView.removeAllViews()
 
-        // add the tags to the project
-        for (tag in project.tags) {
-            val chipView: Chip = Chip(context)
-            chipView.text = tag
-            chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.light_green))
-            holder.chipGroupView.addView(chipView)
-        }
 
-            for(section in project.allowedSections){
-                val chipView: Chip = Chip(context)
-                chipView.text = section
-                chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.teal_700))
-                holder.chipGroupView.addView(chipView)
-            }
 
         if (dataset[position].isTaken) {
             holder.view.alpha = 0.5f
         } else {
             holder.view.alpha = 1f
         }
+
+        //put the tags and the sections :
+        tagAndSectionsChipViewSetup(project, holder)
 
         // make the projects pressable
         holder.view.setOnClickListener {
@@ -148,6 +138,24 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
             } else {
                 recyclerView.findViewHolderForLayoutPosition(i)?.itemView?.alpha = 1f
             }
+        }
+    }
+
+
+    fun tagAndSectionsChipViewSetup(project: ImmutableProject, holder: ProjectViewHolder){
+        // add the tags to the project
+        for (tag in project.tags) {
+            val chipView: Chip = Chip(context)
+            chipView.text = tag
+            chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.light_green))
+            holder.chipGroupView.addView(chipView)
+        }
+
+        for(section in project.allowedSections){
+            val chipView: Chip = Chip(context)
+            chipView.text = section
+            chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.teal_700))
+            holder.chipGroupView.addView(chipView)
         }
     }
 
