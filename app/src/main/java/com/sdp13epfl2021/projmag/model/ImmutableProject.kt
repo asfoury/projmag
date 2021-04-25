@@ -30,8 +30,6 @@ data class ImmutableProject(
     val allowedSections: List<String> = listOf()
 ) : Parcelable {
     companion object {
-        private val sectionsManager = SectionBaseManager()
-        private val tagsManager = TagsBaseManager()
         public object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
