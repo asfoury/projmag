@@ -98,9 +98,13 @@ class FirebaseCandidatureDatabase(
         getDoc(projectID)
             .get()
             .addOnSuccessListener { doc ->
-                doc?.data?.let {
-                    onSuccess(buildCandidature(it, projectID))
-                } ?: onFailure(Exception("Candidature document not found with projectID : $projectID"))
+                if (doc.exists()) {
+                    doc?.data?.let {
+                        onSuccess(buildCandidature(it, projectID))
+                    } ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
+                } else {
+                    onSuccess(emptyList())
+                }
             }
             .addOnFailureListener(onFailure)
     }
