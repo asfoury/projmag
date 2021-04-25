@@ -13,13 +13,7 @@ class SectionBaseManager {
         return sectionsList
     }
 
-    fun isListValid(listToBeChecked : List<String>) : Boolean{
-        for(section in listToBeChecked){
-            if(!sectionsList.contains(section)){
-                return false
-            }
-        }
-        return true
+    fun isListValid(listToBeChecked : List<String>) : Boolean = listToBeChecked.all(sectionsList::contains)
 
-    }
+
 }

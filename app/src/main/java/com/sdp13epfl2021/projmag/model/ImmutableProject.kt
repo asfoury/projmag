@@ -18,7 +18,6 @@ data class ImmutableProject(
     val name: String,
     val lab: String,
     val teacher: String,
-
     val TA: String,
     val nbParticipant: Int,
     val assigned: List<String>,
