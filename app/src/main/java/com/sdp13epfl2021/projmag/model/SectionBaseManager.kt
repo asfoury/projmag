@@ -3,9 +3,8 @@ package com.sdp13epfl2021.projmag.model
 class SectionBaseManager {
     companion object{
         private val sectionsList = listOf<String>(
-            "Chemistry", "Mathematics", "Physics", "CS", "SC",
-            "EE", "Mech Eng", "MicroEngineering", "Life sciences",
-            "Architecture", "Civil Engineering", "Environmental Sciences and Engineering"
+            "Math", "Chemistry","Physics","CS", "Systems Communication","EE","Mechanical","Microtechnics"
+            ,"Material Eng","Life Sciences","Architecture", "Civil Eng","Environmental Eng"
         )
     }
 

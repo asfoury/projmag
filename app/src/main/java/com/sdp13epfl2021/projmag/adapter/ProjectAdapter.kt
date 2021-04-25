@@ -118,7 +118,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
             for(section in project.allowedSections){
                 val chipView: Chip = Chip(context)
                 chipView.text = section
-                chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.red))
+                chipView.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.teal_700))
                 holder.chipGroupView.addView(chipView)
             }
 
