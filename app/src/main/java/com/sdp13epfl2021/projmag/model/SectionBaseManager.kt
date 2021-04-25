@@ -8,11 +8,13 @@ class SectionBaseManager {
         )
 
         fun isListValid(listToBeChecked : List<String>) : Boolean = listToBeChecked.all(sectionsList::contains)
+
+        fun sectionList(): List<String> {
+            return sectionsList.toList() //safe copy
+        }
     }
 
-    fun sectionList(): List<String> {
-        return sectionsList
-    }
+
 
 
 
