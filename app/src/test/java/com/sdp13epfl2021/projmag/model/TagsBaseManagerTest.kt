@@ -30,9 +30,9 @@ class TagsBaseManagerTest {
         Assert.assertEquals(TagsBaseManager.InputResult.TooLong, error)
 
         //tag already exists
-        val error1 = tagBase.addTag(Tag("machinelearning"))
+        val error1 = tagBase.addTag(Tag("machine learning"))
         println(tagBase.getAllTags())
-        Assert.assertEquals(TagsBaseManager.InputResult.AlreadyExists, error1)
+        Assert.assertEquals(TagsBaseManager.InputResult.OK, error1)
 
         //tag contains special characters
         val error2 = tagBase.addTag(Tag("machine1learning"))
@@ -41,13 +41,13 @@ class TagsBaseManagerTest {
         Assert.assertEquals(TagsBaseManager.InputResult.ContainsSpecialChar, error3)
 
         //another good tag
-        val success = tagBase.addTag(Tag("Software engineering"))
+        val success = tagBase.addTag(Tag("software engineering"))
         Assert.assertEquals(TagsBaseManager.InputResult.OK, success)
 
 
         val tags = tagBase.getAllTags()
-        assert(tags.contains(Tag("machinelearning")))
-        assert(tags.contains(Tag("softwareengineering")))
+        assert(tags.contains(Tag("machine learning")))
+        assert(tags.contains(Tag("software engineering")))
 
 
     }

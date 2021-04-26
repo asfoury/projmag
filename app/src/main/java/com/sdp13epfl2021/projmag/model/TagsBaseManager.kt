@@ -12,7 +12,7 @@ import java.util.regex.Pattern
             Tag("biology"),Tag("signal processing"),Tag("robotics"),
             Tag("software"), Tag("vhdl"), Tag("crypto"),
             Tag("aerodynamics"), Tag("C"),Tag("C++"),
-            Tag("Data Science"), Tag("scala"), Tag("java"),
+            Tag("data Science"), Tag("scala"), Tag("java"),
             Tag("ml"), Tag("App development"),Tag("geology"),
             Tag("finance"), Tag("embedded"),Tag("energy"),Tag("photonics"),
             Tag("video processing"),Tag("electrical machines"))

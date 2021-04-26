@@ -149,7 +149,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         chipAdding(project.allowedSections, holder,teal)
     }
 
-    private fun chipAdding(list:List<Any>, holder:ProjectViewHolder, color:ColorStateList){
+    private fun chipAdding(list:List<String>, holder:ProjectViewHolder, color:ColorStateList){
         for(text in list){
             val chipView: Chip = Chip(context)
             chipView.text = text as CharSequence
