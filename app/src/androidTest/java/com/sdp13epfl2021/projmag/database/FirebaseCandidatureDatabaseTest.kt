@@ -160,17 +160,6 @@ class FirebaseCandidatureDatabaseTest {
     }
 
     @Test(timeout = 1000)
-    fun pushCandidatureFailedSuccessfully() {
-        val result: CompletableFuture<Exception> = CompletableFuture()
-        candidatureDBWithoutAuth.pushCandidature(candidature, Candidature.State.Waiting, {
-            assertTrue(false)
-        }, {
-            result.complete(it)
-        })
-        assertTrue(result.get() != null)
-    }
-
-    @Test(timeout = 1000)
     fun acceptAndRejectAndPushCompleteSuccessfully() {
         val result1: CompletableFuture<Int> = CompletableFuture()
         val result2: CompletableFuture<Int> = CompletableFuture()
