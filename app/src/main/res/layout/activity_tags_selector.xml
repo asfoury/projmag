@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:text="@string/tag_selection_instructions"
         android:textSize="20sp"
+        android:background="@color/teal_200"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,11 +24,12 @@
         android:id="@+id/recycler_tag_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
+        android:paddingTop="60dp"
         android:paddingBottom="50dp"
+        android:scrollbars="vertical"
         app:layoutManager="GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/DoneTagButton"
-        app:layout_constraintTop_toBottomOf="@id/title_form"
+        app:layout_constraintTop_toBottomOf="@+id/title_form"
         app:spanCount="2"
         tools:layout_editor_absoluteX="206dp" />
 
