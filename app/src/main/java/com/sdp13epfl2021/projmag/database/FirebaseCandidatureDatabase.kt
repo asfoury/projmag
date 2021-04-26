@@ -115,14 +115,8 @@ class FirebaseCandidatureDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val user = auth.currentUser
-        if (user == null) {
-            GlobalScope.launch { onFailure(SecurityException("Pushing candidature can only be done by authenticated user.")) }
-            return
-        }
-
         getDoc(candidature.projectId)
-            .set(mapOf(user.uid to newState), SetOptions.merge())
+            .set(mapOf(candidature.userID to newState), SetOptions.merge())
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
