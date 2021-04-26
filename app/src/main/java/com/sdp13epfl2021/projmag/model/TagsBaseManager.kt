@@ -8,12 +8,14 @@ import java.util.regex.Pattern
 
     //this should be thread safe
     companion object TagsBase{
-        private val tags: MutableSet<Tag> = mutableSetOf(Tag("roblox"),
-                                                         Tag("signals"),
-                                                         Tag("software"),
-                                                            Tag("vhdl"),
-                                                          Tag("crypto")
-                                                            , Tag("aerodynamics"))
+        private val tags: MutableSet<Tag> = mutableSetOf(Tag("chemistry"),
+            Tag("biology"),Tag("signal processing"),Tag("robotics"),
+            Tag("software"), Tag("vhdl"), Tag("crypto"),
+            Tag("aerodynamics"), Tag("C"),Tag("C++"),
+            Tag("Data Science"), Tag("scala"), Tag("java"),
+            Tag("ml"), Tag("App development"),Tag("geology"),
+            Tag("finance"), Tag("embedded"),Tag("energy"),Tag("photonics"),
+            Tag("video processing"),Tag("electrical machines"))
 
 
     }

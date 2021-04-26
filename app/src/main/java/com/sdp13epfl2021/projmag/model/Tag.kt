@@ -11,7 +11,7 @@ data class Tag(var name: String) {
     private var accepted : Boolean = false
     init{
 
-        name = name.toLowerCase(Locale.ROOT).replace("\\s+".toRegex(), "")
+        name = name.replace("\\s+".toRegex(), "")
     }
 
 

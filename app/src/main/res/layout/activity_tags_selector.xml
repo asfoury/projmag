@@ -23,20 +23,22 @@
         android:id="@+id/recycler_tag_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="GridLayoutManager"
-        app:spanCount="2"
         android:scrollbars="vertical"
+        android:paddingBottom="50dp"
+        app:layoutManager="GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/DoneTagButton"
         app:layout_constraintTop_toBottomOf="@id/title_form"
-        tools:layout_editor_absoluteX="206dp"
-        tools:layout_editor_absoluteY="233dp" />
+        app:spanCount="2"
+        tools:layout_editor_absoluteX="206dp" />
 
     <Button
         android:id="@+id/DoneTagButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text='@string/tag_save_button'
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
