@@ -166,7 +166,7 @@ data class ImmutableProject(
      * @param isTaken : Is this project already taken
      * @param description : description of the project
      */
-    fun build_copy(
+    fun buildCopy(
         id: String = this.id,
         name: String = this.name,
         lab: String = this.lab,
