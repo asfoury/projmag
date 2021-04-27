@@ -20,7 +20,6 @@ import com.sdp13epfl2021.projmag.database.Utils
 class ProjectsListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var appliedProjects: Array<ProjectId>
 
     public fun getItemAdapter(): ProjectAdapter {
         return itemAdapter
@@ -41,8 +40,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-        itemAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink,
-            projectId)
+        itemAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(false)
 
