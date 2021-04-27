@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
@@ -139,13 +140,13 @@ class UserDataFirebase(
     }
 
     override fun applyUnapply(
-        unapply: Boolean,
+        applied: Boolean,
         projectId: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getUserDoc()?.let { doc ->
-            val fieldValue = if (unapply) {
+            val fieldValue = if (applied) {
                 FieldValue.arrayRemove(projectId)
             } else {
                 FieldValue.arrayUnion(projectId)

@@ -86,7 +86,7 @@ interface UserDataDatabase {
      * Call `onSuccess` if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
      *
-     * @param cv the cv to push to the database
+     * @param applied function applies if true, else unapplies
      * @param onSuccess called on success
      * @param onFailure called with an exception on failure
      */
@@ -97,6 +97,14 @@ interface UserDataDatabase {
         onFailure: (Exception) -> Unit
     )
 
+    /**
+     * Gets a `List` of IDs of applied to `Project`s to the database
+     * Call `onSuccess` with the a `List` of IDs if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
     fun getListOfAppliedToProjects(
         onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
