@@ -92,7 +92,7 @@ interface UserDataDatabase {
      */
     fun applyUnapply(
         applied: Boolean,
-        project: ProjectId,
+        projectId: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
