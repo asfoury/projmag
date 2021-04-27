@@ -43,4 +43,20 @@ class FakeUserDataDatabase : UserDataDatabase {
     ) {
         TODO("Not yet implemented")
     }
+
+    override fun applyUnapply(
+        applied: Boolean,
+        project: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getListOfAppliedToProjects(
+        onSuccess: (List<ProjectId>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }
