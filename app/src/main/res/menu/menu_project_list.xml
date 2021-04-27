@@ -2,12 +2,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/appliedProjectsButton"
-        android:title="appliedProjects"
-        android:icon="@drawable/ic_baseline_view_list_24"
-        app:showAsAction="ifRoom"
-        />
-
     <item android:id="@+id/profileButton"
         android:title="@string/profile"
         android:icon="@drawable/ic_baseline_account_circle_24"
