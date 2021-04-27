@@ -145,22 +145,14 @@ class UserDataFirebase(
         onFailure: (Exception) -> Unit
     ) {
         getUserDoc()?.let { doc ->
-            getListOfAppliedToProjects(
-                { ls ->
-                    val temp = ls.toMutableSet()
-                    if (unapply)
-                        temp.remove(projectId)
-                    else
-                        temp.add(projectId)
-                    val newList: List<ProjectId> = temp.toList()
-                    doc.set(
-                        hashMapOf(
-                            "applied to" to newList
-                        ), SetOptions.merge()
-                    ).addOnSuccessListener { onSuccess() }.addOnFailureListener(onFailure)
-                },
-                onFailure
-            )
+            val fieldValue = if (unapply) {
+                FieldValue.arrayRemove(projectId)
+            } else {
+                FieldValue.arrayUnion(projectId)
+            }
+            doc.update(APPLIED_TO_FIELD, fieldValue)
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener(onFailure)
         }
     }
 
