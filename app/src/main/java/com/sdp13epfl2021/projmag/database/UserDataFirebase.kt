@@ -140,16 +140,16 @@ class UserDataFirebase(
     }
 
     override fun applyUnapply(
-        applied: Boolean,
+        apply: Boolean,
         projectId: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         getUserDoc()?.let { doc ->
-            val fieldValue = if (applied) {
-                FieldValue.arrayRemove(projectId)
-            } else {
+            val fieldValue = if (apply) {
                 FieldValue.arrayUnion(projectId)
+            } else {
+                FieldValue.arrayRemove(projectId)
             }
             doc.update(APPLIED_TO_FIELD, fieldValue)
                 .addOnSuccessListener { onSuccess() }
