@@ -24,12 +24,13 @@
         android:theme="@style/Theme.Projmag">
 
         <activity android:name=".activities.SectionSelectionActivity"></activity>
-        <activity android:name=".curriculumvitae.VideoCv"></activity>
+
         <activity android:name=".activities.TagsSelectorActivity" />
 
 
-
-
+        <activity android:name=".curriculumvitae.VideoCv"
+            android:parentActivityName=".activities.ProfilePageActivity">
+        </activity>
 
 
 

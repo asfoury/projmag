@@ -5,8 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class ImmutableProfile private constructor(val lastName : String, val firstName : String,
-                                           val age : Int, val gender : Gender, val sciper : Int?, val phoneNumber : String, val role : Role) :
+                                           val age : Int, val gender : Gender, val sciper : Int?, val phoneNumber : String,  val role : Role) :
     Parcelable {
+
 
     companion object{
         private const val MAX_LAST_NAME_SIZE = 40
