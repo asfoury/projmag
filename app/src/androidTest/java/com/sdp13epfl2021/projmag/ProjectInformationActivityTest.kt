@@ -66,6 +66,7 @@ class ProjectInformationActivityTest {
                 "<ul><li>test1</li><li>test2</li></ul>" +
                 "<p>This is a small image : </p><img src=\"$imageSOUrl\">",
         listOf(epflUrl, snkUrl, notWorkingVideoUrl),
+        listOf()
     )
 
 

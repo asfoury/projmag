@@ -26,8 +26,8 @@ data class ImmutableProject(
     val tags: List<String>,
     val isTaken: Boolean,
     val description: String,
-    val videoURI: List<String>,
-    val allowedSections: List<String>,
+    val videoURI: List<String> = listOf(),
+    val allowedSections: List<String> = listOf(),
 ) : Parcelable {
     companion object {
         public object FieldNames {
@@ -66,7 +66,7 @@ data class ImmutableProject(
             isTaken: Boolean,
             description: String,
             videoURI: List<String> = listOf(),
-            allowedSections: List<String>
+            allowedSections: List<String> = listOf()
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")

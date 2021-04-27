@@ -83,7 +83,7 @@ class FakeProjectsDatabase(projectsBeginning: List<ImmutableProject> = emptyList
             ImmutableProject(
                 pid,
                 it.name, it.lab, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
-                it.bachelorProject, it.tags, it.isTaken, it.description,
+                it.bachelorProject, it.tags, it.isTaken, it.description,it.videoURI,it.allowedSections
             )
         }
         add(newProject)
