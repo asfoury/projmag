@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +14,13 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkStri
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
+import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
 
 class ProjectsListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var appliedProjects: Array<ProjectId>
 
     public fun getItemAdapter(): ProjectAdapter {
         return itemAdapter
@@ -38,7 +41,8 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-        itemAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+        itemAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink,
+            projectId)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(false)
 
@@ -48,7 +52,6 @@ class ProjectsListActivity : AppCompatActivity() {
             val intent = Intent(this, Form::class.java)
             startActivity(intent)
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -17,10 +17,7 @@ import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.widget.MediaController
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.VideoView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -88,6 +85,39 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun setApplyButtonText(applyButton: Button, applied: Boolean) {
+        if (applied)
+            applyButton.text = "UNAPPLY"
+        else
+            applyButton.text = "APPLY"
+    }
+
+    private fun setUpApplyButton(applyButton: Button) {
+        val projectId = projectVar.id
+        val userDataDatabase = Utils.getInstance(this).userDataDatabase
+        var applied = false
+        userDataDatabase.getListOfAppliedToProjects({
+                projectIds ->
+            if (projectIds.contains(projectId))
+                applied = true
+            setApplyButtonText(applyButton, applied)
+        },{})
+
+        applyButton.setOnClickListener {
+            userDataDatabase.applyUnapply(
+                applied,
+                projectVar.id,
+                {
+                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
+                    applied = !applied
+                    setApplyButtonText(applyButton, applied)
+                },
+                {Toast.makeText(this, "Failure!", Toast.LENGTH_LONG).show()}
+            )
+
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
@@ -142,8 +172,9 @@ class ProjectInformationActivity : AppCompatActivity() {
         // make the back button in the title bar work
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-    }
 
+        setUpApplyButton(findViewById(R.id.applyButton) as Button)
+    }
 
     // pause/start when we touch the video
     @SuppressLint("ClickableViewAccessibility")
