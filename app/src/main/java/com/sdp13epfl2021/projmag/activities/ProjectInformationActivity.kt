@@ -42,6 +42,11 @@ import kotlin.collections.ArrayList
 
 class ProjectInformationActivity : AppCompatActivity() {
 
+    companion object {
+        val APPLY_STRING = "APPLY"
+        val UNAPPLY_STRING = "UNAPPLY"
+    }
+
     private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
     private lateinit var metadataDB: MetadataDatabase
@@ -87,9 +92,9 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private fun setApplyButtonText(applyButton: Button, applied: Boolean) {
         if (applied)
-            applyButton.text = "UNAPPLY"
+            applyButton.text = UNAPPLY_STRING
         else
-            applyButton.text = "APPLY"
+            applyButton.text = APPLY_STRING
     }
 
     private fun setUpApplyButton(applyButton: Button) {
@@ -103,7 +108,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         applyButton.setOnClickListener {
             userDataDatabase.applyUnapply(
-                applied,
+                !applied,
                 projectVar.id,
                 {
                     Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
