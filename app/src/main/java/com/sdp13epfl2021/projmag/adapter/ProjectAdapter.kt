@@ -3,7 +3,6 @@ package com.sdp13epfl2021.projmag.adapter
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,7 +77,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
-        val chipGroupView : ChipGroup = view.findViewById(R.id.tags_chip_group)
+        val chipGroupView : ChipGroup = view.findViewById(R.id.chip_group)
     }
 
 

@@ -26,8 +26,8 @@ data class ImmutableProject(
     val tags: List<String>,
     val isTaken: Boolean,
     val description: String,
-    val videoURI: List<String> = listOf(),
-    val allowedSections: List<String> = listOf()
+    val videoURI: List<String>,
+    val allowedSections: List<String>,
 ) : Parcelable {
     companion object {
         public object FieldNames {
@@ -166,7 +166,7 @@ data class ImmutableProject(
      * @param isTaken : Is this project already taken
      * @param description : description of the project
      */
-    fun rebuild(
+    fun build_copy(
         id: String = this.id,
         name: String = this.name,
         lab: String = this.lab,

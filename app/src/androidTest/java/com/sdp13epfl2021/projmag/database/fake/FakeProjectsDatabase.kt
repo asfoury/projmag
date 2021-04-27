@@ -108,7 +108,7 @@ class FakeProjectsDatabase(projectsBeginning: List<ImmutableProject> = emptyList
         val oldProject = projects.find { p -> p.id == id }
         if (oldProject != null) {
             projects = projects - oldProject
-            val newProject = oldProject.rebuild( videoURI = oldProject.videoURI + uri)
+            val newProject = oldProject.build_copy( videoURI = oldProject.videoURI + uri)
             when (newProject) {
                 is Success -> {
                     projects = projects + newProject.value
