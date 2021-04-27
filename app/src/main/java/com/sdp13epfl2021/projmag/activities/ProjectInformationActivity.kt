@@ -96,10 +96,8 @@ class ProjectInformationActivity : AppCompatActivity() {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
         var applied = false
-        userDataDatabase.getListOfAppliedToProjects({
-                projectIds ->
-            if (projectIds.contains(projectId))
-                applied = true
+        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
+            applied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, applied)
         },{})
 
