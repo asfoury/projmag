@@ -103,21 +103,21 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
-        var applied = false
+        var alreadyAppliedgit add  = false
         setApplyButtonText(applyButton,null)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
-            applied = projectIds.contains(projectId)
-            setApplyButtonText(applyButton, applied)
+            alreadyApplied = projectIds.contains(projectId)
+            setApplyButtonText(applyButton, alreadyApplied)
         },{})
 
         applyButton.setOnClickListener {
             userDataDatabase.applyUnapply(
-                !applied,
+                !alreadyApplied,
                 projectVar.id,
                 {
                     Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show()
-                    applied = !applied
-                    setApplyButtonText(applyButton, applied)
+                    alreadyApplied = !alreadyApplied
+                    setApplyButtonText(applyButton, alreadyApplied)
                 },
                 {Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_SHORT).show()}
             )
