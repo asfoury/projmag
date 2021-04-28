@@ -103,7 +103,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
-        var alreadyAppliedgit add  = false
+        var alreadyApplied = false
         setApplyButtonText(applyButton,null)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
