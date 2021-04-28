@@ -43,6 +43,7 @@ import kotlin.collections.ArrayList
 class ProjectInformationActivity : AppCompatActivity() {
 
     companion object {
+        val LOADING_STRING = "LOADING"
         val APPLY_STRING = "APPLY"
         val UNAPPLY_STRING = "UNAPPLY"
     }
@@ -90,8 +91,10 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun setApplyButtonText(applyButton: Button, applied: Boolean) {
-        if (applied)
+    private fun setApplyButtonText(applyButton: Button, applied: Boolean?) {
+        if (applied == null)
+            applyButton.text = LOADING_STRING
+        else if (applied)
             applyButton.text = UNAPPLY_STRING
         else
             applyButton.text = APPLY_STRING
@@ -101,7 +104,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
         var applied = false
-        setApplyButtonText(applyButton, applied)
+        setApplyButtonText(applyButton,null)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             applied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, applied)
