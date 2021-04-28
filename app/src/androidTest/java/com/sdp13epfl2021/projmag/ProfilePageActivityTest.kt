@@ -152,7 +152,7 @@ class ProfilePageActivityTest {
 
     @Test
     fun testSaveProfile() {
-        Thread.sleep(1000)
+        Thread.sleep(3000)
         onView(withId(R.id.profile_save))
             .perform(click())
     }
