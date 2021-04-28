@@ -5,6 +5,7 @@ import com.sdp13epfl2021.projmag.JavaToKotlinHelper
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Success
+import com.sdp13epfl2021.projmag.video.VideoUtils
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
