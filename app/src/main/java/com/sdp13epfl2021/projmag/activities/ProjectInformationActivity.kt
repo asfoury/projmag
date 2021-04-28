@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.activities
 
 
-
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Resources
@@ -19,7 +18,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.MediaController
-
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.VideoView
@@ -31,29 +29,34 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.FileDatabase
+import com.sdp13epfl2021.projmag.database.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.xml.sax.XMLReader
 import java.io.File
-import java.nio.charset.Charset
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class ProjectInformationActivity : AppCompatActivity() {
 
     private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
+    private lateinit var metadataDB: MetadataDatabase
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
-    private val videosUris: MutableList<Uri> = ArrayList()
+    private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
 
     @Synchronized
-    private fun addVideo(videoUri: Uri) {
-        videosUris.add(videoUri)
+    private fun addVideo(videoUri: Uri, subtitle: String?) {
+        videosUris.add(Pair(videoUri, subtitle))
         if (current < 0) {
             readNextVideo()
             videoView.isInvisible = false
@@ -64,16 +67,24 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun readNextVideo() {
         if (current + 1 < videosUris.size) {
             current++
-            videoView.setVideoURI(videosUris[current])
-            videoView.start()
+            updateVideoState()
         }
     }
 
     private fun readPrevVideo() {
         if (current > 0) {
             current--
-            videoView.setVideoURI(videosUris[current])
-            videoView.start()
+            updateVideoState()
+        }
+    }
+
+    private fun updateVideoState() {
+        videoView.setVideoURI(videosUris[current].first)
+        videosUris[current].second?.let {
+            videoView.addSubtitleSource(
+                it.byteInputStream(),
+                VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
+            )
         }
     }
 
@@ -81,16 +92,18 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
-        fileDB = Utils.getInstance(this).fileDatabase
+        val utils = Utils.getInstance(this)
+        fileDB = utils.fileDatabase
+        metadataDB = utils.metadataDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
         val lab = findViewById<TextView>(R.id.info_lab_name)
-        descriptionView = findViewById<TextView>(R.id.info_description)
+        descriptionView = findViewById(R.id.info_description)
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
-        videoView = findViewById<VideoView>(R.id.info_video)
+        videoView = findViewById(R.id.info_video)
 
 
         // get the project
@@ -129,9 +142,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         // make the back button in the title bar work
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-
-
-
     }
 
 
@@ -182,10 +192,17 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun addVideoAfterDownloaded(videosLinks: List<String>) {
         videosLinks.forEach { link ->
             fileDB.getFile(link, projectDir, { file ->
-                addVideo(Uri.fromFile(file))
-            }, {
-                showToast("An error occurred while downloading a video.")
-            })
+                val uri = Uri.fromFile(file)
+                metadataDB.getSubtitlesFromVideo(
+                    link,
+                    Locale.ENGLISH.language,
+                    { subs ->
+                        subs?.let {
+                            addVideo(uri, it)
+                        } ?: run { addVideo(uri, null) }
+                    }, { addVideo(uri, null) }
+                )
+            }, { showToast(getString(R.string.could_not_download_video)) })
         }
     }
 
@@ -213,7 +230,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             Toast.makeText(
                 this,
                 error,
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_LONG
             ).show()
         }
     }

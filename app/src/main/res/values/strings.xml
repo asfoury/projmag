@@ -37,6 +37,9 @@
     <string name="submit">Add a new project to the list</string>
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
+    <string name="could_not_download_video">An error occurred while downloading a video.</string>
+    <string name="could_not_download_subtitles">Subtitles could not be fetched !</string>
+    <string name="no_subtitles_found">No subtitles could be found a video !</string>
     <string name="cv_period_description">Description</string>
     <string name="cv_period_school_name">School Name</string>
     <string name="cv_period_period_title">Period (to change)</string>
@@ -67,19 +70,33 @@
     <string name="video_subtitling_field">Subtitling Text</string>
     <string name="video_subtitling_add">Add</string>
     <string name="form_add_subtitle_button">Add Subtitle</string>
-    <string name="video_subtitling_cant_open_video">"Can't open video for subtitling"</string>
-    <string name="video_subtitling_instruction">"To see subtitles you have to turn on the captions (currently only in English) in your device settings !"</string>
+    <string name="video_subtitling_cant_open_video">Can\'t open video for subtitling</string>
+    <string name="video_subtitling_instruction">This application uses Android Captions. To see subtitles you have to turn on the captions (currently only in English) in your device settings!\nYou can change these settings at any time under, device Settings > Accessibility > Caption Preferences</string>
+    <string name="video_subtitling_instruction_ok_answer">You can change these settings at any time under, device Settings > Accessibility > Caption Preferences</string>
     <string name="clear">Clear</string>
     <string name="ok">OK</string>
-
-
+    <string name="settings">Settings</string>
 
 
     <string name="tag_selection_instructions">Add tags : select the right tags for your project and add/remove by clicking on them</string>
     <string name="tag_add_button_title">add tags</string>
     <string name="tag_save_button">Save</string>
     <string name="failure">failure</string>
+
     <string name="form_save_profile">Save</string>
 
+    <string name="create_cv">create cv</string>
+    <string name="sub_change">Submit change</string>
+
+    <string name="waiting_projectid_null">The ProjectId was not valid</string>
+    <string name="waiting_firstname">First name : %s</string>
+    <string name="waiting_lastname">Last name : %s</string>
+    <string name="waiting_section">Section : %s</string>
+    <string name="waiting_error_msg">An error has occurred while updating candidature : %s</string>
+    <string name="waiting_accepted_msg">"Candidature accepted."</string>
+    <string name="waiting_rejected_msg">"Candidature rejected."</string>
+
+
+    <string name="db_error_msg">An error has occurred while loading database : %s</string>
 
 </resources>

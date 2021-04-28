@@ -8,34 +8,36 @@
     android:orientation="vertical"
     tools:context=".activities.ProfilePageActivity">
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="145dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="112dp">
 
-    <ImageView
-        android:id="@+id/image_profile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="30dp"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:ignore="ContentDescription"
-        />
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/button_edit_profile"
-        android:layout_width="69dp"
-        android:layout_height="37dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="11dp"
-        android:layout_marginBottom="107dp"
-        android:text="@string/edit" />
+        <Button
+            android:id="@+id/button_edit_profile"
+            android:layout_width="78dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="11dp"
+            android:text="@string/edit" />
+
+        <Button
+            android:id="@+id/button_add_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_cv" />
 
 
-
-</RelativeLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -52,9 +54,10 @@
             android:textSize="20sp"
             android:inputType="textEmailAddress" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="87dp"
         android:layout_marginTop="30dp"
         android:background="@color/white"
         android:orientation="horizontal">
@@ -86,13 +89,13 @@
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="88dp"
 
         android:background="@color/white"
         android:orientation="horizontal">
-
 
 
         <EditText
@@ -107,7 +110,6 @@
             android:textSize="20sp" />
 
 
-
         <EditText
             android:id="@+id/profile_genre"
             android:layout_width="wrap_content"
@@ -120,16 +122,14 @@
             android:textSize="20sp" />
 
 
-
-
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="89dp"
 
         android:background="@color/white"
         android:orientation="horizontal">
-
 
 
         <EditText
@@ -156,12 +156,14 @@
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="83dp"
 
         android:background="@color/white"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/profile_save"
             android:layout_width="0dp"
@@ -169,8 +171,23 @@
             android:layout_weight="1"
             android:text="@string/form_save_profile" />
 
+
+
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="99dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonSubChangeProfil"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="135dp"
+            android:layout_marginTop="1dp"
+            android:text="@string/sub_change" />
+    </LinearLayout>
 
 
 </LinearLayout>

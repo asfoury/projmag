@@ -13,6 +13,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.video.VideoUtils
 
 
 /**
@@ -36,11 +37,17 @@ class SignInActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        /*
+         * Tell the user that app uses caption
+         * Propose to change settings
+         */
+        VideoUtils.showInstructionDialog(this)
 
         button.setOnClickListener {
             signIn()
@@ -77,10 +84,19 @@ class SignInActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
+                        val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser;
                         Log.d("SignInActivity", "signInWithCredential:success")
-                        val intent = Intent(this, ProjectsListActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        if(isNew == true){
+                            val intent = Intent(this, ProfilePageActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else if(isNew == false) {
+                            val intent = Intent(this, ProjectsListActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
+                        }
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
