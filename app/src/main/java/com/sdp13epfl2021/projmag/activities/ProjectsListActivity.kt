@@ -51,7 +51,7 @@ class ProjectsListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        if(!UserTypeChoice.data){
+        if(!UserTypeChoice.isProfessor){
             fab.setVisibility(View.INVISIBLE)
         }
 

@@ -29,7 +29,7 @@ class ProfilePageActivity : AppCompatActivity() {
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 
-        if(UserTypeChoice.data){
+        if(UserTypeChoice.isProfessor){
             findViewById<TextView>(R.id.profile_sciper).setVisibility(View.INVISIBLE)
             buttonAddCv.setVisibility(View.INVISIBLE)
         }

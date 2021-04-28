@@ -12,7 +12,7 @@ class UserTypeChoice : AppCompatActivity() {
     lateinit var StuButton: RadioButton
 
     companion object{
-        var data: Boolean = false
+        var isProfessor: Boolean = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +21,11 @@ class UserTypeChoice : AppCompatActivity() {
         StuButton = findViewById(R.id.radioStudentType)
         val intent = Intent(this, ProfilePageActivity::class.java)
         ProfButton.setOnClickListener{
-            data = true
+            isProfessor = true
             startActivity(intent)
         }
         StuButton.setOnClickListener{
-            data = false
+            isProfessor = false
             startActivity(intent)
         }
     }
