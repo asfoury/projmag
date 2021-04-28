@@ -28,14 +28,13 @@ class ProfilePageActivity : AppCompatActivity() {
         button = findViewById(R.id.button_edit_profile)
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
-        
+
         if(UserTypeChoice.data){
             findViewById<TextView>(R.id.profile_sciper).setVisibility(View.INVISIBLE)
             buttonAddCv.setVisibility(View.INVISIBLE)
         }
         button.setOnClickListener {
-            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, pickImage)
+            startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), pickImage)
         }
         buttonAddCv.setOnClickListener{
             val intent = Intent(this,CVCreationActivity::class.java)
