@@ -12,12 +12,14 @@ import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.UserTypeChoice
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.Utils
 
 class ProjectsListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
+
 
     public fun getItemAdapter(): ProjectAdapter {
         return itemAdapter
@@ -47,6 +49,10 @@ class ProjectsListActivity : AppCompatActivity() {
         fab.setOnClickListener {
             val intent = Intent(this, Form::class.java)
             startActivity(intent)
+        }
+
+        if(!UserTypeChoice.data){
+            fab.setVisibility(View.INVISIBLE)
         }
 
     }

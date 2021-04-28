@@ -94,5 +94,8 @@
     <string name="waiting_rejected_msg">"Candidature rejected."</string>
 
     <string name="db_error_msg">An error has occurred while loading database : %s</string>
+    <string name="professor">Professor</string>
+    <string name="student">Student</string>
+    <string name="selection">Your selection:</string>
 
 </resources>

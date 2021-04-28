@@ -13,6 +13,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.UserTypeChoice
 import com.sdp13epfl2021.projmag.video.VideoUtils
 
 
@@ -87,7 +88,7 @@ class SignInActivity : AppCompatActivity() {
                         val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser;
                         Log.d("SignInActivity", "signInWithCredential:success")
                         if(isNew == true){
-                            val intent = Intent(this, ProfilePageActivity::class.java)
+                            val intent = Intent(this, UserTypeChoice::class.java)
                             startActivity(intent)
                             finish()
                         } else if(isNew == false) {
