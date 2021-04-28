@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import com.sdp13epfl2021.projmag.model.*
 
 class UserProfileDatabase(
@@ -48,7 +47,7 @@ class UserProfileDatabase(
     public fun uploadProfile(
         profile: ImmutableProfile,
         onSuccess: () -> Unit,
-        onFaliure: (Exception) -> Unit
+        onFailure: (Exception) -> Unit
     ) {
         val profile = hashMapOf(
             "firstName" to profile.firstName,
@@ -60,23 +59,23 @@ class UserProfileDatabase(
             "sciper" to profile.sciper
         )
         val id = getUser()?.uid
-        if(id != null) {
+        if (id != null) {
             firestore.collection(ROOT).document(id)
                 .set(profile)
                 .addOnSuccessListener {
                     onSuccess()
                 }
                 .addOnFailureListener {
-                    onFaliure(it)
+                    onFailure(it)
                 }
         } else {
-            Log.d(TAG,"Unable to get the uid from firebase")
+            Log.d(TAG, "Unable to get the uid from firebase")
         }
     }
 
     public fun getProfile(onSuccess: (profile: ImmutableProfile?) -> Unit) {
         val userUid = getUser()?.uid
-        if(userUid != null) {
+        if (userUid != null) {
             val docRef = firestore.collection(ROOT).document(userUid)
             docRef.get()
                 .addOnSuccessListener { document ->
