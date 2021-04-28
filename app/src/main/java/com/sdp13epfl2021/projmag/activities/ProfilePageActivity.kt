@@ -24,16 +24,13 @@ class ProfilePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
-
         imageView = findViewById(R.id.image_profile)
         button = findViewById(R.id.button_edit_profile)
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
-
-
+        
         if(UserTypeChoice.data){
-            val pro_Sci = findViewById<TextView>(R.id.profile_sciper)
-            pro_Sci.setVisibility(View.INVISIBLE)
+            findViewById<TextView>(R.id.profile_sciper).setVisibility(View.INVISIBLE)
             buttonAddCv.setVisibility(View.INVISIBLE)
         }
         button.setOnClickListener {
