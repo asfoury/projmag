@@ -82,11 +82,12 @@ interface UserDataDatabase {
     )
 
     /**
-     * Apply to the given project by pushing it to
+     * Apply or unapply to the given project depending on the value of apply
      * Call `onSuccess` if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
      *
-     * @param applied function applies if true, else unapplies
+     * @param apply function applies if true, else unapplies
+     * @param projectId the project to apply or unapply to
      * @param onSuccess called on success
      * @param onFailure called with an exception on failure
      */
