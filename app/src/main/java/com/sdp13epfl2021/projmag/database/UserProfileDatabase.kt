@@ -75,68 +75,69 @@ class UserProfileDatabase(
     }
 
     public fun getProfile(onSuccess: (profile: ImmutableProfile?) -> Unit) {
-        val docRef = firestore.collection(ROOT).document(getUser()?.uid!!)
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val firstName = document["firstName"] as? String
-                    val lastName = document["lastName"] as? String
-                    val ageLong = document["age"]
+        val userUid = getUser()?.uid
+        if(userUid != null) {
+            val docRef = firestore.collection(ROOT).document(userUid)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val firstName = document["firstName"] as? String
+                        val lastName = document["lastName"] as? String
+                        val ageLong = document["age"]
 
-                    val gender = when (document["gender"] as? String) {
-                        Gender.MALE.name -> Gender.MALE
-                        Gender.FEMALE.name -> Gender.FEMALE
-                        else -> Gender.OTHER
-                    }
-                    val phoneNumber = document["phoneNumber"] as? String
-                    val roleString = document["role"] as? String
-                    val sciperLong = document["sciper"]
-
-                    val role = when (roleString) {
-                        Role.TEACHER.name -> Role.TEACHER
-                        Role.STUDENT.name -> Role.STUDENT
-                        else -> Role.OTHER
-                    }
-
-
-                    var age: Int = try {
-                        Integer.valueOf(ageLong.toString())
-                    } catch (excep: NumberFormatException) {
-                        0
-                    }
-
-                    var sciper: Int = try {
-                        Integer.valueOf(sciperLong.toString())
-                    } catch (exep: NumberFormatException) {
-                        0
-                    }
-
-
-                    when (val resProfile = ImmutableProfile.build(
-                        lastName ?: "null",
-                        firstName ?: "null",
-                        age,
-                        gender,
-                        sciper,
-                        phoneNumber ?: "null",
-                        role
-                    )) {
-                        is Success -> {
-                            onSuccess(resProfile.value)
+                        val gender = when (document["gender"] as? String) {
+                            Gender.MALE.name -> Gender.MALE
+                            Gender.FEMALE.name -> Gender.FEMALE
+                            else -> Gender.OTHER
                         }
-                        is Failure -> {
-                            Log.d(TAG, "Failure reason : ${resProfile.reason}")
-                        }
-                    }
+                        val phoneNumber = document["phoneNumber"] as? String
+                        val roleString = document["role"] as? String
+                        val sciperLong = document["sciper"]
 
-                } else {
-                    Log.d(TAG, "No such document")
+                        val role = when (roleString) {
+                            Role.TEACHER.name -> Role.TEACHER
+                            Role.STUDENT.name -> Role.STUDENT
+                            else -> Role.OTHER
+                        }
+
+
+                        var age: Int = try {
+                            Integer.valueOf(ageLong.toString())
+                        } catch (excep: NumberFormatException) {
+                            0
+                        }
+
+                        var sciper: Int = try {
+                            Integer.valueOf(sciperLong.toString())
+                        } catch (exep: NumberFormatException) {
+                            0
+                        }
+
+
+                        when (val resProfile = ImmutableProfile.build(
+                            lastName ?: "null",
+                            firstName ?: "null",
+                            age,
+                            gender,
+                            sciper,
+                            phoneNumber ?: "null",
+                            role
+                        )) {
+                            is Success -> {
+                                onSuccess(resProfile.value)
+                            }
+                            is Failure -> {
+                                Log.d(TAG, "Failure reason : ${resProfile.reason}")
+                            }
+                        }
+
+                    } else {
+                        Log.d(TAG, "No such document")
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "get failed with ", exception)
+                }
+        }
     }
-
-
 }
