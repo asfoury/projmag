@@ -101,6 +101,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
         var applied = false
+        setApplyButtonText(applyButton, applied)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             applied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, applied)
@@ -111,11 +112,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                 !applied,
                 projectVar.id,
                 {
-                    Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show()
                     applied = !applied
                     setApplyButtonText(applyButton, applied)
                 },
-                {Toast.makeText(this, "Failure!", Toast.LENGTH_LONG).show()}
+                {Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_SHORT).show()}
             )
 
         }
