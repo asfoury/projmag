@@ -150,6 +150,14 @@ class ProfilePageActivityTest {
         appCompatEditText8.perform(replaceText("22222"), closeSoftKeyboard())
     }
 
+    @Test
+    fun testSaveProfile() {
+        Thread.sleep(1000)
+        onView(withId(R.id.profile_save))
+            .perform(click())
+    }
+
+
     private fun childAtPosition(
         parentMatcher: Matcher<View>, position: Int
     ): Matcher<View> {
