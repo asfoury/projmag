@@ -91,7 +91,7 @@ interface UserDataDatabase {
      * @param onFailure called with an exception on failure
      */
     fun applyUnapply(
-        applied: Boolean,
+        apply: Boolean,
         projectId: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
