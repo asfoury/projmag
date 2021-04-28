@@ -9,7 +9,8 @@ import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
 class UserTypeChoice : AppCompatActivity() {
 
     companion object{
-        var isProfessor: Boolean = false
+        //user is Professor by default
+        var isProfessor: Boolean = true
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
