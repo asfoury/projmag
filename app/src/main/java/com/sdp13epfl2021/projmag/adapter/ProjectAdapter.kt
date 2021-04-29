@@ -22,7 +22,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView,
+class ProjectAdapter(private val activity: Activity, private val utils: Utils, private val recyclerView: RecyclerView,
                      private val fromLink: Boolean, private var projectIdLink: String):
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
