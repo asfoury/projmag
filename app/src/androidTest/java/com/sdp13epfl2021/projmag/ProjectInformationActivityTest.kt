@@ -176,8 +176,6 @@ class ProjectInformationActivityTest {
         assertTrue(videoView.isPlaying)
         Thread.sleep(8000)
         assertTrue(videoView.isPlaying)
-        video.perform(click())
-        Thread.sleep(1000)
 
         /*val prevButton = onView(
             Matchers.allOf(
