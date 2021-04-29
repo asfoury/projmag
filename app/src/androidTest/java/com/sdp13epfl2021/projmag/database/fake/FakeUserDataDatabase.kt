@@ -51,7 +51,7 @@ class FakeUserDataDatabase : UserDataDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        
     }
 
     override fun getListOfAppliedToProjects(
