@@ -99,8 +99,8 @@ class ProjectsListActivity : AppCompatActivity() {
         builder
             .setView(view)
             .setNeutralButton(getString(R.string.clear)) { _, _ ->
-                itemAdapter.projectFilter = ProjectFilter.default
-                itemAdapter.filter.filter("")
+                projectAdapter.projectFilter = ProjectFilter.default
+                projectAdapter.filter.filter("")
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
@@ -115,7 +115,7 @@ class ProjectsListActivity : AppCompatActivity() {
      */
     @SuppressLint("InflateParams")
     private fun constructDialogView(): View {
-        val pf = itemAdapter.projectFilter
+        val pf = projectAdapter.projectFilter
         val view = layoutInflater.inflate(R.layout.filter_list_layout, null)
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
@@ -131,11 +131,11 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun filter(view: View) {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
-        itemAdapter.projectFilter = ProjectFilter(
+        projectAdapter.projectFilter = ProjectFilter(
             bachelor = bachelor,
             master = master
         )
-        itemAdapter.filter.filter("")
+        projectAdapter.filter.filter("")
     }
 
 }
