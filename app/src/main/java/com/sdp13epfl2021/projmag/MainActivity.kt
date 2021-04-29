@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         //These are used as name for extra in Intent
         const val fromLinkString: String = "fromLink"   //Boolean
         const val projectIdString: String = "projectId" //ProjectId
+        const val projectString: String = "project"     //ImmutableProject
         const val cv: String = "CV"                     //CurriculumVitae
         const val profile: String = "profile"           //ImmutableProfile
     }
