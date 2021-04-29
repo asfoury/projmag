@@ -319,7 +319,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDynamicLink() : Uri {
+    private fun createDynamicLink() : Uri {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
             domainUriPrefix = "https://projmag.page.link/"
@@ -336,7 +336,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
-            val linkToSend = getDynamicLink()
+            val linkToSend = createDynamicLink()
 
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, linkToSend.toString())
@@ -345,7 +345,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             return true
         }
         else if(item.itemId == R.id.generateQRCodeButton) {
-            val linkToSend = getDynamicLink()
+            val linkToSend = createDynamicLink()
 
             val qrImage = QRCode.from(linkToSend.toString()).withSize(800,800)
             val stream = ByteArrayOutputStream()

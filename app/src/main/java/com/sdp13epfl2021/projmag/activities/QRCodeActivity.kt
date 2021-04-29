@@ -12,9 +12,12 @@ class QRCodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_q_r_code)
 
+
         val imageView = findViewById<ImageView>(R.id.qrcode_image)
         val byteArray = intent.getByteArrayExtra("qrcode")
-        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
-        imageView.setImageBitmap(bmp)
+        byteArray?.let {
+            val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+            imageView.setImageBitmap(bmp)
+        }
     }
 }
