@@ -9,6 +9,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
+import com.sdp13epfl2021.projmag.activities.UserTypeChoice
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
@@ -33,7 +36,7 @@ class UserTypeChoiceTest {
                 withId(R.id.radioProfessorType), withText("Professor"),
                 childAtPosition(
                     childAtPosition(
-                        withClassName(`is`("android.widget.RelativeLayout")),
+                        withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                         0
                     ),
                     0
@@ -42,6 +45,8 @@ class UserTypeChoiceTest {
             )
         )
         materialRadioButton.perform(click())
+        assertTrue(UserTypeChoice.isProfessor)
+
 
         val appCompatImageButton = onView(
             allOf(
@@ -61,12 +66,13 @@ class UserTypeChoiceTest {
         )
         appCompatImageButton.perform(click())
 
+
         val materialRadioButton2 = onView(
             allOf(
                 withId(R.id.radioStudentType), withText("Student"),
                 childAtPosition(
                     childAtPosition(
-                        withClassName(`is`("android.widget.RelativeLayout")),
+                        withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
                         0
                     ),
                     1
@@ -75,6 +81,7 @@ class UserTypeChoiceTest {
             )
         )
         materialRadioButton2.perform(click())
+        assertFalse(UserTypeChoice.isProfessor)
     }
 
     private fun childAtPosition(

@@ -13,7 +13,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.UserTypeChoice
 import com.sdp13epfl2021.projmag.video.VideoUtils
 
 

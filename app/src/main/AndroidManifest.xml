@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".UserTypeChoice">
+        <activity android:name=".activities.UserTypeChoice">
         </activity>
         <activity
             android:name=".curriculumvitae.VideoCv"

@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.UserTypeChoice
 
 
 class ProfilePageActivity : AppCompatActivity() {

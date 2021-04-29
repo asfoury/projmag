@@ -1,10 +1,10 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
-import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
+import com.sdp13epfl2021.projmag.R
 
 class UserTypeChoice : AppCompatActivity() {
 
