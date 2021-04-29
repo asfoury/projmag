@@ -394,7 +394,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 //this should not happen, unless the user was disconnected after loading the project view
-                showToast(resources.getString(R.string.waiting_not_allowed))
+                showToast(resources.getString(R.string.waiting_not_allowed), Toast.LENGTH_LONG)
             }
         }
         return super.onOptionsItemSelected(item)

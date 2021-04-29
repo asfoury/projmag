@@ -5,28 +5,25 @@ import android.content.Context
 import android.content.Intent
 import android.widget.ScrollView
 import android.widget.VideoView
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.rule.UiThreadTestRule
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import org.hamcrest.Matchers
 import org.junit.After
-import org.hamcrest.TypeSafeMatcher
-import org.junit.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import java.io.File
@@ -76,11 +73,16 @@ class ProjectInformationActivityTest {
     )
 
 
-    private val inputStreamSNK = javaClass.classLoader!!.getResourceAsStream("641a85c7-2944-4ffa-a18f-7ee5cf501df5")
-    private val inputStreamEPFL = javaClass.classLoader!!.getResourceAsStream("c1758313-31b0-4880-8381-4723c17ae9e4")
-    private val inputStreamArch = javaClass.classLoader!!.getResourceAsStream("ec855899-e73b-4977-a3f8-054f38e966ed_Arch_4k.png")
-    private val inputStreamSO = javaClass.classLoader!!.getResourceAsStream("70e3321e-670d-47a1-9b36-25a6d72ad3b7_SO.png")
-    private val inputStreamEmpty = javaClass.classLoader!!.getResourceAsStream("ea77c6b0-0f93-4b25-80ae-808fc6d70c78_empty.jpeg")
+    private val inputStreamSNK =
+        javaClass.classLoader!!.getResourceAsStream("641a85c7-2944-4ffa-a18f-7ee5cf501df5")
+    private val inputStreamEPFL =
+        javaClass.classLoader!!.getResourceAsStream("c1758313-31b0-4880-8381-4723c17ae9e4")
+    private val inputStreamArch =
+        javaClass.classLoader!!.getResourceAsStream("ec855899-e73b-4977-a3f8-054f38e966ed_Arch_4k.png")
+    private val inputStreamSO =
+        javaClass.classLoader!!.getResourceAsStream("70e3321e-670d-47a1-9b36-25a6d72ad3b7_SO.png")
+    private val inputStreamEmpty =
+        javaClass.classLoader!!.getResourceAsStream("ea77c6b0-0f93-4b25-80ae-808fc6d70c78_empty.jpeg")
 
     private val videoSNKFile: File = Files.createTempFile("SNK OP ", ".mp4").toFile()
     private val videoEPFLFile: File = Files.createTempFile("EPFL", ".mkv").toFile()
@@ -106,7 +108,16 @@ class ProjectInformationActivityTest {
     private val candidatureDB = FakeCandidatureDatabase()
     private val metadataDB = FakeMetadataDatabase()
     private val context: Context = ApplicationProvider.getApplicationContext()
-    private val utils = Utils.getInstance(context, true, auth, userdataDB, candidatureDB, fileDB, metadataDB, projectsDB)
+    private val utils = Utils.getInstance(
+        context,
+        true,
+        auth,
+        userdataDB,
+        candidatureDB,
+        fileDB,
+        metadataDB,
+        projectsDB
+    )
 
     private fun getIntent(): Intent {
         val intent = Intent(context, ProjectInformationActivity::class.java)
@@ -128,7 +139,8 @@ class ProjectInformationActivityTest {
         return intent
     }
 
-    @get:Rule var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
+    @get:Rule
+    var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
 
 
     @After
@@ -208,7 +220,8 @@ class ProjectInformationActivityTest {
     @Test
     fun clickOnApplyButton() {
         onView(withId(R.id.applyButton)).perform(scrollTo()).perform(click())
-      
+    }
+
     @Test
     fun clickOnWaitingListButton() {
         onView(withId(R.id.waitingListButton)).perform(click())
