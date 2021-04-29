@@ -100,6 +100,7 @@
 
     <string name="db_error_msg">An error has occurred while loading database : %s</string>
     <string name="filter">Filter</string>
+    <string name="success">success</string>
 
 
 

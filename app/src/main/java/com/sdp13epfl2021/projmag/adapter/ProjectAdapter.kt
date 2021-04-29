@@ -21,8 +21,8 @@ import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView, private val fromLink: Boolean, private var projectIdLink: String) :
+class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView,
+                     private val fromLink: Boolean, private var projectIdLink: String):
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     companion object ItemAdapterCompanion {
@@ -33,7 +33,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
     var projectFilter: ProjectFilter = ProjectFilter.default
 
-    fun sortDataset() {
+    private fun sortDataset() {
         dataset.sortBy{ project -> project.isTaken }
         if (fromLink) {
             dataset.sortByDescending { project -> projectIdLink == project.id }
