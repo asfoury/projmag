@@ -10,6 +10,7 @@ class ImmutableProjectTest {
         val id = "zoerjfoerfj"
         val name = "epic roblox coding"
         val labName = "roblox labs"
+        val authorID = "a"
         val projectManager = "kaou el roblox master"
         val teacher = "kaou el roblox master"
         val description = "epic roblox coding alll freaking day DAMN SON"
@@ -21,7 +22,7 @@ class ImmutableProjectTest {
         val tags = listOf("robloxprog")
 
         
-        val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
+        val result = ImmutableProject.build(id, name, labName, authorID, projectManager, teacher, numberStudents,
             listStudents, true, true, tags, false, description)
         when(result){
             is Success -> {
@@ -100,6 +101,7 @@ class ImmutableProjectTest {
         val project = ImmutableProject(
             name = "some project",
             lab = "some lab",
+            authorId = "some author id",
             teacher = "some teacher",
             TA = "some TA",
             nbParticipant = 2345,
@@ -119,6 +121,7 @@ class ImmutableProjectTest {
             ImmutableProject(
                 name = get("name") as String,
                 lab = get("lab") as String,
+                authorId = get("authorID") as String,
                 teacher = get("teacher") as String,
                 TA = get("TA") as String,
                 nbParticipant = get("nbParticipant") as Int,
@@ -141,6 +144,7 @@ class ImmutableProjectTest {
             "11111",
             "Real-time reconstruction of deformable objects",
             "CVLAB",
+            "authorID37",
             "Teacher2",
             "TA2",
             1,
@@ -155,6 +159,7 @@ class ImmutableProjectTest {
         val validMap: Map<String, Any?> = mapOf(
             "name" to project.name,
             "lab" to project.lab,
+            "authorID" to project.authorId,
             "teacher" to project.teacher,
             "TA" to project.TA,
             "nbParticipant" to project.nbParticipant,

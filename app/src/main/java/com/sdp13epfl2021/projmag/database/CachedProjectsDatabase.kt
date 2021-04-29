@@ -21,7 +21,13 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
             }
             listeners.forEach { it -> it(change) }
         }
-        db.getAllProjects({ all -> all.forEach(this::addProject) }, {})
+        db.getAllProjects({ all ->
+            all.forEach {
+                addProject(it)
+                val change = ProjectChange(ProjectChange.Type.ADDED, it)
+                listeners.forEach { it -> it(change) }
+            }
+        }, {})
     }
 
 

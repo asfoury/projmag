@@ -151,11 +151,14 @@ class ProfilePageActivityTest {
                         4
                     ),
                     1
+
                 ),
                 isDisplayed()
             )
         )
         appCompatEditText8.perform(replaceText("22222"), closeSoftKeyboard())
+
+
     }
 
 
