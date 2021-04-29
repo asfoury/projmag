@@ -29,8 +29,7 @@ class ProfilePageActivityTest {
 
     @Test
     fun testSaveProfile() {
-        Thread.sleep(1000)
-        closeSoftKeyboard()
+        Thread.sleep(4000)
         onView(withId(R.id.buttonSubChangeProfil))
             .perform(click())
     }
