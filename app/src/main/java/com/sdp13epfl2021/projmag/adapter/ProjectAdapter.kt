@@ -1,6 +1,6 @@
 package com.sdp13epfl2021.projmag.adapter
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +21,8 @@ import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView,
+
+class ProjectAdapter(private val activity: Activity, private val utils: Utils, private val recyclerView: RecyclerView,
                      private val fromLink: Boolean, private var projectIdLink: String):
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
@@ -41,15 +42,16 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
     }
 
     init {
-        utils.projectsDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
         utils.projectsDatabase.addProjectsChangeListener { change ->
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
                 ProjectChange.Type.REMOVED -> removeProject(change.project)
             }
-            notifyDataSetChanged()
+            activity.runOnUiThread{notifyDataSetChanged()}
         }
+
+        utils.projectsDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
     }
 
     @Synchronized
@@ -67,6 +69,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
         }
         greyOut()
         sortDataset()
+        activity.runOnUiThread{notifyDataSetChanged()}
     }
 
     @Synchronized
@@ -110,7 +113,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
 
         // add the tags to the project
         for (tag in project.tags) {
-            val chipView: Chip = Chip(context)
+            val chipView: Chip = Chip(activity)
             chipView.text = tag
             holder.chipGroupView.addView(chipView)
         }
