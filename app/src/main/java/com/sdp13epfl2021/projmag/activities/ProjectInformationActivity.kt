@@ -113,6 +113,8 @@ class ProjectInformationActivity : AppCompatActivity() {
             setApplyButtonText(applyButton, alreadyApplied)
         },{})
 
+        applyButton.isEnabled = !projectVar.isTaken
+
         applyButton.setOnClickListener {
             userDataDatabase.applyUnapply(
                 !alreadyApplied,
