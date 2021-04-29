@@ -6,45 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".UserTypeChoice">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserType">
 
-        tools:layout_editor_absoluteX="169dp"
-        tools:layout_editor_absoluteY="295dp">
-
-        <RadioGroup
+        <RadioButton
+            android:id="@+id/radioProfessorType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="153dp"
-            android:layout_marginTop="307dp">
+            android:text="@string/professor" />
 
-            <RadioButton
-                android:id="@+id/radioProfessorType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/professor"></RadioButton>
-
-            <RadioButton
-                android:id="@+id/radioStudentType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/student"></RadioButton>
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/textViewUserType"
+        <RadioButton
+            android:id="@+id/radioStudentType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="131dp"
-            android:layout_marginTop="265dp"
-            android:text="@string/selection"
-            android:textSize="20sp" />
+            android:text="@string/student" />
+    </RadioGroup>
 
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/textViewUserType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/selection"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
 </androidx.constraintlayout.widget.ConstraintLayout>
