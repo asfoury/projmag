@@ -112,7 +112,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         applyButton.setOnClickListener {
             userDataDatabase.applyUnapply(
                 !alreadyApplied,
-                projectVar.id,
+               projectId,
                 {
                     Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show()
                     alreadyApplied = !alreadyApplied
