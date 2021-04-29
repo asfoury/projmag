@@ -26,7 +26,6 @@ data class ProjectFilter(
         if (master) {
             matches = matches && project.masterProject
         }
-        Log.d("invoke-filter", matches.toString())
         return matches
     }
 }
