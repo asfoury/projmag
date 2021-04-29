@@ -23,7 +23,7 @@ class ImmutableProjectTest {
     private val sectionList = SectionBaseManager.sectionList().toList()
 
 
-    val result = ImmutableProject.build(id, name, labName, projectManager, teacher, numberStudents,
+    val result = ImmutableProject.build(id, name, labName, authorID, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
         listOf(), sectionList) as Success<ImmutableProject>
     val project = result.value
