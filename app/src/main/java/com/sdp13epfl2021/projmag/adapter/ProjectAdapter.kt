@@ -19,7 +19,8 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 
-class ProjectAdapter(private val activity: Activity, private val utils: Utils, private val recyclerView: RecyclerView, private val fromLink: Boolean, private var projectIdLink: String) :
+class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView,
+                     private val fromLink: Boolean, private var projectIdLink: String):
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     companion object ItemAdapterCompanion {
@@ -29,7 +30,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
     var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
-    fun sortDataset() {
+    private fun sortDataset() {
         dataset.sortBy{ project -> project.isTaken }
         if (fromLink) {
             dataset.sortByDescending { project -> projectIdLink == project.id }
