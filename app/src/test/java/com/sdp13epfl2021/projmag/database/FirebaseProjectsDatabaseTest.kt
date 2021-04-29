@@ -45,6 +45,7 @@ class FirebaseProjectsDatabaseTest {
 
     val name = "epic roblox coding"
     val labName = "roblox labs"
+    val authorId = "some author id"
     val projectManager = "kaou el roblox master"
     val teacher = "kaou el roblox master"
     val description = "epic roblox coding alll freaking day DAMN SON"
@@ -56,13 +57,10 @@ class FirebaseProjectsDatabaseTest {
 
     val ID = "some-id"
 
-
-    val result = ImmutableProject.build(ID, name, labName, projectManager, teacher, numberStudents,
+    val result = ImmutableProject.build(ID, name, labName, authorId, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
         listOf(), sectionList) as Success<ImmutableProject>
     val project = result.value
-
-
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
         private var nb = 1
@@ -163,6 +161,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS.data).thenReturn(mapOf(
             "name" to project.name,
             "lab" to project.lab,
+            "authorID" to project.authorId,
             "teacher" to project.teacher,
             "TA" to project.TA,
             "nbParticipant" to project.nbParticipant,
@@ -203,6 +202,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS.data).thenReturn(mapOf(
             "name" to project.name,
             "lab" to project.lab,
+            "authorID" to project.authorId,
             "teacher" to project.teacher,
             "TA" to project.TA,
             "nbParticipant" to project.nbParticipant,

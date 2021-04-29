@@ -58,7 +58,9 @@
 
     <string name="display_number_student">Number of participant : %d</string>
     <string name="display_bachelor_only">Bachelor semester</string>
+    <string name="bachelor">Bachelor</string>
     <string name="display_master_only">Master semester</string>
+    <string name="master">Master</string>
     <string name="display_bachelor_and_master">Bachelor &amp; Master semester</string>
     <string name="display_not_found">Project not found</string>
 
@@ -74,6 +76,7 @@
     <string name="video_subtitling_instruction">This application uses Android Captions. To see subtitles you have to turn on the captions (currently only in English) in your device settings!\nYou can change these settings at any time under, device Settings > Accessibility > Caption Preferences</string>
     <string name="video_subtitling_instruction_ok_answer">You can change these settings at any time under, device Settings > Accessibility > Caption Preferences</string>
     <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
 
     <string name="settings">Settings</string>
@@ -99,7 +102,13 @@
     <string name="waiting_error_msg">An error has occurred while updating candidature : %s</string>
     <string name="waiting_accepted_msg">"Candidature accepted."</string>
     <string name="waiting_rejected_msg">"Candidature rejected."</string>
+    <string name="waiting_button">waitingListButton</string>
+    <string name="waiting_not_allowed">"Only author of this project can access this."</string>
 
     <string name="db_error_msg">An error has occurred while loading database : %s</string>
+    <string name="filter">Filter</string>
+    <string name="success">success</string>
+
+
 
 </resources>

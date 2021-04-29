@@ -27,6 +27,7 @@ class OfflineProjectsDatabaseTest {
         "12345",
         "What fraction of Google searches are answered by Wikipedia?",
         "DLAB",
+        "authorID23",
         "Robert West",
         "TA1",
         1,
@@ -43,6 +44,7 @@ class OfflineProjectsDatabaseTest {
         "11111",
         "Real-time reconstruction of deformable objects",
         "CVLAB",
+        "authorID29",
         "Teacher2",
         "TA2",
         1,
@@ -59,6 +61,7 @@ class OfflineProjectsDatabaseTest {
         "00000",
         "Implement a fast driver for a 100 Gb/s network card",
         "DSLAB",
+        "authorID31",
         "Teacher5",
         "TA5",
         3,
@@ -71,7 +74,6 @@ class OfflineProjectsDatabaseTest {
         listOf(),
         listOf(sectionList[2])
     )
-
 
 
     private val onFailureNotExpected: ((Exception) -> Unit) = { e ->

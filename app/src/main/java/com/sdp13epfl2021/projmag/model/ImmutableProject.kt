@@ -17,6 +17,7 @@ data class ImmutableProject(
     val id: String,
     val name: String,
     val lab: String,
+    val authorId: String,
     val teacher: String,
     val TA: String,
     val nbParticipant: Int,
@@ -34,6 +35,7 @@ data class ImmutableProject(
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
+            const val AUTHOR_ID = "authorID"
             const val TEACHER = "teacher"
             const val TA = "TA"
             const val NB_PARTICIPANT = "nbParticipant"
@@ -56,6 +58,7 @@ data class ImmutableProject(
             id: String,
             name: String,
             lab: String,
+            authorId: String,
             teacher: String,
             TA: String,
             nbParticipant: Int,
@@ -87,6 +90,7 @@ data class ImmutableProject(
                         id,
                         name,
                         lab,
+                        authorId,
                         teacher,
                         TA,
                         nbParticipant,
@@ -118,6 +122,7 @@ data class ImmutableProject(
                     id = projectId,
                     name = map[FieldNames.NAME] as String,
                     lab = map[FieldNames.LAB] as String,
+                    authorId = map[FieldNames.AUTHOR_ID] as String,
                     teacher = map[FieldNames.TEACHER] as String,
                     TA = map[FieldNames.TA] as String,
                     nbParticipant = (map[FieldNames.NB_PARTICIPANT] as Number).toInt(),
@@ -170,6 +175,7 @@ data class ImmutableProject(
         id: String = this.id,
         name: String = this.name,
         lab: String = this.lab,
+        authorId: String = this.authorId,
         teacher: String = this.teacher,
         TA: String = this.TA,
         nbParticipant: Int = this.nbParticipant,
@@ -182,7 +188,7 @@ data class ImmutableProject(
         videoURI: List<String> = this.videoURI,
         allowedSections: List<String> = this.allowedSections
     ) = build(
-        id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
+        id, name, lab, authorId, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
         tags, isTaken, description, videoURI, allowedSections
     )
 
@@ -194,6 +200,7 @@ data class ImmutableProject(
         FieldNames.NAME.toSearchName() to name.toLowerCase(Locale.ROOT).split(" "),
         FieldNames.LAB to lab,
         FieldNames.LAB.toSearchName() to lab.toLowerCase(Locale.ROOT),
+        FieldNames.AUTHOR_ID to authorId,
         FieldNames.TEACHER to teacher,
         FieldNames.TEACHER.toSearchName() to teacher.toLowerCase(Locale.ROOT).split(" "),
         FieldNames.TA to TA,

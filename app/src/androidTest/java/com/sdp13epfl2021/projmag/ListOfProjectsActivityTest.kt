@@ -1,14 +1,15 @@
 package com.sdp13epfl2021.projmag
 
+import android.content.Context
 import android.view.View
 import android.widget.AutoCompleteTextView
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
@@ -48,12 +49,12 @@ class ListOfProjectsActivityTest {
     @Test
     fun takenProjectsLastWithSearch() {
         val search = onView(withId(R.id.searchButton))
-        search.perform(ViewActions.click())
+        search.perform(click())
         activityRule.scenario.onActivity { projectListActivity ->
             val dataset = projectListActivity.getItemAdapter().dataset
             var taken = false
             for (project in dataset) {
-                if (taken == true) assert(project.isTaken)
+                if (taken) assert(project.isTaken)
                 if (project.isTaken) taken = true
             }
         }
@@ -134,5 +135,28 @@ class ListOfProjectsActivityTest {
         )
         // go back to list of projects
         Espresso.pressBack()
+    }
+
+    @Test
+    fun clearFilterDoNotCrash() {
+        onView(withId(R.id.filterButton)).perform(click())
+        val clear = ApplicationProvider.getApplicationContext<Context>().getString(R.string.clear)
+        onView(withText(clear)).perform(click())
+    }
+
+    @Test
+    fun cancelFilterDialogDoNotCrash() {
+        onView(withId(R.id.filterButton)).perform(click())
+        val cancel = ApplicationProvider.getApplicationContext<Context>().getString(R.string.cancel)
+        onView(withText(cancel)).perform(click())
+    }
+
+    @Test
+    fun filterDoNotCrash() {
+        onView(withId(R.id.filterButton)).perform(click())
+        val ok = ApplicationProvider.getApplicationContext<Context>().getString(R.string.ok)
+        onView(withId(R.id.filter_bachelor)).perform(click())
+        onView(withId(R.id.filter_master)).perform(click())
+        onView(withText(ok)).perform(click())
     }
 }

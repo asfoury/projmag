@@ -27,6 +27,7 @@ class ProjectUploaderTest {
         id = PID,
         name = "Some test project",
         lab = "some lab",
+        authorId = "some author id",
         teacher = "Some Teacher",
         TA = "Some TA",
         nbParticipant = 2,
@@ -35,7 +36,6 @@ class ProjectUploaderTest {
         bachelorProject = false,
         tags = listOf("t1", "t2"),
         isTaken = false,
-        description = "some description",
     )
 
     @Suppress("UNCHECKED_CAST")
