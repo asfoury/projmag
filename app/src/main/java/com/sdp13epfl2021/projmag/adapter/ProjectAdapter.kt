@@ -145,31 +145,35 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
     }
 
     override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList = ArrayList<ImmutableProject>()
-                val search = constraint.toString()
-                if (constraint.toString().isEmpty()) {
-                    filteredList.addAll(datasetAll)
-                } else {
-                    for (project in datasetAll) {
-                        if (project.name.toLowerCase(Locale.ROOT).contains(search.toLowerCase())) {
-                            filteredList.add(project)
-                        }
+        return ProjectListFilter()
+    }
+
+    private inner class ProjectListFilter : Filter() {
+        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
+            val filteredList = ArrayList<ImmutableProject>()
+            val search = constraint.toString()
+            if (constraint.toString().isEmpty()) {
+                filteredList.addAll(datasetAll)
+            } else {
+                for (project in datasetAll) {
+                    if (project.name.toLowerCase(Locale.ROOT)
+                            .contains(search.toLowerCase(Locale.ROOT))
+                    ) {
+                        filteredList.add(project)
                     }
                 }
-                val filterResults = FilterResults()
-                filterResults.values = filteredList.filter { projectFilter(it) }
-                return filterResults
             }
+            val filterResults = Filter.FilterResults()
+            filterResults.values = filteredList.filter { projectFilter(it) }
+            return filterResults
+        }
 
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                dataset.clear()
-                dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
-                sortDataset()
-                greyOut()
-                notifyDataSetChanged()
-            }
+        override fun publishResults(constraint: CharSequence?, results: Filter.FilterResults?) {
+            dataset.clear()
+            dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
+            sortDataset()
+            greyOut()
+            notifyDataSetChanged()
         }
     }
 
