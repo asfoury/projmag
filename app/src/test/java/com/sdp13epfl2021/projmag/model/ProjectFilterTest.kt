@@ -6,6 +6,7 @@ import junit.framework.TestCase.assertEquals
 class ProjectFilterTest {
     private val project = (ImmutableProject.build(
         id = "id",
+        authorId = "authorId",
         name = "name",
         lab = "lab",
         teacher = "teacher",
