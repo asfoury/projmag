@@ -17,6 +17,9 @@ import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.ProjectFilter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView,
@@ -29,6 +32,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
 
     var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
+    var projectFilter: ProjectFilter = ProjectFilter.default
 
     private fun sortDataset() {
         dataset.sortBy{ project -> project.isTaken }
@@ -144,27 +148,35 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
     }
 
     override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val filteredList = ArrayList<ImmutableProject>()
-                val search = constraint.toString()
-                if (constraint.toString().isEmpty()) {
-                    filteredList.addAll(datasetAll)
-                } else {
-                    for (project in datasetAll) if (project.name.toLowerCase().contains(search.toLowerCase())) filteredList.add(project)
-                }
-                val filterResults = FilterResults()
-                filterResults.values = filteredList
-                return filterResults
-            }
+        return ProjectListFilter()
+    }
 
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                dataset.clear()
-                dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
-                sortDataset()
-                greyOut()
-                notifyDataSetChanged()
+    private inner class ProjectListFilter : Filter() {
+        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
+            val filteredList = ArrayList<ImmutableProject>()
+            val search = constraint.toString()
+            if (constraint.toString().isEmpty()) {
+                filteredList.addAll(datasetAll)
+            } else {
+                for (project in datasetAll) {
+                    if (project.name.toLowerCase(Locale.ROOT)
+                            .contains(search.toLowerCase(Locale.ROOT))
+                    ) {
+                        filteredList.add(project)
+                    }
+                }
             }
+            val filterResults = Filter.FilterResults()
+            filterResults.values = filteredList.filter { projectFilter(it) }
+            return filterResults
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: Filter.FilterResults?) {
+            dataset.clear()
+            dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
+            sortDataset()
+            greyOut()
+            notifyDataSetChanged()
         }
     }
 
