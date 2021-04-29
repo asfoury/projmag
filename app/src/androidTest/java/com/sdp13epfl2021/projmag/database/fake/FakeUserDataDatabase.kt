@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.UserDataDatabase
+import java.util.Collections.emptyList
 
 class FakeUserDataDatabase : UserDataDatabase {
     override fun pushFavoriteProject(
@@ -42,5 +43,21 @@ class FakeUserDataDatabase : UserDataDatabase {
         onFailure: (java.lang.Exception) -> Unit
     ) {
         TODO("Not yet implemented")
+    }
+
+    override fun applyUnapply(
+        applied: Boolean,
+        project: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        
+    }
+
+    override fun getListOfAppliedToProjects(
+        onSuccess: (List<ProjectId>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        onSuccess(ArrayList<ProjectId>())
     }
 }

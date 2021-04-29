@@ -17,10 +17,7 @@ import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
-import android.widget.MediaController
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.VideoView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.auth.ktx.auth
@@ -46,6 +43,12 @@ import kotlin.collections.ArrayList
 
 
 class ProjectInformationActivity : AppCompatActivity() {
+
+    companion object {
+        val LOADING_STRING = "LOADING"
+        val APPLY_STRING = "APPLY"
+        val UNAPPLY_STRING = "UNAPPLY"
+    }
 
     private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
@@ -90,6 +93,41 @@ class ProjectInformationActivity : AppCompatActivity() {
             )
         }
         videoView.start()
+    }
+
+    private fun setApplyButtonText(applyButton: Button, applied: Boolean?) {
+        applyButton.text = when (applied) {
+            null -> LOADING_STRING
+            true -> UNAPPLY_STRING
+            false -> APPLY_STRING
+        }
+    }
+
+    private fun setUpApplyButton(applyButton: Button) {
+        val projectId = projectVar.id
+        val userDataDatabase = Utils.getInstance(this).userDataDatabase
+        var alreadyApplied = false
+        setApplyButtonText(applyButton,null)
+        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
+            alreadyApplied = projectIds.contains(projectId)
+            setApplyButtonText(applyButton, alreadyApplied)
+        },{})
+
+        applyButton.isEnabled = !projectVar.isTaken
+
+        applyButton.setOnClickListener {
+            userDataDatabase.applyUnapply(
+                !alreadyApplied,
+               projectId,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setApplyButtonText(applyButton, alreadyApplied)
+                },
+                {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
+            )
+
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,14 +179,15 @@ class ProjectInformationActivity : AppCompatActivity() {
                 addVideoAfterDownloaded(project.videoURI)
             }
         } else {
-            showToast("An error occurred while loading project.")
+            showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
         }
 
         // make the back button in the title bar work
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-    }
 
+        setUpApplyButton(findViewById(R.id.applyButton) as Button)
+    }
 
     // pause/start when we touch the video
     @SuppressLint("ClickableViewAccessibility")
@@ -207,7 +246,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                         } ?: run { addVideo(uri, null) }
                     }, { addVideo(uri, null) }
                 )
-            }, { showToast(getString(R.string.could_not_download_video)) })
+            }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
         }
     }
 
@@ -230,12 +269,12 @@ class ProjectInformationActivity : AppCompatActivity() {
         descriptionView.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun showToast(error: String) {
+    private fun showToast(message: String, toastLength: Int) {
         runOnUiThread {
             Toast.makeText(
                 this,
-                error,
-                Toast.LENGTH_LONG
+                message,
+                toastLength
             ).show()
         }
     }
@@ -271,11 +310,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                             descriptionView.text = descriptionView.text
                         }
                     } else {
-                        showToast("An error occurred while loading image.")
+                        showToast("An error occurred while loading image.", Toast.LENGTH_LONG)
                     }
                 }
             }, {
-                showToast("An error occurred while downloading image.")
+                showToast("An error occurred while downloading image.", Toast.LENGTH_LONG)
             })
             return holder
         }
@@ -357,7 +396,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 //this should not happen, unless the user was disconnected after loading the project view
-                showToast(resources.getString(R.string.waiting_not_allowed))
+                showToast(resources.getString(R.string.waiting_not_allowed), Toast.LENGTH_LONG)
             }
         }
         return super.onOptionsItemSelected(item)
