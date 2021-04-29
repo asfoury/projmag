@@ -35,7 +35,8 @@ class ProjectUploaderTest {
         nbParticipant = 2,
         TA = "Some TA",
         teacher = "Some Teacher",
-        lab = "some lab"
+        lab = "some lab",
+        authorId = "some author id"
     )
 
     @Suppress("UNCHECKED_CAST")
