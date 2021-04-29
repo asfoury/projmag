@@ -2,11 +2,8 @@ package com.sdp13epfl2021.projmag
 
 
 import android.content.Intent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.VideoView
-import androidx.core.view.isVisible
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -15,14 +12,9 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.rule.UiThreadTestRule
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import junit.framework.Assert.*
-import org.hamcrest.Description
-import junit.framework.Assert.*
 import org.hamcrest.Matchers
-import org.hamcrest.TypeSafeMatcher
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
