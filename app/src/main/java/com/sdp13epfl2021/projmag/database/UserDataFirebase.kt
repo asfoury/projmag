@@ -3,9 +3,11 @@ package com.sdp13epfl2021.projmag.database
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 /**
  * An implementation of a user-data database
@@ -28,10 +30,17 @@ class UserDataFirebase(
         const val FAVORITES_FIELD = "favorites"
 
         /**
+         * The field containing applied to
+         */
+        const val APPLIED_TO_FIELD = "applied to"
+
+        /**
          *  The field containing cv
          */
         const val CV_FIELD = "cv"
     }
+
+
 
     /**
      * Return the current logged user or null if none
@@ -127,6 +136,37 @@ class UserDataFirebase(
                 SetOptions.merge()
             ).addOnSuccessListener { onSuccess() }
                 .addOnFailureListener(onFailure)
+        }
+    }
+
+    override fun applyUnapply(
+        apply: Boolean,
+        projectId: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        getUserDoc()?.let { doc ->
+            val fieldValue = if (apply) {
+                FieldValue.arrayUnion(projectId)
+            } else {
+                FieldValue.arrayRemove(projectId)
+            }
+            doc.update(APPLIED_TO_FIELD, fieldValue)
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener(onFailure)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getListOfAppliedToProjects (
+        onSuccess: (List<ProjectId>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        getUserDoc()?.run {
+            get()
+                .addOnSuccessListener { doc ->
+                    onSuccess((doc[APPLIED_TO_FIELD] as? List<ProjectId>) ?: listOf())
+                }.addOnFailureListener(onFailure)
         }
     }
 }
