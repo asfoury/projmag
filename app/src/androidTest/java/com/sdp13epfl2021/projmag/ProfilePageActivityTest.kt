@@ -28,6 +28,14 @@ class ProfilePageActivityTest {
     var mActivityTestRule = ActivityTestRule(ProfilePageActivity::class.java)
 
     @Test
+    fun testSaveProfile() {
+        Thread.sleep(1000)
+        closeSoftKeyboard()
+        onView(withId(R.id.profile_save))
+            .perform(click())
+    }
+
+    @Test
     fun profilePageActivityTest() {
         val appCompatEditText = onView(
             allOf(
@@ -150,13 +158,7 @@ class ProfilePageActivityTest {
         appCompatEditText8.perform(replaceText("22222"), closeSoftKeyboard())
     }
 
-//    @Test
-//    fun testSaveProfile() {
-//        Thread.sleep(1000)
-//        closeSoftKeyboard()
-//        onView(withId(R.id.profile_save))
-//            .perform(click())
-//    }
+
 
 
     private fun childAtPosition(
