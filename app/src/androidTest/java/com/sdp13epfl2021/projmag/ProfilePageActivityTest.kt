@@ -134,20 +134,7 @@ class ProfilePageActivityTest {
         )
         appCompatEditText7.perform(replaceText("7777777"), closeSoftKeyboard())
 
-        val appCompatEditText8 = onView(
-            allOf(
-                withId(R.id.profile_sciper),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.LinearLayout")),
-                        4
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText8.perform(replaceText("22222"), closeSoftKeyboard())
+
 
         val appCompatEditText9 = onView(
             allOf(

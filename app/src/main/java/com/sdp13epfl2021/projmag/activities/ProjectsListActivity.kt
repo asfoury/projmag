@@ -25,6 +25,7 @@ class ProjectsListActivity : AppCompatActivity() {
     private lateinit var projectAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
 
+
     fun getItemAdapter(): ProjectAdapter {
         return projectAdapter
     }
@@ -54,6 +55,13 @@ class ProjectsListActivity : AppCompatActivity() {
             val intent = Intent(this, Form::class.java)
             startActivity(intent)
         }
+
+
+        if(!UserTypeChoice.isProfessor){
+            fab.setVisibility(View.INVISIBLE)
+        }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -87,7 +87,7 @@ class SignInActivity : AppCompatActivity() {
                         val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser;
                         Log.d("SignInActivity", "signInWithCredential:success")
                         if(isNew == true){
-                            val intent = Intent(this, ProfilePageActivity::class.java)
+                            val intent = Intent(this, UserTypeChoice::class.java)
                             startActivity(intent)
                             finish()
                         } else if(isNew == false) {
