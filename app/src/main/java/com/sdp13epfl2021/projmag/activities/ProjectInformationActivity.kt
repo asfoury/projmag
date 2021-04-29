@@ -92,12 +92,11 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private fun setApplyButtonText(applyButton: Button, applied: Boolean?) {
-        if (applied == null)
-            applyButton.text = LOADING_STRING
-        else if (applied)
-            applyButton.text = UNAPPLY_STRING
-        else
-            applyButton.text = APPLY_STRING
+        applyButton.text = when (applied) {
+            null -> LOADING_STRING
+            true -> UNAPPLY_STRING
+            false -> APPLY_STRING
+        }
     }
 
     private fun setUpApplyButton(applyButton: Button) {
