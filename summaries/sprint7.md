@@ -11,7 +11,9 @@ This week I added the apply/unapply feature to the app. I also set out to and sp
 
 
 ## Arnaud 
-
+This week I added the possibility for teachers to view the list of candidatures for their projects.  
+I also fix a bug where projects were not always displayed when the phone was in offline mode.  
+I spent a lot of time writing tests and doing code reviews.  
 
 ## Kaourintin 
 
