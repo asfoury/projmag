@@ -114,11 +114,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                 !alreadyApplied,
                 projectVar.id,
                 {
-                    Toast.makeText(this, getString(R.string.success), Toast.LENGTH_SHORT).show()
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
                     setApplyButtonText(applyButton, alreadyApplied)
                 },
-                {Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_SHORT).show()}
+                {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
             )
 
         }
@@ -172,7 +172,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 addVideoAfterDownloaded(project.videoURI)
             }
         } else {
-            showToast("An error occurred while loading project.")
+            showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
         }
 
         // make the back button in the title bar work
@@ -239,7 +239,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                         } ?: run { addVideo(uri, null) }
                     }, { addVideo(uri, null) }
                 )
-            }, { showToast(getString(R.string.could_not_download_video)) })
+            }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
         }
     }
 
@@ -262,12 +262,12 @@ class ProjectInformationActivity : AppCompatActivity() {
         descriptionView.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    private fun showToast(error: String) {
+    private fun showToast(message: String, toastLength: Int) {
         runOnUiThread {
             Toast.makeText(
                 this,
-                error,
-                Toast.LENGTH_LONG
+                message,
+                toastLength
             ).show()
         }
     }
@@ -303,11 +303,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                             descriptionView.text = descriptionView.text
                         }
                     } else {
-                        showToast("An error occurred while loading image.")
+                        showToast("An error occurred while loading image.", Toast.LENGTH_LONG)
                     }
                 }
             }, {
-                showToast("An error occurred while downloading image.")
+                showToast("An error occurred while downloading image.", Toast.LENGTH_LONG)
             })
             return holder
         }
