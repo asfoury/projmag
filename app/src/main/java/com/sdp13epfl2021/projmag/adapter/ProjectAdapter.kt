@@ -17,6 +17,9 @@ import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.ProjectFilter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ProjectAdapter(private val context: Context, private val utils: Utils, private val recyclerView: RecyclerView, private val fromLink: Boolean, private var projectIdLink: String) :
@@ -28,6 +31,7 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
 
     var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
+    var projectFilter: ProjectFilter = ProjectFilter.default
 
     fun sortDataset() {
         dataset.sortBy{ project -> project.isTaken }
@@ -148,10 +152,14 @@ class ProjectAdapter(private val context: Context, private val utils: Utils, pri
                 if (constraint.toString().isEmpty()) {
                     filteredList.addAll(datasetAll)
                 } else {
-                    for (project in datasetAll) if (project.name.toLowerCase().contains(search.toLowerCase())) filteredList.add(project)
+                    for (project in datasetAll) {
+                        if (project.name.toLowerCase(Locale.ROOT).contains(search.toLowerCase())) {
+                            filteredList.add(project)
+                        }
+                    }
                 }
                 val filterResults = FilterResults()
-                filterResults.values = filteredList
+                filterResults.values = filteredList.filter { projectFilter(it) }
                 return filterResults
             }
 
