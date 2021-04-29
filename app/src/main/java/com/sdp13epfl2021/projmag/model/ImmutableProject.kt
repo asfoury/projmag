@@ -1,15 +1,12 @@
     package com.sdp13epfl2021.projmag.model
 
-import android.net.Uri
 import android.os.Parcelable
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
-import kotlinx.parcelize.RawValue
 import java.lang.ClassCastException
 import java.lang.NullPointerException
 import java.util.*
-import kotlin.Exception
 
 sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
@@ -20,6 +17,7 @@ data class ImmutableProject constructor(
     val id: String,
     val name: String,
     val lab: String,
+    val authorId: String,
     val teacher: String,
     val TA: String,
     val nbParticipant: Int,
@@ -37,6 +35,7 @@ data class ImmutableProject constructor(
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
+            const val AUTHOR_ID = "authorID"
             const val TEACHER = "teacher"
             const val TA = "TA"
             const val NB_PARTICIPANT = "nbParticipant"
@@ -58,6 +57,7 @@ data class ImmutableProject constructor(
             id: String,
             name: String,
             lab: String,
+            authorId: String,
             teacher: String,
             TA: String,
             nbParticipant: Int,
@@ -85,6 +85,7 @@ data class ImmutableProject constructor(
                         id,
                         name,
                         lab,
+                        authorId,
                         teacher,
                         TA,
                         nbParticipant,
@@ -115,6 +116,7 @@ data class ImmutableProject constructor(
                     id = projectId,
                     name = map[FieldNames.NAME] as String,
                     lab = map[FieldNames.LAB] as String,
+                    authorId = map[FieldNames.AUTHOR_ID] as String,
                     teacher = map[FieldNames.TEACHER] as String,
                     TA = map[FieldNames.TA] as String,
                     nbParticipant = (map[FieldNames.NB_PARTICIPANT] as Number).toInt(),
@@ -163,6 +165,7 @@ data class ImmutableProject constructor(
         id: String = this.id,
         name: String = this.name,
         lab: String = this.lab,
+        authorId: String = this.authorId,
         teacher: String = this.teacher,
         TA: String = this.TA,
         nbParticipant: Int = this.nbParticipant,
@@ -174,7 +177,7 @@ data class ImmutableProject constructor(
         description: String = this.description,
         videoURI: List<String> = this.videoURI
     ) = build(
-        id, name, lab, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
+        id, name, lab, authorId, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
         tags, isTaken, description, videoURI
     )
 
@@ -186,6 +189,7 @@ data class ImmutableProject constructor(
         FieldNames.NAME.toSearchName() to name.toLowerCase(Locale.ROOT).split(" "),
         FieldNames.LAB to lab,
         FieldNames.LAB.toSearchName() to lab.toLowerCase(Locale.ROOT),
+        FieldNames.AUTHOR_ID to authorId,
         FieldNames.TEACHER to teacher,
         FieldNames.TEACHER.toSearchName() to teacher.toLowerCase(Locale.ROOT).split(" "),
         FieldNames.TA to TA,
