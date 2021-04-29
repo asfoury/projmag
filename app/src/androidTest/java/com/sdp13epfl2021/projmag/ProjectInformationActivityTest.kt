@@ -216,7 +216,7 @@ class ProjectInformationActivityTest {
 
     @Test
     fun clickOnApplyButton() {
-        onView(withId(R.id.applyButton)).perform(click())
+        onView(withId(R.id.applyButton)).perform(scrollTo()).perform(click())
     }
 
 }
