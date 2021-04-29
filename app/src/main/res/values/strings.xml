@@ -99,8 +99,14 @@
     <string name="waiting_not_allowed">"Only author of this project can access this."</string>
 
     <string name="db_error_msg">An error has occurred while loading database : %s</string>
+
+    <string name="professor">Professor</string>
+    <string name="student">Student</string>
+    <string name="selection">Your selection:</string>
+
     <string name="filter">Filter</string>
     <string name="success">success</string>
+
 
 
 
