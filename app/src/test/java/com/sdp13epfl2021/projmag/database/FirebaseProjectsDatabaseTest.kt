@@ -56,7 +56,8 @@ class FirebaseProjectsDatabaseTest {
         nbParticipant = 2,
         TA = "Some TA",
         teacher = "Some Teacher",
-        lab = "some lab"
+        lab = "some lab",
+        authorId = "some author id"
     )
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
@@ -158,6 +159,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS.data).thenReturn(mapOf(
             "name" to project.name,
             "lab" to project.lab,
+            "authorID" to project.authorId,
             "teacher" to project.teacher,
             "TA" to project.TA,
             "nbParticipant" to project.nbParticipant,
@@ -196,6 +198,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockQDS.data).thenReturn(mapOf(
             "name" to project.name,
             "lab" to project.lab,
+            "authorID" to project.authorId,
             "teacher" to project.teacher,
             "TA" to project.TA,
             "nbParticipant" to project.nbParticipant,
