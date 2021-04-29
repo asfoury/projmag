@@ -27,13 +27,13 @@ class ProfilePageActivityTest {
     @JvmField
     var mActivityTestRule = ActivityTestRule(ProfilePageActivity::class.java)
 
-    @Test
-    fun testSaveProfile() {
-        Thread.sleep(1000)
-        onView(withId(R.id.buttonSubChangeProfil))
-            .perform(scrollTo())
-            .perform(click())
-    }
+//    @Test
+//    fun testSaveProfile() {
+//        Thread.sleep(1000)
+//        onView(withId(R.id.buttonSubChangeProfil))
+//            .perform(scrollTo())
+//            .perform(click())
+//    }
 
     @Test
     fun profilePageActivityTest() {
