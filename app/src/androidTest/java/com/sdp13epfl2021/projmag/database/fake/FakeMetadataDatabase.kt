@@ -3,7 +3,7 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.database.MetadataDatabase
 import java.lang.Exception
 
-class FakeMetadataDatabase : MetadataDatabase {
+class FakeMetadataDatabase(var subs: Map<String, String?> = emptyMap()) : MetadataDatabase {
     override fun addSubtitlesToVideo(
         videoUri: String,
         language: String,
@@ -20,6 +20,6 @@ class FakeMetadataDatabase : MetadataDatabase {
         onSuccess: (String?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        onSuccess(subs[videoUri])
     }
 }
