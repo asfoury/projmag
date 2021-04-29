@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import java.lang.Exception
 
 /**
  * An interface to manage a database containing
@@ -79,6 +78,36 @@ interface UserDataDatabase {
     fun pushCv(
         cv: CurriculumVitae,
         onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Apply or unapply to the given project depending on the value of apply
+     * Call `onSuccess` if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param apply function applies if true, else unapplies
+     * @param projectId the project to apply or unapply to
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
+    fun applyUnapply(
+        apply: Boolean,
+        projectId: ProjectId,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Gets a `List` of IDs of applied to `Project`s to the database
+     * Call `onSuccess` with the a `List` of IDs if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
+    fun getListOfAppliedToProjects(
+        onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     )
 }
