@@ -47,21 +47,16 @@ class ProfilePageActivity : AppCompatActivity() {
 
         UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile)
 
-        findViewById<Button>(R.id.profile_save).setOnClickListener{
-            val profile = createProfileFromFields()
-            if(profile != null) {
-                UserProfileDatabase(Firebase.firestore, Firebase.auth).uploadProfile(profile, {}, {})
-            }
-        }
-
-
-
         buttonAddCv.setOnClickListener{
             val intent = Intent(this,CVCreationActivity::class.java)
             startActivity(intent)
             finish()
         }
         buttonSubChange.setOnClickListener{
+            val profile = createProfileFromFields()
+            if(profile != null) {
+                UserProfileDatabase(Firebase.firestore, Firebase.auth).uploadProfile(profile, {}, {})
+            }
             val intent = Intent(this,ProjectsListActivity::class.java)
             startActivity(intent)
             finish()

@@ -159,23 +159,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="83dp"
-
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/profile_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/form_save_profile" />
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="99dp"
         android:orientation="horizontal">
 
