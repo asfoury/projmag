@@ -29,7 +29,6 @@ class ProfilePageActivity : AppCompatActivity() {
     private val pickImage = 0
     private var imageUri: Uri? = null
 
-    private var userProfileUploader : UserProfileDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

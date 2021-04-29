@@ -30,20 +30,6 @@ class UserProfileDatabase(
      * @return current logged user or null
      */
     private fun getUser(): FirebaseUser? = auth.currentUser
-
-
-    /**
-     * Return the document associated to the user
-     *
-     * @return document associated to the user
-     */
-    private fun getUserDoc(): DocumentReference? =
-        getUser()?.let { user ->
-            firestore
-                .collection(UserDataFirebase.ROOT)
-                .document(user.uid)
-        }
-
     public fun uploadProfile(
         profile: ImmutableProfile,
         onSuccess: () -> Unit,
