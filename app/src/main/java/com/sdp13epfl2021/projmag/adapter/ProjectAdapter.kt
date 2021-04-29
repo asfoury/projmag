@@ -148,15 +148,15 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
 
 
     private fun tagAndSectionsChipViewSetup(project: ImmutableProject, holder: ProjectViewHolder){
-        val green = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.light_green))
-        val teal = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.teal_700))
+        val green = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.light_green))
+        val teal = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.teal_700))
         chipAdding(project.tags, holder, green)
         chipAdding(project.allowedSections, holder,teal)
     }
 
     private fun chipAdding(list:List<String>, holder:ProjectViewHolder, color:ColorStateList){
         for(text in list){
-            val chipView: Chip = Chip(context)
+            val chipView: Chip = Chip(activity)
             chipView.text = text as CharSequence
             chipView.chipBackgroundColor = color
             holder.chipGroupView.addView(chipView)
