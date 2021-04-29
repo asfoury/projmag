@@ -214,6 +214,11 @@ class ProjectInformationActivityTest {
         onView(withId(R.id.shareButton)).perform(click())
     }
 
+    @Test
+    fun clickOnApplyButton() {
+        onView(withId(R.id.applyButton)).perform(click())
+    }
+
 }
 
 

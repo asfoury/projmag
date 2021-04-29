@@ -58,6 +58,6 @@ class FakeUserDataDatabase : UserDataDatabase {
         onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        onSuccess(ArrayList<ProjectId>())
+        TODO("Not yet implemented")
     }
 }
