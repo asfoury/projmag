@@ -20,10 +20,12 @@ import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.FileDatabase
 import com.sdp13epfl2021.projmag.database.MetadataDatabase
@@ -56,6 +58,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var projectDir: File
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
+    private var userID: String? = null
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -89,6 +92,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
             )
         }
+        videoView.start()
     }
 
     private fun setApplyButtonText(applyButton: Button, applied: Boolean?) {
@@ -129,6 +133,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_project_information)
 
         val utils = Utils.getInstance(this)
+        userID = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
 
@@ -143,7 +148,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
         // get the project
-        val project: ImmutableProject? = intent.getParcelableExtra("project")
+        val project: ImmutableProject? = intent.getParcelableExtra(MainActivity.projectString)
         if (project != null) {
             projectVar = project
             // set the text views
@@ -357,6 +362,12 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
 
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.waitingListButton)?.isVisible = (userID == projectVar.authorId)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_information, menu)
         return true
@@ -376,6 +387,15 @@ class ProjectInformationActivity : AppCompatActivity() {
             sendIntent.type = "text/plain"
             startActivity(sendIntent)
             return true
+        } else if (item.itemId == R.id.waitingListButton) {
+            if (userID == projectVar.authorId) {
+                val intent = Intent(this, WaitingListActivity::class.java)
+                intent.putExtra(MainActivity.projectIdString, projectVar.id)
+                startActivity(intent)
+            } else {
+                //this should not happen, unless the user was disconnected after loading the project view
+                showToast(resources.getString(R.string.waiting_not_allowed))
+            }
         }
         return super.onOptionsItemSelected(item)
     }

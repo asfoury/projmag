@@ -94,6 +94,10 @@ class FirebaseCandidatureDatabaseTest {
 
         //DocumentSnapshot
         Mockito
+            .`when`(mockDS.exists())
+            .thenReturn(true)
+        
+        Mockito
             .`when`(mockDS.data)
             .thenReturn(mapOf(
                 userIDAccepted to "Accepted",
@@ -153,17 +157,6 @@ class FirebaseCandidatureDatabaseTest {
         assertTrue(usersID.contains(userIDAccepted))
         assertTrue(usersID.contains(userIDRejected))
         assertTrue(usersID.contains(userIDWaiting))
-    }
-
-    @Test(timeout = 1000)
-    fun pushCandidatureFailedSuccessfully() {
-        val result: CompletableFuture<Exception> = CompletableFuture()
-        candidatureDBWithoutAuth.pushCandidature(candidature, Candidature.State.Waiting, {
-            assertTrue(false)
-        }, {
-            result.complete(it)
-        })
-        assertTrue(result.get() != null)
     }
 
     @Test(timeout = 1000)
