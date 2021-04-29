@@ -16,6 +16,7 @@ private val ID_PATTERN: Regex = Regex("^[a-zA-Z0-9]*\$")
 class OfflineProjectDatabase(private val db: ProjectsDatabase, private val projectsDir: File) : ProjectsDatabase {
 
     private var projectsFiles: Map<ProjectId, File> = emptyMap()
+    private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
 
     init {
         projectsDir.mkdirs()
@@ -27,12 +28,12 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
                 ProjectChange.Type.MODIFIED -> saveProject(change.project)
                 ProjectChange.Type.REMOVED -> deleteProject(change.project.id)
             }
+            listeners.forEach { it -> it(change) }
         }
 
         db.getAllProjects({ remoteProjects ->
             GlobalScope.launch(Dispatchers.IO) {
                 remoteProjects.forEach { p -> saveProject(p) }
-                loadProjects()
             }
         }, {})
     }
@@ -200,13 +201,15 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
     ) {
         db.updateVideoWithProject(id, uri, onSuccess, onFailure)
     }
-  
+
+    @Synchronized
     override fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
-        db.addProjectsChangeListener(changeListener)
+        listeners = listeners + changeListener
     }
 
+    @Synchronized
     override fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit) {
-        db.removeProjectsChangeListener(changeListener)
+        listeners = listeners - changeListener
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.File
@@ -19,6 +20,14 @@ class Utils(
 
     companion object {
         private var instance: Utils? = null
+
+        // Uncomment to disable Firebase cache
+        /*init {
+            val settings = firestoreSettings {
+                isPersistenceEnabled = false
+            }
+            Firebase.firestore.firestoreSettings = settings
+        }*/
 
         @Synchronized
         fun getInstance(
