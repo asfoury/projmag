@@ -16,6 +16,9 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
 import com.sdp13epfl2021.projmag.adapter.CandidatureAdapter
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
@@ -33,18 +36,20 @@ import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 
-
+@LargeTest
 @RunWith(AndroidJUnit4::class)
 class WaitingListTest {
 
-    lateinit var scenario: ActivityScenario<WaitingListActivity>
+    val auth: FirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
 
     val pid = "J890ghj34sdklv3245"
     val project = ImmutableProject(
         pid,
         "What fraction of Google searches are answered by Wikipedia?",
         "DLAB",
+        "authorID11",
         "Robert West",
         "TA1",
         1,
@@ -91,7 +96,7 @@ class WaitingListTest {
     )
     val metadataDB = FakeMetadataDatabase()
     val context: Context = ApplicationProvider.getApplicationContext()
-    val utils = Utils.getInstance(context, true, userdataDB, candidatureDB, fileDB, metadataDB, projectsDB)
+    val utils = Utils.getInstance(context, true, auth, userdataDB, candidatureDB, fileDB, metadataDB, projectsDB)
 
     private fun getIntent(): Intent {
         val intent = Intent(context, WaitingListActivity::class.java)

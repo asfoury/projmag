@@ -92,7 +92,11 @@
     <string name="waiting_error_msg">An error has occurred while updating candidature : %s</string>
     <string name="waiting_accepted_msg">"Candidature accepted."</string>
     <string name="waiting_rejected_msg">"Candidature rejected."</string>
+    <string name="waiting_button">waitingListButton</string>
+    <string name="waiting_not_allowed">"Only author of this project can access this."</string>
 
     <string name="db_error_msg">An error has occurred while loading database : %s</string>
+
+
 
 </resources>
