@@ -1,7 +1,7 @@
 # Summary for week 7
 
 ## Mohamed
-
+This week I had to finish last weeks PR(needed to use mockito to write tests and improve code coverage) and also work on QR generation for the projects, I was able to do both but the 2 PRs wont pass the android tests on Cirrus despite passing before and passing locally. I am not sure what to do, this sprint my time estimates were corrcect for the implememtation of the new feature and for the tests, but I ended up working about 15 hours with a large part dedicated to trying different things to make the tests pass on Cirrus. I am not sure what to do maybe try to use the same emulator that is used on Cirrus?
 
 ## Giovanni
 
