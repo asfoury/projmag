@@ -4,7 +4,7 @@
 This week I had to finish last weeks PR(needed to use mockito to write tests and improve code coverage) and also work on QR generation for the projects, I was able to do both but the 2 PRs wont pass the android tests on Cirrus despite passing before and passing locally. I am not sure what to do, this sprint my time estimates were corrcect for the implememtation of the new feature and for the tests, but I ended up working about 15 hours with a large part dedicated to trying different things to make the tests pass on Cirrus. I am not sure what to do maybe try to use the same emulator that is used on Cirrus?
 
 ## Giovanni
-
+This week I split UI to have to diffrent interface for student and professor, allow user to access diffrent functionality depend on if there are student and professor (when the user first sign). This task take me more time than expected, I don't have enough time to implement my second task which is create list of own projects available offline
 
 ## Luke (Scrum Master)
 This week I added the apply/unapply feature to the app. I also set out to and spent a lot of time trying to enable the display of the list of projects applied to. I however realised that Paul is already creating a filter interface, so we decided that we would integrate the two. I had trouble testing my code and even a basic test would not work until I remembered the system's emulator screen is small. I also review a few PRs. I spent an overall 11hrs this week.
