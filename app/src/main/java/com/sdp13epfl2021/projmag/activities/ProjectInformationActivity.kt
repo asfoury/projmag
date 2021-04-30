@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -36,7 +37,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -363,6 +366,15 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun createDynamicLink() : Uri {
+        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+            link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
+            domainUriPrefix = "https://projmag.page.link/"
+            androidParameters {}
+        }
+        return dynamicLink.uri
+    }
+
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.waitingListButton)?.isVisible = (userID == projectVar.authorId)
@@ -377,12 +389,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
-            val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-                link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
-                domainUriPrefix = "https://projmag.page.link/"
-                androidParameters {}
-            }
-            val linkToSend = dynamicLink.uri
+            val linkToSend = createDynamicLink()
 
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, linkToSend.toString())
@@ -398,6 +405,19 @@ class ProjectInformationActivity : AppCompatActivity() {
                 //this should not happen, unless the user was disconnected after loading the project view
                 showToast(resources.getString(R.string.waiting_not_allowed), Toast.LENGTH_LONG)
             }
+        }
+        else if(item.itemId == R.id.generateQRCodeButton) {
+            val linkToSend = createDynamicLink()
+
+            val qrImage = QRCode.from(linkToSend.toString()).withSize(800,800)
+            val stream = ByteArrayOutputStream()
+            qrImage.bitmap().compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val byteArray: ByteArray = stream.toByteArray()
+
+            val intent = Intent(this, QRCodeActivity::class.java)
+            intent.putExtra("qrcode",byteArray)
+            startActivity(intent)
+            return true
         }
         return super.onOptionsItemSelected(item)
     }
