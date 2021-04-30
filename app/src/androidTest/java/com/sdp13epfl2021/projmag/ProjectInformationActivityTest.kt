@@ -216,12 +216,20 @@ class ProjectInformationActivityTest {
     }
 
     @Test
+    fun clickOnGenQRButton() {
+        Thread.sleep(2000)
+        onView(withId(R.id.generateQRCodeButton)).perform(click())
+    }
+
+    @Test
     fun clickOnApplyButton() {
+        Thread.sleep(2000)
         onView(withId(R.id.applyButton)).perform(scrollTo()).perform(click())
     }
 
     @Test
     fun clickOnWaitingListButton() {
+        Thread.sleep(2000)
         onView(withId(R.id.waitingListButton)).perform(click())
     }
 }

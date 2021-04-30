@@ -5,13 +5,19 @@
     <item android:id="@+id/waitingListButton"
         android:title="@string/waiting_button"
         android:icon="@drawable/waiting_list_icon_24"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
 
     <item android:id="@+id/shareButton"
         android:title="@string/share"
         android:icon="@drawable/ic_baseline_share_24"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/generateQRCodeButton"
+        android:title="@string/share"
+        android:icon="@drawable/ic_baseline_qr_code_24"
+        app:showAsAction="always"
         />
 
 </menu>
