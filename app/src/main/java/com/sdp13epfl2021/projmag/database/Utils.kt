@@ -34,27 +34,57 @@ class Utils(
             context: Context,
             reset: Boolean = false,
             auth: FirebaseAuth = Firebase.auth,
-            userDataDB: UserDataDatabase = UserDataFirebase(Firebase.firestore, auth),
-            candidatureDB: CandidatureDatabase = FirebaseCandidatureDatabase(Firebase.firestore, auth, userDataDB),
+            userDataDB: UserDataDatabase = createUserDB(context, auth, reset),
+            candidatureDB: CandidatureDatabase = createCandidatureDB(context, auth, userDataDB, reset),
             fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, auth),
             metadataDB: MetadataDatabase = MetadataFirebase(Firebase.firestore),
-            projectsDB: ProjectsDatabase? = null //avoid creating an offline database every time the function is called
+            projectsDB: ProjectsDatabase = createProjectsDB(context, reset)
         ): Utils {
             if (instance == null || reset) {
-                instance = Utils(auth, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB ?: createProjectsDB(context))
+                instance = Utils(auth, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
             }
             return instance!!
         }
 
-        private fun createProjectsDB(context: Context): ProjectsDatabase {
-            return CachedProjectsDatabase(
-                OfflineProjectDatabase(
-                    FirebaseProjectsDatabase(
-                        Firebase.firestore
-                    ),
-                    File(context.applicationContext.filesDir, "projects")
+        private fun createProjectsDB(context: Context, reset: Boolean): ProjectsDatabase {
+            return if (reset || instance?.projectsDatabase == null) {
+                CachedProjectsDatabase(
+                    OfflineProjectDatabase(
+                        FirebaseProjectsDatabase(
+                            Firebase.firestore
+                        ),
+                        File(context.applicationContext.filesDir, "projects")
+                    )
                 )
-            )
+            } else {
+                instance!!.projectsDatabase
+            }
+        }
+
+        private fun createUserDB(context: Context, auth: FirebaseAuth, reset: Boolean): UserDataDatabase {
+            return if (reset || instance?.userDataDatabase == null) {
+                OfflineCachedUserDataDatabase(
+                    UserDataFirebase(
+                        Firebase.firestore,
+                        auth
+                    ),
+                    auth.currentUser?.uid ?: "",
+                    File(context.applicationContext.filesDir, "users")
+                )
+            } else {
+                instance!!.userDataDatabase
+            }
+        }
+
+        private fun createCandidatureDB(context: Context, auth: FirebaseAuth, userDataDB: UserDataDatabase, reset: Boolean): CandidatureDatabase {
+            return if (reset || instance?.candidatureDatabase == null) {
+                OfflineCachedCandidatureDatabase(
+                    FirebaseCandidatureDatabase(Firebase.firestore, auth, userDataDB),
+                    context.applicationContext.filesDir
+                )
+            } else {
+                instance!!.candidatureDatabase
+            }
         }
     }
 }
