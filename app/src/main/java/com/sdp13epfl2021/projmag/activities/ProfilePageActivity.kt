@@ -8,14 +8,10 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.local.LruGarbageCollector
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.UserProfileDatabase
@@ -49,7 +45,11 @@ class ProfilePageActivity : AppCompatActivity() {
         }
 
 
-        UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile)
+        UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
+            Toast.makeText(this, "Failed to load profile", Toast.LENGTH_LONG).show()
+            Log.d("DEBUG PP", "shoul show toast")
+        }
+
 
         buttonAddCv.setOnClickListener{
             val intent = Intent(this,CVCreationActivity::class.java)
@@ -78,7 +78,7 @@ class ProfilePageActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.profile_phone_number).setText(profile.phoneNumber)
             findViewById<EditText>(R.id.profile_sciper).setText(profile.sciper.toString())
         } else {
-            Log.d(ContentValues.TAG, "NULL")
+            Toast.makeText(this, "Failed to load profile", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -95,9 +95,11 @@ class ProfilePageActivity : AppCompatActivity() {
         val firstName = findViewById<EditText>(R.id.profile_firstname).text.toString()
         val lastName = findViewById<EditText>(R.id.profile_lastname).text.toString()
         val age = findViewById<EditText>(R.id.profile_age).text.toString()
-        val gender = if (findViewById<EditText>(R.id.profile_genre).text.toString() == Gender.MALE.toString())  Gender.MALE
-        else {
-            if (findViewById<EditText>(R.id.profile_genre).text.toString() == Gender.FEMALE.toString()) Gender.FEMALE else Gender.OTHER
+
+        val gender = when(findViewById<EditText>(R.id.profile_genre).text.toString()){
+            Gender.MALE.name -> Gender.MALE
+            Gender.FEMALE.name -> Gender.FEMALE
+            else -> Gender.OTHER
         }
         val phoneNumber = findViewById<EditText>(R.id.profile_phone_number).text.toString()
         val role = Role.STUDENT
