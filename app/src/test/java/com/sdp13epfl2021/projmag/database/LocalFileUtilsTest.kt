@@ -1,11 +1,8 @@
 package com.sdp13epfl2021.projmag.database
 
-import android.os.Parcelable
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.model.ImmutableProject
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
-import kotlinx.parcelize.Parcelize
 import org.junit.After
 import org.junit.Test
 import java.io.File

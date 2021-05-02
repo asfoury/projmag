@@ -1,8 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
-import android.os.Parcelable
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.io.Serializable
 
@@ -10,6 +8,14 @@ private const val CV_FILENAME: String = "cv.data"
 private const val FAVORITES_FILENAME: String = "favorites.data"
 private const val APPLIED_FILENAME: String = "applied.data"
 
+/**
+ * This is an implementation of UserDataDatabase that keep users' data both in persistent storage and memory.
+ * If we are offline and firebase cache is empty/disabled, it will use the data stored locally.
+ * If we are offline and firebase cache is enabled, it will use both the data stored locally and in the cache (priority to `db`).
+ * If we are not offline, it will use the data return by `db` (up to date).
+ *
+ * Favorites/Applied will not use `db` (expect push) because it is only for the local user use.
+ */
 class OfflineCachedUserDataDatabase(
     private val db: UserDataDatabase,
     private val localUserID: String,
@@ -27,7 +33,7 @@ class OfflineCachedUserDataDatabase(
     private val appliedFile: File = File(localUserDir, APPLIED_FILENAME)
     private val cvFile: File = File(localUserDir, CV_FILENAME)
 
-    data class SerializedStringListWrapper(val list: List<String>) : Serializable
+    private data class SerializedStringListWrapper(val list: List<String>) : Serializable
 
     init {
         localUserDir.mkdirs()

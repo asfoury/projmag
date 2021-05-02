@@ -1,14 +1,18 @@
 package com.sdp13epfl2021.projmag.database
 
-import android.os.Parcelable
 import com.sdp13epfl2021.projmag.model.Candidature
-import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.io.Serializable
 
 
 private const val CANDIDATURE_FILENAME: String = "candidatures.data"
 
+/**
+ * This is an implementation of CandidatureDatabase that keep candidatures both in persistent storage and memory.
+ * If we are offline and firebase cache is empty/disabled, it will use the data stored locally.
+ * If we are offline and firebase cache is enabled, it will use both the data stored locally and in the cache (priority to `db`).
+ * If we are not offline, it will use the data return by `db` (up to date).
+ */
 class OfflineCachedCandidatureDatabase(
     private val db: CandidatureDatabase,
     private val projectsDir: File
@@ -21,7 +25,7 @@ class OfflineCachedCandidatureDatabase(
             projectsDir.listFiles()?.let { it
                 .filter(File::isDirectory)
                 .mapNotNull(File::listFiles)
-                .mapNotNull { arr -> arr.find { f -> f.parentFile != null && f.name == CANDIDATURE_FILENAME && f.isFile } }
+                .mapNotNull { arr -> arr.find { f -> f.parentFile != null && f.isFile && f.name == CANDIDATURE_FILENAME } }
                 .forEach { f ->
                     candidatures[f.parentFile!!.name] = LocalFileUtils.loadFromFile(f, SerializableCandidatureListWrapper::class)?.list ?: emptyList()
                 }
@@ -59,6 +63,7 @@ class OfflineCachedCandidatureDatabase(
                     c -> remoteList.all { r -> r.userID != c.userID }
                 }
             } ?: emptyList()
+            saveCandidature(projectID)
             onSuccess(localList + remoteList)
         }, onFailure)
     }
