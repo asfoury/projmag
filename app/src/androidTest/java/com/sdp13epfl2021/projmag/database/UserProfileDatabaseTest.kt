@@ -113,9 +113,9 @@ class UserProfileDatabaseTest {
     @Test
     fun checkThatGettingProfileWorks() {
         val udb = UserProfileDatabase(mockFirebaseFirestore, mockFirebaseAuth)
-        udb.getProfile {
+        udb.getProfile({
             assert(it != null)
-        }
+        }, {})
     }
 
     @Test
