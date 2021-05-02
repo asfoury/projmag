@@ -50,6 +50,18 @@ class OfflineCachedCandidatureDatabase(
         }
     }
 
+    private fun merge(projectID: ProjectId, remoteList: List<Candidature>): List<Candidature> {
+        val localList = candidatures[projectID]?.let {
+            it.filter {
+                    c -> remoteList.all { r -> r.userID != c.userID }
+            }
+        } ?: emptyList()
+        val totalList = localList + remoteList
+        candidatures[projectID] = totalList
+        saveCandidature(projectID)
+        return totalList
+    }
+
     override fun getListOfCandidatures(
         projectID: ProjectId,
         onSuccess: (List<Candidature>) -> Unit,
@@ -58,14 +70,7 @@ class OfflineCachedCandidatureDatabase(
         db.getListOfCandidatures(projectID, { remoteList ->
             //If we are offline, the remoteList could be empty or incomplete (cache).
             //We only keep them if they don't collide, with userID (priority to remote => up to date)
-            val localList = candidatures[projectID]?.let {
-                it.filter {
-                    c -> remoteList.all { r -> r.userID != c.userID }
-                }
-            } ?: emptyList()
-            val totalList = localList + remoteList
-            candidatures[projectID] = totalList
-            saveCandidature(projectID)
+            val totalList: List<Candidature> = merge(projectID, remoteList)
             onSuccess(totalList)
         }, onFailure)
     }
@@ -81,5 +86,16 @@ class OfflineCachedCandidatureDatabase(
         candidatures[projectId] = oldList + candidature
         saveCandidature(projectId)
         db.pushCandidature(candidature, newState, onSuccess, onFailure)
+    }
+
+    override fun addListener(
+        projectID: ProjectId,
+        onChange: (ProjectId, List<Candidature>) -> Unit
+    ) {
+        db.addListener(projectID) { _, newCandidatures ->
+            val totalList: List<Candidature> = merge(projectID, newCandidatures)
+            onChange(projectID, totalList)
+        }
+        getListOfCandidatures(projectID, {}, {}) //preload the candidatures
     }
 }
