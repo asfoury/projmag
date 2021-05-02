@@ -38,7 +38,7 @@ class Utils(
             candidatureDB: CandidatureDatabase = createCandidatureDB(context, auth, userDataDB, reset),
             fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, auth),
             metadataDB: MetadataDatabase = MetadataFirebase(Firebase.firestore),
-            projectsDB: ProjectsDatabase = createProjectsDB(context, reset)
+            projectsDB: ProjectsDatabase = createProjectsDB(context, candidatureDB, reset)
         ): Utils {
             if (instance == null || reset) {
                 instance = Utils(auth, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
@@ -46,14 +46,15 @@ class Utils(
             return instance!!
         }
 
-        private fun createProjectsDB(context: Context, reset: Boolean): ProjectsDatabase {
+        private fun createProjectsDB(context: Context, candidatureDB: CandidatureDatabase, reset: Boolean): ProjectsDatabase {
             return if (reset || instance?.projectsDatabase == null) {
                 CachedProjectsDatabase(
                     OfflineProjectDatabase(
                         FirebaseProjectsDatabase(
                             Firebase.firestore
                         ),
-                        getSubDir(context, "projects")
+                        getSubDir(context, "projects"),
+                        candidatureDB
                     )
                 )
             } else {
