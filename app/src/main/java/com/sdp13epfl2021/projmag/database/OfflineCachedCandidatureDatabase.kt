@@ -63,8 +63,10 @@ class OfflineCachedCandidatureDatabase(
                     c -> remoteList.all { r -> r.userID != c.userID }
                 }
             } ?: emptyList()
+            val totalList = localList + remoteList
+            candidatures[projectID] = totalList
             saveCandidature(projectID)
-            onSuccess(localList + remoteList)
+            onSuccess(totalList)
         }, onFailure)
     }
 

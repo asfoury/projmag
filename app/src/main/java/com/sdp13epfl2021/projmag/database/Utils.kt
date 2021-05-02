@@ -53,7 +53,7 @@ class Utils(
                         FirebaseProjectsDatabase(
                             Firebase.firestore
                         ),
-                        File(context.applicationContext.filesDir, "projects")
+                        getSubDir(context, "projects")
                     )
                 )
             } else {
@@ -69,7 +69,7 @@ class Utils(
                         auth
                     ),
                     auth.currentUser?.uid ?: "",
-                    File(context.applicationContext.filesDir, "users")
+                    getSubDir(context, "users")
                 )
             } else {
                 instance!!.userDataDatabase
@@ -80,11 +80,15 @@ class Utils(
             return if (reset || instance?.candidatureDatabase == null) {
                 OfflineCachedCandidatureDatabase(
                     FirebaseCandidatureDatabase(Firebase.firestore, auth, userDataDB),
-                    context.applicationContext.filesDir
+                    getSubDir(context, "projects")
                 )
             } else {
                 instance!!.candidatureDatabase
             }
+        }
+
+        private fun getSubDir(context: Context, subName: String): File {
+            return File(context.applicationContext.filesDir, subName)
         }
     }
 }
