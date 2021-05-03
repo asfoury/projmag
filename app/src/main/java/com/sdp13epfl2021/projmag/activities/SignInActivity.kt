@@ -21,7 +21,6 @@ import com.sdp13epfl2021.projmag.video.VideoUtils
  * the Google tutorial to integrate Google sign in in an android app.
  */
 class SignInActivity : AppCompatActivity() {
-
     companion object {
         private const val RC_SIGN_IN = 120
     }
@@ -91,6 +90,9 @@ class SignInActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else if(isNew == false) {
+                            val savedTypeChoice :String = "userTypeChoicePrefs"
+                            val settings = getSharedPreferences(savedTypeChoice, 0)
+                            UserTypeChoice.isProfessor = settings.getBoolean("isProfessor",true)
                             val intent = Intent(this, ProjectsListActivity::class.java)
                             startActivity(intent)
                             finish()
