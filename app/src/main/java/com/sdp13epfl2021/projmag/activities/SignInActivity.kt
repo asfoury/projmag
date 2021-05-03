@@ -92,8 +92,6 @@ class SignInActivity : AppCompatActivity() {
                             finish()
                         } else if(isNew == false) {
 
-                            val settings = getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE)
-                            UserTypeChoice.isProfessor = settings.getBoolean(UserTypeChoice.isUserProf,true)
                             val intent = Intent(this, ProjectsListActivity::class.java)
                             startActivity(intent)
                             finish()
