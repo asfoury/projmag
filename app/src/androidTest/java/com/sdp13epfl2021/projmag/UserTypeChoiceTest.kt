@@ -82,6 +82,40 @@ class UserTypeChoiceTest {
         )
         materialRadioButton2.perform(click())
         assertFalse(UserTypeChoice.isProfessor)
+
+        val appCompatImageButton2 = onView(
+            allOf(
+                withContentDescription("Navigate up"),
+                childAtPosition(
+                    allOf(
+                        withId(R.id.action_bar),
+                        childAtPosition(
+                            withId(R.id.action_bar_container),
+                            0
+                        )
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatImageButton2.perform(click())
+
+        val materialRadioButton3 = onView(
+            allOf(
+                withId(R.id.radioPHDType), withText("PHD"),
+                childAtPosition(
+                    childAtPosition(
+                        withClassName(`is`("androidx.constraintlayout.widget.ConstraintLayout")),
+                        0
+                    ),
+                    2
+                ),
+                isDisplayed()
+            )
+        )
+        materialRadioButton3.perform(click())
+        assertTrue(UserTypeChoice.isProfessor)
     }
 
     private fun childAtPosition(

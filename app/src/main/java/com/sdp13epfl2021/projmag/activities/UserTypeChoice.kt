@@ -17,7 +17,12 @@ class UserTypeChoice : AppCompatActivity() {
         setContentView(R.layout.activity_user_type_choice)
         val professorButton: RadioButton = findViewById(R.id.radioProfessorType)
         val studentButton: RadioButton= findViewById(R.id.radioStudentType)
+        val pdhButton: RadioButton= findViewById(R.id.radioPHDType)
         val intent = Intent(this, ProfilePageActivity::class.java)
+        pdhButton.setOnClickListener{
+            isProfessor = true
+            startActivity(intent)
+        }
         professorButton.setOnClickListener{
             isProfessor = true
             startActivity(intent)
@@ -26,5 +31,6 @@ class UserTypeChoice : AppCompatActivity() {
             isProfessor = false
             startActivity(intent)
         }
+
     }
 }
