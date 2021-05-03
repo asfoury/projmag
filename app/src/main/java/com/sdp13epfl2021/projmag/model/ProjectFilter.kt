@@ -1,10 +1,13 @@
 package com.sdp13epfl2021.projmag.model
 
 import android.util.Log
+import com.sdp13epfl2021.projmag.database.ProjectId
 
 data class ProjectFilter(
     val bachelor: Boolean = false,
-    val master: Boolean = false
+    val master: Boolean = false,
+    val applied: Boolean = false,
+    val appliedProjects: List<ProjectId> = ArrayList(),
 ) {
 
     companion object {
@@ -25,6 +28,9 @@ data class ProjectFilter(
         }
         if (master) {
             matches = matches && project.masterProject
+        }
+        if (applied) {
+            matches = matches && appliedProjects.contains(project.id)
         }
         return matches
     }

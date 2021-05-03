@@ -22,12 +22,20 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
+
     private lateinit var itemAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var appliedProjects: MutableList<ProjectId>
+    private lateinit var utils: Utils
 
+    private fun updateAppliedProjects() {
+        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
+            appliedProjects.removeAll { true }
+            appliedProjects.addAll(list)
+        },{})
+    }
 
     fun getItemAdapter(): ProjectAdapter {
-
         return itemAdapter
     }
 
@@ -39,6 +47,10 @@ class ProjectsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
 
+        utils = Utils.getInstance(this)
+        appliedProjects = ArrayList()
+        updateAppliedProjects()
+
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
         var projectId = ""
         if (fromLink) {
@@ -47,7 +59,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
         itemAdapter =
-            ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+            ProjectAdapter(this, utils, recyclerView, fromLink, projectId)
         recyclerView.adapter = itemAdapter
         recyclerView.setHasFixedSize(false)
 
@@ -129,6 +141,7 @@ class ProjectsListActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.filter_list_layout, null)
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
+        view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
         return view
     }
 
@@ -141,11 +154,20 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun filter(view: View) {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
+        val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
         itemAdapter.projectFilter = ProjectFilter(
             bachelor = bachelor,
-            master = master
+            master = master,
+            applied = applied,
+            appliedProjects.toList()
         )
         itemAdapter.filter.filter("")
     }
+
+    override fun onResume() {
+        updateAppliedProjects()
+        super.onResume()
+    }
+
 
 }

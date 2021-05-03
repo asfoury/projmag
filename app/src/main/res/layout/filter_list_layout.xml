@@ -20,6 +20,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <CheckBox
+            android:id="@+id/filter_applied"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:text="@string/applied"
+            app:layout_constraintEnd_toStartOf="@+id/space"
+            app:layout_constraintHorizontal_bias="0.468"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <CheckBox
             android:id="@+id/filter_master"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
