@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -90,9 +91,9 @@ class SignInActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else if(isNew == false) {
-                            val savedTypeChoice :String = "userTypeChoicePrefs"
-                            val settings = getSharedPreferences(savedTypeChoice, 0)
-                            UserTypeChoice.isProfessor = settings.getBoolean("isProfessor",true)
+
+                            val settings = getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE)
+                            UserTypeChoice.isProfessor = settings.getBoolean(UserTypeChoice.isUserProf,true)
                             val intent = Intent(this, ProjectsListActivity::class.java)
                             startActivity(intent)
                             finish()
