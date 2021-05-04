@@ -25,7 +25,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
     private lateinit var itemAdapter: ProjectAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var appliedProjects: MutableList<ProjectId>
+    private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
 
     private fun updateAppliedProjects() {
@@ -48,7 +48,6 @@ class ProjectsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_projects_list)
 
         utils = Utils.getInstance(this)
-        appliedProjects = ArrayList()
         updateAppliedProjects()
 
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
