@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +13,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import com.sdp13epfl2021.projmag.activities.SignInActivity
+import com.sdp13epfl2021.projmag.activities.UserTypeChoice
 
 class MainActivity : AppCompatActivity() {
     companion object MainActivityCompanion {
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        UserTypeChoice.isProfessor = getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE).getBoolean(UserTypeChoice.isUserProf, true)
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
