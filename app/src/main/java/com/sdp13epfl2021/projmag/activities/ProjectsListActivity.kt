@@ -30,7 +30,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
     private fun updateAppliedProjects() {
         utils.userDataDatabase.getListOfAppliedToProjects({ list ->
-            appliedProjects.removeAll { true }
+            appliedProjects.clear()
             appliedProjects.addAll(list)
         },{})
     }
