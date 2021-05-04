@@ -12,6 +12,7 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import com.sdp13epfl2021.projmag.activities.SignInActivity
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 class MainActivity : AppCompatActivity() {
     companion object MainActivityCompanion {
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         const val projectString: String = "project"     //ImmutableProject
         const val cv: String = "CV"                     //CurriculumVitae
         const val profile: String = "profile"           //ImmutableProfile
+        var listOwnProject: List<ImmutableProject> = listOf()
     }
 
     private lateinit var mAuth: FirebaseAuth

@@ -20,15 +20,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".activities.QRCodeActivity"></activity>
-        <activity android:name=".activities.UserTypeChoice"></activity>
+        <activity android:name=".PersonalProjectList"></activity>
+        <activity android:name=".activities.QRCodeActivity" />
+        <activity android:name=".activities.UserTypeChoice" />
         <activity
             android:name=".curriculumvitae.VideoCv"
-            android:parentActivityName=".activities.ProfilePageActivity"></activity>
+            android:parentActivityName=".activities.ProfilePageActivity" />
         <activity android:name=".activities.TagsSelectorActivity" />
         <activity
             android:name=".activities.ProfilePageActivity"
-            android:parentActivityName=".activities.ProjectsListActivity"/>
+            android:parentActivityName=".activities.ProjectsListActivity" />
         <activity
             android:name=".video.VideoSubtitlingActivity"
             android:screenOrientation="portrait" />

@@ -134,7 +134,27 @@ class Form : AppCompatActivity() {
             }
         }
     }
-
+        private fun updatePrivateList(){
+            MainActivity.listOwnProject += ImmutableProject(
+                id = "",
+                name = getTextFromEditText(R.id.form_edit_text_project_name),
+                lab = getTextFromEditText(R.id.form_edit_text_laboratory),
+                authorId = Firebase.auth.currentUser!!.uid,
+                teacher = getTextFromEditText(R.id.form_edit_text_teacher),
+                TA = getTextFromEditText(R.id.form_edit_text_project_TA),
+                nbParticipant = try {
+                    getTextFromEditText(R.id.form_nb_of_participant).toInt()
+                } catch (_: NumberFormatException) {
+                    0
+                },
+                masterProject = findViewById<CheckBox>(R.id.form_check_box_MP).isChecked,
+                bachelorProject = findViewById<CheckBox>(R.id.form_check_box_SP).isChecked,
+                isTaken = false,
+                description = getTextFromEditText(R.id.form_project_description),
+                assigned = listOf(),
+                tags = listTags.toList()
+            )
+        }
 
         /**
          * Extract string text content form an EditText view
@@ -190,6 +210,7 @@ class Form : AppCompatActivity() {
          * Expected to be called when clicking on a submission button on the view
          */
         private fun submit(view: View) = Firebase.auth.uid?.let {
+            updatePrivateList()
             setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
             val utils = Utils.getInstance(this)
             ProjectUploader(

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
+import com.sdp13epfl2021.projmag.PersonalProjectList
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.ProjectId
@@ -88,6 +89,11 @@ class ProjectsListActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.profileButton -> {
                 val intent = Intent(this, ProfilePageActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.listButton ->{
+                val intent = Intent(this, PersonalProjectList::class.java)
                 startActivity(intent)
                 true
             }
