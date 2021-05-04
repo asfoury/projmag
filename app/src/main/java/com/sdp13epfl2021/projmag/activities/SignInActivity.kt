@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.activities
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,7 +22,6 @@ import com.sdp13epfl2021.projmag.video.VideoUtils
  * the Google tutorial to integrate Google sign in in an android app.
  */
 class SignInActivity : AppCompatActivity() {
-
     companion object {
         private const val RC_SIGN_IN = 120
     }
@@ -91,6 +91,7 @@ class SignInActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else if(isNew == false) {
+
                             val intent = Intent(this, ProjectsListActivity::class.java)
                             startActivity(intent)
                             finish()
