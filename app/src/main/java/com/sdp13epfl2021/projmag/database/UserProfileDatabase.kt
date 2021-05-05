@@ -61,7 +61,7 @@ class UserProfileDatabase(
                     onFailure(it)
                 }
         } else {
-            Log.d(TAG, "Unable to get the uid from firebase")
+          onFailure(Exception("user id is null"))
         }
     }
 
@@ -120,9 +120,9 @@ class UserProfileDatabase(
                         }
                     }
                 }
-                .addOnFailureListener { exception ->
-                    onFailure(exception)
-                }
+                .addOnFailureListener(onFailure)
+        } else {
+            onFailure(Exception("Document is null"))
         }
     }
 }
