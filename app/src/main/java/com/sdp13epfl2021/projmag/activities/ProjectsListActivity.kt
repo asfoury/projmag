@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +18,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
@@ -28,11 +28,13 @@ class ProjectsListActivity : AppCompatActivity() {
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
 
+    private var projectFilter: ProjectFilter = ProjectFilter()
+
     private fun updateAppliedProjects() {
         utils.userDataDatabase.getListOfAppliedToProjects({ list ->
             appliedProjects.clear()
             appliedProjects.addAll(list)
-        },{})
+        }, {})
     }
 
     fun getItemAdapter(): ProjectAdapter {
@@ -70,7 +72,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
 
-        if(!UserTypeChoice.isProfessor){
+        if (!UserTypeChoice.isProfessor) {
             fab.setVisibility(View.INVISIBLE)
         }
 
@@ -78,7 +80,7 @@ class ProjectsListActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_project_list, menu)
+        menuInflater.inflate(R.menu.menu_project_list, menu)
         val item = menu?.findItem(R.id.searchButton)
         val searchView: SearchView = item?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -87,7 +89,7 @@ class ProjectsListActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                itemAdapter.filter.filter(newText)
+                itemAdapter.getFilter(projectFilter).filter(newText)
                 return false
             }
         })
@@ -120,7 +122,7 @@ class ProjectsListActivity : AppCompatActivity() {
         builder
             .setView(view)
             .setNeutralButton(getString(R.string.clear)) { _, _ ->
-                itemAdapter.projectFilter = ProjectFilter.default
+                projectFilter = ProjectFilter()
                 itemAdapter.filter.filter("")
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
@@ -136,7 +138,7 @@ class ProjectsListActivity : AppCompatActivity() {
      */
     @SuppressLint("InflateParams")
     private fun constructDialogView(): View {
-        val pf = itemAdapter.projectFilter
+        val pf = projectFilter
         val view = layoutInflater.inflate(R.layout.filter_list_layout, null)
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
@@ -154,13 +156,13 @@ class ProjectsListActivity : AppCompatActivity() {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        itemAdapter.projectFilter = ProjectFilter(
+        val pf = ProjectFilter(
             bachelor = bachelor,
             master = master,
             applied = applied,
-            appliedProjects.toList()
+            isAppliedProject = { appliedProjects.contains(it.id) }
         )
-        itemAdapter.filter.filter("")
+        itemAdapter.getFilter(pf).filter("")
     }
 
     override fun onResume() {

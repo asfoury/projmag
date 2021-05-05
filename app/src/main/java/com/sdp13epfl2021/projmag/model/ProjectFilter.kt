@@ -1,19 +1,28 @@
 package com.sdp13epfl2021.projmag.model
 
-import android.util.Log
 import com.sdp13epfl2021.projmag.database.ProjectId
 
-data class ProjectFilter(
+/**
+ *  An Immutable project Filter
+ *  It's constructor takes filtering parameters and its `invoke` function operator
+ *  takes a project and return `true`/`false`, whether it matches or not the constructor
+ *  parameters
+ *
+ * @property bachelor if it is true will require the project degree be bachelor, otherwise it has
+ *                    no effect on filtering.
+ * @property master if it is true will require the project degree to be master, otherwise it has
+ *                  no effect on filtering.
+ * @property applied if it is true will require the project to be one the user applied to
+ *                   (i.e. `isAppliedProject` is true), otherwise it has no effect on filtering.
+ * @property isAppliedProject Should return true if the user applied to this project,
+ *                              false otherwise.
+ */
+class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
-    val appliedProjects: List<ProjectId> = ArrayList(),
+    val isAppliedProject: (ImmutableProject) -> Boolean = { false },
 ) {
-
-    companion object {
-        val default = ProjectFilter()
-    }
-
     /**
      * Tells if the given project match the constraints
      *
@@ -30,7 +39,7 @@ data class ProjectFilter(
             matches = matches && project.masterProject
         }
         if (applied) {
-            matches = matches && appliedProjects.contains(project.id)
+            matches = matches && isAppliedProject(project)
         }
         return matches
     }
