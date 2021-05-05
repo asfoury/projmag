@@ -31,23 +31,16 @@ class ProfilePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
-        imageView = findViewById(R.id.image_profile)
-        button = findViewById(R.id.button_edit_profile)
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 
         if(UserTypeChoice.isProfessor){
             findViewById<TextView>(R.id.profile_sciper).setVisibility(View.INVISIBLE)
-            buttonAddCv.setVisibility(View.INVISIBLE)
+            //buttonAddCv.setVisibility(View.INVISIBLE)
         }
-        button.setOnClickListener {
-            startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), pickImage)
-        }
-
 
         UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
             Toast.makeText(this, "Failed to load profile", Toast.LENGTH_LONG).show()
-            Log.d("DEBUG PP", "shoul show toast")
         }
 
 

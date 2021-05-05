@@ -112,6 +112,7 @@
 
     <string name="filter">Filter</string>
     <string name="applied">Applied</string>
+    <string name="edit_profile_text">Edit Profile</string>
 
 
 </resources>
