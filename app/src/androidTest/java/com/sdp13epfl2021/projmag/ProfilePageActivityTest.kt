@@ -30,7 +30,7 @@ class ProfilePageActivityTest {
     @Test
     fun changeProfileValuesAndSumbmit() {
         onView(withId(R.id.buttonSubChangeProfil)).perform(scrollTo())
-        Thread.sleep(2000)
+        Thread.sleep(10000)
         onView(withId(R.id.buttonSubChangeProfil)).perform(click())
 
 
