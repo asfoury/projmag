@@ -29,9 +29,8 @@ class ProfilePageActivityTest {
 
     @Test
     fun changeProfileValuesAndSumbmit() {
-        onView(withId(R.id.buttonSubChangeProfil)).perform(scrollTo())
-        Thread.sleep(10000)
-        onView(withId(R.id.buttonSubChangeProfil)).perform(click())
+        onView(withId(R.id.button_add_cv)).perform(scrollTo())
+        onView(withId(R.id.button_add_cv)).perform(click())
 
 
     }
