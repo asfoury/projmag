@@ -22,12 +22,9 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
-<<<<<<< HEAD
-    private lateinit var projectAdapter: ProjectAdapter
-=======
 
-    private lateinit var itemAdapter: ProjectAdapter
->>>>>>> main
+    private lateinit var projectAdapter: ProjectAdapter
+
     private lateinit var recyclerView: RecyclerView
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
@@ -40,11 +37,9 @@ class ProjectsListActivity : AppCompatActivity() {
     }
 
     fun getItemAdapter(): ProjectAdapter {
-<<<<<<< HEAD
+
         return projectAdapter
-=======
-        return itemAdapter
->>>>>>> main
+
     }
 
     fun getRecyclerView(): RecyclerView {
@@ -65,14 +60,11 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
-<<<<<<< HEAD
+
         projectAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
-=======
-        itemAdapter =
-            ProjectAdapter(this, utils, recyclerView, fromLink, projectId)
-        recyclerView.adapter = itemAdapter
->>>>>>> main
+
+
         recyclerView.setHasFixedSize(false)
 
         // get the fab and make it go to the Form activity
@@ -166,16 +158,14 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun filter(view: View) {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
-<<<<<<< HEAD
-        projectAdapter.projectFilter = ProjectFilter(
-=======
+
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        itemAdapter.projectFilter = ProjectFilter(
->>>>>>> main
+        projectAdapter.projectFilter = ProjectFilter(
+
             bachelor = bachelor,
             master = master,
             applied = applied,
-            appliedProjects.toList()
+            appliedProjects = appliedProjects.toList()
         )
         projectAdapter.filter.filter("")
     }
