@@ -22,12 +22,29 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
+<<<<<<< HEAD
     private lateinit var projectAdapter: ProjectAdapter
-    private lateinit var recyclerView: RecyclerView
+=======
 
+    private lateinit var itemAdapter: ProjectAdapter
+>>>>>>> main
+    private lateinit var recyclerView: RecyclerView
+    private val appliedProjects: MutableList<ProjectId> = ArrayList()
+    private lateinit var utils: Utils
+
+    private fun updateAppliedProjects() {
+        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
+            appliedProjects.clear()
+            appliedProjects.addAll(list)
+        },{})
+    }
 
     fun getItemAdapter(): ProjectAdapter {
+<<<<<<< HEAD
         return projectAdapter
+=======
+        return itemAdapter
+>>>>>>> main
     }
 
     fun getRecyclerView(): RecyclerView {
@@ -38,6 +55,9 @@ class ProjectsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
 
+        utils = Utils.getInstance(this)
+        updateAppliedProjects()
+
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
         var projectId = ""
         if (fromLink) {
@@ -45,8 +65,14 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+<<<<<<< HEAD
         projectAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
+=======
+        itemAdapter =
+            ProjectAdapter(this, utils, recyclerView, fromLink, projectId)
+        recyclerView.adapter = itemAdapter
+>>>>>>> main
         recyclerView.setHasFixedSize(false)
 
         // get the fab and make it go to the Form activity
@@ -127,6 +153,7 @@ class ProjectsListActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.filter_list_layout, null)
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
+        view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
         return view
     }
 
@@ -139,11 +166,24 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun filter(view: View) {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
+<<<<<<< HEAD
         projectAdapter.projectFilter = ProjectFilter(
+=======
+        val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
+        itemAdapter.projectFilter = ProjectFilter(
+>>>>>>> main
             bachelor = bachelor,
-            master = master
+            master = master,
+            applied = applied,
+            appliedProjects.toList()
         )
         projectAdapter.filter.filter("")
     }
+
+    override fun onResume() {
+        updateAppliedProjects()
+        super.onResume()
+    }
+
 
 }
