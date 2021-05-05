@@ -26,12 +26,4 @@ class ProfilePageActivityTest {
         onView(withId(R.id.profile_phone_number)).perform(scrollTo(),clearText(), typeText("0101010100"))
     }
 
-
-    @Test
-    fun changeProfileValuesAndSumbmit() {
-        onView(withId(R.id.button_add_cv)).perform(scrollTo())
-        onView(withId(R.id.button_add_cv)).perform(click())
-
-
-    }
 }
