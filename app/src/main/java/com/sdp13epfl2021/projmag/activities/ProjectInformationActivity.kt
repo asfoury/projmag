@@ -133,6 +133,33 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun addToFavoritesButton(favButton: Button){
+        val userDataDatabase = Utils.getInstance(this).userDataDatabase
+        var isFavorite = false
+        val projectId = projectVar.id
+        userDataDatabase.getListOfFavoriteProjects({ projectIds ->
+            isFavorite = projectIds.contains(projectId)
+        }, {showToast(getString(R.string.success), Toast.LENGTH_SHORT)} )
+
+
+
+        if(!isFavorite) favButton.text = getString(R.string.favorite_remove_button)
+
+
+        favButton.setOnClickListener{
+            userDataDatabase.pushFavoriteProject(projectId,{handleFavoriteAddSuccess(favButton)},
+                {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
+        }
+
+
+    }
+
+    private fun handleFavoriteAddSuccess(favButton: Button){
+        showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+        favButton.text = getString(R.string.favorite_remove_button)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
@@ -190,6 +217,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         setUpApplyButton(findViewById(R.id.applyButton) as Button)
+        addToFavoritesButton(findViewById<Button>(R.id.addFavoriteInProject))
     }
 
     // pause/start when we touch the video
