@@ -13,5 +13,8 @@ This week I added a filter which filtered by projects to which the user has appl
 ## Kaourintin 
 
 ## Paul (Scrum Master)
+This week I had to implement preferences for projects. This went smoothly. I work a decent amount of time. As we recieved the code review from our TAs, I was able to fix some of my bad coding habits. However I had some issue in testing as Dagger Hilt dependency injection is still not a part of our project.
+Next sprint, I hope to work on this dagger hilt stuff.
 
 ## Overall Team
+Nothing special to say for this sprint. The PR merge were a bit late. Except that we had some issue to find time for stand-up meetings at the beginning of the sprint. However, later, the team was able catch up and meet to solve issues or get help. We also recieved the code review, and the team agreed to define UI tests refactoring (depency injection overall) and KDOC as the highest priority for next sprint.
