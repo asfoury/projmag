@@ -106,6 +106,14 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun setFavoriteButtonText(favoriteButton: Button, isFavorite: Boolean?) {
+        favoriteButton.text = when (isFavorite) {
+            null -> LOADING_STRING
+            true -> getString(R.string.favorite_remove_button)
+            false -> getString(R.string.favorite_add_button)
+        }
+    }
+
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
@@ -137,26 +145,40 @@ class ProjectInformationActivity : AppCompatActivity() {
         val userDataDatabase = Utils.getInstance(this).userDataDatabase
         var isFavorite = false
         val projectId = projectVar.id
+
+        //until data is loaded from database, show loading
+        setFavoriteButtonText(favButton, null  )
+
+        //load data from the database and set the favorite add button to the right value
         userDataDatabase.getListOfFavoriteProjects({ projectIds ->
             isFavorite = projectIds.contains(projectId)
-        }, {showToast(getString(R.string.success), Toast.LENGTH_SHORT)} )
+            setFavoriteButtonText(favButton, isFavorite)
+        }, {} )
 
 
-
-        if(!isFavorite) favButton.text = getString(R.string.favorite_remove_button)
-
-
+        //handle click on the add favourite button
         favButton.setOnClickListener{
-            userDataDatabase.pushFavoriteProject(projectId,{handleFavoriteAddSuccess(favButton)},
-                {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
+            if(!isFavorite) {
+                userDataDatabase.pushFavoriteProject(projectId,
+                    { isFavorite = handleFavoriteButtonText(favButton, isFavorite)},
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
+
+            }
+            else{
+                userDataDatabase.removeFromFavorite(projectId,
+                    { isFavorite = handleFavoriteButtonText(favButton, isFavorite)},
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
+            }
+
         }
 
 
     }
 
-    private fun handleFavoriteAddSuccess(favButton: Button){
+    private fun handleFavoriteButtonText(favButton: Button, isFavorite: Boolean) : Boolean{
         showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-        favButton.text = getString(R.string.favorite_remove_button)
+        setFavoriteButtonText(favButton, isFavorite)
+        return !isFavorite
     }
 
 
