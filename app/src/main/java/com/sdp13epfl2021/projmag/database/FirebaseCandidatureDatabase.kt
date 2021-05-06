@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.model.*
@@ -119,6 +120,19 @@ class FirebaseCandidatureDatabase(
             .set(mapOf(candidature.userID to newState), SetOptions.merge())
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
+    }
+
+    override fun addListener(
+        projectID: ProjectId,
+        onChange: (ProjectId, List<Candidature>) -> Unit
+    ) {
+        getDoc(projectID)
+            .addSnapshotListener { snapshot, _ ->
+                snapshot?.data?.let {
+                    val candidatures: List<Candidature> = buildCandidature(it, projectID)
+                    onChange(projectID, candidatures)
+                }
+            }
     }
 
 }

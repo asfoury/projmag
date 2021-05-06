@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,7 +100,7 @@ class ProjectAdapter(
     fun openProject(holder: ProjectViewHolder, project: ImmutableProject) {
         val context = holder.view.context
         val intent = Intent(context, ProjectInformationActivity::class.java)
-        intent.putExtra(projectString, project)
+        intent.putExtra(projectString, project as Parcelable)
         context.startActivity(intent)
     }
 
