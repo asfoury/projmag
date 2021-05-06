@@ -120,7 +120,6 @@ class UserProfileDatabase(
                         }
                     }
                 }
-                .addOnFailureListener(onFailure)
         } else {
             onFailure(Exception("Document is null"))
         }

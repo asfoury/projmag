@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 
+import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -115,7 +116,9 @@ class UserProfileDatabaseTest {
         val udb = UserProfileDatabase(mockFirebaseFirestore, mockFirebaseAuth)
         udb.getProfile({
             assert(it != null)
-        }, {})
+        }, {
+            Log.d("TEST", it.toString())
+        })
     }
 
     @Test
