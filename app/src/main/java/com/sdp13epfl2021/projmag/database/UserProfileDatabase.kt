@@ -81,7 +81,7 @@ class UserProfileDatabase(
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         val firstName = (document["firstName"] as? String)
-                        val lastName = (document["firstName"] as? String)
+                        val lastName = (document["lastName"] as? String)
                         val age = (document["age"] as? Long)?.toInt()
                         val sciper = (document["sciper"] as? Long)?.toInt()
                         val phoneNumber = (document["phoneNumber"] as? String)
