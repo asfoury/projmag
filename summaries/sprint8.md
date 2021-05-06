@@ -1,7 +1,7 @@
 # Summary for week 8
 
 ## Mohamed
-
+This week I had 2 tasks the first was to fix some issues with the user profile which I initally thought would take me 4 hours and the second was to work on another feature. The fixes ended up taking me more time then expected because I had some issues with tests passing on cirrus and also after each of the 2 code reviews that were done I had some things to fix so this ended up also taking some time. For the next sprints I can try to produce better code from the begining thus minimizing what I have to do after the code reviews and also try to improve my time estimates.
 ## Giovanni
 This week first I add PHD role as user type to our app , which was a quick and easy task then I update the user type code to allow to save type of the user when the applicaton is turn off. This task take more time then expectd because I had to find the good way to save the user type choice in the documentation.  I don't have enough time to implement my third task. I have to pay attention to the choice of my task and thier time estimation for the next sprint 
 
