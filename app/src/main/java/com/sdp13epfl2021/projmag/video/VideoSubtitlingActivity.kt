@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.video
 
 import android.content.Intent
-import android.media.MediaFormat
 import android.net.Uri
 import android.os.Bundle
 import android.widget.*
@@ -9,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE_MESSAGE
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
-import java.util.*
 
 class VideoSubtitlingActivity : AppCompatActivity() {
 

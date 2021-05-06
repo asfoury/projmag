@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.database
 
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
 
 class MetadataFirebase(private val firestore: FirebaseFirestore) : MetadataDatabase {
     companion object {

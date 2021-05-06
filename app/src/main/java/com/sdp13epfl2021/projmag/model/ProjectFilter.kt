@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projmag.model
 
-import android.util.Log
 import com.sdp13epfl2021.projmag.database.ProjectId
 
 data class ProjectFilter(

@@ -7,7 +7,6 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 /**
  * An implementation of a user-data database
@@ -39,7 +38,6 @@ class UserDataFirebase(
          */
         const val CV_FIELD = "cv"
     }
-
 
 
     /**
@@ -129,8 +127,7 @@ class UserDataFirebase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getUserDoc()?.let {
-            doc ->
+        getUserDoc()?.let { doc ->
             doc.set(
                 hashMapOf(CV_FIELD to cv),
                 SetOptions.merge()
@@ -158,7 +155,7 @@ class UserDataFirebase(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun getListOfAppliedToProjects (
+    override fun getListOfAppliedToProjects(
         onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {

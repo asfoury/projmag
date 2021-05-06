@@ -1,8 +1,8 @@
 package com.sdp13epfl2021.projmag.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
@@ -24,7 +24,11 @@ class WaitingListActivity : AppCompatActivity() {
             waitingListView.layoutManager = LinearLayoutManager(this)
             waitingListView.setHasFixedSize(false)
         } ?: run {
-            Toast.makeText(this, resources.getString(R.string.waiting_projectid_null), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                resources.getString(R.string.waiting_projectid_null),
+                Toast.LENGTH_LONG
+            ).show()
             finish()
         }
     }

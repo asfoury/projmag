@@ -2,7 +2,6 @@ package com.sdp13epfl2021.projmag.activities
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Color.blue
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -17,7 +16,7 @@ import java.io.Serializable
 
 
 class TagsSelectorActivity : AppCompatActivity() {
-    private val selectedTags : MutableSet<Tag> = mutableSetOf()
+    private val selectedTags: MutableSet<Tag> = mutableSetOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tags_selector)
@@ -37,12 +36,12 @@ class TagsSelectorActivity : AppCompatActivity() {
                 object : RecyclerItemClickListenr.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
-                        val holder = tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
-                        if(selectedTags.contains(tagsDataset[position])) {
+                        val holder =
+                            tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
+                        if (selectedTags.contains(tagsDataset[position])) {
                             holder.textView.setTextColor(Color.RED)
                             selectedTags.remove(tagsDataset[position])
-                        }
-                        else{
+                        } else {
                             holder.textView.setTextColor(Color.GREEN)
                             selectedTags.add(tagsDataset[position])
 
@@ -55,13 +54,13 @@ class TagsSelectorActivity : AppCompatActivity() {
                 })
         )
 
-        saveButton.setOnClickListener{
+        saveButton.setOnClickListener {
             val returnIntent = Intent()
             val tagsManager = TagsBaseManager()
-            val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
+            val tags = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
 
             //This should work because String is inherently serializable but I could get crashes
-            returnIntent.putExtra("tagsList",  tags as Serializable)
+            returnIntent.putExtra("tagsList", tags as Serializable)
             setResult(RESULT_OK, returnIntent)
             finish()
         }
@@ -70,7 +69,7 @@ class TagsSelectorActivity : AppCompatActivity() {
     }
 
 
-    fun allSelectedTags() : MutableSet<Tag>{
+    fun allSelectedTags(): MutableSet<Tag> {
         return selectedTags
     }
 

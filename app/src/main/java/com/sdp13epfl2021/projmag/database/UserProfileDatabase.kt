@@ -4,7 +4,6 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.model.*
 
@@ -30,7 +29,7 @@ class UserProfileDatabase(
      * @return current logged user or null
      */
     private fun getUser(): FirebaseUser? = auth.currentUser
-    public fun uploadProfile(
+    fun uploadProfile(
         profile: ImmutableProfile,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
@@ -59,7 +58,7 @@ class UserProfileDatabase(
         }
     }
 
-    public fun getProfile(onSuccess: (profile: ImmutableProfile?) -> Unit) {
+    fun getProfile(onSuccess: (profile: ImmutableProfile?) -> Unit) {
         val userUid = getUser()?.uid
         if (userUid != null) {
             val docRef = firestore.collection(ROOT).document(userUid)

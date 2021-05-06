@@ -1,19 +1,17 @@
 package com.sdp13epfl2021.projmag.database
 
-import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.*
 import java.util.*
-import kotlin.collections.HashMap
 
 private const val PROJECT_DATA_FILE: String = "project.data"
 private val ID_PATTERN: Regex = Regex("^[a-zA-Z0-9]*\$")
 
-class OfflineProjectDatabase(private val db: ProjectsDatabase, private val projectsDir: File) : ProjectsDatabase {
+class OfflineProjectDatabase(private val db: ProjectsDatabase, private val projectsDir: File) :
+    ProjectsDatabase {
 
     private var projectsFiles: Map<ProjectId, File> = emptyMap()
     private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
@@ -23,7 +21,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         loadProjects()
 
         db.addProjectsChangeListener { change ->
-            when(change.type) {
+            when (change.type) {
                 ProjectChange.Type.ADDED -> saveProject(change.project)
                 ProjectChange.Type.MODIFIED -> saveProject(change.project)
                 ProjectChange.Type.REMOVED -> deleteProject(change.project.id)
@@ -44,8 +42,12 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
             .listFiles()
             ?.let {
                 it.map { child -> child.name to File(child, PROJECT_DATA_FILE) }
-                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(data) != null }
-                .toMap()
+                    .filter { (id, data) ->
+                        id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(
+                            data
+                        ) != null
+                    }
+                    .toMap()
             } ?: emptyMap()
     }
 
@@ -154,7 +156,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
                 val localProjects = projectsFiles
                     .filterKeys { id -> !remoteProjects.any { p -> p.id == id } }
                     .mapNotNull { entry -> readProject(entry.value) }
-                    .filter { p -> p.name == name}
+                    .filter { p -> p.name == name }
                 onSuccess(remoteProjects + localProjects)
             }
         }, onFailure)

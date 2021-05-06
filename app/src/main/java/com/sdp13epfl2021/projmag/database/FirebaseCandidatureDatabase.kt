@@ -2,13 +2,18 @@ package com.sdp13epfl2021.projmag.database
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.database.UserDataFirebase.Companion.APPLIED_TO_FIELD
 import com.sdp13epfl2021.projmag.model.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * An implementation of a candidature database
@@ -34,7 +39,10 @@ class FirebaseCandidatureDatabase(
             .document(projectID)
     }
 
-    private fun buildCandidature(dataMap: Map<String, Any>, projectID: ProjectId): List<Candidature> {
+    private fun buildCandidature(
+        dataMap: Map<String, Any>,
+        projectID: ProjectId
+    ): List<Candidature> {
         val candidatures = ConcurrentLinkedQueue<Candidature>()
         runBlocking {
             dataMap.map {
@@ -50,7 +58,12 @@ class FirebaseCandidatureDatabase(
         return candidatures.toList()
     }
 
-    private suspend fun addCandidature(candidatures: Queue<Candidature>, projectID: ProjectId, userID: String, state: Candidature.State) {
+    private suspend fun addCandidature(
+        candidatures: Queue<Candidature>,
+        projectID: ProjectId,
+        userID: String,
+        state: Candidature.State
+    ) {
         var waiting = true
         var profile: ImmutableProfile? = null
         var cv: CurriculumVitae? = null
@@ -75,7 +88,8 @@ class FirebaseCandidatureDatabase(
             21,
             Gender.MALE,
             123456,
-            "021 123 45 67", Role.STUDENT) as Success).value
+            "021 123 45 67", Role.STUDENT
+        ) as Success).value
     }
 
     //TODO Remove after Profile/CV are implemented
@@ -101,7 +115,8 @@ class FirebaseCandidatureDatabase(
                 if (doc.exists()) {
                     doc?.data?.let {
                         onSuccess(buildCandidature(it, projectID))
-                    } ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
+                    }
+                        ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
                 } else {
                     onSuccess(emptyList())
                 }
@@ -120,5 +135,22 @@ class FirebaseCandidatureDatabase(
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
+
+    override fun removeCandidature(
+        candidature: Candidature,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        getDoc(candidature.projectId)
+            .let { doc ->
+                val fieldValue = FieldValue.arrayRemove(candidature.userID)
+                doc.update(APPLIED_TO_FIELD, fieldValue)
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener(onFailure)
+            }
+
+    }
+
+
 
 }

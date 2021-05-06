@@ -36,4 +36,10 @@ interface CandidatureDatabase {
         onFailure: (Exception) -> Unit
     )
 
+    fun removeCandidature(
+        candidature: Candidature,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
 }

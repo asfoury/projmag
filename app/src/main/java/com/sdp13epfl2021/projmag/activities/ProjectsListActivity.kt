@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +31,7 @@ class ProjectsListActivity : AppCompatActivity() {
         utils.userDataDatabase.getListOfAppliedToProjects({ list ->
             appliedProjects.clear()
             appliedProjects.addAll(list)
-        },{})
+        }, {})
     }
 
     fun getItemAdapter(): ProjectAdapter {
@@ -70,15 +69,15 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
 
-        if(!UserTypeChoice.isProfessor){
-            fab.setVisibility(View.INVISIBLE)
+        if (!UserTypeChoice.isProfessor) {
+            fab.visibility = View.INVISIBLE
         }
 
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_project_list, menu)
+        menuInflater.inflate(R.menu.menu_project_list, menu)
         val item = menu?.findItem(R.id.searchButton)
         val searchView: SearchView = item?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

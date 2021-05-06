@@ -1,11 +1,9 @@
-    package com.sdp13epfl2021.projmag.model
+package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
-import java.lang.ClassCastException
-import java.lang.NullPointerException
 import java.util.*
 
 sealed class Result<T>
@@ -177,8 +175,20 @@ data class ImmutableProject constructor(
         description: String = this.description,
         videoURI: List<String> = this.videoURI
     ) = build(
-        id, name, lab, authorId, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
-        tags, isTaken, description, videoURI
+        id,
+        name,
+        lab,
+        authorId,
+        teacher,
+        TA,
+        nbParticipant,
+        assigned,
+        masterProject,
+        bachelorProject,
+        tags,
+        isTaken,
+        description,
+        videoURI
     )
 
     /**

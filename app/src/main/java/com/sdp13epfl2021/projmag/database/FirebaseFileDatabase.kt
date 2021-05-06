@@ -125,7 +125,7 @@ class FirebaseFileDatabase(
         storage
             .getReferenceFromUrl(fileUrl)
             .delete()
-            .addOnSuccessListener{ onSuccess() }
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 }

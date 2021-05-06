@@ -14,23 +14,26 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.EMPTY_CV
 import com.sdp13epfl2021.projmag.database.FileDatabase
 import com.sdp13epfl2021.projmag.database.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.model.Candidature
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
+import com.sdp13epfl2021.projmag.model.ImmutableProfile.Companion.EMPTY_PROFILE
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +62,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
+    private lateinit var profile: ImmutableProfile
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
     private var userID: String? = null
@@ -108,26 +112,45 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val userDataDatabase = Utils.getInstance(this).userDataDatabase
+        val utils = Utils.getInstance(this)
+        val userDataDatabase = utils.userDataDatabase
+        val candidatureDatabase = utils.candidatureDatabase
         var alreadyApplied = false
-        setApplyButtonText(applyButton,null)
+        setApplyButtonText(applyButton, null)
+
+        val candidature = Candidature(projectId, "dummy", EMPTY_PROFILE, EMPTY_CV,
+            Candidature.State.Waiting)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
-        },{})
+        }, {})
 
         applyButton.isEnabled = !projectVar.isTaken
 
         applyButton.setOnClickListener {
             userDataDatabase.applyUnapply(
                 !alreadyApplied,
-               projectId,
+                projectId,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
                     setApplyButtonText(applyButton, alreadyApplied)
+                    if (!alreadyApplied) {
+                        candidatureDatabase.pushCandidature(
+                            candidature,
+                            Candidature.State.Waiting,
+                            {},
+                            { showToast("FAILLLL", Toast.LENGTH_LONG) })
+                    } else {
+                        candidatureDatabase.removeCandidature(
+                            candidature,
+                            {},
+                            { showToast("FAILLLL2", Toast.LENGTH_LONG) }
+                        )
+                    }
                 },
-                {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
+                { showToast(getString(R.string.failure), Toast.LENGTH_LONG) }
+
             )
 
         }
@@ -141,6 +164,15 @@ class ProjectInformationActivity : AppCompatActivity() {
         userID = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
+
+        utils.userProfileDatabase.getProfile { it ->
+            if (it == null) {
+                profile = EMPTY_PROFILE
+            } else {
+                profile = it
+            }
+
+        }
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
@@ -189,7 +221,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setUpApplyButton(findViewById(R.id.applyButton) as Button)
+        setUpApplyButton(findViewById<Button>(R.id.applyButton))
     }
 
     // pause/start when we touch the video
@@ -366,7 +398,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun createDynamicLink() : Uri {
+    private fun createDynamicLink(): Uri {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
             domainUriPrefix = "https://projmag.page.link/"
@@ -383,7 +415,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_project_information, menu)
+        menuInflater.inflate(R.menu.menu_project_information, menu)
         return true
     }
 
@@ -405,17 +437,16 @@ class ProjectInformationActivity : AppCompatActivity() {
                 //this should not happen, unless the user was disconnected after loading the project view
                 showToast(resources.getString(R.string.waiting_not_allowed), Toast.LENGTH_LONG)
             }
-        }
-        else if(item.itemId == R.id.generateQRCodeButton) {
+        } else if (item.itemId == R.id.generateQRCodeButton) {
             val linkToSend = createDynamicLink()
 
-            val qrImage = QRCode.from(linkToSend.toString()).withSize(800,800)
+            val qrImage = QRCode.from(linkToSend.toString()).withSize(800, 800)
             val stream = ByteArrayOutputStream()
             qrImage.bitmap().compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray: ByteArray = stream.toByteArray()
 
             val intent = Intent(this, QRCodeActivity::class.java)
-            intent.putExtra("qrcode",byteArray)
+            intent.putExtra("qrcode", byteArray)
             startActivity(intent)
             return true
         }

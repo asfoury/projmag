@@ -27,6 +27,8 @@ data class CurriculumVitae(
         }
 
     companion object {
+        val EMPTY_CV = CurriculumVitae("", ArrayList(), ArrayList(), ArrayList(), ArrayList())
+
         interface Validate {
             fun isValid(): Boolean
         }

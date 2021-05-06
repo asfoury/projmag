@@ -22,8 +22,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProjectAdapter(private val activity: Activity, private val utils: Utils, private val recyclerView: RecyclerView,
-                     private val fromLink: Boolean, private var projectIdLink: String):
+class ProjectAdapter(
+    private val activity: Activity,
+    private val utils: Utils,
+    private val recyclerView: RecyclerView,
+    private val fromLink: Boolean,
+    private var projectIdLink: String
+) :
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     companion object ItemAdapterCompanion {
@@ -35,7 +40,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
     var projectFilter: ProjectFilter = ProjectFilter.default
 
     private fun sortDataset() {
-        dataset.sortBy{ project -> project.isTaken }
+        dataset.sortBy { project -> project.isTaken }
         if (fromLink) {
             dataset.sortByDescending { project -> projectIdLink == project.id }
         }
@@ -48,7 +53,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
                 ProjectChange.Type.REMOVED -> removeProject(change.project)
             }
-            activity.runOnUiThread{notifyDataSetChanged()}
+            activity.runOnUiThread { notifyDataSetChanged() }
         }
 
         utils.projectsDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
@@ -69,7 +74,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
         }
         greyOut()
         sortDataset()
-        activity.runOnUiThread{notifyDataSetChanged()}
+        activity.runOnUiThread { notifyDataSetChanged() }
     }
 
     @Synchronized
@@ -82,7 +87,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
-        val chipGroupView : ChipGroup = view.findViewById(R.id.chip_group)
+        val chipGroupView: ChipGroup = view.findViewById(R.id.chip_group)
     }
 
 

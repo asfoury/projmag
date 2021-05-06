@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projmag.database
 
-import android.util.Log
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -82,15 +81,30 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         GlobalScope.launch { onSuccess(projects) }
     }
 
-    override fun getProjectsFromName(name: String, onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getProjectsFromName(
+        name: String,
+        onSuccess: (List<ImmutableProject>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch { onSuccess(projects.filter { p -> p.name == name }) }
     }
 
-    override fun getProjectsFromTags(tags: List<String>, onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getProjectsFromTags(
+        tags: List<String>,
+        onSuccess: (List<ImmutableProject>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch {
             val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
-            onSuccess(projects.filter {
-                p -> p.tags.any { tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT)) } }
+            onSuccess(projects.filter { p ->
+                p.tags.any { tag ->
+                    listOfTags.contains(
+                        tag.toLowerCase(
+                            Locale.ROOT
+                        )
+                    )
+                }
+            }
             )
         }
     }

@@ -3,21 +3,21 @@ package com.sdp13epfl2021.projmag.model
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
- class TagsBaseManager{
-     val MAX_TAG_SIZE: Int = 40
+class TagsBaseManager {
+    val MAX_TAG_SIZE: Int = 40
 
     //this should be thread safe
-    companion object TagsBase{
-        private val tags: MutableSet<Tag> = mutableSetOf(Tag("roblox"),
-                                                         Tag("signals"),
-                                                         Tag("software"),
-                                                            Tag("vhdl"),
-                                                          Tag("crypto")
-                                                            , Tag("aerodynamics"))
+    companion object TagsBase {
+        private val tags: MutableSet<Tag> = mutableSetOf(
+            Tag("roblox"),
+            Tag("signals"),
+            Tag("software"),
+            Tag("vhdl"),
+            Tag("crypto"), Tag("aerodynamics")
+        )
 
 
     }
-
 
 
     /**
@@ -48,10 +48,10 @@ import java.util.regex.Pattern
      * @param tag
      * @return whether or not an error has happened and what type it is using the sealed class tagAddResult
      */
-    fun addTag(tag : Tag) : InputResult{
+    fun addTag(tag: Tag): InputResult {
         val tagName = tag.name
 
-        if(tagName.length > MAX_TAG_SIZE ){
+        if (tagName.length > MAX_TAG_SIZE) {
             //sealed class?
             return InputResult.TooLong
         }
@@ -59,17 +59,16 @@ import java.util.regex.Pattern
 
         //checking that there are other characters than normal letters :
         val p = Pattern.compile("[^a-z ]")
-        val m : Matcher = p.matcher(tagName)
-        if(m.find()){
+        val m: Matcher = p.matcher(tagName)
+        if (m.find()) {
             return InputResult.ContainsSpecialChar
         }
 
         synchronized(tags) {
             //various other checks :
-            if(tags.contains(tag)){
+            if (tags.contains(tag)) {
                 return InputResult.AlreadyExists
-            }
-            else{
+            } else {
                 tags.add(tag)
                 return InputResult.OK
             }
@@ -83,8 +82,8 @@ import java.util.regex.Pattern
         return tags.toSet()
     }
 
-     fun tagsListToStringList(tags : Set<Tag>) : List<String>{
-         return tags.toList().map(Tag::name)
-     }
+    fun tagsListToStringList(tags: Set<Tag>): List<String> {
+        return tags.toList().map(Tag::name)
+    }
 
 }
