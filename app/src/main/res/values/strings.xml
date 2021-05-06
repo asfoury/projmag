@@ -113,5 +113,14 @@
     <string name="filter">Filter</string>
     <string name="PHD">PHD</string>
     <string name="applied">Applied</string>
+    <string name="edit_profile_text">Edit Profile</string>
+    <string name="profile_loading_failed">Failed to load profile</string>
+    <string name="required_degree">Required Degree</string>
+    <string name="application">Application</string>
+    <string name="filter_settings_icon">filter settings icon</string>
+    <string name="preferences">Preferences</string>
+    <string name="sending_preferences">Sending Preferences...</string>
+    <string name="failed_send_pref">Failed to Send Preferences</string>
+
 
 </resources>

@@ -7,10 +7,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
@@ -19,6 +20,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
@@ -28,20 +30,9 @@ class ProjectsListActivity : AppCompatActivity() {
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
 
-    private fun updateAppliedProjects() {
-        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
-            appliedProjects.clear()
-            appliedProjects.addAll(list)
-        },{})
-    }
-
-    fun getItemAdapter(): ProjectAdapter {
-        return itemAdapter
-    }
-
-    fun getRecyclerView(): RecyclerView {
-        return recyclerView
-    }
+    private var projectFilter: ProjectFilter = ProjectFilter()
+    private var userPref: ProjectFilter = ProjectFilter()
+    private var useFilterPref: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +47,7 @@ class ProjectsListActivity : AppCompatActivity() {
             projectId = intent.getStringExtra(projectIdString) ?: ""
         }
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+        recyclerView = findViewById(R.id.recycler_view_project)
         itemAdapter =
             ProjectAdapter(this, utils, recyclerView, fromLink, projectId)
         recyclerView.adapter = itemAdapter
@@ -70,15 +61,15 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
 
-        if(!UserTypeChoice.isProfessor){
-            fab.setVisibility(View.INVISIBLE)
+        if (!UserTypeChoice.isProfessor) {
+            fab.visibility = View.INVISIBLE
         }
 
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_project_list, menu)
+        menuInflater.inflate(R.menu.menu_project_list, menu)
         val item = menu?.findItem(R.id.searchButton)
         val searchView: SearchView = item?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -87,7 +78,7 @@ class ProjectsListActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                itemAdapter.filter.filter(newText)
+                itemAdapter.getFilter(projectFilter).filter(newText)
                 return false
             }
         })
@@ -111,6 +102,50 @@ class ProjectsListActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
 
+    override fun onResume() {
+        updateAppliedProjects()
+        updatePreferences()
+        super.onResume()
+    }
+
+
+    /**
+     * Update the list of projects, which the user applied to, from the Database
+     */
+    private fun updateAppliedProjects() {
+        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
+            appliedProjects.clear()
+            appliedProjects.addAll(list)
+        }, {})
+    }
+
+    /**
+     * TODO Remove once the tests have been fixed
+     */
+    fun getItemAdapter(): ProjectAdapter {
+        return itemAdapter
+    }
+
+    /**
+     * TODO Remove once the tests have been fixed
+     */
+    fun getRecyclerView(): RecyclerView {
+        return recyclerView
+    }
+
+    /**
+     * Update the current ProjectFilter with the given value,
+     * and updates its applicationCheck function
+     *
+     * @param pf the new ProjectFilter
+     */
+    private fun setProjectFilter(pf: ProjectFilter?) {
+        pf?.apply {
+            setApplicationCheck { checkIfApplied(it) }
+            projectFilter = this
+        }
+    }
+
     /**
      * Opens a dialog with filtering options for the project list
      */
@@ -120,7 +155,7 @@ class ProjectsListActivity : AppCompatActivity() {
         builder
             .setView(view)
             .setNeutralButton(getString(R.string.clear)) { _, _ ->
-                itemAdapter.projectFilter = ProjectFilter.default
+                projectFilter = ProjectFilter()
                 itemAdapter.filter.filter("")
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
@@ -136,11 +171,23 @@ class ProjectsListActivity : AppCompatActivity() {
      */
     @SuppressLint("InflateParams")
     private fun constructDialogView(): View {
-        val pf = itemAdapter.projectFilter
-        val view = layoutInflater.inflate(R.layout.filter_list_layout, null)
+        val pf = projectFilter
+        val view = layoutInflater.inflate(R.layout.project_filter_settings, null)
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
         view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
+        view.findViewById<ImageButton>(R.id.filter_settings_button).setOnClickListener {
+            startActivity(Intent(this, PreferencesActivity::class.java))
+        }
+        view.findViewById<SwitchCompat>(R.id.filter_preferences_switch).apply {
+            setOnCheckedChangeListener { _, isChecked ->
+                useFilterPref = isChecked
+
+                view.findViewById<View>(R.id.filter_preferences_layout).visibility =
+                    if (isChecked) View.GONE else View.VISIBLE
+            }
+            isChecked = useFilterPref
+        }
         return view
     }
 
@@ -154,19 +201,38 @@ class ProjectsListActivity : AppCompatActivity() {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        itemAdapter.projectFilter = ProjectFilter(
-            bachelor = bachelor,
-            master = master,
-            applied = applied,
-            appliedProjects.toList()
+        setProjectFilter(
+            if (useFilterPref) {
+                userPref
+            } else {
+                ProjectFilter(
+                    bachelor = bachelor,
+                    master = master,
+                    applied = applied
+                )
+            }
         )
-        itemAdapter.filter.filter("")
+        itemAdapter.getFilter(projectFilter).filter("")
     }
 
-    override fun onResume() {
-        updateAppliedProjects()
-        super.onResume()
-    }
+    /**
+     * Check if the user applied to the given project
+     *
+     * @param project the project to check
+     * @return `true` if the user applied, `false` otherwise
+     */
+    private fun checkIfApplied(project: ImmutableProject): Boolean =
+        appliedProjects.contains(project.id)
 
+
+    /**
+     * Fetch the user preference from Database and update.
+     */
+    private fun updatePreferences() {
+        utils.userDataDatabase.getPreferences(
+            { pf -> pf?.let { userPref = it } },
+            {}
+        )
+    }
 
 }

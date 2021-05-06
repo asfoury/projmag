@@ -36,4 +36,8 @@ interface CandidatureDatabase {
         onFailure: (Exception) -> Unit
     )
 
+    fun addListener(
+        projectID: ProjectId,
+        onChange: (ProjectId, List<Candidature>) -> Unit
+    )
 }
