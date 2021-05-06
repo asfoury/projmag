@@ -38,10 +38,10 @@ class UserProfileDatabaseTest {
         "Last Name",
         "First Name",
         22,
-        Gender.OTHER,
+        Gender.MALE,
         289982,
         "01001001",
-        Role.OTHER
+        Role.STUDENT
     )) {
         is Success -> prof.value
         is Failure -> null
@@ -104,10 +104,10 @@ class UserProfileDatabaseTest {
         Mockito.`when`(mockDS["firstName"]).thenReturn(exampleUserProfile?.firstName)
         Mockito.`when`(mockDS["lastName"]).thenReturn(exampleUserProfile?.lastName)
         Mockito.`when`(mockDS["age"]).thenReturn(exampleUserProfile?.age?.toLong())
-        Mockito.`when`(mockDS["gender"]).thenReturn(exampleUserProfile?.gender)
+        Mockito.`when`(mockDS["gender"]).thenReturn(exampleUserProfile?.gender?.name)
         Mockito.`when`(mockDS["sciper"]).thenReturn(exampleUserProfile?.sciper?.toLong())
         Mockito.`when`(mockDS["phoneNumber"]).thenReturn(exampleUserProfile?.phoneNumber)
-        Mockito.`when`(mockDS["role"]).thenReturn(exampleUserProfile?.role)
+        Mockito.`when`(mockDS["role"]).thenReturn(exampleUserProfile?.role?.name)
 
     }
 
