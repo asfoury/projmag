@@ -106,13 +106,14 @@ class PreferencesActivity : AppCompatActivity() {
      * Push the ProjectFilter, built from UI information, to the Database
      * If it succeeded, finishes the activity, otherwise display a message to the user
      */
-    fun submit() {
+    private fun submit() {
         val pf = buildProjectFilter()
         toast(getString(R.string.sending_preferences))
         userDB.pushPreferences(
             pf,
-            { runOnUiThread { finish() } },
+            {},
             { toast(getString(R.string.failed_send_pref)) }
         )
+        finish()
     }
 }
