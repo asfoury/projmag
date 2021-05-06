@@ -13,7 +13,7 @@ import kotlin.collections.HashMap
 private const val PROJECT_DATA_FILE: String = "project.data"
 private val ID_PATTERN: Regex = Regex("^[a-zA-Z0-9]*\$")
 
-class OfflineProjectDatabase(private val db: ProjectsDatabase, private val projectsDir: File) : ProjectsDatabase {
+class OfflineProjectDatabase(private val db: ProjectsDatabase, private val projectsDir: File, candidatureDB: CandidatureDatabase) : ProjectsDatabase {
 
     private var projectsFiles: Map<ProjectId, File> = emptyMap()
     private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
@@ -33,7 +33,10 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
 
         db.getAllProjects({ remoteProjects ->
             GlobalScope.launch(Dispatchers.IO) {
-                remoteProjects.forEach { p -> saveProject(p) }
+                remoteProjects.forEach {
+                    p -> saveProject(p)
+                    candidatureDB.addListener(p.id) { _, _ -> }
+                }
             }
         }, {})
     }

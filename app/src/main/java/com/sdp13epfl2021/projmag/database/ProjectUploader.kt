@@ -21,6 +21,7 @@ class ProjectUploader(
     private val projectDB: ProjectsDatabase,
     private val fileDB: FileDatabase,
     private val metadataDB: MetadataDatabase,
+    private val candidatureDB: CandidatureDatabase,
     private val showMsg: (String) -> Unit,
     private val onFailure: () -> Unit,
     private val onSuccess: () -> Unit
@@ -78,6 +79,7 @@ class ProjectUploader(
         projectDB.pushProject(
             project,
             { id ->
+                candidatureDB.addListener(id) { _, _ -> }
                 videoUri?.let { uri ->
                     uploadVideo(id, uri, subtitles)
                 }
