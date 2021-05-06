@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
@@ -18,7 +20,6 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class ProjectsListActivity : AppCompatActivity() {
     private lateinit var utils: Utils
 
     private var projectFilter: ProjectFilter = ProjectFilter()
+    private var useFilterPref: Boolean = false
 
     private fun updateAppliedProjects() {
         utils.userDataDatabase.getListOfAppliedToProjects({ list ->
@@ -143,6 +145,12 @@ class ProjectsListActivity : AppCompatActivity() {
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
         view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
+        view.findViewById<SwitchCompat>(R.id.filter_preferences_switch)
+            .setOnCheckedChangeListener { _, isChecked ->
+                useFilterPref = isChecked
+                view.findViewById<View>(R.id.filter_preferences_layout).visibility =
+                    if (isChecked) View.GONE else View.VISIBLE
+            }
         return view
     }
 
@@ -156,13 +164,18 @@ class ProjectsListActivity : AppCompatActivity() {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        val pf = ProjectFilter(
-            bachelor = bachelor,
-            master = master,
-            applied = applied,
-            isAppliedProject = { appliedProjects.contains(it.id) }
-        )
-        itemAdapter.getFilter(pf).filter("")
+        projectFilter =
+            if (useFilterPref) {
+                TODO("get_user_pref")
+            } else {
+                ProjectFilter(
+                    bachelor = bachelor,
+                    master = master,
+                    applied = applied,
+                    isAppliedProject = { appliedProjects.contains(it.id) }
+                )
+            }
+        itemAdapter.getFilter(projectFilter).filter("")
     }
 
     override fun onResume() {

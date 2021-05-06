@@ -112,6 +112,10 @@
 
     <string name="filter">Filter</string>
     <string name="applied">Applied</string>
+    <string name="required_degree">Required Degree</string>
+    <string name="application">Application</string>
+    <string name="filter_settings_icon">filter settings icon</string>
+    <string name="preferences">Preferences</string>
 
 
 </resources>
