@@ -38,10 +38,10 @@ class UserProfileDatabaseTest {
         "Last Name",
         "First Name",
         22,
-        Gender.MALE,
+        Gender.OTHER,
         289982,
         "01001001",
-        Role.STUDENT
+        Role.OTHER
     )) {
         is Success -> prof.value
         is Failure -> null
@@ -115,7 +115,15 @@ class UserProfileDatabaseTest {
     fun checkThatGettingProfileWorks() {
         val udb = UserProfileDatabase(mockFirebaseFirestore, mockFirebaseAuth)
         udb.getProfile({
-            assertEquals(exampleUserProfile, it)
+            assertEquals(exampleUserProfile?.firstName, it?.firstName)
+            assertEquals(exampleUserProfile?.lastName, it?.lastName)
+            assertEquals(exampleUserProfile?.age, it?.age)
+            assertEquals(exampleUserProfile?.sciper, it?.sciper)
+            assertEquals(exampleUserProfile?.phoneNumber, it?.phoneNumber)
+            assertEquals(exampleUserProfile?.role, it?.role)
+            assertEquals(exampleUserProfile?.gender, it?.gender)
+
+
         }, {
             Log.d("TEST", it.toString())
         })
