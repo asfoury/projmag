@@ -116,6 +116,8 @@
     <string name="application">Application</string>
     <string name="filter_settings_icon">filter settings icon</string>
     <string name="preferences">Preferences</string>
+    <string name="sending_preferences">Sending Preferences...</string>
+    <string name="failed_send_pref">Failed to Send Preferences</string>
 
 
 </resources>

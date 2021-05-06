@@ -3,11 +3,11 @@ package com.sdp13epfl2021.projmag.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.text.Layout
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -20,6 +20,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
@@ -30,22 +31,8 @@ class ProjectsListActivity : AppCompatActivity() {
     private lateinit var utils: Utils
 
     private var projectFilter: ProjectFilter = ProjectFilter()
+    private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
-
-    private fun updateAppliedProjects() {
-        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
-            appliedProjects.clear()
-            appliedProjects.addAll(list)
-        }, {})
-    }
-
-    fun getItemAdapter(): ProjectAdapter {
-        return itemAdapter
-    }
-
-    fun getRecyclerView(): RecyclerView {
-        return recyclerView
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +102,50 @@ class ProjectsListActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
 
+    override fun onResume() {
+        updateAppliedProjects()
+        updatePreferences()
+        super.onResume()
+    }
+
+
+    /**
+     * Update the list of projects, which the user applied to, from the Database
+     */
+    private fun updateAppliedProjects() {
+        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
+            appliedProjects.clear()
+            appliedProjects.addAll(list)
+        }, {})
+    }
+
+    /**
+     * TODO Remove once the tests have been fixed
+     */
+    fun getItemAdapter(): ProjectAdapter {
+        return itemAdapter
+    }
+
+    /**
+     * TODO Remove once the tests have been fixed
+     */
+    fun getRecyclerView(): RecyclerView {
+        return recyclerView
+    }
+
+    /**
+     * Update the current ProjectFilter with the given value,
+     * and updates its applicationCheck function
+     *
+     * @param pf the new ProjectFilter
+     */
+    private fun setProjectFilter(pf: ProjectFilter?) {
+        pf?.apply {
+            setApplicationCheck { checkIfApplied(it) }
+            projectFilter = this
+        }
+    }
+
     /**
      * Opens a dialog with filtering options for the project list
      */
@@ -141,16 +172,21 @@ class ProjectsListActivity : AppCompatActivity() {
     @SuppressLint("InflateParams")
     private fun constructDialogView(): View {
         val pf = projectFilter
-        val view = layoutInflater.inflate(R.layout.filter_list_layout, null)
+        val view = layoutInflater.inflate(R.layout.project_filter_settings, null)
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
         view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
-        view.findViewById<SwitchCompat>(R.id.filter_preferences_switch)
-            .setOnCheckedChangeListener { _, isChecked ->
+        view.findViewById<ImageButton>(R.id.filter_settings_button).setOnClickListener {
+            startActivity(Intent(this, PreferencesActivity::class.java))
+        }
+        view.findViewById<SwitchCompat>(R.id.filter_preferences_switch).apply {
+            setOnCheckedChangeListener { _, isChecked ->
                 useFilterPref = isChecked
                 view.findViewById<View>(R.id.filter_preferences_layout).visibility =
                     if (isChecked) View.GONE else View.VISIBLE
             }
+            isChecked = useFilterPref
+        }
         return view
     }
 
@@ -164,24 +200,38 @@ class ProjectsListActivity : AppCompatActivity() {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        projectFilter =
+        setProjectFilter(
             if (useFilterPref) {
-                TODO("get_user_pref")
+                userPref
             } else {
                 ProjectFilter(
                     bachelor = bachelor,
                     master = master,
-                    applied = applied,
-                    isAppliedProject = { appliedProjects.contains(it.id) }
+                    applied = applied
                 )
             }
+        )
         itemAdapter.getFilter(projectFilter).filter("")
     }
 
-    override fun onResume() {
-        updateAppliedProjects()
-        super.onResume()
-    }
+    /**
+     * Check if the user applied to the given project
+     *
+     * @param project the project to check
+     * @return `true` if the user applied, `false` otherwise
+     */
+    private fun checkIfApplied(project: ImmutableProject): Boolean =
+        appliedProjects.contains(project.id)
 
+
+    /**
+     * Fetch the user preference from Database and update.
+     */
+    private fun updatePreferences() {
+        utils.userDataDatabase.getPreferences(
+            { pf -> pf?.let { userPref = it } },
+            {}
+        )
+    }
 
 }
