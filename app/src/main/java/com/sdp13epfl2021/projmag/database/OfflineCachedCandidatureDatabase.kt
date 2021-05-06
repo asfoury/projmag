@@ -50,12 +50,14 @@ class OfflineCachedCandidatureDatabase(
         }
     }
 
+    private fun getLocalCandidatures(projectID: ProjectId): List<Candidature> {
+        return candidatures[projectID] ?: emptyList()
+    }
+
     private fun merge(projectID: ProjectId, remoteList: List<Candidature>): List<Candidature> {
-        val localList = candidatures[projectID]?.let {
-            it.filter {
-                    c -> remoteList.all { r -> r.userID != c.userID }
-            }
-        } ?: emptyList()
+        val localList: List<Candidature> = getLocalCandidatures(projectID).filter {
+            c -> remoteList.all { r -> r.userID != c.userID }
+        }
         val totalList = localList + remoteList
         candidatures[projectID] = totalList
         saveCandidature(projectID)
@@ -72,7 +74,10 @@ class OfflineCachedCandidatureDatabase(
             //We only keep them if they don't collide, with userID (priority to remote => up to date)
             val totalList: List<Candidature> = merge(projectID, remoteList)
             onSuccess(totalList)
-        }, onFailure)
+        }, {
+            //If the db failed to load (for example offline mode), we return the local cached list
+            onSuccess(getLocalCandidatures(projectID))
+        })
     }
 
     override fun pushCandidature(
