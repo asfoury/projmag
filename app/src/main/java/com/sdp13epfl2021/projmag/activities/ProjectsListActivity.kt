@@ -47,7 +47,7 @@ class ProjectsListActivity : AppCompatActivity() {
             projectId = intent.getStringExtra(projectIdString) ?: ""
         }
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+        recyclerView = findViewById(R.id.recycler_view_project)
         itemAdapter =
             ProjectAdapter(this, utils, recyclerView, fromLink, projectId)
         recyclerView.adapter = itemAdapter
@@ -62,7 +62,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
 
         if (!UserTypeChoice.isProfessor) {
-            fab.setVisibility(View.INVISIBLE)
+            fab.visibility = View.INVISIBLE
         }
 
 
@@ -182,6 +182,7 @@ class ProjectsListActivity : AppCompatActivity() {
         view.findViewById<SwitchCompat>(R.id.filter_preferences_switch).apply {
             setOnCheckedChangeListener { _, isChecked ->
                 useFilterPref = isChecked
+
                 view.findViewById<View>(R.id.filter_preferences_layout).visibility =
                     if (isChecked) View.GONE else View.VISIBLE
             }
