@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sdp13epfl2021.projmag">
 
     <uses-permission
@@ -20,22 +21,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".activities.QRCodeActivity"></activity>
-        <activity android:name=".activities.UserTypeChoice"></activity>
+        <activity
+            android:name=".activities.PreferencesActivity"
+            android:parentActivityName=".activities.ProjectsListActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".activities.QRCodeActivity" />
+        <activity android:name=".activities.UserTypeChoice" />
         <activity
             android:name=".curriculumvitae.VideoCv"
-            android:parentActivityName=".activities.ProfilePageActivity"></activity>
+            android:parentActivityName=".activities.ProfilePageActivity" />
         <activity android:name=".activities.TagsSelectorActivity" />
         <activity
             android:name=".activities.ProfilePageActivity"
-            android:parentActivityName=".activities.ProjectsListActivity"/>
+            android:parentActivityName=".activities.ProjectsListActivity" />
         <activity
             android:name=".video.VideoSubtitlingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activities.CVCreationActivity"
             android:parentActivityName=".activities.ProfilePageActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activities.ProjectInformationActivity"
             android:parentActivityName=".activities.ProjectsListActivity" />
@@ -43,8 +51,12 @@
         <activity android:name=".activities.SignInActivity" />
         <activity
             android:name=".Form"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activities.ProjectsListActivity" />
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activities.ProjectsListActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

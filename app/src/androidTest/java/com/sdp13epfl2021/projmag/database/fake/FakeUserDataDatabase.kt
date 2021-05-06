@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.UserDataDatabase
+import com.sdp13epfl2021.projmag.model.ProjectFilter
 import com.sdp13epfl2021.projmag.model.Candidature
 
 class FakeUserDataDatabase(
@@ -70,7 +71,7 @@ class FakeUserDataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        if (apply) {
+if (apply) {
             applied.add(projectId)
         } else {
             applied.remove(projectId)
@@ -82,6 +83,21 @@ class FakeUserDataDatabase(
         onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        onSuccess(applied.toList())
+        onSuccess(ArrayList<ProjectId>())
+    }
+
+    override fun getPreferences(
+        onSuccess: (ProjectFilter?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun pushPreferences(
+        pf: ProjectFilter,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 }
