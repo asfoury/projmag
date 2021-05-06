@@ -40,7 +40,7 @@ class ProfilePageActivity : AppCompatActivity() {
         }
 
         UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
-            Toast.makeText(this, "Failed to load profile", Toast.LENGTH_LONG).show()
+            Toast.makeText(this,getString(R.string.profile_loading_failed)   , Toast.LENGTH_LONG).show()
         }
 
 
@@ -63,7 +63,6 @@ class ProfilePageActivity : AppCompatActivity() {
 
     private fun loadUserProfile(profile : ImmutableProfile?) {
         if (profile != null) {
-            Log.d(ContentValues.TAG, "NOT NULL")
             findViewById<EditText>(R.id.profile_firstname).setText(profile.firstName)
             findViewById<EditText>(R.id.profile_lastname).setText(profile.lastName)
             findViewById<EditText>(R.id.profile_age).setText(profile.age.toString())
@@ -71,7 +70,7 @@ class ProfilePageActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.profile_phone_number).setText(profile.phoneNumber)
             findViewById<EditText>(R.id.profile_sciper).setText(profile.sciper.toString())
         } else {
-            Toast.makeText(this, "Failed to load profile", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG).show()
         }
     }
 

@@ -86,7 +86,7 @@ class UserProfileDatabase(
                         val sciper = (document["sciper"] as? Long)?.toInt()
                         val phoneNumber = (document["phoneNumber"] as? String)
 
-                        val gender = when ((document["gender"] as? String)) {
+                        val gender = when (document["gender"] as? String) {
                             Gender.MALE.name -> Gender.MALE
                             Gender.FEMALE.name -> Gender.FEMALE
                             else -> Gender.OTHER
