@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.UserDataDatabase
+import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.util.Collections.emptyList
 
 class FakeUserDataDatabase : UserDataDatabase {
@@ -51,7 +52,7 @@ class FakeUserDataDatabase : UserDataDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        
+
     }
 
     override fun getListOfAppliedToProjects(
@@ -59,5 +60,20 @@ class FakeUserDataDatabase : UserDataDatabase {
         onFailure: (Exception) -> Unit
     ) {
         onSuccess(ArrayList<ProjectId>())
+    }
+
+    override fun getPreferences(
+        onSuccess: (ProjectFilter?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun pushPreferences(
+        pf: ProjectFilter,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 }
