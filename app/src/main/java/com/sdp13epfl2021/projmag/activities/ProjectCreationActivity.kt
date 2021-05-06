@@ -196,6 +196,7 @@ class Form : AppCompatActivity() {
                 utils.projectsDatabase,
                 utils.fileDatabase,
                 utils.metadataDatabase,
+                utils.candidatureDatabase,
                 ::showToast,
                 { setSubmitButtonEnabled(true) },
                 ::finishFromOtherThread
