@@ -5,6 +5,7 @@ package com.sdp13epfl2021.projmag.curriculumvitae
 import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 
 /**
@@ -17,7 +18,7 @@ data class CurriculumVitae(
     val jobExperience: List<PeriodDescription>,
     val languages: List<LanguageLevel>,
     val skills: List<SkillDescription>,
-) : Parcelable {
+) : Parcelable, Serializable {
 
     var uri: Uri? = null
         set(value) {
@@ -43,7 +44,7 @@ data class CurriculumVitae(
             val description: String,
             val from: Int,
             val to: Int
-        ) : Validate, Parcelable {
+        ) : Validate, Parcelable, Serializable {
             override fun isValid(): Boolean = name.isNotEmpty() &&
                     location.isNotEmpty() &&
                     description.isNotEmpty() &&
@@ -62,7 +63,7 @@ data class CurriculumVitae(
         data class LanguageLevel(
             val language: String,
             val level: Level
-        ) : Validate, Parcelable {
+        ) : Validate, Parcelable, Serializable {
             companion object {
                 /**
                  * Possible language levels
@@ -103,7 +104,7 @@ data class CurriculumVitae(
         data class SkillDescription(
             val name: String,
             val skillLevel: SkillLevel
-        ) : Validate, Parcelable {
+        ) : Validate, Parcelable, Serializable {
             /**
              * Possible language levels
              */

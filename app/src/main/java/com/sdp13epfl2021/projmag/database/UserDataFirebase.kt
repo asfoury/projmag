@@ -139,6 +139,14 @@ class UserDataFirebase(
         }
     }
 
+    override fun getCv(
+        userID: String,
+        onSuccess: (CurriculumVitae?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun applyUnapply(
         apply: Boolean,
         projectId: ProjectId,
