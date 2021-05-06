@@ -82,6 +82,23 @@ interface UserDataDatabase {
     )
 
     /**
+     * Get the cv for the given user.
+     * If no cv was found for this user, onSuccess is called with null.
+     *
+     * Call `onSuccess` if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param userID the user id of the cv to get
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
+    fun getCv(
+        userID: String,
+        onSuccess: (CurriculumVitae?) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
      * Apply or unapply to the given project depending on the value of apply
      * Call `onSuccess` if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
