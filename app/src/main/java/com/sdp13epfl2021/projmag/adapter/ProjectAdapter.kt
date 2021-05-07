@@ -3,12 +3,12 @@ package com.sdp13epfl2021.projmag.adapter
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +24,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProjectAdapter(private val activity: Activity, private val utils: Utils, private val recyclerView: RecyclerView,
-                     private val fromLink: Boolean, private var projectIdLink: String):
+class ProjectAdapter(
+    private val activity: Activity,
+    private val utils: Utils,
+    private val recyclerView: RecyclerView,
+    private val fromLink: Boolean,
+    private var projectIdLink: String
+) :
     RecyclerView.Adapter<ProjectAdapter.ProjectViewHolder>(), Filterable {
 
     companion object ItemAdapterCompanion {
@@ -34,10 +39,9 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
 
     var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
-    var projectFilter: ProjectFilter = ProjectFilter.default
 
     private fun sortDataset() {
-        dataset.sortBy{ project -> project.isTaken }
+        dataset.sortBy { project -> project.isTaken }
         if (fromLink) {
             dataset.sortByDescending { project -> projectIdLink == project.id }
         }
@@ -50,7 +54,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
                 ProjectChange.Type.REMOVED -> removeProject(change.project)
             }
-            activity.runOnUiThread{notifyDataSetChanged()}
+            activity.runOnUiThread { notifyDataSetChanged() }
         }
 
         utils.projectsDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
@@ -71,7 +75,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
         }
         greyOut()
         sortDataset()
-        activity.runOnUiThread{notifyDataSetChanged()}
+        activity.runOnUiThread { notifyDataSetChanged() }
     }
 
     @Synchronized
@@ -83,8 +87,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
     class ProjectViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
-        val linearLayoutView: LinearLayout = view.findViewById(R.id.linear_layout_2)
-        val chipGroupView : ChipGroup = view.findViewById(R.id.chip_group)
+        val chipGroupView: ChipGroup = view.findViewById(R.id.chip_group)
     }
 
 
@@ -99,7 +102,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
     fun openProject(holder: ProjectViewHolder, project: ImmutableProject) {
         val context = holder.view.context
         val intent = Intent(context, ProjectInformationActivity::class.java)
-        intent.putExtra(projectString, project)
+        intent.putExtra(projectString, project as Parcelable)
         context.startActivity(intent)
     }
 
@@ -147,6 +150,7 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
     }
 
 
+
     private fun tagAndSectionsChipViewSetup(project: ImmutableProject, holder: ProjectViewHolder){
         val green = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.light_green))
         val teal = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.teal_700))
@@ -163,12 +167,23 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
         }
     }
 
+    /**
+     * Return a list Filter for this Adapter with the given ProjectFilter
+     *
+     * @param pf the ProjectFilter
+     * @return a Filter for this adapter
+     */
+    fun getFilter(pf: ProjectFilter): Filter = ProjectListFilter(pf)
+
+
     override fun getFilter(): Filter {
         return ProjectListFilter()
     }
 
-    private inner class ProjectListFilter : Filter() {
-        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
+    private inner class ProjectListFilter(val projectFilter: ProjectFilter = ProjectFilter()) :
+        Filter() {
+
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList = ArrayList<ImmutableProject>()
             val search = constraint.toString()
             if (constraint.toString().isEmpty()) {
@@ -182,12 +197,13 @@ class ProjectAdapter(private val activity: Activity, private val utils: Utils, p
                     }
                 }
             }
-            val filterResults = Filter.FilterResults()
+            val filterResults = FilterResults()
             filterResults.values = filteredList.filter { projectFilter(it) }
             return filterResults
         }
 
-        override fun publishResults(constraint: CharSequence?, results: Filter.FilterResults?) {
+        @Suppress("UNCHECKED_CAST")
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             dataset.clear()
             dataset.addAll(performFiltering(constraint).values as Collection<ImmutableProject>)
             sortDataset()

@@ -18,6 +18,8 @@ class ProjectUploaderTest {
 
     val mockMetadataDB = Mockito.mock(MetadataDatabase::class.java)
 
+    val mockCandidatureDB = Mockito.mock(CandidatureDatabase::class.java)
+
     val mockUri = Mockito.mock(Uri::class.java)
     val subtitles = "not formatted subtitles, but we do not really care here"
 
@@ -99,6 +101,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals(reason, msg) },
             {},
             {}).checkProjectAndThenUpload(
@@ -114,6 +117,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals("Project pushed (without video) with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
@@ -129,6 +133,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals("Project pushed with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
@@ -144,6 +149,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals("Project pushed with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(

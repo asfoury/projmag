@@ -2,11 +2,14 @@ package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 @Parcelize
-class ImmutableProfile private constructor(val lastName : String, val firstName : String,
-                                           val age : Int, val gender : Gender, val sciper : Int?, val phoneNumber : String,  val role : Role) :
-    Parcelable {
+
+data class ImmutableProfile private constructor(val lastName : String, val firstName : String,
+                                           val age : Int, val gender : Gender, val sciper : Int?, val phoneNumber : String, val role : Role) :
+    Parcelable, Serializable {
+
 
 
     companion object{

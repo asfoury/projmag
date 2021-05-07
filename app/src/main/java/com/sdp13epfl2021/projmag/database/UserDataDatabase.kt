@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 /**
  * An interface to manage a database containing
@@ -82,6 +83,23 @@ interface UserDataDatabase {
     )
 
     /**
+     * Get the cv for the given user.
+     * If no cv was found for this user, onSuccess is called with null.
+     *
+     * Call `onSuccess` if the operation succeeded
+     * Call `onFailure` with an Exception in case of failure
+     *
+     * @param userID the user id of the cv to get
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
+    fun getCv(
+        userID: String,
+        onSuccess: (CurriculumVitae?) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
      * Apply or unapply to the given project depending on the value of apply
      * Call `onSuccess` if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
@@ -108,6 +126,32 @@ interface UserDataDatabase {
      */
     fun getListOfAppliedToProjects(
         onSuccess: (List<ProjectId>) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Get the user preferences from Firebase
+     * If none are set, return `null`.
+     *
+     * @param onSuccess Called on success with the fetched or null
+     * @param onFailure Called no failure with an `Exception`
+     */
+    fun getPreferences(
+        onSuccess: (ProjectFilter?) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+
+    /**
+     * Push the given project to Firebase. It will be linked with the user who pushed it.
+     *
+     * @param pf The given `ProjectFilter`
+     * @param onSuccess Called on success
+     * @param onFailure Called on Failure with an `Exception`
+     */
+    fun pushPreferences(
+        pf: ProjectFilter,
+        onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
 }

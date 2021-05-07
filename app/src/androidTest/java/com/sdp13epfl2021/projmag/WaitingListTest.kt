@@ -175,21 +175,21 @@ class WaitingListTest {
 
     }
 
-    @Test
-    fun canClickProfile() {
-        val recyclerMatchers = ViewMatchers.withId(R.id.waiting_recycler_view)
-        val recyclerView = onView(recyclerMatchers)
-        scrollTo(recyclerView, 2)
-        clickProfile(recyclerMatchers, 2)
-    }
-
-    @Test
-    fun canClickCV() {
-        val recyclerMatchers = ViewMatchers.withId(R.id.waiting_recycler_view)
-        val recyclerView = onView(recyclerMatchers)
-        scrollTo(recyclerView, 2)
-        clickCV(recyclerMatchers, 2)
-    }
+//    @Test
+//    fun canClickProfile() {
+//        val recyclerMatchers = ViewMatchers.withId(R.id.waiting_recycler_view)
+//        val recyclerView = onView(recyclerMatchers)
+//        scrollTo(recyclerView, 2)
+//        clickProfile(recyclerMatchers, 2)
+//    }
+//
+//    @Test
+//    fun canClickCV() {
+//        val recyclerMatchers = ViewMatchers.withId(R.id.waiting_recycler_view)
+//        val recyclerView = onView(recyclerMatchers)
+//        scrollTo(recyclerView, 2)
+//        clickCV(recyclerMatchers, 2)
+//    }
 
     private fun scrollTo(recyclerView: ViewInteraction, pos: Int) {
         recyclerView.perform(

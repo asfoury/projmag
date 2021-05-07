@@ -1,10 +1,9 @@
+
 package com.sdp13epfl2021.projmag.database
 
+import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
 import com.sdp13epfl2021.projmag.database.fake.FakeProjectsDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.SectionBaseManager
-import com.sdp13epfl2021.projmag.model.Tag
-import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import junit.framework.TestCase.*
 import org.junit.After
 import org.junit.Before
@@ -20,61 +19,11 @@ class OfflineProjectsDatabaseTest {
     private val projectsDir = Files.createTempDirectory("offline_test").toFile()
     private val unreadableDir = Files.createTempDirectory("offline_test_invalid").toFile()
 
-    private val tagManager = TagsBaseManager()
-    private val tagList : List<String> = tagManager.tagsListToStringList(tagManager.getAllTags())
-    private val sectionList : List<String> = SectionBaseManager.sectionList()
-    private val p1 = ImmutableProject(
-        "12345",
-        "What fraction of Google searches are answered by Wikipedia?",
-        "DLAB",
-        "authorID23",
-        "Robert West",
-        "TA1",
-        1,
-        listOf<String>(),
-        false,
-        true,
-        listOf(tagList[0], tagList[3]),
-        false,
-        "Description of project1",
-        listOf(),
-        listOf(sectionList[0])
-    )
-    private val p2 = ImmutableProject(
-        "11111",
-        "Real-time reconstruction of deformable objects",
-        "CVLAB",
-        "authorID29",
-        "Teacher2",
-        "TA2",
-        1,
-        listOf<String>(),
-        false,
-        true,
-        listOf(tagList[3], tagList[0]),
-        false,
-        "Description of project2",
-        listOf(),
-        listOf(sectionList[3])
-    )
-    private val p3 = ImmutableProject(
-        "00000",
-        "Implement a fast driver for a 100 Gb/s network card",
-        "DSLAB",
-        "authorID31",
-        "Teacher5",
-        "TA5",
-        3,
-        listOf<String>(),
-        false,
-        true,
-        listOf(tagList[2]),
-        false,
-        "Description of project5",
-        listOf(),
-        listOf(sectionList[2])
-    )
+    private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","authorID23", "Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
+    private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","authorID29", "Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
+    private val p3 = ImmutableProject("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","authorID31", "Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
 
+    private val fakeCandidatureDB: CandidatureDatabase = FakeCandidatureDatabase()
 
     private val onFailureNotExpected: ((Exception) -> Unit) = { e ->
         e.printStackTrace()
@@ -127,11 +76,11 @@ class OfflineProjectsDatabaseTest {
     fun shouldNotCrashWithInvalidDir() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        OfflineProjectDatabase(fakeDB, unreadableDir)
+        OfflineProjectDatabase(fakeDB, unreadableDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         val emptyDB = FakeProjectsDatabase(listOf())
-        val db2 = OfflineProjectDatabase(emptyDB, unreadableDir)
+        val db2 = OfflineProjectDatabase(emptyDB, unreadableDir, fakeCandidatureDB)
         var result: List<ImmutableProject>? = null
         db2.getAllProjects({
             result = it
@@ -145,7 +94,7 @@ class OfflineProjectsDatabaseTest {
     fun getAllIdsWorks() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        OfflineProjectDatabase(fakeDB, projectsDir)
+        OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
         fakeDB.add(p3)
         Thread.sleep(100)
@@ -155,7 +104,7 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(500)
 
         val emptyDB = FakeProjectsDatabase(listOf())
-        val db2 = OfflineProjectDatabase(emptyDB, projectsDir)
+        val db2 = OfflineProjectDatabase(emptyDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         var result: List<ProjectId>? = null
@@ -170,7 +119,7 @@ class OfflineProjectsDatabaseTest {
     fun getAllProjectsWorks() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        OfflineProjectDatabase(fakeDB, projectsDir)
+        OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
         fakeDB.add(p3)
         Thread.sleep(100)
@@ -178,7 +127,7 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
 
         val emptyDB = FakeProjectsDatabase(listOf())
-        val db2 = OfflineProjectDatabase(emptyDB, projectsDir)
+        val db2 = OfflineProjectDatabase(emptyDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         var result: List<ImmutableProject>? = null
@@ -220,7 +169,7 @@ class OfflineProjectsDatabaseTest {
     fun getProjectFromIdWorks() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        OfflineProjectDatabase(fakeDB, projectsDir)
+        OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
         fakeDB.add(p3)
         Thread.sleep(100)
@@ -228,7 +177,7 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
 
         val emptyDB = FakeProjectsDatabase(listOf())
-        val db2 = OfflineProjectDatabase(emptyDB, projectsDir)
+        val db2 = OfflineProjectDatabase(emptyDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         var result1: ImmutableProject? = null
@@ -250,7 +199,7 @@ class OfflineProjectsDatabaseTest {
     fun getProjectsFromNameWorks() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        OfflineProjectDatabase(fakeDB, projectsDir)
+        OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
         fakeDB.add(p3)
         Thread.sleep(100)
@@ -258,7 +207,7 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
 
         val emptyDB = FakeProjectsDatabase(listOf())
-        val db2 = OfflineProjectDatabase(emptyDB, projectsDir)
+        val db2 = OfflineProjectDatabase(emptyDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         var result1: List<ImmutableProject>? = null
@@ -280,7 +229,7 @@ class OfflineProjectsDatabaseTest {
     fun getProjectsFromTagsWorks() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        OfflineProjectDatabase(fakeDB, projectsDir)
+        OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
         fakeDB.add(p3)
         Thread.sleep(100)
@@ -288,15 +237,15 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
 
         val emptyDB = FakeProjectsDatabase(listOf())
-        val db2 = OfflineProjectDatabase(emptyDB, projectsDir)
+        val db2 = OfflineProjectDatabase(emptyDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         var result: List<ImmutableProject>? = null
-        db2.getProjectsFromTags(listOf(tagList[2]), {
+        db2.getProjectsFromTags(listOf("ml", "database"), {
             result = it
         }, onFailureNotExpected)
         while (result == null);
-        assertEquals(listOf(p3), result)
+        assertEquals(listOf(p2), result)
 
     }
 
@@ -305,7 +254,7 @@ class OfflineProjectsDatabaseTest {
     fun pushIsCorrectlyCalled() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        val db = OfflineProjectDatabase(fakeDB, projectsDir)
+        val db = OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         var result: ProjectId? = null
@@ -321,7 +270,7 @@ class OfflineProjectsDatabaseTest {
     fun deleteProjectWithIdIsCorrectlyCalled() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        val db = OfflineProjectDatabase(fakeDB, projectsDir)
+        val db = OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         db.deleteProjectWithId(p2.id, {}, onFailureNotExpected)
@@ -333,7 +282,7 @@ class OfflineProjectsDatabaseTest {
     fun updateVideoWithProjectIsCorrectlyCalled() {
         val projectsList = listOf(p1)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        val db = OfflineProjectDatabase(fakeDB, projectsDir)
+        val db = OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
 
         val uri_1: String = "https://remote/uri/1"
@@ -351,7 +300,7 @@ class OfflineProjectsDatabaseTest {
     fun listenersWorks() {
         val projectsList = listOf(p1, p2)
         val fakeDB = FakeProjectsDatabase(projectsList)
-        val db = OfflineProjectDatabase(fakeDB, projectsDir)
+        val db = OfflineProjectDatabase(fakeDB, projectsDir, fakeCandidatureDB)
         Thread.sleep(500)
         var count: AtomicInteger = AtomicInteger(0)
 
@@ -384,4 +333,5 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
         assertEquals(4, count.get())
     }
+
 }

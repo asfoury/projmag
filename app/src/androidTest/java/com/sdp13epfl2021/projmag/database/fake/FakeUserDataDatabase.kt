@@ -3,15 +3,24 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.ProjectId
 import com.sdp13epfl2021.projmag.database.UserDataDatabase
-import java.util.Collections.emptyList
+import com.sdp13epfl2021.projmag.model.ProjectFilter
+import com.sdp13epfl2021.projmag.model.Candidature
 
-class FakeUserDataDatabase : UserDataDatabase {
+class FakeUserDataDatabase(
+    val userID: String = "",
+    var favorites: MutableSet<ProjectId> = HashSet(),
+    var cvs: MutableMap<String, CurriculumVitae> = HashMap(),
+    var applied: MutableSet<ProjectId> = HashSet(),
+) : UserDataDatabase {
+
+
     override fun pushFavoriteProject(
         projectID: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        favorites.add(projectID)
+        onSuccess()
     }
 
     override fun pushListOfFavoriteProjects(
@@ -19,14 +28,15 @@ class FakeUserDataDatabase : UserDataDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        favorites.addAll(projectIDs)
+        onSuccess()
     }
 
     override fun getListOfFavoriteProjects(
         onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        onSuccess(favorites.toList())
     }
 
     override fun removeFromFavorite(
@@ -34,24 +44,39 @@ class FakeUserDataDatabase : UserDataDatabase {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        favorites.remove(projectID)
+        onSuccess()
     }
 
     override fun pushCv(
         cv: CurriculumVitae,
         onSuccess: () -> Unit,
-        onFailure: (java.lang.Exception) -> Unit
+        onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        cvs[userID] = cv
+        onSuccess()
+    }
+
+    override fun getCv(
+        userID: String,
+        onSuccess: (CurriculumVitae?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        onSuccess(cvs[userID])
     }
 
     override fun applyUnapply(
-        applied: Boolean,
-        project: ProjectId,
+        apply: Boolean,
+        projectId: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        
+if (apply) {
+            applied.add(projectId)
+        } else {
+            applied.remove(projectId)
+        }
+        onSuccess()
     }
 
     override fun getListOfAppliedToProjects(
@@ -59,5 +84,20 @@ class FakeUserDataDatabase : UserDataDatabase {
         onFailure: (Exception) -> Unit
     ) {
         onSuccess(ArrayList<ProjectId>())
+    }
+
+    override fun getPreferences(
+        onSuccess: (ProjectFilter?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun pushPreferences(
+        pf: ProjectFilter,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 }
