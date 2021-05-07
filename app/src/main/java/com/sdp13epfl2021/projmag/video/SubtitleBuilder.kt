@@ -35,7 +35,9 @@ class SubtitleBuilder {
     var start: Int = 0
         set(pos) {
             field = pos
-            end = if (end < pos) pos else end
+            if (end < pos) {
+                end = pos
+            }
         }
 
     /**
@@ -43,7 +45,9 @@ class SubtitleBuilder {
      */
     var end: Int = 0
         set(pos) {
-            start = if (pos < start) pos else start
+            if (pos < start) {
+                start = pos
+            }
             field = pos
         }
 
