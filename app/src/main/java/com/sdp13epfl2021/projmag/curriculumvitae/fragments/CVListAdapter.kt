@@ -8,11 +8,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 
+/**
+ * A specific adapter to be used with various kind of UI list views inside the
+ * CV creation process. Represent some data set
+ */
 class CVListAdapter<T>(private val dataSet: MutableList<T>, private val remove: (T) -> Unit) :
     RecyclerView.Adapter<CVListAdapter<T>.ViewHolder>() {
 
+    /**
+     * ViewHolder for various CardViews
+     */
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        /**
+         * the text view of the CardView
+         */
         val textView: TextView = view.findViewById(R.id.cv_cardview_textview)
+
+        /**
+         * The button of the card view
+         * (usually used to delete the card)
+         */
         val button: ImageButton = view.findViewById(R.id.cv_item_cardview_button)
     }
 

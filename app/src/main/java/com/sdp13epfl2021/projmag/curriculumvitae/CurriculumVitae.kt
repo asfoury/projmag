@@ -21,7 +21,7 @@ data class CurriculumVitae(
     val summary: String,
     val education: List<PeriodDescription>,
     val jobExperience: List<PeriodDescription>,
-    val languages: List<LanguageLevel>,
+    val languages: List<Language>,
     val skills: List<SkillDescription>,
 ) : Parcelable, Serializable {
 
@@ -65,7 +65,7 @@ data class CurriculumVitae(
      * @property language the name of the language
      * @property level the level at this language
      */
-    data class LanguageLevel(
+    data class Language(
         val language: String,
         val level: Level
     ) : Validateable, Parcelable, Serializable {
@@ -73,7 +73,7 @@ data class CurriculumVitae(
         override fun isValid(): Boolean = language.isNotEmpty()
 
         override fun equals(other: Any?): Boolean =
-            if (other is LanguageLevel) {
+            if (other is Language) {
                 this.language == other.language
             } else {
                 false
