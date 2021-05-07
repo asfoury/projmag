@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
 import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
@@ -30,6 +31,7 @@ class Form : AppCompatActivity() {
         private const val REQUEST_VIDEO_ACCESS = 1
         private const val REQUEST_VIDEO_SUBTITLING = 2
         private const val REQUEST_TAG_ACCESS = 3
+        private const val REQUEST_SELECTION_ACCESS = 4
     }
 
 
@@ -43,12 +45,14 @@ class Form : AppCompatActivity() {
     private var subtitles: String? = null
 
     private var listTags: Array<String> = emptyArray()
+    private var listSections : Array<String> = emptyArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addtagButton: Button = findViewById(R.id.addTagsButton)
+        val addSectionButton : Button = findViewById(R.id.addSectionButton)
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(
@@ -60,6 +64,9 @@ class Form : AppCompatActivity() {
         findViewById<Button>(R.id.form_button_sub)?.setOnClickListener(::submit)
         addtagButton.setOnClickListener {
             switchToTagsSelectionActivity()
+        }
+        addSectionButton.setOnClickListener{
+            switchToSectionSelectionActivity()
         }
         findViewById<TextView>(R.id.title_form).requestFocus()
         findViewById<Button>(R.id.form_add_subtitle).setOnClickListener(::onClickSubtitleButton)
@@ -125,12 +132,18 @@ class Form : AppCompatActivity() {
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_TAG_ACCESS) {
             if (data != null) {
-                val tagData = data.getStringArrayExtra("tagsList")
+                val tagData = data.getStringArrayExtra(MainActivity.tagsList)
                 if (tagData != null) {
                     listTags = tagData
                 }
-
-
+            }
+        }
+        else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECTION_ACCESS){
+            if (data != null) {
+                val secList = data.getStringArrayExtra(MainActivity.sectionsList)
+                if (secList != null) {
+                    listSections = secList
+                }
             }
         }
     }
@@ -156,7 +169,7 @@ class Form : AppCompatActivity() {
          */
         private fun constructProject(): Result<ImmutableProject> {
             return ImmutableProject.build(
-                id = "",
+                id = "", //id is defined by firebase itself
                 name = getTextFromEditText(R.id.form_edit_text_project_name),
                 lab = getTextFromEditText(R.id.form_edit_text_laboratory),
                 authorId = Firebase.auth.currentUser!!.uid,
@@ -172,7 +185,8 @@ class Form : AppCompatActivity() {
                 isTaken = false,
                 description = getTextFromEditText(R.id.form_project_description),
                 assigned = listOf(),
-                tags = listTags.toList()
+                tags = listTags.toList(),
+                allowedSections = listSections.toList()
             )
         }
 
@@ -211,11 +225,16 @@ class Form : AppCompatActivity() {
          * Switch to the tag selection activity that will then comeback to this activity
          * And update the project list if the activity finishes properly
          */
-        fun switchToTagsSelectionActivity() {
+        private fun switchToTagsSelectionActivity() {
             //why do i need to do the :: class.java to make it work
             val intent = Intent(this, TagsSelectorActivity::class.java)
             startActivityForResult(intent, REQUEST_TAG_ACCESS)
 
+        }
+
+        private fun switchToSectionSelectionActivity(){
+            val intent = Intent(this, SectionSelectionActivity::class.java)
+            startActivityForResult(intent, REQUEST_SELECTION_ACCESS)
         }
 
 

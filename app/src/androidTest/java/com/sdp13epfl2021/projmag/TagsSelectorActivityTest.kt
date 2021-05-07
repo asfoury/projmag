@@ -43,6 +43,7 @@ class TagsSelectorActivityTest {
         onView(withId(R.id.recycler_tag_view)).perform(actionOnItemAtPosition<TagAdapter.TagViewHolder>(3, longClick()))
         //scroll to an element of a tag view
         onView(withId(R.id.recycler_tag_view)).perform(RecyclerViewActions.scrollToPosition<TagAdapter.TagViewHolder>(4))
+        
 
 
     }

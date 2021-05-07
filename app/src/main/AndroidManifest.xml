@@ -31,6 +31,9 @@
         <activity
             android:name=".curriculumvitae.VideoCv"
             android:parentActivityName=".activities.ProfilePageActivity" />
+
+        <activity android:name=".activities.SectionSelectionActivity" />
+
         <activity android:name=".activities.TagsSelectorActivity" />
         <activity
             android:name=".activities.ProfilePageActivity"

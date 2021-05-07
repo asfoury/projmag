@@ -1,3 +1,4 @@
+
 package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
@@ -332,4 +333,5 @@ class OfflineProjectsDatabaseTest {
         Thread.sleep(100)
         assertEquals(4, count.get())
     }
+
 }

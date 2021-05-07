@@ -25,14 +25,15 @@ import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class ProjectsListActivity : AppCompatActivity() {
 
-    private lateinit var itemAdapter: ProjectAdapter
+    private lateinit var projectAdapter: ProjectAdapter
+
     private lateinit var recyclerView: RecyclerView
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
-
     private var projectFilter: ProjectFilter = ProjectFilter()
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +48,14 @@ class ProjectsListActivity : AppCompatActivity() {
             projectId = intent.getStringExtra(projectIdString) ?: ""
         }
 
-        recyclerView = findViewById(R.id.recycler_view_project)
-        itemAdapter =
-            ProjectAdapter(this, utils, recyclerView, fromLink, projectId)
-        recyclerView.adapter = itemAdapter
+
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+
+        projectAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+        recyclerView.adapter = projectAdapter
+
+
+
         recyclerView.setHasFixedSize(false)
 
         // get the fab and make it go to the Form activity
@@ -78,7 +83,9 @@ class ProjectsListActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                itemAdapter.getFilter(projectFilter).filter(newText)
+
+                projectAdapter.getFilter(projectFilter).filter(newText)
+
                 return false
             }
         })
@@ -119,11 +126,13 @@ class ProjectsListActivity : AppCompatActivity() {
         }, {})
     }
 
+
+
     /**
      * TODO Remove once the tests have been fixed
      */
     fun getItemAdapter(): ProjectAdapter {
-        return itemAdapter
+        return projectAdapter
     }
 
     /**
@@ -155,8 +164,10 @@ class ProjectsListActivity : AppCompatActivity() {
         builder
             .setView(view)
             .setNeutralButton(getString(R.string.clear)) { _, _ ->
+
                 projectFilter = ProjectFilter()
-                itemAdapter.filter.filter("")
+                projectAdapter.filter.filter("")
+
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
@@ -171,8 +182,10 @@ class ProjectsListActivity : AppCompatActivity() {
      */
     @SuppressLint("InflateParams")
     private fun constructDialogView(): View {
+
         val pf = projectFilter
         val view = layoutInflater.inflate(R.layout.project_filter_settings, null)
+
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
         view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
@@ -200,7 +213,9 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun filter(view: View) {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
+
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
+
         setProjectFilter(
             if (useFilterPref) {
                 userPref
@@ -212,7 +227,8 @@ class ProjectsListActivity : AppCompatActivity() {
                 )
             }
         )
-        itemAdapter.getFilter(projectFilter).filter("")
+        projectAdapter.getFilter(projectFilter).filter("")
+
     }
 
     /**

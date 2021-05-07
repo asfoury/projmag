@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
         const val projectString: String = "project"     //ImmutableProject
         const val cv: String = "CV"                     //CurriculumVitae
         const val profile: String = "profile"           //ImmutableProfile
+        const val tagsList: String = "tagsList"         //Array string (originally of tags)
+        const val  sectionsList:String = "sectionsList" //Array string
     }
 
     private lateinit var mAuth: FirebaseAuth
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
-
+    
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
          * Else send him to DashboardActivity*/
         Handler(Looper.getMainLooper()).postDelayed({

@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -114,18 +116,15 @@ class ProjectAdapter(
         // remove all tags to keep them from being duplicated
         holder.chipGroupView.removeAllViews()
 
-        // add the tags to the project
-        for (tag in project.tags) {
-            val chipView: Chip = Chip(activity)
-            chipView.text = tag
-            holder.chipGroupView.addView(chipView)
-        }
 
         if (dataset[position].isTaken) {
             holder.view.alpha = 0.5f
         } else {
             holder.view.alpha = 1f
         }
+
+        //put the tags and the sections :
+        tagAndSectionsChipViewSetup(project, holder)
 
         // make the projects pressable
         holder.view.setOnClickListener {
@@ -150,6 +149,24 @@ class ProjectAdapter(
         }
     }
 
+
+
+    private fun tagAndSectionsChipViewSetup(project: ImmutableProject, holder: ProjectViewHolder){
+        val green = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.light_green))
+        val teal = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.teal_700))
+        chipAdding(project.tags, holder, green)
+        chipAdding(project.allowedSections, holder,teal)
+    }
+
+    private fun chipAdding(list:List<String>, holder:ProjectViewHolder, color:ColorStateList){
+        for(text in list){
+            val chipView: Chip = Chip(activity)
+            chipView.text = text as CharSequence
+            chipView.chipBackgroundColor = color
+            holder.chipGroupView.addView(chipView)
+        }
+    }
+
     /**
      * Return a list Filter for this Adapter with the given ProjectFilter
      *
@@ -157,6 +174,7 @@ class ProjectAdapter(
      * @return a Filter for this adapter
      */
     fun getFilter(pf: ProjectFilter): Filter = ProjectListFilter(pf)
+
 
     override fun getFilter(): Filter {
         return ProjectListFilter()

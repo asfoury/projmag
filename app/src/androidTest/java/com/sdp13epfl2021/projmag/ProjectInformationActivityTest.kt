@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.ScrollView
 import android.widget.VideoView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -19,6 +20,7 @@ import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -69,7 +71,8 @@ class ProjectInformationActivityTest {
                 "<img src=\"$emptyImageUrl\">" +
                 "<ul><li>test1</li><li>test2</li></ul>" +
                 "<p>This is a small image : </p><img src=\"$imageSOUrl\">",
-        listOf(epflUrl, snkUrl, notWorkingVideoUrl)
+        listOf(epflUrl, snkUrl, notWorkingVideoUrl),
+        listOf()
     )
 
 

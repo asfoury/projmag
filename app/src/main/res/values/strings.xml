@@ -78,13 +78,19 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+
     <string name="settings">Settings</string>
+
 
 
     <string name="tag_selection_instructions">Add tags : select the right tags for your project and add/remove by clicking on them</string>
     <string name="tag_add_button_title">add tags</string>
     <string name="tag_save_button">Save</string>
     <string name="failure">failure</string>
+
+    <string name="section_selection_instructions">Sections allowed to take the project</string>
+    <string name="section_save_button">Save</string>
+    <string name="section_add_button_title">add Section</string>
 
     <string name="form_save_profile">Save</string>
 

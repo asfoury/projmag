@@ -2,6 +2,8 @@ package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.database.fake.FakeProjectsDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.SectionBaseManager
+import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import junit.framework.TestCase
 import org.junit.Assert.*
 import org.junit.Test
@@ -9,9 +11,60 @@ import java.util.concurrent.atomic.AtomicInteger
 
 
 class CachedProjectsDatabaseTest {
-    private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","authorID13", "Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
-    private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","authorID17", "Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
-    private val p3 = ImmutableProject("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","authorID19", "Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
+    private val tagManager = TagsBaseManager()
+    private val tagList : List<String> = tagManager.tagsListToStringList(tagManager.getAllTags())
+    private val sectionList : List<String> = SectionBaseManager.sectionList()
+    private val p1 = ImmutableProject(
+        "12345",
+        "What fraction of Google searches are answered by Wikipedia?",
+        "DLAB",
+        "authorID13",
+        "Robert West",
+        "TA1",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf(tagList[0], tagList[3]),
+        false,
+        "Description of project1",
+        listOf(),
+        listOf(sectionList[0])
+    )
+    private val p2 = ImmutableProject(
+        "11111",
+        "Real-time reconstruction of deformable objects",
+        "CVLAB",
+        "authorID17",
+        "Teacher2",
+        "TA2",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf(tagList[3], tagList[0]),
+        false,
+        "Description of project2",
+        listOf(),
+        listOf(sectionList[3])
+    )
+    private val p3 = ImmutableProject(
+        "00000",
+        "Implement a fast driver for a 100 Gb/s network card",
+        "DSLAB",
+        "authorID19",
+        "Teacher5",
+        "TA5",
+        3,
+        listOf<String>(),
+        false,
+        true,
+        listOf(tagList[2]),
+        false,
+        "Description of project5",
+        listOf(),
+        listOf(sectionList[2])
+    )
 
 
     @Test(timeout = 1000)
@@ -143,7 +196,7 @@ class CachedProjectsDatabaseTest {
         val cachedDB = CachedProjectsDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
-        cachedDB.getProjectsFromTags(listOf("ml", "Driver"), { projects ->
+        cachedDB.getProjectsFromTags(listOf(tagList[0], tagList[3]), { projects ->
             result = projects
         }, { e ->
             assertNull(e)
@@ -151,8 +204,8 @@ class CachedProjectsDatabaseTest {
 
         while (result == null);
         assertEquals(2, result!!.size)
+        assertTrue(result!!.contains(p1))
         assertTrue(result!!.contains(p2))
-        assertTrue(result!!.contains(p3))
     }
 
     @Test(timeout = 1000)
