@@ -48,7 +48,7 @@ class ProjectAdapter(
     }
 
     init {
-        utils.projectsDatabase.addProjectsChangeListener { change ->
+        utils.projectDatabase.addProjectsChangeListener { change ->
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
@@ -57,7 +57,7 @@ class ProjectAdapter(
             activity.runOnUiThread { notifyDataSetChanged() }
         }
 
-        utils.projectsDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
+        utils.projectDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
     }
 
     @Synchronized

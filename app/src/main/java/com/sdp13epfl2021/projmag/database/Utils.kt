@@ -4,18 +4,23 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.sdp13epfl2021.projmag.database.impl.cache.CachedProjectDatabase
+import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedUserdataDatabase
+import com.sdp13epfl2021.projmag.database.impl.cache.OfflineProjectDatabase
+import com.sdp13epfl2021.projmag.database.impl.firebase.*
+import com.sdp13epfl2021.projmag.database.interfaces.*
 import java.io.File
 
 class Utils(
     val auth: FirebaseAuth,
-    val userDataDatabase: UserDataDatabase,
+    val userdataDatabase: UserdataDatabase,
     val candidatureDatabase: CandidatureDatabase,
     val fileDatabase: FileDatabase,
     val metadataDatabase: MetadataDatabase,
-    val projectsDatabase: ProjectsDatabase,
+    val projectDatabase: ProjectDatabase,
 ) {
 
     companion object {
@@ -34,23 +39,23 @@ class Utils(
             context: Context,
             reset: Boolean = false,
             auth: FirebaseAuth = Firebase.auth,
-            userDataDB: UserDataDatabase = createUserDB(context, auth, reset),
-            candidatureDB: CandidatureDatabase = createCandidatureDB(context, auth, userDataDB, reset),
+            userdataDB: UserdataDatabase = createUserDB(context, auth, reset),
+            candidatureDB: CandidatureDatabase = createCandidatureDB(context, auth, userdataDB, reset),
             fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, auth),
-            metadataDB: MetadataDatabase = MetadataFirebase(Firebase.firestore),
-            projectsDB: ProjectsDatabase = createProjectsDB(context, candidatureDB, reset)
+            metadataDB: MetadataDatabase = FirebaseMetadataDatabase(Firebase.firestore),
+            projectDB: ProjectDatabase = createProjectDB(context, candidatureDB, reset)
         ): Utils {
             if (instance == null || reset) {
-                instance = Utils(auth, userDataDB, candidatureDB, fileDB, metadataDB, projectsDB)
+                instance = Utils(auth, userdataDB, candidatureDB, fileDB, metadataDB, projectDB)
             }
             return instance!!
         }
 
-        private fun createProjectsDB(context: Context, candidatureDB: CandidatureDatabase, reset: Boolean): ProjectsDatabase {
-            return if (reset || instance?.projectsDatabase == null) {
-                CachedProjectsDatabase(
+        private fun createProjectDB(context: Context, candidatureDB: CandidatureDatabase, reset: Boolean): ProjectDatabase {
+            return if (reset || instance?.projectDatabase == null) {
+                CachedProjectDatabase(
                     OfflineProjectDatabase(
-                        FirebaseProjectsDatabase(
+                        FirebaseProjectDatabase(
                             Firebase.firestore
                         ),
                         getSubDir(context, "projects"),
@@ -58,14 +63,14 @@ class Utils(
                     )
                 )
             } else {
-                instance!!.projectsDatabase
+                instance!!.projectDatabase
             }
         }
 
-        private fun createUserDB(context: Context, auth: FirebaseAuth, reset: Boolean): UserDataDatabase {
-            return if (reset || instance?.userDataDatabase == null) {
-                OfflineCachedUserDataDatabase(
-                    UserDataFirebase(
+        private fun createUserDB(context: Context, auth: FirebaseAuth, reset: Boolean): UserdataDatabase {
+            return if (reset || instance?.userdataDatabase == null) {
+                OfflineCachedUserdataDatabase(
+                    FirebaseUserdataDatabase(
                         Firebase.firestore,
                         auth
                     ),
@@ -73,14 +78,14 @@ class Utils(
                     getSubDir(context, "users")
                 )
             } else {
-                instance!!.userDataDatabase
+                instance!!.userdataDatabase
             }
         }
 
-        private fun createCandidatureDB(context: Context, auth: FirebaseAuth, userDataDB: UserDataDatabase, reset: Boolean): CandidatureDatabase {
+        private fun createCandidatureDB(context: Context, auth: FirebaseAuth, userdataDB: UserdataDatabase, reset: Boolean): CandidatureDatabase {
             return if (reset || instance?.candidatureDatabase == null) {
                 OfflineCachedCandidatureDatabase(
-                    FirebaseCandidatureDatabase(Firebase.firestore, auth, userDataDB),
+                    FirebaseCandidatureDatabase(Firebase.firestore, auth, userdataDB),
                     getSubDir(context, "projects")
                 )
             } else {

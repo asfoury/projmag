@@ -3,6 +3,9 @@ package com.sdp13epfl2021.projmag.database
 import com.google.common.io.Files
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Test

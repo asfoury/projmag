@@ -1,17 +1,16 @@
 package com.sdp13epfl2021.projmag.database.fake
 
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.ProjectId
-import com.sdp13epfl2021.projmag.database.UserDataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
-import com.sdp13epfl2021.projmag.model.Candidature
 
-class FakeUserDataDatabase(
+class FakeUserdataDatabase(
     val userID: String = "",
     var favorites: MutableSet<ProjectId> = HashSet(),
     var cvs: MutableMap<String, CurriculumVitae> = HashMap(),
     var applied: MutableSet<ProjectId> = HashSet(),
-) : UserDataDatabase {
+) : UserdataDatabase {
 
 
     override fun pushFavoriteProject(

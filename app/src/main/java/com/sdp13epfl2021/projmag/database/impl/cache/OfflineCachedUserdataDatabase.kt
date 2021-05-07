@@ -1,49 +1,53 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.cache
 
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.database.SerializedStringListWrapper
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.database.loadFromFile
+import com.sdp13epfl2021.projmag.database.saveToFile
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.io.File
-import java.io.Serializable
 
-private const val CV_FILENAME: String = "cv.data"
-private const val FAVORITES_FILENAME: String = "favorites.data"
-private const val APPLIED_FILENAME: String = "applied.data"
 
 /**
- * This is an implementation of UserDataDatabase that keep users' data both in persistent storage and memory.
+ * This is an implementation of UserdataDatabase that keep users' data both in persistent storage and memory.
  * If we are offline and firebase cache is empty/disabled, it will use the data stored locally.
  * If we are offline and firebase cache is enabled, it will use both the data stored locally and in the cache (priority to `db`).
  * If we are not offline, it will use the data return by `db` (up to date).
  *
  * Favorites/Applied will not use `db` (expect push) because it is only for the local user use.
  */
-class OfflineCachedUserDataDatabase(
-    private val db: UserDataDatabase,
+class OfflineCachedUserdataDatabase(
+    private val db: UserdataDatabase,
     private val localUserID: String,
     private val usersDir: File
 
-) : UserDataDatabase {
+) : UserdataDatabase {
 
+    private val cvFilename: String = "cv.data"
+    private val favoritesFilename: String = "favorites.data"
+    private val appliedFilename: String = "applied.data"
+
+    private val cvs: MutableMap<String, CurriculumVitae> = HashMap()
     private val favorites: MutableSet<ProjectId> = HashSet()
     private val applied: MutableSet<ProjectId> = HashSet()
-    private val cvs: MutableMap<String, CurriculumVitae> = HashMap()
 
     private val localUserDir: File = File(usersDir, localUserID)
 
-    private val favoritesFile: File = File(localUserDir, FAVORITES_FILENAME)
-    private val appliedFile: File = File(localUserDir, APPLIED_FILENAME)
-    private val cvFile: File = File(localUserDir, CV_FILENAME)
+    private val cvFile: File = File(localUserDir, cvFilename)
+    private val favoritesFile: File = File(localUserDir, favoritesFilename)
+    private val appliedFile: File = File(localUserDir, appliedFilename)
 
-    private data class SerializedStringListWrapper(val list: List<String>) : Serializable
 
     init {
         localUserDir.mkdirs()
         loadUsersData()
 
-        LocalFileUtils.loadFromFile(favoritesFile, SerializedStringListWrapper::class)?.let {
+        loadFromFile(favoritesFile, SerializedStringListWrapper::class)?.let {
             favorites.addAll(it.list)
         }
-        LocalFileUtils.loadFromFile(appliedFile, SerializedStringListWrapper::class)?.let {
+        loadFromFile(appliedFile, SerializedStringListWrapper::class)?.let {
             applied.addAll(it.list)
         }
     }
@@ -52,11 +56,12 @@ class OfflineCachedUserDataDatabase(
         try {
             usersDir.listFiles()?.forEach { file ->
                 when (file.name) {
-                    CV_FILENAME -> LocalFileUtils.loadFromFile(file, CurriculumVitae::class)?.let { cv ->
-                        file.parent?.let { userID ->
-                            cvs.put(userID, cv)
+                    cvFilename -> loadFromFile(file, CurriculumVitae::class)
+                        ?.let { cv ->
+                            file.parent?.let { userID ->
+                                cvs.put(userID, cv)
+                            }
                         }
-                    }
                     //TODO load profiles when merge here
                     //others
                 }
@@ -67,9 +72,8 @@ class OfflineCachedUserDataDatabase(
     }
 
     private fun saveFavorites() {
-        LocalFileUtils.saveToFile(favoritesFile, SerializedStringListWrapper(favorites.toList()))
+        saveToFile(favoritesFile, SerializedStringListWrapper(favorites.toList()))
     }
-
 
 
     override fun pushFavoriteProject(
@@ -115,7 +119,7 @@ class OfflineCachedUserDataDatabase(
         onFailure: (Exception) -> Unit
     ) {
         cvs[localUserID] = cv
-        LocalFileUtils.saveToFile(cvFile, cv)
+        saveToFile(cvFile, cv)
         db.pushCv(cv, onSuccess, onFailure)
     }
 
@@ -142,7 +146,7 @@ class OfflineCachedUserDataDatabase(
         } else {
             applied.remove(projectId)
         }
-        LocalFileUtils.saveToFile(appliedFile, SerializedStringListWrapper(applied.toList()))
+        saveToFile(appliedFile, SerializedStringListWrapper(applied.toList()))
         db.applyUnapply(apply, projectId, onSuccess, onFailure)
     }
 

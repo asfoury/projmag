@@ -2,17 +2,20 @@ package com.sdp13epfl2021.projmag.database
 
 import android.net.Uri
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Success
-import com.sdp13epfl2021.projmag.video.VideoUtils
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 
 class ProjectUploaderTest {
-    val mockProjectDB = Mockito.mock(ProjectsDatabase::class.java)
+    val mockProjectDB = Mockito.mock(ProjectDatabase::class.java)
 
     val mockFileDB = Mockito.mock(FileDatabase::class.java)
 

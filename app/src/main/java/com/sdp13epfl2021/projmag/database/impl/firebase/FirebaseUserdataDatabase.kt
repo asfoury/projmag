@@ -1,6 +1,5 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
@@ -8,16 +7,18 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 /**
  * An implementation of a user-data database
  * using Google Firebase/FireStore
  */
-class UserDataFirebase(
+class FirebaseUserdataDatabase(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
-) : UserDataDatabase {
+) : UserdataDatabase {
 
     companion object {
         /**

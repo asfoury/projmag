@@ -1,12 +1,11 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.model.*
 
+//TODO add KDoc after refactoring this
 class UserProfileDatabase(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth

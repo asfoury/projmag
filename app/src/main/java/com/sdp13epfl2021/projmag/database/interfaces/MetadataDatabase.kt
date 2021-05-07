@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.interfaces
 
 import java.lang.Exception
 
