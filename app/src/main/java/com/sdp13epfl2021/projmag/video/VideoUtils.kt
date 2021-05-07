@@ -9,13 +9,11 @@ import android.widget.Toast
 import com.sdp13epfl2021.projmag.R
 import java.util.*
 
+/**
+ * Some Utils functions and values used to facilitate video subtitling.
+ */
 object VideoUtils {
     private const val format = "text/vtt"
-
-    /**
-     * name of shared preferences for showing message related to caption only once
-     */
-    const val FIRST_TIME_CAPTIONS_SETTINGS_PREFERENCES = "captions_settings_preferences"
 
     /**
      * Subtitle format for english subtitles
