@@ -10,7 +10,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
 
 
-const val RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"
+const val VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"
 
 /**
  * The activity where the user can add subtitle with timestamps to a video
@@ -103,7 +103,7 @@ class VideoSubtitlingActivity : AppCompatActivity() {
 
     private fun submit() {
         val data = Intent()
-        data.putExtra(RESULT_KEY, builder.build())
+        data.putExtra(VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY, builder.build())
         setResult(RESULT_OK, data)
         finish()
     }
