@@ -93,13 +93,6 @@ class TagsSelectorActivity : AppCompatActivity() {
         return selectedTags
     }
 
-    /*
-    private fun colorPreviouslySelectedSections(previouslySelectedSections : List<String>){
-        for(section in previouslySelectedSections){
 
-            val holder = tagRecyclerView.findViewHolderForLayoutPosition(position)
-            holder.textView.setTextColor(Color.GREEN)
-        }
-    }*/
 
 }
