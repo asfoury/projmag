@@ -6,6 +6,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
+private val VALID_YEARS = 1900..2100
+
 
 @Parcelize
 /**
@@ -43,9 +45,6 @@ data class CurriculumVitae(
         val from: Int,
         val to: Int
     ) : Validateable, Parcelable, Serializable {
-
-        private val VALID_YEARS = 1900..2100
-
         override fun isValid(): Boolean = name.isNotEmpty() &&
                 location.isNotEmpty() &&
                 description.isNotEmpty() &&
