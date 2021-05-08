@@ -36,7 +36,6 @@ fun saveToFile(file: File, data: Serializable): Boolean {
  * @return the data casted to kclass type or null if failed.
  *
  */
-@Suppress("UNCHECKED_CAST")
 fun <T : Serializable> loadFromFile(file: File, kclass: KClass<T>): T? {
     try {
         ObjectInputStream(FileInputStream(file)).use {

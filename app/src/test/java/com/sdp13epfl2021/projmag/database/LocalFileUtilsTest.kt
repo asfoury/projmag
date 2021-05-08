@@ -14,21 +14,31 @@ class LocalFileUtilsTest {
     private data class SerializableClassForTesting(val list: List<String>, private val num: Int, val s: String) : Serializable
 
     private val validFile: File = Files.createTempFile("testing", ".tmp").toFile()
+    private val invalidFile: File = Files.createTempDirectory("testing2").toFile()
+
+    @Before
+    fun setup() {
+        invalidFile.mkdirs()
+        invalidFile.setWritable(false)
+        invalidFile.setReadOnly()
+    }
 
     @After
     fun clean() {
         validFile.deleteRecursively()
+        invalidFile.deleteRecursively()
     }
 
     @Test
     fun saveLoadWork() {
         val data = SerializableClassForTesting(listOf("a", "", "c"), 123, "test")
-        saveToFile(validFile, data)
+        assertTrue(saveToFile(validFile, data))
         assertEquals(data, loadFromFile(validFile, SerializableClassForTesting::class))
 
         val result: CurriculumVitae? = loadFromFile(validFile, CurriculumVitae::class)
         assertNull(result)
 
+        assertFalse(saveToFile(invalidFile, data))
     }
 
 }
