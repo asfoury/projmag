@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database.interfaces
 
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 /**
@@ -151,5 +152,27 @@ interface UserdataDatabase {
         pf: ProjectFilter,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Uploads the user profile to firebase
+     * @param profile the user profile to upload
+     * @param onSuccess the closure that's when a profile is uploaded successfully
+     * @param onFailure the closure that's called if the upload fails
+     */
+    fun uploadProfile(
+        profile: ImmutableProfile,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Gets the user profile from firebase if it exists
+     * @param onSuccess the closure that's when a profile is downloaded successfully with the fetched profile passed to it
+     * @param onFailure the closure that's called if the download fails
+     */
+    fun getProfile(
+        onSuccess: (profile: ImmutableProfile?) -> Unit,
+        onFailure: (Exception) -> kotlin.Unit
     )
 }
