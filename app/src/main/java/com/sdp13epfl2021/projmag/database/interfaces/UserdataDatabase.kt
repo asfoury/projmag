@@ -155,7 +155,7 @@ interface UserdataDatabase {
     )
 
     /**
-     * Uploads the user profile to a remote database
+     * Uploads the user profile to a database
      * @param profile the user profile to upload
      * @param onSuccess the closure that's when a profile is uploaded successfully
      * @param onFailure the closure that's called if the upload fails
@@ -167,7 +167,7 @@ interface UserdataDatabase {
     )
 
     /**
-     * Gets the user profile from the remote database if it exists
+     * Gets the user profile from the database if it exists
      * @param onSuccess the closure that's when a profile is downloaded successfully with the fetched profile passed to it
      * @param onFailure the closure that's called if the download fails
      */
