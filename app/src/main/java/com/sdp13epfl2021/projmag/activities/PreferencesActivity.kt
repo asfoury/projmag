@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -20,7 +19,7 @@ class PreferencesActivity : AppCompatActivity() {
     /**
      * The database of user's informations
      */
-    private val userDB = Utils.getInstance(this).userDataDatabase
+    private val userDB = Utils.getInstance(this).userdataDatabase
 
     /**
      * Check box that require the project to ask for a bachelor degree

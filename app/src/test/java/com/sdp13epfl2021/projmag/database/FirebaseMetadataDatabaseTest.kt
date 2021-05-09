@@ -4,14 +4,14 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseMetadataDatabase
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito
 
 @Suppress("UNCHECKED_CAST")
-class MetadataFirebaseTest {
+class FirebaseMetadataDatabaseTest {
     val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
     val mockColRef = Mockito.mock(CollectionReference::class.java)
     val mockDocRef = Mockito.mock(DocumentReference::class.java)
@@ -27,7 +27,7 @@ class MetadataFirebaseTest {
 
     @Before
     fun setupMocks() {
-        Mockito.`when`(mockFirebaseFirestore.collection(MetadataFirebase.ROOT_VIDEO))
+        Mockito.`when`(mockFirebaseFirestore.collection(FirebaseMetadataDatabase.ROOT_VIDEO))
             .thenReturn(mockColRef)
 
         Mockito.`when`(mockColRef.document(videoUri)).thenReturn(mockDocRef)
@@ -56,7 +56,7 @@ class MetadataFirebaseTest {
 
     @Test
     fun addSubtitlesToVideoWorks() {
-        MetadataFirebase(mockFirebaseFirestore).addSubtitlesToVideo(
+        FirebaseMetadataDatabase(mockFirebaseFirestore).addSubtitlesToVideo(
             videoUri,
             lang,
             subtitles,
@@ -67,7 +67,7 @@ class MetadataFirebaseTest {
 
     @Test
     fun getSubtitlesFromVideoWorks() {
-        MetadataFirebase(mockFirebaseFirestore).getSubtitlesFromVideo(
+        FirebaseMetadataDatabase(mockFirebaseFirestore).getSubtitlesFromVideo(
             videoUri,
             lang,
             { subs -> assertEquals(subtitles, subs) },

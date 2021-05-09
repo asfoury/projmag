@@ -1,9 +1,13 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import java.lang.Exception
 
-class MetadataFirebase(private val firestore: FirebaseFirestore) : MetadataDatabase {
+/**
+ * An implementation of MetadataDatabase using Firebase firestore.
+ */
+class FirebaseMetadataDatabase(private val firestore: FirebaseFirestore) : MetadataDatabase {
     companion object {
         const val ROOT_VIDEO = "video_metadata"
     }

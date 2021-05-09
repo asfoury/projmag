@@ -1,12 +1,13 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.interfaces
 
+import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 
 /**
  * Interface for a Database of Projects
  *
  */
-interface ProjectsDatabase {
+interface ProjectDatabase {
 
     /**
      * Asynchronously get all `ProjectId`s from the database
@@ -51,7 +52,7 @@ interface ProjectsDatabase {
     )
 
     /**
-     * Asynchronoulsy get `Project`s matching the given
+     * Asynchronously get `Project`s matching the given
      * `name`, and pass them to the `onSuccess` consumer. Otherwise pass
      * an `Exception` to the `onFailure` consumer.
      * If the query is empty, onSuccess is called with an empty list
@@ -67,7 +68,7 @@ interface ProjectsDatabase {
     )
 
     /**
-     * Asynchronoulsy get `Project`s matching the given
+     * Asynchronously get `Project`s matching the given
      * `tags`, and pass them to the `onSuccess` consumer. Otherwise pass
      * an `Exception` to the `onFailure` consumer.
      * If the query is empty, onSuccess is called with an empty list
@@ -129,13 +130,18 @@ interface ProjectsDatabase {
     )
 
     /**
-     * Attaches the 'changeListener' to the projects collection.
-     * It will be trigger at every creation, modification and deletion of project.
+     * Attaches a listener callback to the projects collection.
+     * It will be trigger at every creation, modification and deletion of project with the given project and the type of change.
+     *
+     * @param changeListener function called when a change occurs.
      */
+
     fun addProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
 
     /**
      * Remove the 'changeListener' if it is still attached.
+     *
+     * @param changeListener the listener to remove.
      */
     fun removeProjectsChangeListener(changeListener: (ProjectChange) -> Unit)
 }

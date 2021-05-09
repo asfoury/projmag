@@ -1,7 +1,7 @@
 package com.sdp13epfl2021.projmag.database.fake
 
 import android.net.Uri
-import com.sdp13epfl2021.projmag.database.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import java.io.File
 import java.util.*
 

@@ -1,9 +1,11 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.interfaces
 
 import com.sdp13epfl2021.projmag.model.Candidature
 
 /**
- * An interface for a Database of candidatures to project
+ * An interface for a Database of candidatures.
+ *
+ * It provides methods to get candidatures to a particular projects, or to update a particular candidature.
  */
 interface CandidatureDatabase {
 
@@ -36,6 +38,12 @@ interface CandidatureDatabase {
         onFailure: (Exception) -> Unit
     )
 
+    /**
+     * Add a listener to a particular project candidature.
+     *
+     * @param projectID the id of the project to register.
+     * @param onChange the listener callback function.
+     */
     fun addListener(
         projectID: ProjectId,
         onChange: (ProjectId, List<Candidature>) -> Unit

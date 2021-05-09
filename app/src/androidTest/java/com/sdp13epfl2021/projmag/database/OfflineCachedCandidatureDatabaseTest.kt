@@ -3,14 +3,21 @@ package com.sdp13epfl2021.projmag.database
 import com.google.common.io.Files
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
+import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 import java.io.File
 import java.util.concurrent.CompletableFuture
 
 class OfflineCachedCandidatureDatabaseTest {
 
+    private val mockInvalidDir1: File = Mockito.mock(File::class.java)
+    private val mockInvalidDir2: File = Mockito.mock(File::class.java)
 
     private val projectId: ProjectId = "001"
     private val userID = "fakeUserID"
@@ -42,6 +49,17 @@ class OfflineCachedCandidatureDatabaseTest {
 
     private val onFailureNotExpected: (Exception) -> Unit = {
         assert(false)
+    }
+
+    @Before
+    fun setup() {
+        Mockito
+            .`when`(mockInvalidDir1.listFiles())
+            .thenReturn(null)
+
+        Mockito
+            .`when`(mockInvalidDir2.listFiles())
+            .then { throw SecurityException("not readable") }
     }
 
     @Test
@@ -79,5 +97,13 @@ class OfflineCachedCandidatureDatabaseTest {
         assertEquals(listOf(candidature), future3.get())
 
         tempDir.deleteRecursively()
+    }
+
+    @Test
+    fun invalidDirShouldNotCrash() {
+        val fakeDB = FakeCandidatureDatabase()
+
+        OfflineCachedCandidatureDatabase(fakeDB, mockInvalidDir1)
+        OfflineCachedCandidatureDatabase(fakeDB, mockInvalidDir2)
     }
 }

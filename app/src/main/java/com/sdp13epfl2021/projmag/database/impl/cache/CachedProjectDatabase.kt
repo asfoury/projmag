@@ -1,17 +1,33 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.cache
 
-import android.util.Log
+import com.sdp13epfl2021.projmag.database.ProjectChange
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
 
-class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabase {
+/**
+ * An implementation of ProjectDatabase that keep a cached list of projects and rely on another ProjectDatabase.
+ *
+ * Any call to a getXXX methods will be performed on a cached list, that is not always up to date, but listeners can be used in theses cases.
+ *
+ * Any call to  push/delete/update methods will be forward to the given db.
+ *
+ * @param db a ProjectDatabase that will be used as a base database.
+ */
+class CachedProjectDatabase(private val db: ProjectDatabase) : ProjectDatabase {
 
-    private val TAG = "CachedProjectDatabase"
     private var projects: List<ImmutableProject> = emptyList()
     private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
 
+    /**
+     * Load projects from the given db and register for any change.
+     *
+     * Only one local ChangeListener is add to the given db.
+     * All other listeners are called from this one, when a change occurs.
+     */
     init {
         db.addProjectsChangeListener { change ->
             when (change.type) {
@@ -22,9 +38,9 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
             listeners.forEach { it -> it(change) }
         }
         db.getAllProjects({ all ->
-            all.forEach {
-                addProject(it)
-                val change = ProjectChange(ProjectChange.Type.ADDED, it)
+            all.forEach { p ->
+                addProject(p)
+                val change = ProjectChange(ProjectChange.Type.ADDED, p)
                 listeners.forEach { it -> it(change) }
             }
         }, {})
@@ -33,9 +49,9 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
 
     /**
      * Add a Project to the local cache.
+     *
      * If the cache contains a project with the same id,
      * the local project is removed and replaced by the new one.
-     * If the project is null, nothing is done.
      */
     @Synchronized
     private fun addProject(project: ImmutableProject) {
@@ -46,6 +62,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
 
     /**
      * Remove a project from its id, from the local cache.
+     *
      * If the project is not present, nothing is done.
      */
     @Synchronized
@@ -56,6 +73,7 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
 
     /**
      * Synchronously get all projects cached locally.
+     *
      * This list is guaranteed to have only non null Project.
      */
     fun getAllProjects(): List<ImmutableProject> {
@@ -82,15 +100,30 @@ class CachedProjectsDatabase(private val db: ProjectsDatabase) : ProjectsDatabas
         GlobalScope.launch { onSuccess(projects) }
     }
 
-    override fun getProjectsFromName(name: String, onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getProjectsFromName(
+        name: String,
+        onSuccess: (List<ImmutableProject>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch { onSuccess(projects.filter { p -> p.name == name }) }
     }
 
-    override fun getProjectsFromTags(tags: List<String>, onSuccess: (List<ImmutableProject>) -> Unit, onFailure: (Exception) -> Unit) {
+    override fun getProjectsFromTags(
+        tags: List<String>,
+        onSuccess: (List<ImmutableProject>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         GlobalScope.launch {
             val listOfTags = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
-            onSuccess(projects.filter {
-                p -> p.tags.any { tag -> listOfTags.contains(tag.toLowerCase(Locale.ROOT)) } }
+            onSuccess(projects.filter { p ->
+                p.tags.any { tag ->
+                    listOfTags.contains(
+                        tag.toLowerCase(
+                            Locale.ROOT
+                        )
+                    )
+                }
+            }
             )
         }
     }

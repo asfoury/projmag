@@ -2,7 +2,7 @@ package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 

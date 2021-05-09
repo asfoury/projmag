@@ -5,9 +5,11 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseProjectDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -18,7 +20,7 @@ import org.mockito.Mockito
  *  Firebase/Firestore API
  */
 @Suppress("UNCHECKED_CAST")
-class FirebaseProjectsDatabaseTest {
+class FirebaseProjectDatabaseTest {
     val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
     val mockColRef = Mockito.mock(CollectionReference::class.java)
     val mockDocRef = Mockito.mock(DocumentReference::class.java)
@@ -80,7 +82,7 @@ class FirebaseProjectsDatabaseTest {
 
         // --- mockFirebaseFirestore ---
         Mockito
-            .`when`(mockFirebaseFirestore.collection(FirebaseProjectsDatabase.ROOT))
+            .`when`(mockFirebaseFirestore.collection(FirebaseProjectDatabase.ROOT))
             .thenReturn(mockColRef)
 
         // --- mockColRef ---
@@ -238,7 +240,7 @@ class FirebaseProjectsDatabaseTest {
 
         // an empty firestore instance
         Mockito
-            .`when`(mockFirebaseFirestoreEmtpy.collection(FirebaseProjectsDatabase.ROOT))
+            .`when`(mockFirebaseFirestoreEmtpy.collection(FirebaseProjectDatabase.ROOT))
             .thenReturn(mockColRefEmpty)
         Mockito
             .`when`(mockColRefEmpty.get())
@@ -278,13 +280,13 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getAllIdsIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getAllIds(
             { list -> assertEquals(listOf(ID), list) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getAllIds(
             { list -> assertEquals(emptyList<ProjectId>(), list) },
             {}
@@ -294,14 +296,14 @@ class FirebaseProjectsDatabaseTest {
     @Test
     fun getProjectFromIdIsCorrect() {
         Mockito.`when`(mockDS.exists()).thenReturn(true)
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectFromId(
             ID,
             { p -> assertEquals(project, p) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getProjectFromId(
             ID,
             { p -> assertEquals(null, p) },
@@ -312,7 +314,7 @@ class FirebaseProjectsDatabaseTest {
     @Test
     fun getProjectFromIdWhenDSDoNotExistsDoNotCrash() {
         Mockito.`when`(mockDS.exists()).thenReturn(false)
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectFromId(
             ID,
             { p -> assertEquals(null, p) },
@@ -322,13 +324,13 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getAllProjectsIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getAllProjects(
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getAllProjects(
             { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
             { assert(false) }
@@ -337,14 +339,14 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getProjectsFromNameIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectsFromName(
             project.name,
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getProjectsFromName(
             project.name,
             { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
@@ -354,7 +356,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getProjectsFromTagsIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectsFromTags(
             project.tags,
             { lp -> assertEquals(listOf(project), lp) },
@@ -364,7 +366,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun updateVideoWithProjectWorks() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.updateVideoWithProject(
             ID,
             "",
@@ -380,7 +382,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun listenersShouldNotCrash() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         val listener: ((ProjectChange) -> Unit) = {}
         db.addProjectsChangeListener(listener)
         db.removeProjectsChangeListener(listener)

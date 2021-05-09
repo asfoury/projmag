@@ -1,14 +1,12 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.interfaces
 
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 /**
- * An interface to manage a database containing
- * user data
- *
+ * An interface to manage a database containing user data, such as favorites, cv, applications, preferences.
  */
-interface UserDataDatabase {
+interface UserdataDatabase {
     /**
      * Push the ID of a favorite `Project` to the database
      * Call `onSuccess` if the operation succeeded

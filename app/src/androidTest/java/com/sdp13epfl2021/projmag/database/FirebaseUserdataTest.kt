@@ -13,9 +13,11 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 
 @Suppress("UNCHECKED_CAST")
-class UserDataFirebaseTest {
+class FirebaseUserdataTest {
     companion object {
         private const val ID = "some-project-id"
         private const val UID = "some-user-id"
@@ -34,15 +36,15 @@ class UserDataFirebaseTest {
     private val mockDSTask: Task<DocumentSnapshot> =
         Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
 
-    private val database: UserDataDatabase =
-        UserDataFirebase(mockFirebaseFirestore, mockFirebaseAuth)
+    private val database: UserdataDatabase =
+        FirebaseUserdataDatabase(mockFirebaseFirestore, mockFirebaseAuth)
 
 
     @Before
     fun setupMocks() {
         // ColRef
         Mockito
-            .`when`(mockFirebaseFirestore.collection(UserDataFirebase.ROOT))
+            .`when`(mockFirebaseFirestore.collection(FirebaseUserdataDatabase.ROOT))
             .thenReturn(mockColRef)
         Mockito
             .`when`(mockColRef.document(UID))
@@ -71,7 +73,7 @@ class UserDataFirebaseTest {
 
         //DocumentSnapshot
         Mockito
-            .`when`(mockDS[UserDataFirebase.FAVORITES_FIELD])
+            .`when`(mockDS[FirebaseUserdataDatabase.FAVORITES_FIELD])
             .thenReturn(listOf(ID))
 
 
