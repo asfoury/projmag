@@ -1,29 +1,57 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.cache
 
-import com.sdp13epfl2021.projmag.model.Failure
+import com.sdp13epfl2021.projmag.database.ProjectChange
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.saveToFile
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.model.Success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.ObjectInputStream
 import java.util.*
-import kotlin.collections.HashMap
 
-private const val PROJECT_DATA_FILE: String = "project.data"
-private val ID_PATTERN: Regex = Regex("^[a-zA-Z0-9]*\$")
 
-class OfflineProjectDatabase(private val db: ProjectsDatabase, private val projectsDir: File) : ProjectsDatabase {
+/**
+ * An implementation of ProjectDatabase that store/load projects from local storage and rely on another ProjectsDatabase.
+ *
+ * Any call to a getXXX methods will use a combined list of local storage and db (priority to db -> up to date).
+ *
+ * Any call to  push/delete/update methods will be forward to the given db.
+ *
+ * @param db a ProjectDatabase that will be used as a base database.
+ * @param projectsDir the directory of projects, any directory inside represent a project.
+ */
+class OfflineProjectDatabase(
+    private val db: ProjectDatabase,
+    private val projectsDir: File,
+    candidatureDB: CandidatureDatabase
+) : ProjectDatabase {
 
+    private val projectDataFilename: String = "project.data"
+    private val idRegex: Regex = Regex("^[a-zA-Z0-9]*\$")
+
+    /**
+     * Projects are not stored in memory, we only keep track of projectId for valid projects.
+     */
     private var projectsFiles: Map<ProjectId, File> = emptyMap()
     private var listeners: List<((ProjectChange) -> Unit)> = emptyList()
 
+    /**
+     * Load projects from the local storage then from the given db and register for any change.
+     *
+     * Only one local ChangeListener is add to the given db.
+     * All other listeners are called from this one, when a change occurs.
+     */
     init {
         projectsDir.mkdirs()
         loadProjects()
 
         db.addProjectsChangeListener { change ->
-            when(change.type) {
+            when (change.type) {
                 ProjectChange.Type.ADDED -> saveProject(change.project)
                 ProjectChange.Type.MODIFIED -> saveProject(change.project)
                 ProjectChange.Type.REMOVED -> deleteProject(change.project.id)
@@ -33,19 +61,30 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
 
         db.getAllProjects({ remoteProjects ->
             GlobalScope.launch(Dispatchers.IO) {
-                remoteProjects.forEach { p -> saveProject(p) }
+                remoteProjects.forEach { p ->
+                    saveProject(p)
+                    candidatureDB.addListener(p.id) { _, _ -> }
+                }
             }
         }, {})
     }
 
-    @Synchronized
+    /**
+     * This method is called once when initialized.
+     *
+     * Loads all valid projects found in the local storage from the files /projects/{projectId}/project.data.
+     */
     private fun loadProjects() {
         projectsFiles = projectsDir
             .listFiles()
             ?.let {
-                it.map { child -> child.name to File(child, PROJECT_DATA_FILE) }
-                .filter { (id, data) -> id.matches(ID_PATTERN) && data.exists() && data.isFile && readProject(data) != null }
-                .toMap()
+                it.map { child -> child.name to File(child, projectDataFilename) }
+                    .filter { (id, data) ->
+                        id.matches(idRegex) && data.exists() && data.isFile && readProject(
+                            data
+                        ) != null
+                    }
+                    .toMap()
             } ?: emptyMap()
     }
 
@@ -66,18 +105,13 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
         if (projectDir.isDirectory || projectDir.mkdir()) {
             var projectFile = projectsFiles[project.id]
             if (projectFile == null) {
-                projectFile = File(projectDir, PROJECT_DATA_FILE)
+                projectFile = File(projectDir, projectDataFilename)
                 projectsFiles = projectsFiles + (project.id to projectFile)
             }
-            writeProject(project, projectFile)
+            saveToFile(projectFile, project.toMapString())
         }
     }
 
-    private fun writeProject(project: ImmutableProject, file: File) {
-        ObjectOutputStream(FileOutputStream(file, false)).use {
-            it.writeObject(project.toMapString())
-        }
-    }
 
     @Suppress("UNCHECKED_CAST")
     private fun readProject(file: File): ImmutableProject? {
@@ -154,7 +188,7 @@ class OfflineProjectDatabase(private val db: ProjectsDatabase, private val proje
                 val localProjects = projectsFiles
                     .filterKeys { id -> !remoteProjects.any { p -> p.id == id } }
                     .mapNotNull { entry -> readProject(entry.value) }
-                    .filter { p -> p.name == name}
+                    .filter { p -> p.name == name }
                 onSuccess(remoteProjects + localProjects)
             }
         }, onFailure)

@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -7,16 +7,18 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 /**
  * An implementation of a user-data database
  * using Google Firebase/FireStore
  */
-class UserDataFirebase(
+class FirebaseUserdataDatabase(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
-) : UserDataDatabase {
+) : UserdataDatabase {
 
     companion object {
         /**
@@ -38,8 +40,12 @@ class UserDataFirebase(
          *  The field containing cv
          */
         const val CV_FIELD = "cv"
-    }
 
+        /**
+         *  The field containing cv
+         */
+        const val PREF_FIELD = "preferences"
+    }
 
 
     /**
@@ -129,14 +135,18 @@ class UserDataFirebase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getUserDoc()?.let {
-            doc ->
-            doc.set(
-                hashMapOf(CV_FIELD to cv),
-                SetOptions.merge()
-            ).addOnSuccessListener { onSuccess() }
-                .addOnFailureListener(onFailure)
-        }
+        getUserDoc()?.set(
+            hashMapOf(CV_FIELD to cv),
+            SetOptions.merge()
+        )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
+    }
+
+    override fun getCv(
+        userID: String,
+        onSuccess: (CurriculumVitae?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 
     override fun applyUnapply(
@@ -158,7 +168,7 @@ class UserDataFirebase(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun getListOfAppliedToProjects (
+    override fun getListOfAppliedToProjects(
         onSuccess: (List<ProjectId>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -168,5 +178,28 @@ class UserDataFirebase(
                     onSuccess((doc[APPLIED_TO_FIELD] as? List<ProjectId>) ?: listOf())
                 }.addOnFailureListener(onFailure)
         }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun getPreferences(
+        onSuccess: (ProjectFilter?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        getUserDoc()
+            ?.get()
+            ?.addOnSuccessListener { doc ->
+                onSuccess(doc?.get(PREF_FIELD)?.let { ProjectFilter(it as Map<String, Any>) })
+            }?.addOnFailureListener(onFailure)
+    }
+
+    override fun pushPreferences(
+        pf: ProjectFilter,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        getUserDoc()
+            ?.set(hashMapOf(PREF_FIELD to pf))
+            ?.addOnSuccessListener { onSuccess() }
+            ?.addOnFailureListener(onFailure)
     }
 }

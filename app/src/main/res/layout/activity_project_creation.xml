@@ -106,13 +106,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:autofillHints=""
             android:hint="@string/project_description"
             android:inputType="textMultiLine"
             android:lines="10"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_check_box_SP" />
 
@@ -134,34 +135,33 @@
             android:id="@+id/add_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/add_video"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.925"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/videoView" />
+
 
         <Button
             android:id="@+id/play_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:enabled="false"
             android:text="@string/play_video"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoView" />
+            app:layout_constraintTop_toBottomOf="@+id/addTagsButton" />
 
         <Button
             android:id="@+id/form_add_subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
             android:enabled="false"
             android:text="@string/form_add_subtitle_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_video" />
 
         <Button
@@ -174,21 +174,30 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/form_add_subtitle" />
-
-
+            app:layout_constraintTop_toBottomOf="@+id/play_video" />
 
         <Button
             android:id="@+id/addTagsButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
             android:text='@string/tag_add_button_title'
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
-            app:layout_constraintBottom_toBottomOf="@+id/form_project_description"
-            app:layout_constraintEnd_toEndOf="@id/play_video"
-            app:layout_constraintStart_toStartOf="@id/form_button_sub" />
+        <Button
+            android:id="@+id/addSectionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
 
-
+            android:text='@string/section_add_button_title'
+            app:layout_constraintEnd_toStartOf="@+id/add_video"
+            app:layout_constraintStart_toEndOf="@+id/addTagsButton"
+            app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

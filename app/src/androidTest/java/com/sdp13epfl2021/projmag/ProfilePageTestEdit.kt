@@ -13,10 +13,5 @@ class ProfilePageTestEdit {
     var activityRule: ActivityScenarioRule<ProfilePageActivity> =
         ActivityScenarioRule(ProfilePageActivity::class.java)
 
-    @Test
-    fun userCanEditProfile() {
-        Espresso.onView(ViewMatchers.withId(R.id.button_edit_profile)).perform(click())
 
-        
-    }
 }

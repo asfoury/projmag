@@ -1,24 +1,79 @@
 package com.sdp13epfl2021.projmag.database
 
-import com.sdp13epfl2021.projmag.database.fake.FakeProjectsDatabase
+import com.sdp13epfl2021.projmag.database.fake.FakeProjectDatabase
+import com.sdp13epfl2021.projmag.database.impl.cache.CachedProjectDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.SectionBaseManager
+import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import junit.framework.TestCase
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class CachedProjectsDatabaseTest {
-    private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","authorID13", "Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
-    private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","authorID17", "Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
-    private val p3 = ImmutableProject("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","authorID19", "Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
+class CachedProjectDatabaseTest {
+    private val tagManager = TagsBaseManager()
+    private val tagList : List<String> = tagManager.tagsListToStringList(tagManager.getAllTags())
+    private val sectionList : List<String> = SectionBaseManager.sectionList()
+    private val p1 = ImmutableProject(
+        "12345",
+        "What fraction of Google searches are answered by Wikipedia?",
+        "DLAB",
+        "authorID13",
+        "Robert West",
+        "TA1",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf(tagList[0], tagList[3]),
+        false,
+        "Description of project1",
+        listOf(),
+        listOf(sectionList[0])
+    )
+    private val p2 = ImmutableProject(
+        "11111",
+        "Real-time reconstruction of deformable objects",
+        "CVLAB",
+        "authorID17",
+        "Teacher2",
+        "TA2",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf(tagList[3], tagList[0]),
+        false,
+        "Description of project2",
+        listOf(),
+        listOf(sectionList[3])
+    )
+    private val p3 = ImmutableProject(
+        "00000",
+        "Implement a fast driver for a 100 Gb/s network card",
+        "DSLAB",
+        "authorID19",
+        "Teacher5",
+        "TA5",
+        3,
+        listOf<String>(),
+        false,
+        true,
+        listOf(tagList[2]),
+        false,
+        "Description of project5",
+        listOf(),
+        listOf(sectionList[2])
+    )
 
 
     @Test(timeout = 1000)
     fun getAllProjectWorksWhenTheDBIsUpdated() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
 
         var all = cachedDB.getAllProjects()
         assertEquals(3, all.size)
@@ -65,8 +120,8 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectFromIdWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: ImmutableProject? = null
 
         cachedDB.getProjectFromId(p2.id, { project ->
@@ -81,8 +136,8 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectsFromNameWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
         cachedDB.getProjectsFromName(p2.name, { projects ->
@@ -98,8 +153,8 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getAllIdsWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: List<ProjectId>? = null
 
         cachedDB.getAllIds({ projectsIds ->
@@ -118,8 +173,8 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 2000)
     fun getAllProjectsAsyncWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
         cachedDB.getAllProjects({ projects ->
@@ -139,11 +194,11 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun getProjectsFromTagsWorks() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
-        cachedDB.getProjectsFromTags(listOf("ml", "Driver"), { projects ->
+        cachedDB.getProjectsFromTags(listOf(tagList[0], tagList[3]), { projects ->
             result = projects
         }, { e ->
             assertNull(e)
@@ -151,15 +206,15 @@ class CachedProjectsDatabaseTest {
 
         while (result == null);
         assertEquals(2, result!!.size)
+        assertTrue(result!!.contains(p1))
         assertTrue(result!!.contains(p2))
-        assertTrue(result!!.contains(p3))
     }
 
     @Test(timeout = 1000)
     fun pushIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: ProjectId? = null
 
         cachedDB.pushProject(p3, { projectId ->
@@ -176,8 +231,8 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 1000)
     fun deleteProjectWithIdIsCorrectlyCalled() {
         val allBeginning = listOf(p1, p2, p3)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var result: List<ImmutableProject>? = null
 
         cachedDB.deleteProjectWithId(p3.id, {
@@ -194,8 +249,8 @@ class CachedProjectsDatabaseTest {
     @Test(timeout = 4000)
     fun updateVideoWithProjectIsCorrectlyCalled() {
         val projectsList = listOf(p1)
-        val fakeDB = FakeProjectsDatabase(projectsList)
-        val db = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(projectsList)
+        val db = CachedProjectDatabase(fakeDB)
         Thread.sleep(500)
 
         val uri_1: String = "https://remote/uri/1"
@@ -211,8 +266,8 @@ class CachedProjectsDatabaseTest {
     @Test
     fun listenersWorks() {
         val allBeginning = listOf(p1, p2)
-        val fakeDB = FakeProjectsDatabase(allBeginning)
-        val cachedDB = CachedProjectsDatabase(fakeDB)
+        val fakeDB = FakeProjectDatabase(allBeginning)
+        val cachedDB = CachedProjectDatabase(fakeDB)
         var count: AtomicInteger = AtomicInteger(0)
 
         val listener: ((ProjectChange) -> Unit) = { change ->

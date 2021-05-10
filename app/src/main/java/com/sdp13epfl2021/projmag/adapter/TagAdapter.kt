@@ -26,6 +26,8 @@ class TagAdapter(private val context : Context, private val tags : List<Tag>)
         val tag = tags[position]
         holder.textView.text =  tag.name
 
+        
+
 
     }
 

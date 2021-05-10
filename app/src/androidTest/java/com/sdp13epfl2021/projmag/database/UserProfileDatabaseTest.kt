@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 
+import android.util.Log
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
+import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -102,20 +104,30 @@ class UserProfileDatabaseTest {
 
         Mockito.`when`(mockDS["firstName"]).thenReturn(exampleUserProfile?.firstName)
         Mockito.`when`(mockDS["lastName"]).thenReturn(exampleUserProfile?.lastName)
-        Mockito.`when`(mockDS["age"]).thenReturn(exampleUserProfile?.age)
-        Mockito.`when`(mockDS["gender"]).thenReturn(exampleUserProfile?.gender)
-        Mockito.`when`(mockDS["sciper"]).thenReturn(exampleUserProfile?.sciper)
+        Mockito.`when`(mockDS["age"]).thenReturn(exampleUserProfile?.age?.toLong())
+        Mockito.`when`(mockDS["gender"]).thenReturn(exampleUserProfile?.gender?.name)
+        Mockito.`when`(mockDS["sciper"]).thenReturn(exampleUserProfile?.sciper?.toLong())
         Mockito.`when`(mockDS["phoneNumber"]).thenReturn(exampleUserProfile?.phoneNumber)
-        Mockito.`when`(mockDS["role"]).thenReturn(exampleUserProfile?.role)
+        Mockito.`when`(mockDS["role"]).thenReturn(exampleUserProfile?.role?.name)
 
     }
 
     @Test
     fun checkThatGettingProfileWorks() {
         val udb = UserProfileDatabase(mockFirebaseFirestore, mockFirebaseAuth)
-        udb.getProfile {
-            assert(it != null)
-        }
+        udb.getProfile({
+            assertEquals(exampleUserProfile?.firstName, it?.firstName)
+            assertEquals(exampleUserProfile?.lastName, it?.lastName)
+            assertEquals(exampleUserProfile?.age, it?.age)
+            assertEquals(exampleUserProfile?.sciper, it?.sciper)
+            assertEquals(exampleUserProfile?.phoneNumber, it?.phoneNumber)
+            assertEquals(exampleUserProfile?.role, it?.role)
+            assertEquals(exampleUserProfile?.gender, it?.gender)
+
+
+        }, {
+            Log.d("TEST", it.toString())
+        })
     }
 
     @Test

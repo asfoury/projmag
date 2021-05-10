@@ -28,6 +28,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/student" />
+        <RadioButton
+            android:id="@+id/radioPHDType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/PHD" />
     </RadioGroup>
 
     <TextView

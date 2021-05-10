@@ -2,21 +2,26 @@ package com.sdp13epfl2021.projmag.database
 
 import android.net.Uri
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Success
-import com.sdp13epfl2021.projmag.video.VideoUtils
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 
 class ProjectUploaderTest {
-    val mockProjectDB = Mockito.mock(ProjectsDatabase::class.java)
+    val mockProjectDB = Mockito.mock(ProjectDatabase::class.java)
 
     val mockFileDB = Mockito.mock(FileDatabase::class.java)
 
     val mockMetadataDB = Mockito.mock(MetadataDatabase::class.java)
+
+    val mockCandidatureDB = Mockito.mock(CandidatureDatabase::class.java)
 
     val mockUri = Mockito.mock(Uri::class.java)
     val subtitles = "not formatted subtitles, but we do not really care here"
@@ -26,17 +31,17 @@ class ProjectUploaderTest {
     val exampleProject = ImmutableProject(
         id = PID,
         name = "Some test project",
-        description = "some description",
+        lab = "some lab",
+        authorId = "some author id",
+        teacher = "Some Teacher",
+        TA = "Some TA",
+        nbParticipant = 2,
+        assigned = listOf("s1", "s2"),
+        masterProject = true,
+        bachelorProject = false,
         tags = listOf("t1", "t2"),
         isTaken = false,
-        bachelorProject = false,
-        masterProject = true,
-        assigned = listOf("s1", "s2"),
-        nbParticipant = 2,
-        TA = "Some TA",
-        teacher = "Some Teacher",
-        lab = "some lab",
-        authorId = "some author id"
+        description = "some description"
     )
 
     @Suppress("UNCHECKED_CAST")
@@ -99,6 +104,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals(reason, msg) },
             {},
             {}).checkProjectAndThenUpload(
@@ -114,6 +120,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals("Project pushed (without video) with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
@@ -129,6 +136,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals("Project pushed with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
@@ -144,6 +152,7 @@ class ProjectUploaderTest {
             mockProjectDB,
             mockFileDB,
             mockMetadataDB,
+            mockCandidatureDB,
             { msg -> assertEquals("Project pushed with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(

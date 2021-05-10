@@ -1,11 +1,11 @@
 package com.sdp13epfl2021.projmag.database
 
 import android.net.Uri
+import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.model.Success
-import com.sdp13epfl2021.projmag.video.VideoUtils
 import java.util.*
 
 /**
@@ -18,9 +18,10 @@ import java.util.*
  * @param onSuccess a method which is always called at the end of a successful process
  */
 class ProjectUploader(
-    private val projectDB: ProjectsDatabase,
+    private val projectDB: ProjectDatabase,
     private val fileDB: FileDatabase,
     private val metadataDB: MetadataDatabase,
+    private val candidatureDB: CandidatureDatabase,
     private val showMsg: (String) -> Unit,
     private val onFailure: () -> Unit,
     private val onSuccess: () -> Unit
@@ -78,6 +79,7 @@ class ProjectUploader(
         projectDB.pushProject(
             project,
             { id ->
+                candidatureDB.addListener(id) { _, _ -> }
                 videoUri?.let { uri ->
                     uploadVideo(id, uri, subtitles)
                 }

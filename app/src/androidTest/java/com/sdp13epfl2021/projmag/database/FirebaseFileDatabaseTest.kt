@@ -9,6 +9,7 @@ import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseFileDatabase
 import junit.framework.TestCase.*
 import org.junit.After
 import org.junit.Before

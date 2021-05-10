@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
@@ -91,13 +92,13 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
 
     private fun openProfile(context: Context, profile: ImmutableProfile) {
         val intent = Intent(context, MainActivity::class.java) //TODO change to profile view
-        intent.putExtra(MainActivity.profile, profile)
+        intent.putExtra(MainActivity.profile, profile as Parcelable)
         context.startActivity(intent)
     }
 
     private fun openCV(context: Context, cv: CurriculumVitae) {
         val intent = Intent(context, MainActivity::class.java) //TODO change to CV view
-        intent.putExtra(MainActivity.cv, cv)
+        intent.putExtra(MainActivity.cv, cv as Parcelable)
         context.startActivity(intent)
     }
 

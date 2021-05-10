@@ -69,7 +69,8 @@ class ProjectInformationActivityTest {
                 "<img src=\"$emptyImageUrl\">" +
                 "<ul><li>test1</li><li>test2</li></ul>" +
                 "<p>This is a small image : </p><img src=\"$imageSOUrl\">",
-        listOf(epflUrl, snkUrl, notWorkingVideoUrl)
+        listOf(epflUrl, snkUrl, notWorkingVideoUrl),
+        listOf()
     )
 
 
@@ -90,8 +91,8 @@ class ProjectInformationActivityTest {
     private val imageSOFile: File = Files.createTempFile("SO", ".png").toFile()
     private val emptyFile: File = Files.createTempFile("empty", ".jpeg").toFile()
 
-    private val projectsDB = FakeProjectsDatabase(listOf(project))
-    private val userdataDB = FakeUserDataDatabase()
+    private val projectsDB = FakeProjectDatabase(listOf(project))
+    private val userdataDB = FakeUserdataDatabase()
     private val fileDB = FakeFileDatabase(
         mapOf(
             snkUrl to videoSNKFile,

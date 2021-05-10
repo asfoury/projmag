@@ -14,22 +14,20 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.FileDatabase
-import com.sdp13epfl2021.projmag.database.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
@@ -116,7 +114,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val userDataDatabase = Utils.getInstance(this).userDataDatabase
+        val userDataDatabase = Utils.getInstance(this).userdataDatabase
         var alreadyApplied = false
         setApplyButtonText(applyButton,null)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->

@@ -5,7 +5,10 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelper
-import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseProjectDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
+import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +20,7 @@ import org.mockito.Mockito
  *  Firebase/Firestore API
  */
 @Suppress("UNCHECKED_CAST")
-class FirebaseProjectsDatabaseTest {
+class FirebaseProjectDatabaseTest {
     val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
     val mockColRef = Mockito.mock(CollectionReference::class.java)
     val mockDocRef = Mockito.mock(DocumentReference::class.java)
@@ -42,23 +45,24 @@ class FirebaseProjectsDatabaseTest {
     val mockDSEmpty: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQueryEmpty: Query = Mockito.mock(Query::class.java)
 
+    val name = "epic roblox coding"
+    val labName = "roblox labs"
+    val authorId = "some author id"
+    val projectManager = "kaou el roblox master"
+    val teacher = "kaou el roblox master"
+    val description = "epic roblox coding alll freaking day DAMN SON"
+    val numberStudents = 3
+    val listStudents = listOf("epic robloxxx programmer")
+    val tagManager = TagsBaseManager()
+    val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
+    val sectionList = SectionBaseManager.sectionList().toList()
 
     val ID = "some-id"
-    val project = ImmutableProject(
-        id = ID,
-        name = "Some test project",
-        description = "some description",
-        tags = listOf("t1", "t2"),
-        isTaken = false,
-        bachelorProject = false,
-        masterProject = true,
-        assigned = listOf("s1", "s2"),
-        nbParticipant = 2,
-        TA = "Some TA",
-        teacher = "Some Teacher",
-        lab = "some lab",
-        authorId = "some author id"
-    )
+
+    val result = ImmutableProject.build(ID, name, labName, authorId, projectManager, teacher, numberStudents,
+        listStudents, true, true, tagList, false, description,
+        listOf(), sectionList) as Success<ImmutableProject>
+    val project = result.value
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
         private var nb = 1
@@ -78,7 +82,7 @@ class FirebaseProjectsDatabaseTest {
 
         // --- mockFirebaseFirestore ---
         Mockito
-            .`when`(mockFirebaseFirestore.collection(FirebaseProjectsDatabase.ROOT))
+            .`when`(mockFirebaseFirestore.collection(FirebaseProjectDatabase.ROOT))
             .thenReturn(mockColRef)
 
         // --- mockColRef ---
@@ -169,7 +173,9 @@ class FirebaseProjectsDatabaseTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
+
         ))
         /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
@@ -185,7 +191,7 @@ class FirebaseProjectsDatabaseTest {
         Mockito.`when`(mockDS["description"]).thenReturn(project.description)
         Mockito.`when`(mockDS["videoUri"]).thenReturn(project.videoUri)
         */
-      
+
         // --- mockQS ---
         Mockito
             .`when`(mockQS.iterator())
@@ -208,7 +214,8 @@ class FirebaseProjectsDatabaseTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
         ))
         /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
@@ -233,7 +240,7 @@ class FirebaseProjectsDatabaseTest {
 
         // an empty firestore instance
         Mockito
-            .`when`(mockFirebaseFirestoreEmtpy.collection(FirebaseProjectsDatabase.ROOT))
+            .`when`(mockFirebaseFirestoreEmtpy.collection(FirebaseProjectDatabase.ROOT))
             .thenReturn(mockColRefEmpty)
         Mockito
             .`when`(mockColRefEmpty.get())
@@ -273,13 +280,13 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getAllIdsIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getAllIds(
             { list -> assertEquals(listOf(ID), list) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getAllIds(
             { list -> assertEquals(emptyList<ProjectId>(), list) },
             {}
@@ -289,14 +296,14 @@ class FirebaseProjectsDatabaseTest {
     @Test
     fun getProjectFromIdIsCorrect() {
         Mockito.`when`(mockDS.exists()).thenReturn(true)
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectFromId(
             ID,
             { p -> assertEquals(project, p) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getProjectFromId(
             ID,
             { p -> assertEquals(null, p) },
@@ -307,7 +314,7 @@ class FirebaseProjectsDatabaseTest {
     @Test
     fun getProjectFromIdWhenDSDoNotExistsDoNotCrash() {
         Mockito.`when`(mockDS.exists()).thenReturn(false)
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectFromId(
             ID,
             { p -> assertEquals(null, p) },
@@ -317,13 +324,13 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getAllProjectsIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getAllProjects(
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getAllProjects(
             { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
             { assert(false) }
@@ -332,14 +339,14 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getProjectsFromNameIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectsFromName(
             project.name,
             { lp -> assertEquals(listOf(project), lp) },
             {}
         )
 
-        val dbEmpty: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestoreEmtpy)
+        val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getProjectsFromName(
             project.name,
             { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
@@ -349,7 +356,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun getProjectsFromTagsIsCorrect() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.getProjectsFromTags(
             project.tags,
             { lp -> assertEquals(listOf(project), lp) },
@@ -359,7 +366,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun updateVideoWithProjectWorks() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         db.updateVideoWithProject(
             ID,
             "",
@@ -375,7 +382,7 @@ class FirebaseProjectsDatabaseTest {
 
     @Test
     fun listenersShouldNotCrash() {
-        val db: ProjectsDatabase = FirebaseProjectsDatabase(mockFirebaseFirestore)
+        val db: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestore)
         val listener: ((ProjectChange) -> Unit) = {}
         db.addProjectsChangeListener(listener)
         db.removeProjectsChangeListener(listener)

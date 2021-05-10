@@ -5,25 +5,44 @@ import org.junit.Assert
 import org.junit.Test
 
 class ImmutableProjectTest {
+    private val id = "zoerjfoerfj"
+    private val name = "epic roblox coding"
+    private val labName = "roblox labs"
+    private val authorID = "a"
+    private val projectManager = "kaou el roblox master"
+    private val teacher = "kaou el roblox master"
+    private val description = "epic roblox coding alll freaking day DAMN SON"
+    private val numberStudents = 3
+    private val masterProject = true
+    private val bachelorSemesterProject = true
+    private val masterSemesterProject = true
+    private val listStudents = listOf("epic robloxxx programmer")
+    private val tagManager = TagsBaseManager()
+    private val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
+    private val sectionManager = SectionBaseManager()
+    private val sectionList = SectionBaseManager.sectionList().toList()
+
+
+    val result = ImmutableProject.build(id, name, labName, authorID, projectManager, teacher, numberStudents,
+        listStudents, true, true, tagList, false, description,
+        listOf(), sectionList) as Success<ImmutableProject>
+    val project = result.value
     @Test
     fun initializationAndSanitizationTests(){
-        val id = "zoerjfoerfj"
-        val name = "epic roblox coding"
-        val labName = "roblox labs"
-        val authorID = "a"
-        val projectManager = "kaou el roblox master"
-        val teacher = "kaou el roblox master"
-        val description = "epic roblox coding alll freaking day DAMN SON"
-        val numberStudents = 3
-        val masterProject = true
-        val bachelorSemesterProject = true
-        val masterSemesterProject = true
-        val listStudents = listOf("epic robloxxx programmer")
-        val tags = listOf("robloxprog")
+        val tags = mutableListOf<String>()
+        val sections = mutableListOf<String>()
+        if(tagList.isNotEmpty()) {
+            tags.add(tagList[0])
+        }
+        if(sectionList.isNotEmpty()){
+            sections.add(sectionList[0])
+        }
 
-        
+
         val result = ImmutableProject.build(id, name, labName, authorID, projectManager, teacher, numberStudents,
-            listStudents, true, true, tags, false, description)
+            listStudents, true, true, tags, false, description,
+            listOf(), sections)
+
         when(result){
             is Success -> {
 
@@ -40,6 +59,8 @@ class ImmutableProjectTest {
                 Assert.assertEquals(true, project.bachelorProject)
                 Assert.assertEquals(true, project.masterProject)
                 Assert.assertEquals(listStudents, project.assigned)
+                Assert.assertEquals(tags, project.tags)
+                Assert.assertEquals(sections, project.allowedSections)
                 //testing the limit of functions
                 val longName = "ultra epic robloxx coder ultimate guy but with a name that's long aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                 when (project.buildCopy(name = longName)) {
@@ -63,15 +84,6 @@ class ImmutableProjectTest {
                     is Failure -> assert(true)
                 }
 
-
-                /*val ultraLongDescription =
-                    "this right here is the next generation ultra epic giga robloxx lab." +
-                            " What we do is pure unalderated robloxx epicness. Using robloxx code blocks " +
-                            "we are able to recreate reality as we like. The goal would be to reach the anperamthian nebula " +
-                            "to destroy the center of the jedi stronghold. Yoda, the generator of the tool they call the force, " +
-                            "is expected to be on their hidden stronghold. His fall should ensure our victory."+
-                            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-                */
                 val ultraLongDescription = "a".repeat(ImmutableProject.MAX_DESCRIPTION_SIZE + 1)
                 when (project.buildCopy(description = ultraLongDescription)) {
                     is Success -> assert(false)
@@ -97,28 +109,13 @@ class ImmutableProjectTest {
 
     @Test
     fun toMapStringIsCorrect() {
-        val default_id = ""
-        val project = ImmutableProject(
-            name = "some project",
-            lab = "some lab",
-            authorId = "some author id",
-            teacher = "some teacher",
-            TA = "some TA",
-            nbParticipant = 2345,
-            assigned = listOf("a student", "an other student"),
-            masterProject = false,
-            bachelorProject = true,
-            isTaken = false,
-            tags = listOf("tag1", "tag2", "tag3"),
-            description = "some description of the project",
-            id = default_id
-        )
 
         val fooMap = project.toMapString()
 
         @Suppress("UNCHECKED_CAST")
         val projectRebuilt = fooMap.run {
             ImmutableProject(
+                id = id,
                 name = get("name") as String,
                 lab = get("lab") as String,
                 authorId = get("authorID") as String,
@@ -128,10 +125,10 @@ class ImmutableProjectTest {
                 assigned = get("assigned") as List<String>,
                 masterProject = get("masterProject") as Boolean,
                 bachelorProject = get("bachelorProject") as Boolean,
-                isTaken = get("isTaken") as Boolean,
                 tags = get("tags") as List<String>,
+                isTaken = get("isTaken") as Boolean,
                 description = get("description") as String,
-                id = default_id
+                allowedSections = get("allowedSections") as List<String>
             )
         }
 
@@ -140,22 +137,6 @@ class ImmutableProjectTest {
 
     @Test
     fun buildFromMapWorks() {
-        val project = ImmutableProject(
-            "11111",
-            "Real-time reconstruction of deformable objects",
-            "CVLAB",
-            "authorID37",
-            "Teacher2",
-            "TA2",
-            1,
-            emptyList(),
-            false,
-            true,
-            listOf("Computer Vision","ML"),
-            false,
-            "Description of project2",
-            emptyList()
-        )
         val validMap: Map<String, Any?> = mapOf(
             "name" to project.name,
             "lab" to project.lab,
@@ -169,7 +150,8 @@ class ImmutableProjectTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI
+            "videoURI" to project.videoURI,
+            "allowedSections" to project.allowedSections
         )
 
 

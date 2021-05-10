@@ -78,7 +78,9 @@
     <string name="clear">Clear</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+
     <string name="settings">Settings</string>
+
 
 
     <string name="tag_selection_instructions">Add tags : select the right tags for your project and add/remove by clicking on them</string>
@@ -89,6 +91,10 @@
 
     <string name="tag_save_button">Save</string>
     <string name="failure">failure</string>
+
+    <string name="section_selection_instructions">Sections allowed to take the project</string>
+    <string name="section_save_button">Save</string>
+    <string name="section_add_button_title">add Section</string>
 
     <string name="form_save_profile">Save</string>
 
@@ -115,7 +121,16 @@
     <string name="selection">Your selection:</string>
 
     <string name="filter">Filter</string>
+    <string name="PHD">PHD</string>
     <string name="applied">Applied</string>
+    <string name="edit_profile_text">Edit Profile</string>
+    <string name="profile_loading_failed">Failed to load profile</string>
+    <string name="required_degree">Required Degree</string>
+    <string name="application">Application</string>
+    <string name="filter_settings_icon">filter settings icon</string>
+    <string name="preferences">Preferences</string>
+    <string name="sending_preferences">Sending Preferences...</string>
+    <string name="failed_send_pref">Failed to Send Preferences</string>
 
 
 </resources>

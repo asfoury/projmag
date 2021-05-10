@@ -1,8 +1,8 @@
 package com.sdp13epfl2021.projmag.database.fake
 
 import com.sdp13epfl2021.projmag.database.ProjectChange
-import com.sdp13epfl2021.projmag.database.ProjectId
-import com.sdp13epfl2021.projmag.database.ProjectsDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Success
@@ -10,8 +10,8 @@ import java.util.*
 import kotlin.NoSuchElementException
 
 
-class FakeProjectsDatabase(projectsBeginning: List<ImmutableProject> = emptyList()) :
-    ProjectsDatabase {
+class FakeProjectDatabase(projectsBeginning: List<ImmutableProject> = emptyList()) :
+    ProjectDatabase {
 
     var projects: List<ImmutableProject> = projectsBeginning
     var listeners: List<((ProjectChange) -> Unit)> = emptyList()
@@ -80,9 +80,11 @@ class FakeProjectsDatabase(projectsBeginning: List<ImmutableProject> = emptyList
         val pid = nextId.toString()
         nextId += 1
         val newProject = project.let {
-            ImmutableProject(pid,
-            it.name, it.lab, it.authorId, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
-            it.bachelorProject, it.tags, it.isTaken, it.description)
+            ImmutableProject(
+                pid,
+                it.name, it.lab, it.authorId, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
+                it.bachelorProject, it.tags, it.isTaken, it.description, it.videoURI, it.allowedSections
+            )
         }
         add(newProject)
         onSuccess(pid)
