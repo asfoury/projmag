@@ -10,6 +10,10 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.CandidatureAdapter
 import com.sdp13epfl2021.projmag.database.Utils
 
+/**
+ * Activity which displays a list of those who have applied to a project submitted
+ * by the user.
+ */
 class WaitingListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

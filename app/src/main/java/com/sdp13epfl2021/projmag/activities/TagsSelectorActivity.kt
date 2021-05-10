@@ -16,7 +16,9 @@ import com.sdp13epfl2021.projmag.model.Tag
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import java.io.Serializable
 
-
+/**
+ * Activity in which to add tags to a project
+ */
 class TagsSelectorActivity : AppCompatActivity() {
     private val selectedTags : MutableSet<Tag> = mutableSetOf()
     override fun onCreate(savedInstanceState: Bundle?) {

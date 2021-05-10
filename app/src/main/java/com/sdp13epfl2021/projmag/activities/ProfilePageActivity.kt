@@ -14,7 +14,10 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
 import com.sdp13epfl2021.projmag.model.*
 
-
+/**
+ * Activity in which one can create their profile by filling in fields
+ * such as names, age, sciper, etc...
+ */
 class ProfilePageActivity : AppCompatActivity() {
 
     lateinit var imageView: ImageView

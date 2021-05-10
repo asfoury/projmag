@@ -6,6 +6,9 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Makes the project list items clickable
+ */
 class MakeRecyclerListItemsClickListenable(context: Context, recyclerView: RecyclerView, private val mListener: OnItemClickListener?) : RecyclerView.OnItemTouchListener {
 
     private val mGestureDetector: GestureDetector

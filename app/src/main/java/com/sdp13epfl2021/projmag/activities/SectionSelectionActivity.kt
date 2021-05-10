@@ -14,6 +14,9 @@ import com.sdp13epfl2021.projmag.adapter.SectionAdapter
 import com.sdp13epfl2021.projmag.model.SectionBaseManager
 import java.io.Serializable
 
+/**
+ * Activity in which to select the sections of a project upon its creation
+ */
 class SectionSelectionActivity : AppCompatActivity() {
     private val  chosenSections : MutableSet<String> = mutableSetOf()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +39,9 @@ class SectionSelectionActivity : AppCompatActivity() {
 
 
     }
+
     /**
-     * Handling of what happens when you click on sections in the UI for the app phone backend
+     * Handling of what happens when you click on sections in the UI
      *
      * @param sectionRecyclerView : the section recycler view
      * @param sectionDataset : the dataset of sections

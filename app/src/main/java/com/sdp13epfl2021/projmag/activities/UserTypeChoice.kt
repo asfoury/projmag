@@ -7,6 +7,9 @@ import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
 
+/**
+ * Activity in which user selects which type of user they are (teacher, student, PhD)
+ */
 class UserTypeChoice : AppCompatActivity() {
 
     companion object{

@@ -13,6 +13,9 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
 import com.sdp13epfl2021.projmag.database.Utils
 
+/**
+ * Activity in which one can create and submit a CV.
+ */
 class CVCreationActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2
