@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import com.sdp13epfl2021.projmag.activities.SignInActivity
 import com.sdp13epfl2021.projmag.activities.UserTypeChoice

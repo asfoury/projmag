@@ -1,7 +1,5 @@
 package com.sdp13epfl2021.projmag.model
 
-import java.util.*
-
 /**
  * Class for tags, they are stored in lowercase and without spaces
  *

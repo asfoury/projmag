@@ -1,12 +1,11 @@
 package com.sdp13epfl2021.projmag.activities
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -83,7 +82,7 @@ class SignInActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser;
+                        val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser
                         Log.d("SignInActivity", "signInWithCredential:success")
                         if(isNew == true){
                             val intent = Intent(this, UserTypeChoice::class.java)

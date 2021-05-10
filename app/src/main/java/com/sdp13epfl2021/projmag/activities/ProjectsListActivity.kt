@@ -18,8 +18,8 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkStri
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
