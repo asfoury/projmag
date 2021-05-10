@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sdp13epfl2021.projmag.R
 
+/**
+ * A Fragment simply displaying an introduction with instruction to CV creation process
+ */
 class IntroFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,

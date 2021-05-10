@@ -12,18 +12,24 @@ import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
 
-
+/**
+ * This Activity is used to provide a video, recorded by the device's camera, to be put in the CV
+ */
 class VideoCv : AppCompatActivity() {
 
     companion object {
+        /**
+         * The key used to retrieve the video results
+         */
         const val RESULT_KEY = "com.sdp13epfl2021.projmag.curriculumvitea.VideoCV"
     }
 
-    lateinit var vidButton: Button
-    lateinit var subButton: Button
-    lateinit var videoView: VideoView
+    private lateinit var vidButton: Button
+    private lateinit var subButton: Button
+    private lateinit var videoView: VideoView
     private var videoUri: Uri? = null
     private val pickVideo = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_cv)
@@ -59,6 +65,4 @@ class VideoCv : AppCompatActivity() {
             }
         }
     }
-
-
 }
