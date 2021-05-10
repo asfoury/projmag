@@ -13,6 +13,9 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
 import com.sdp13epfl2021.projmag.database.Utils
 
+/**
+ * Activity in which one can create and submit a CV.
+ */
 class CVCreationActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2
@@ -33,8 +36,13 @@ class CVCreationActivity : AppCompatActivity() {
     override fun onBackPressed() { /* DO NOTHING TO AVOID LOOSING WORK */
     }
 
-    fun buildCV() = cvFrags.buildCV()
 
+    private fun buildCV() = cvFrags.buildCV()
+
+    /**
+     * This function is called when the user wishes to submit their CV.
+     * It pushes the CV to firebase.
+     */
     private fun onFinish() {
         val cv = buildCV()
         val utils = Utils.getInstance(this)

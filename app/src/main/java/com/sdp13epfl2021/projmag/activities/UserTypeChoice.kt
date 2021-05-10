@@ -7,6 +7,9 @@ import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
 
+/**
+ * Activity in which user chooses which type of user they are (teacher, PhD, student).
+ */
 class UserTypeChoice : AppCompatActivity() {
 
     companion object{
@@ -23,7 +26,7 @@ class UserTypeChoice : AppCompatActivity() {
         val professorButton: RadioButton = findViewById(R.id.radioProfessorType)
         val studentButton: RadioButton= findViewById(R.id.radioStudentType)
         val pdhButton: RadioButton= findViewById(R.id.radioPHDType)
-        val intent = Intent(this, ProfilePageActivity::class.java)
+        val intent = Intent(this, ProfileCreationActivity::class.java)
         pdhButton.setOnClickListener{
             isProfessor = true
             startActivity(intent)

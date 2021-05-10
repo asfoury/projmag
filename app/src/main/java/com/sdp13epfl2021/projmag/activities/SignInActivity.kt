@@ -18,8 +18,7 @@ import com.sdp13epfl2021.projmag.video.VideoUtils
 
 
 /**
- * Activity which signs in a user who has not yet signed in. Some code taken from
- * the Google tutorial to integrate Google sign in in an android app.
+ * Activity which signs in a user who has not yet signed in.
  */
 class SignInActivity : AppCompatActivity() {
     companion object {

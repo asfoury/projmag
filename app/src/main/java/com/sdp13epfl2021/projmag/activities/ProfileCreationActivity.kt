@@ -17,8 +17,11 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.UserProfileDatabase
 import com.sdp13epfl2021.projmag.model.*
 
-
-class ProfilePageActivity : AppCompatActivity() {
+/**
+ * Activity in which one can create their profile by filling in fields
+ * such as names, age, sciper, etc...
+ */
+class ProfileCreationActivity : AppCompatActivity() {
 
     lateinit var imageView: ImageView
     lateinit var button: Button
@@ -26,7 +29,6 @@ class ProfilePageActivity : AppCompatActivity() {
     lateinit var buttonSubChange: Button
     private val pickImage = 0
     private var imageUri: Uri? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

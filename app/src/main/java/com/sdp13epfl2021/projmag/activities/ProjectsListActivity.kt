@@ -23,10 +23,12 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
+/**
+ * Displays a list of projects. User can filter based on various criteria and search by name.
+ */
 class ProjectsListActivity : AppCompatActivity() {
 
     private lateinit var projectAdapter: ProjectAdapter
-
     private lateinit var recyclerView: RecyclerView
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
@@ -34,7 +36,9 @@ class ProjectsListActivity : AppCompatActivity() {
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
 
-
+    /**
+     * Creates and displays list of projects.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
@@ -67,12 +71,15 @@ class ProjectsListActivity : AppCompatActivity() {
 
 
         if (!UserTypeChoice.isProfessor) {
-            fab.visibility = View.INVISIBLE
+            //fab.visibility = View.INVISIBLE
         }
 
 
     }
 
+    /**
+     * Adds search button and functionality, filter button, user button to menu.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_project_list, menu)
         val item = menu?.findItem(R.id.searchButton)
@@ -96,7 +103,7 @@ class ProjectsListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.profileButton -> {
-                val intent = Intent(this, ProfilePageActivity::class.java)
+                val intent = Intent(this, ProfileCreationActivity::class.java)
                 startActivity(intent)
                 true
             }

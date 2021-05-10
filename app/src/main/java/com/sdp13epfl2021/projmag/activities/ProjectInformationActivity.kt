@@ -44,7 +44,10 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity displaying the information and media of a project and from which
+ * one can apply to the project or send it using a deep link or QR code.
+ */
 class ProjectInformationActivity : AppCompatActivity() {
 
     companion object {
@@ -382,11 +385,18 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Creates menu with a share button and a QR code button.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.menu_project_information, menu)
         return true
     }
 
+    /**
+     * QR code button opens QRCodeActivity and share button generates
+     * a deep link and opens the android share activity.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
             val linkToSend = createDynamicLink()

@@ -37,7 +37,7 @@ class SectionSelectionActivity : AppCompatActivity() {
 
     }
     /**
-     * Handling of what happens when you click on sections in the UI for the app phone backend
+     * Handling of what happens when you click on sections in the UI
      *
      * @param sectionRecyclerView : the section recycler view
      * @param sectionDataset : the dataset of sections

@@ -22,9 +22,12 @@ import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
 
+const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE_MESSAGE"
 
-const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FROM_TO_SUBTITLE_MESSAGE"
 
+/**
+ * Activity consisting of a form one can use to create and submit a project.
+ */
 class Form : AppCompatActivity() {
 
     companion object {
@@ -40,7 +43,6 @@ class Form : AppCompatActivity() {
 
 
     //video related variables
-
     private var videoUri: Uri? = null
     private var subtitles: String? = null
 

@@ -30,13 +30,13 @@
         <activity android:name=".activities.UserTypeChoice" />
         <activity
             android:name=".curriculumvitae.VideoCv"
-            android:parentActivityName=".activities.ProfilePageActivity" />
+            android:parentActivityName=".activities.ProfileCreationActivity" />
 
         <activity android:name=".activities.SectionSelectionActivity" />
 
         <activity android:name=".activities.TagsSelectorActivity" />
         <activity
-            android:name=".activities.ProfilePageActivity"
+            android:name=".activities.ProfileCreationActivity"
             android:parentActivityName=".activities.ProjectsListActivity" />
         <activity
             android:name=".video.VideoSubtitlingActivity"
@@ -44,7 +44,7 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activities.CVCreationActivity"
-            android:parentActivityName=".activities.ProfilePageActivity"
+            android:parentActivityName=".activities.ProfileCreationActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
