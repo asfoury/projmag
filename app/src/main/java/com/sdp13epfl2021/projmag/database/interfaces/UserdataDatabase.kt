@@ -172,7 +172,7 @@ interface UserdataDatabase {
      * @param onFailure the closure that's called if the download fails
      */
     fun getProfile(
-        onSuccess: (profile: ImmutableProfile?) -> Unit,
+        onSuccess: (ImmutableProfile?) -> Unit,
         onFailure: (Exception) -> Unit
     )
 }
