@@ -170,18 +170,19 @@ class ProjectInformationActivity : AppCompatActivity() {
      *
      * @param projectId : id of the project to push
      * @param favButton : button responsible for adding/removing favourites
-     * @param isClick : differentiate the init button handling from a click handling
-     * @return
+     * @param isClick : differentiate the initialisation of the favourite button from a click on the button
      */
     private fun handleFavoriteButtonText(projectId : String, favButton: Button, isClick : Boolean) {
         userDataDatabase.getListOfFavoriteProjects({ projectIds ->
             var isFavorite = projectIds.contains(projectId)
+            //we clicked on the favourites button and the project is in the favourite list
             if(isFavorite && isClick){
                 userDataDatabase.removeFromFavorite(projectId,
                     {showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                         isFavorite = !isFavorite},
                     {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
             }
+            //clicked on the favourites button and the project isn't in the favourite list
             else if(isClick){
                 userDataDatabase.pushFavoriteProject(projectId,
                     {showToast(getString(R.string.success), Toast.LENGTH_SHORT)
@@ -189,6 +190,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                     {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
             }
 
+            //update the add/remove from favourites button accordingly
             setButtonText(favButton, isFavorite,
                 LOADING_STRING ,getString(R.string.favorite_remove_button),
                 getString(R.string.favorite_add_button))
