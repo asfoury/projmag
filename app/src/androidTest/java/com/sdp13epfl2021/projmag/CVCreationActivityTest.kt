@@ -14,9 +14,9 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.LanguageLevel
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.PeriodDescription
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.SkillDescription
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Language
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.PeriodDescription
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.SkillDescription
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
@@ -44,7 +44,7 @@ class CVCreationActivityTest {
         "hello",
         listOf(PeriodDescription("period", "location", "description", 2000, 2001)),
         listOf(),
-        listOf(LanguageLevel("language", LanguageLevel.Companion.Level.Basic)),
+        listOf(Language("language", Language.Level.Basic)),
         listOf(SkillDescription("skill", SkillDescription.SkillLevel.Basic))
     )
 
@@ -363,7 +363,7 @@ class CVCreationActivityTest {
                 parentMatcher.describeTo(description)
             }
 
-            public override fun matchesSafely(view: View): Boolean {
+            override fun matchesSafely(view: View): Boolean {
                 val parent = view.parent
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)

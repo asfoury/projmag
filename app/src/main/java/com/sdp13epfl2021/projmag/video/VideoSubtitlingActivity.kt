@@ -9,11 +9,13 @@ import com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE_MESSAGE
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
 
-class VideoSubtitlingActivity : AppCompatActivity() {
 
-    companion object {
-        const val RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"
-    }
+const val VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"
+
+/**
+ * The activity where the user can add subtitle with timestamps to a video
+ */
+class VideoSubtitlingActivity : AppCompatActivity() {
 
     private var videoUri: Uri? = null
 
@@ -26,11 +28,11 @@ class VideoSubtitlingActivity : AppCompatActivity() {
         videoUri = intent.getStringExtra(FORM_TO_SUBTITLE_MESSAGE)?.let { Uri.parse(it) }
 
         findViewById<Button>(R.id.video_subtitling_set_start_button).setOnClickListener {
-            setStartOrEnd(SubtitleBuilder.START)
+            setStart()
         }
 
         findViewById<Button>(R.id.video_subtitling_set_end_button).setOnClickListener {
-            setStartOrEnd(SubtitleBuilder.END)
+            setEnd()
         }
 
         findViewById<Button>(R.id.video_subtitling_add).setOnClickListener { addButtonPressed() }
@@ -84,19 +86,24 @@ class VideoSubtitlingActivity : AppCompatActivity() {
             updateSubs()
         }
 
-    private fun setStartOrEnd(or: Boolean) {
+    private fun setStart() {
         findViewById<VideoView>(R.id.video_subtitling_videoview).let { videoView ->
-            if (or == SubtitleBuilder.END) {
-                videoView.pause()
-            }
-            builder.setStartOrEnd(or, videoView.currentPosition)
+            builder.start = videoView.currentPosition
+            updateTimeTextView()
+        }
+    }
+
+    private fun setEnd() {
+        findViewById<VideoView>(R.id.video_subtitling_videoview).let { videoView ->
+            videoView.pause()
+            builder.end = videoView.currentPosition
             updateTimeTextView()
         }
     }
 
     private fun submit() {
         val data = Intent()
-        data.putExtra(RESULT_KEY, builder.build())
+        data.putExtra(VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY, builder.build())
         setResult(RESULT_OK, data)
         finish()
     }
