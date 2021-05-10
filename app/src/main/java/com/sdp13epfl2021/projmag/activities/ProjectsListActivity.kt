@@ -57,7 +57,8 @@ class ProjectsListActivity : AppCompatActivity() {
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
 
-        projectAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+        projectAdapter =
+            ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
 
 
@@ -134,7 +135,6 @@ class ProjectsListActivity : AppCompatActivity() {
             appliedProjects.addAll(list)
         }, {})
     }
-
 
 
     /**

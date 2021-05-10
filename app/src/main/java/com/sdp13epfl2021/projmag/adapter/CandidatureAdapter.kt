@@ -22,7 +22,14 @@ import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
 
-class CandidatureAdapter(activity: Activity, private val utils: Utils, private val projectId: ProjectId) :
+/**
+ * Adapter for the list of candidatures. Adapts candidatures to recyclerview.
+ */
+class CandidatureAdapter(
+    activity: Activity,
+    private val utils: Utils,
+    private val projectId: ProjectId
+) :
     RecyclerView.Adapter<CandidatureAdapter.CandidatureHolder>() {
 
     private val candidatures: MutableList<Candidature> = ArrayList()
@@ -48,19 +55,43 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
 
     override fun onBindViewHolder(holder: CandidatureHolder, position: Int) {
         val candidature = candidatures[position]
-        holder.firstnameView.text = resources.getString(R.string.waiting_firstname, candidature.profile.firstName)
-        holder.lastnameView.text = resources.getString(R.string.waiting_lastname, candidature.profile.lastName)
-        holder.sectionView.text = resources.getString(R.string.waiting_section, "IC") // TODO change when added : candidature.profile.section
+        holder.firstnameView.text =
+            resources.getString(R.string.waiting_firstname, candidature.profile.firstName)
+        holder.lastnameView.text =
+            resources.getString(R.string.waiting_lastname, candidature.profile.lastName)
+        holder.sectionView.text = resources.getString(
+            R.string.waiting_section,
+            "IC"
+        ) // TODO change when added : candidature.profile.section
         setColor(holder, candidature.state)
 
         val context = holder.view.context
         holder.profileButton.setOnClickListener { openProfile(context, candidature.profile) }
         holder.cvButton.setOnClickListener { openCV(context, candidature.cv) }
-        holder.acceptButton.setOnClickListener(createListener(holder, candidature, Candidature.State.Accepted, resources.getString(R.string.waiting_accepted_msg)))
-        holder.rejectButton.setOnClickListener(createListener(holder, candidature, Candidature.State.Rejected, resources.getString(R.string.waiting_rejected_msg)))
+        holder.acceptButton.setOnClickListener(
+            createListener(
+                holder,
+                candidature,
+                Candidature.State.Accepted,
+                resources.getString(R.string.waiting_accepted_msg)
+            )
+        )
+        holder.rejectButton.setOnClickListener(
+            createListener(
+                holder,
+                candidature,
+                Candidature.State.Rejected,
+                resources.getString(R.string.waiting_rejected_msg)
+            )
+        )
     }
 
-    private fun createListener(holder: CandidatureHolder, candidature: Candidature, state: Candidature.State, successMsg: String): (View) -> Unit {
+    private fun createListener(
+        holder: CandidatureHolder,
+        candidature: Candidature,
+        state: Candidature.State,
+        successMsg: String
+    ): (View) -> Unit {
         return { view: View ->
             utils.candidatureDatabase.pushCandidature(
                 candidature,
@@ -112,7 +143,9 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
         }
     }
 
-
+    /**
+     * Class containing fields to show in recycler view display of candidatures
+     */
     class CandidatureHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val firstnameView: TextView = view.findViewById(R.id.waiting_firstname)
         val lastnameView: TextView = view.findViewById(R.id.waiting_lastname)

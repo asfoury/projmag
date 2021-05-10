@@ -34,34 +34,38 @@ class ProfilePageActivity : AppCompatActivity() {
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 
-        if(UserTypeChoice.isProfessor){
-            findViewById<TextView>(R.id.profile_sciper).setVisibility(View.INVISIBLE)
+        if (UserTypeChoice.isProfessor) {
+            findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
             //buttonAddCv.setVisibility(View.INVISIBLE)
         }
 
         UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
-            Toast.makeText(this,getString(R.string.profile_loading_failed)   , Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
+                .show()
         }
 
 
-        buttonAddCv.setOnClickListener{
-            val intent = Intent(this,CVCreationActivity::class.java)
+        buttonAddCv.setOnClickListener {
+            val intent = Intent(this, CVCreationActivity::class.java)
             startActivity(intent)
             finish()
         }
-        buttonSubChange.setOnClickListener{
+        buttonSubChange.setOnClickListener {
             val profile = createProfileFromFields()
-            if(profile != null) {
-                UserProfileDatabase(Firebase.firestore, Firebase.auth).uploadProfile(profile, {}, {})
+            if (profile != null) {
+                UserProfileDatabase(Firebase.firestore, Firebase.auth).uploadProfile(
+                    profile,
+                    {},
+                    {})
             }
-            val intent = Intent(this,ProjectsListActivity::class.java)
+            val intent = Intent(this, ProjectsListActivity::class.java)
             startActivity(intent)
             finish()
         }
 
     }
 
-    private fun loadUserProfile(profile : ImmutableProfile?) {
+    private fun loadUserProfile(profile: ImmutableProfile?) {
         if (profile != null) {
             findViewById<EditText>(R.id.profile_firstname).setText(profile.firstName)
             findViewById<EditText>(R.id.profile_lastname).setText(profile.lastName)
@@ -70,7 +74,8 @@ class ProfilePageActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.profile_phone_number).setText(profile.phoneNumber)
             findViewById<EditText>(R.id.profile_sciper).setText(profile.sciper.toString())
         } else {
-            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -83,12 +88,12 @@ class ProfilePageActivity : AppCompatActivity() {
         }
     }
 
-    private fun createProfileFromFields() : ImmutableProfile? {
+    private fun createProfileFromFields(): ImmutableProfile? {
         val firstName = findViewById<EditText>(R.id.profile_firstname).text.toString()
         val lastName = findViewById<EditText>(R.id.profile_lastname).text.toString()
         val age = findViewById<EditText>(R.id.profile_age).text.toString()
 
-        val gender = when(findViewById<EditText>(R.id.profile_genre).text.toString()){
+        val gender = when (findViewById<EditText>(R.id.profile_genre).text.toString()) {
             Gender.MALE.name -> Gender.MALE
             Gender.FEMALE.name -> Gender.FEMALE
             else -> Gender.OTHER
@@ -98,9 +103,11 @@ class ProfilePageActivity : AppCompatActivity() {
         val sciper = findViewById<EditText>(R.id.profile_sciper).text.toString()
 
 
-        val profile =  ImmutableProfile.build(lastName,firstName,Integer.valueOf(age),gender , Integer.valueOf(sciper) ,phoneNumber,
-            role)
-        return when(profile) {
+        val profile = ImmutableProfile.build(
+            lastName, firstName, Integer.valueOf(age), gender, Integer.valueOf(sciper), phoneNumber,
+            role
+        )
+        return when (profile) {
             is Success -> {
                 profile.value
             }

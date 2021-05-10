@@ -1,4 +1,4 @@
-    package com.sdp13epfl2021.projmag.model
+package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
@@ -6,7 +6,7 @@ import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toS
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-    sealed class Result<T>
+sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
@@ -29,7 +29,7 @@ data class ImmutableProject(
     val allowedSections: List<String> = listOf(),
 ) : Parcelable {
     companion object {
-        public object FieldNames {
+        object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
@@ -81,7 +81,7 @@ data class ImmutableProject(
                             "students currently assigned but only $nbParticipant allowed to work for the project"
                 )
                 //!sectionsManager.isListValid(allowedSections) -> Failure("a section in the section list doesn't exist $allowedSections")
-                 //!tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist $tags")
+                //!tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist $tags")
 
                 else -> Success(
                     ImmutableProject(
@@ -186,8 +186,21 @@ data class ImmutableProject(
         videoURI: List<String> = this.videoURI,
         allowedSections: List<String> = this.allowedSections
     ) = build(
-        id, name, lab, authorId, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
-        tags, isTaken, description, videoURI, allowedSections
+        id,
+        name,
+        lab,
+        authorId,
+        teacher,
+        TA,
+        nbParticipant,
+        assigned,
+        masterProject,
+        bachelorProject,
+        tags,
+        isTaken,
+        description,
+        videoURI,
+        allowedSections
     )
 
     /**
@@ -214,9 +227,6 @@ data class ImmutableProject(
         FieldNames.VIDEO_URI to videoURI,
         FieldNames.ALLOWED_SECTIONS to allowedSections
     )
-
-
-
 
 
 }

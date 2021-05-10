@@ -6,16 +6,17 @@ package com.sdp13epfl2021.projmag.model
  * @property name : name of the tag
  */
 data class Tag(var name: String) {
-    private var accepted : Boolean = false
-    init{
+    private var accepted: Boolean = false
+
+    init {
 
         name = name.replace("\\s+".toRegex(), "")
     }
 
 
-      fun equals(other: Tag): Boolean {
+    fun equals(other: Tag): Boolean {
         return other.name == this.name
-      }
+    }
 
     /*
     When the tag is transformed into a string, it has to be only his name that is transmitted

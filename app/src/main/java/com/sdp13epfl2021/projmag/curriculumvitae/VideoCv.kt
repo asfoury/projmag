@@ -18,6 +18,7 @@ class VideoCv : AppCompatActivity() {
     companion object {
         const val RESULT_KEY = "com.sdp13epfl2021.projmag.curriculumvitea.VideoCV"
     }
+
     lateinit var vidButton: Button
     lateinit var subButton: Button
     lateinit var videoView: VideoView
@@ -38,21 +39,23 @@ class VideoCv : AppCompatActivity() {
                 startActivityForResult(intent, pickVideo)
             }
         }
-        subButton.setOnClickListener{
-            if(videoUri != null){
-            val data = Intent()
-            data.putExtra(RESULT_KEY, videoUri.toString())
-            setResult(RESULT_OK, data)
-            finish()}
+        subButton.setOnClickListener {
+            if (videoUri != null) {
+                val data = Intent()
+                data.putExtra(RESULT_KEY, videoUri.toString())
+                setResult(RESULT_OK, data)
+                finish()
+            }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && requestCode == pickVideo) {
             if (intent?.data != null) {
-                videoUri = intent?.data
+                videoUri = intent.data
                 videoView.setVideoURI(videoUri)
-                videoView.start();
+                videoView.start()
             }
         }
     }

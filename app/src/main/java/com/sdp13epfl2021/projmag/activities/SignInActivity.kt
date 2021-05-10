@@ -69,7 +69,8 @@ class SignInActivity : AppCompatActivity() {
                 Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                Toast.makeText(applicationContext, "Google sign in failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Google sign in failed", Toast.LENGTH_SHORT)
+                    .show()
                 // Google Sign In failed, update UI appropriately
                 Log.w("SignInActivity", "Google sign in failed", e)
             }
@@ -79,27 +80,27 @@ class SignInActivity : AppCompatActivity() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser
-                        Log.d("SignInActivity", "signInWithCredential:success")
-                        if(isNew == true){
-                            val intent = Intent(this, UserTypeChoice::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else if(isNew == false) {
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val isNew: Boolean? = task.result?.additionalUserInfo?.isNewUser
+                    Log.d("SignInActivity", "signInWithCredential:success")
+                    if (isNew == true) {
+                        val intent = Intent(this, UserTypeChoice::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else if (isNew == false) {
 
-                            val intent = Intent(this, ProjectsListActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }else{
-                            Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
-                        }
+                        val intent = Intent(this, ProjectsListActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
-                        // If sign in fails, display a message to the user.
                         Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
                     }
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("SignInActivity", "signInWithCredential:failure", task.exception)
                 }
+            }
     }
 }
