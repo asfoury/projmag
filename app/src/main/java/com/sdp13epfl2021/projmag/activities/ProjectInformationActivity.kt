@@ -153,12 +153,12 @@ class ProjectInformationActivity : AppCompatActivity() {
             LOADING_STRING ,getString(R.string.favorite_remove_button), getString(R.string.favorite_add_button))
 
         //load data from the database and set the favorite add button to the right value
-        handleFavoriteButtonText(projectId, favButton)
+        handleFavoriteButtonText(projectId, favButton, false)
 
 
         //handle click on the add favourite button
         favButton.setOnClickListener{
-            handleFavoriteButtonText(projectId, favButton)
+            handleFavoriteButtonText(projectId, favButton, true)
         }
 
 
@@ -170,23 +170,25 @@ class ProjectInformationActivity : AppCompatActivity() {
      *
      * @param projectId : id of the project to push
      * @param favButton : button responsible for adding/removing favourites
+     * @param isClick : differentiate the init button handling from a click handling
      * @return
      */
-    private fun handleFavoriteButtonText(projectId : String, favButton: Button) {
+    private fun handleFavoriteButtonText(projectId : String, favButton: Button, isClick : Boolean) {
         userDataDatabase.getListOfFavoriteProjects({ projectIds ->
             var isFavorite = projectIds.contains(projectId)
-            if(isFavorite){
+            if(isFavorite && isClick){
                 userDataDatabase.removeFromFavorite(projectId,
                     {showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                         isFavorite = !isFavorite},
                     {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
             }
-            else{
+            else if(isClick){
                 userDataDatabase.pushFavoriteProject(projectId,
                     {showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                       isFavorite = !isFavorite},
                     {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
             }
+
             setButtonText(favButton, isFavorite,
                 LOADING_STRING ,getString(R.string.favorite_remove_button),
                 getString(R.string.favorite_add_button))
