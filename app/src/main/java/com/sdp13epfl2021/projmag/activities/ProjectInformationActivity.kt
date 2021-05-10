@@ -60,6 +60,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
     private var userID: String? = null
+    private val userDataDatabase = Utils.getInstance(this).userdataDatabase
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -96,30 +97,35 @@ class ProjectInformationActivity : AppCompatActivity() {
         videoView.start()
     }
 
-    private fun setApplyButtonText(applyButton: Button, applied: Boolean?) {
-        applyButton.text = when (applied) {
-            null -> LOADING_STRING
-            true -> UNAPPLY_STRING
-            false -> APPLY_STRING
+    /**
+     * Function that given a boolean and strings set the value of the button according to the string
+     * values
+     *
+     * @param button button to manipulate
+     * @param isOn boolean value indicating the value of the boolean
+     * @param nullText text to show when the boolean is null (usually when button value is loading)
+     * @param trueText text to show on the button when the boolean value is true
+     * @param falseText text to show on the button when the boolean value is false
+     */
+    private fun setButtonText(button: Button, isOn : Boolean?, nullText : String,
+                              trueText : String, falseText : String){
+        button.text = when (isOn) {
+            null -> nullText
+            true -> trueText
+            false -> falseText
         }
     }
 
-    private fun setFavoriteButtonText(favoriteButton: Button, isFavorite: Boolean?) {
-        favoriteButton.text = when (isFavorite) {
-            null -> LOADING_STRING
-            true -> getString(R.string.favorite_remove_button)
-            false -> getString(R.string.favorite_add_button)
-        }
-    }
+
+
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val userDataDatabase = Utils.getInstance(this).userdataDatabase
         var alreadyApplied = false
-        setApplyButtonText(applyButton,null)
+        setButtonText(applyButton, null, LOADING_STRING, UNAPPLY_STRING, APPLY_STRING)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
-            setApplyButtonText(applyButton, alreadyApplied)
+            setButtonText(applyButton, alreadyApplied, LOADING_STRING, UNAPPLY_STRING, APPLY_STRING )
         },{})
 
         applyButton.isEnabled = !projectVar.isTaken
@@ -131,7 +137,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
-                    setApplyButtonText(applyButton, alreadyApplied)
+                    setButtonText(applyButton, alreadyApplied, LOADING_STRING, UNAPPLY_STRING, APPLY_STRING)
                 },
                 {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
             )
@@ -139,44 +145,52 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun addToFavoritesButton(favButton: Button){
-        val userDataDatabase = Utils.getInstance(this).userDataDatabase
-        var isFavorite = false
+    private fun setUpFavoritesButton(favButton: Button){
         val projectId = projectVar.id
 
         //until data is loaded from database, show loading
-        setFavoriteButtonText(favButton, null  )
+        setButtonText(favButton, null,
+            LOADING_STRING ,getString(R.string.favorite_remove_button), getString(R.string.favorite_add_button))
 
         //load data from the database and set the favorite add button to the right value
-        userDataDatabase.getListOfFavoriteProjects({ projectIds ->
-            isFavorite = projectIds.contains(projectId)
-            setFavoriteButtonText(favButton, isFavorite)
-        }, {} )
+        handleFavoriteButtonText(projectId, favButton)
 
 
         //handle click on the add favourite button
         favButton.setOnClickListener{
-            if(!isFavorite) {
-                userDataDatabase.pushFavoriteProject(projectId,
-                    { isFavorite = handleFavoriteButtonText(favButton, isFavorite)},
-                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
-
-            }
-            else{
-                userDataDatabase.removeFromFavorite(projectId,
-                    { isFavorite = handleFavoriteButtonText(favButton, isFavorite)},
-                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
-            }
-
+            handleFavoriteButtonText(projectId, favButton)
         }
 
 
     }
 
-    private fun handleFavoriteButtonText(favButton: Button, isFavorite: Boolean) : Boolean{
-        showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-        setFavoriteButtonText(favButton, isFavorite)
-        return !isFavorite
+    /**
+     * Function that contacts the database, pushes/removes the project from the favourite list,
+     * and changes the button value to the right value
+     *
+     * @param projectId : id of the project to push
+     * @param favButton : button responsible for adding/removing favourites
+     * @return
+     */
+    private fun handleFavoriteButtonText(projectId : String, favButton: Button) {
+        userDataDatabase.getListOfFavoriteProjects({ projectIds ->
+            var isFavorite = projectIds.contains(projectId)
+            if(isFavorite){
+                userDataDatabase.removeFromFavorite(projectId,
+                    {showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                        isFavorite = !isFavorite},
+                    {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
+            }
+            else{
+                userDataDatabase.pushFavoriteProject(projectId,
+                    {showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                      isFavorite = !isFavorite},
+                    {showToast(getString(R.string.failure), Toast.LENGTH_SHORT)})
+            }
+            setButtonText(favButton, isFavorite,
+                LOADING_STRING ,getString(R.string.favorite_remove_button),
+                getString(R.string.favorite_add_button))
+        }, {showToast("failure to contact the database", Toast.LENGTH_SHORT)} )
     }
 
 
@@ -237,7 +251,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         setUpApplyButton(findViewById(R.id.applyButton) as Button)
-        addToFavoritesButton(findViewById<Button>(R.id.addFavoriteInProject))
+        setUpFavoritesButton(findViewById<Button>(R.id.addFavoriteInProject))
     }
 
     // pause/start when we touch the video
