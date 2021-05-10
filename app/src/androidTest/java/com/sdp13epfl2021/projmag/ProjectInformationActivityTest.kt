@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.ScrollView
 import android.widget.VideoView
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -20,7 +19,6 @@ import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import org.hamcrest.Matchers
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -93,8 +91,8 @@ class ProjectInformationActivityTest {
     private val imageSOFile: File = Files.createTempFile("SO", ".png").toFile()
     private val emptyFile: File = Files.createTempFile("empty", ".jpeg").toFile()
 
-    private val projectsDB = FakeProjectsDatabase(listOf(project))
-    private val userdataDB = FakeUserDataDatabase()
+    private val projectsDB = FakeProjectDatabase(listOf(project))
+    private val userdataDB = FakeUserdataDatabase()
     private val fileDB = FakeFileDatabase(
         mapOf(
             snkUrl to videoSNKFile,

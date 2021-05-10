@@ -18,7 +18,7 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkStri
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
-import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
@@ -120,7 +120,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * Update the list of projects, which the user applied to, from the Database
      */
     private fun updateAppliedProjects() {
-        utils.userDataDatabase.getListOfAppliedToProjects({ list ->
+        utils.userdataDatabase.getListOfAppliedToProjects({ list ->
             appliedProjects.clear()
             appliedProjects.addAll(list)
         }, {})
@@ -245,7 +245,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * Fetch the user preference from Database and update.
      */
     private fun updatePreferences() {
-        utils.userDataDatabase.getPreferences(
+        utils.userdataDatabase.getPreferences(
             { pf -> pf?.let { userPref = it } },
             {}
         )

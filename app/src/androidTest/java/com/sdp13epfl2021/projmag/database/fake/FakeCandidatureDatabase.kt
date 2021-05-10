@@ -1,7 +1,7 @@
 package com.sdp13epfl2021.projmag.database.fake
 
-import com.sdp13epfl2021.projmag.database.CandidatureDatabase
-import com.sdp13epfl2021.projmag.database.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Candidature
 
 class FakeCandidatureDatabase(

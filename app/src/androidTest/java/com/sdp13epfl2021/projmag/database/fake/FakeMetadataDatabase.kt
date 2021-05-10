@@ -1,6 +1,6 @@
 package com.sdp13epfl2021.projmag.database.fake
 
-import com.sdp13epfl2021.projmag.database.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import java.lang.Exception
 
 class FakeMetadataDatabase(var subs: Map<String, String?> = emptyMap()) : MetadataDatabase {

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
+import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before

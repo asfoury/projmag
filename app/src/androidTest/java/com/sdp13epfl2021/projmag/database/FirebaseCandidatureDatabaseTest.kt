@@ -7,7 +7,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.fake.FakeUserDataDatabase
+import com.sdp13epfl2021.projmag.database.fake.FakeUserdataDatabase
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.Assert.*
 import org.junit.Before
@@ -34,7 +36,7 @@ class FirebaseCandidatureDatabaseTest {
     private val mockVoidTask: Task<Void> = Mockito.mock(Task::class.java) as Task<Void>
     private val mockDSTask: Task<DocumentSnapshot> = Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
 
-    private val userDB: UserDataDatabase = FakeUserDataDatabase()
+    private val userDB: UserdataDatabase = FakeUserdataDatabase()
     private val candidatureDB = FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuth, userDB)
     private val candidatureDBWithoutAuth = FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuthFailed, userDB)
 

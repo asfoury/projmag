@@ -1,16 +1,20 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import android.net.Uri
 import androidx.core.net.toUri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.util.*
 
+/**
+ * An implementation of FileDatabase using Firebase storage.
+ */
 class FirebaseFileDatabase(
     private val storage: FirebaseStorage,
     private val auth: FirebaseAuth
@@ -33,7 +37,8 @@ class FirebaseFileDatabase(
 
         try {
             if (!destinationFolder.mkdirs() && !destinationFolder.isDirectory) {
-                throw IOException("The destination folder \"${destinationFolder.path}\" can't be created.")
+                GlobalScope.launch { onFailure(IOException("The destination folder \"${destinationFolder.path}\" can't be created.")) }
+                return
             }
             fileRef = storage.getReferenceFromUrl(fileUrl)
             destinationFile = File(destinationFolder, fileRef.name)
@@ -125,7 +130,7 @@ class FirebaseFileDatabase(
         storage
             .getReferenceFromUrl(fileUrl)
             .delete()
-            .addOnSuccessListener{ onSuccess() }
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 }

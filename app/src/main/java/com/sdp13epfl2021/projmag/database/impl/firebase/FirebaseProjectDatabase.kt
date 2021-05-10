@@ -1,9 +1,12 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.sdp13epfl2021.projmag.database.ProjectChange
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
@@ -12,7 +15,7 @@ import java.util.*
 /**
  * A Firebase Firestore Database of Projects
  */
-class FirebaseProjectsDatabase(private val firestore: FirebaseFirestore) : ProjectsDatabase {
+class FirebaseProjectDatabase(private val firestore: FirebaseFirestore) : ProjectDatabase {
     /**
      * the Root collection in Firebase
      */

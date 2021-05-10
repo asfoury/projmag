@@ -1,12 +1,9 @@
 package com.sdp13epfl2021.projmag.activities
 
 
-import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.UserProfileDatabase
+import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
 import com.sdp13epfl2021.projmag.model.*
 
 

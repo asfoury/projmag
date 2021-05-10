@@ -1,15 +1,20 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * An implementation of a candidature database
@@ -18,7 +23,7 @@ import java.util.concurrent.*
 class FirebaseCandidatureDatabase(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
-    private val userDataDatabase: UserDataDatabase
+    private val userdataDatabase: UserdataDatabase
 ) : CandidatureDatabase {
 
     companion object {
@@ -35,7 +40,17 @@ class FirebaseCandidatureDatabase(
             .document(projectID)
     }
 
-    private fun buildCandidature(dataMap: Map<String, Any>, projectID: ProjectId): List<Candidature> {
+    /**
+     * Construct the list of candidatures, it will load each candidature asynchronously.
+     *
+     * @param dataMap a map containing the userID and the State of candidatures.
+     * @param projectID the id of the project.
+     * @return a list of candidatures.
+     */
+    private fun buildCandidature(
+        dataMap: Map<String, Any>,
+        projectID: ProjectId
+    ): List<Candidature> {
         val candidatures = ConcurrentLinkedQueue<Candidature>()
         runBlocking {
             dataMap.map {
@@ -51,12 +66,25 @@ class FirebaseCandidatureDatabase(
         return candidatures.toList()
     }
 
-    private suspend fun addCandidature(candidatures: Queue<Candidature>, projectID: ProjectId, userID: String, state: Candidature.State) {
+    /**
+     * Load profile and cv for a particular candidature, then add the resulting candidature to the collection of candidatures if valid.
+     *
+     * @param candidatures a queue where candidature will be inserted.
+     * @param projectID the id of the project.
+     * @param userID the id of the user of this candidature.
+     * @param state the state of this candidature.
+     */
+    private suspend fun addCandidature(
+        candidatures: Queue<Candidature>,
+        projectID: ProjectId,
+        userID: String,
+        state: Candidature.State
+    ) {
         var waiting = true
         var profile: ImmutableProfile? = null
         var cv: CurriculumVitae? = null
-        /*userDataDatabase.getProfile(userID, { profile = it }, { waiting = false})*/ //TODO add when implemented
-        /*userDataDatabase.getCV(userID, { cv = it }, { waiting = false })*/ //TODO add when implemented
+        /*userdataDatabase.getProfile(userID, { profile = it }, { waiting = false})*/ //TODO add when implemented
+        /*userdataDatabase.getCV(userID, { cv = it }, { waiting = false })*/ //TODO add when implemented
         profile = dummyProfile(userID)
         cv = dummyCV(userID)
 
@@ -76,7 +104,8 @@ class FirebaseCandidatureDatabase(
             21,
             Gender.MALE,
             123456,
-            "021 123 45 67", Role.STUDENT) as Success).value
+            "021 123 45 67", Role.STUDENT
+        ) as Success).value
     }
 
     //TODO Remove after Profile/CV are implemented
@@ -102,7 +131,8 @@ class FirebaseCandidatureDatabase(
                 if (doc.exists()) {
                     doc?.data?.let {
                         onSuccess(buildCandidature(it, projectID))
-                    } ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
+                    }
+                        ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
                 } else {
                     onSuccess(emptyList())
                 }

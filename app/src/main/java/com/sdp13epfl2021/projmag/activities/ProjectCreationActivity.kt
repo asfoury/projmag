@@ -208,7 +208,7 @@ class Form : AppCompatActivity() {
             setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
             val utils = Utils.getInstance(this)
             ProjectUploader(
-                utils.projectsDatabase,
+                utils.projectDatabase,
                 utils.fileDatabase,
                 utils.metadataDatabase,
                 utils.candidatureDatabase,

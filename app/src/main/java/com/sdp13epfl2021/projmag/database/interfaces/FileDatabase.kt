@@ -1,8 +1,12 @@
-package com.sdp13epfl2021.projmag.database
+package com.sdp13epfl2021.projmag.database.interfaces
 
 import android.net.Uri
 import java.io.File
 
+/**
+ * An interface for a database of files.
+ * It provides methods for get/push/delete files.
+ */
 interface FileDatabase {
 
     /**
