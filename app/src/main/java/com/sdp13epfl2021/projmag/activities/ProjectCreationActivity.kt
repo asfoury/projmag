@@ -19,6 +19,7 @@ import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
+import com.sdp13epfl2021.projmag.video.VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY
 import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
 
@@ -122,7 +123,7 @@ class Form : AppCompatActivity() {
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_SUBTITLING) {
             if (data != null) {
-                data.getStringExtra(VideoSubtitlingActivity.RESULT_KEY)?.let {
+                data.getStringExtra(VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY)?.let {
                     subtitles = it
                     vidView.addSubtitleSource(
                         it.byteInputStream(),

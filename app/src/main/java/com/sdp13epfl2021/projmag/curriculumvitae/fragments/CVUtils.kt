@@ -1,13 +1,13 @@
 package com.sdp13epfl2021.projmag.curriculumvitae.fragments
 
-object CVUtils {
 
-    /**
-     * Add to the MutableList if not already present
-     */
-    fun <T> MutableList<T>.addNotExisting(e: T) {
-        if (e !in this) {
-            add(e)
-        }
+/**
+ * Add to the MutableList if not already present
+ *
+ * @param e some element to add to this `MutableList`
+ */
+fun <T> MutableList<T>.addIfNotExisting(e: T) {
+    if (e !in this) {
+        add(e)
     }
 }

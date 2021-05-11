@@ -11,6 +11,10 @@ import androidx.fragment.app.Fragment
 import com.sdp13epfl2021.projmag.R
 
 
+/**
+ * A Fragment where the user should write a few sentence to introduce its CV,
+ * a summary of its professional life.
+ */
 class SummaryFragment : Fragment() {
 
     private var content = ""
@@ -43,6 +47,11 @@ class SummaryFragment : Fragment() {
         return view
     }
 
+    /**
+     * Get the result of this Fragment
+     *
+     * @return the content of the summary.
+     */
     fun get(): String = content
 
 }

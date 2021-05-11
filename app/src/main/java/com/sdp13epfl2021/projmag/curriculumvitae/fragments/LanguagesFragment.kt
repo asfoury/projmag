@@ -8,13 +8,16 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.LanguageLevel
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.LanguageLevel.Companion.Level
-import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Language
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Language.Level
 
+
+/**
+ * A Fragment requesting the user to input its spoken language along the respective level at it
+ */
 class LanguagesFragment : Fragment() {
 
-    private val listLanguage: MutableList<LanguageLevel> = mutableListOf()
+    private val listLanguage: MutableList<Language> = mutableListOf()
 
     private val listLangAdapter = CVListAdapter(listLanguage, ::removeFromListLang)
 
@@ -46,13 +49,15 @@ class LanguagesFragment : Fragment() {
 
     /**
      * Return the data given by the user
+     *
+     * @return the result of the Fragment, i.e. a list of Language
      */
     fun get() = listLanguage
 
 
-    private fun addToListLang(lang: LanguageLevel) {
+    private fun addToListLang(lang: Language) {
         if (lang.isValid()) {
-            listLanguage.addNotExisting(lang)
+            listLanguage.addIfNotExisting(lang)
             listLanguage.sortBy { -(it.level.ordinal) }
             listLangAdapter.notifyDataSetChanged()
         } else {
@@ -61,7 +66,7 @@ class LanguagesFragment : Fragment() {
     }
 
 
-    private fun removeFromListLang(lang: LanguageLevel) {
+    private fun removeFromListLang(lang: Language) {
         listLanguage.remove(lang)
         listLangAdapter.notifyDataSetChanged()
     }
@@ -72,7 +77,7 @@ class LanguagesFragment : Fragment() {
         val level = view?.findViewById<Spinner>(R.id.cv_language_spinner)?.selectedItem as? Level
 
         if (name != null && level != null) {
-            addToListLang(LanguageLevel(name, level))
+            addToListLang(Language(name, level))
         } else {
             Toast.makeText(activity, "Couldn't get data", Toast.LENGTH_SHORT).show()
         }

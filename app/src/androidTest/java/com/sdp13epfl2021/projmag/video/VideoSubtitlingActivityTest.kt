@@ -39,8 +39,8 @@ class VideoSubtitlingActivityTest {
         Thread.sleep(1000)
 
         val builder = SubtitleBuilder()
-        builder.setStartOrEnd(SubtitleBuilder.START, defaultTimestamp)
-        builder.setStartOrEnd(SubtitleBuilder.END, defaultTimestamp)
+        builder.start = defaultTimestamp
+        builder.end = defaultTimestamp
         builder.add(subtitlesText)
 
         onView(withId(R.id.video_subtitling_set_start_button)).perform(ViewActions.click())
@@ -56,7 +56,9 @@ class VideoSubtitlingActivityTest {
         onView(withId(R.id.video_subtitling_submit_button)).perform(ViewActions.click())
         assertThat(activityRule.scenario.result.resultCode, Matchers.`is`(RESULT_OK))
         assertThat(
-            activityRule.scenario.result.resultData.getStringExtra(VideoSubtitlingActivity.RESULT_KEY),
+            activityRule.scenario.result.resultData.getStringExtra(
+                VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY
+            ),
             Matchers.`is`(builder.build())
         )
     }

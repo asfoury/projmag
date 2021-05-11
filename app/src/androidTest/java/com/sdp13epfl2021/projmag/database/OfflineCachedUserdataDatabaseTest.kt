@@ -18,13 +18,15 @@ class OfflineCachedUserdataDatabaseTest {
 
     private val cv: CurriculumVitae = CurriculumVitae(
         "summary",
-        listOf(CurriculumVitae.Companion.PeriodDescription(
-            "name",
-            "loc",
-            "description",
-            2010,
-            2020
-        )),
+        listOf(
+            CurriculumVitae.PeriodDescription(
+                "name",
+                "loc",
+                "description",
+                2010,
+                2020
+            )
+        ),
         listOf(),
         listOf(),
         listOf()
