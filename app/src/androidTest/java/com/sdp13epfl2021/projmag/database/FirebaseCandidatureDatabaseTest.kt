@@ -155,7 +155,7 @@ class FirebaseCandidatureDatabaseTest {
 
         assertEquals(3, result.size)
         assertTrue(result.all { c -> c.projectId == PID })
-        val usersID = result.map { c -> c.userID }
+        val usersID = result.map { c -> c.userId }
         assertTrue(usersID.contains(userIDAccepted))
         assertTrue(usersID.contains(userIDRejected))
         assertTrue(usersID.contains(userIDWaiting))

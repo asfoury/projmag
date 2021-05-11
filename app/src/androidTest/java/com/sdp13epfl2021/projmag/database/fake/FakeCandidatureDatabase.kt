@@ -25,7 +25,7 @@ class FakeCandidatureDatabase(
         onFailure: (Exception) -> Unit
     ) {
         val projectID = candidature.projectId
-        val userID = candidature.userID
+        val userID = candidature.userId
         val newMap1 = candidaturesState[projectID] ?: emptyMap()
         val newMap2 = candidatures[projectID] ?: emptyMap()
         candidaturesState[projectID] = newMap1 + (userID to newState)

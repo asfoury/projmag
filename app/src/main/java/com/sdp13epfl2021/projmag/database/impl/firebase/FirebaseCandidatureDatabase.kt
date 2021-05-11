@@ -148,7 +148,7 @@ class FirebaseCandidatureDatabase(
         onFailure: (Exception) -> Unit
     ) {
         getDoc(candidature.projectId)
-            .set(mapOf(candidature.userID to newState), SetOptions.merge())
+            .set(mapOf(candidature.userId to newState), SetOptions.merge())
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
@@ -160,9 +160,9 @@ class FirebaseCandidatureDatabase(
         onFailure: (Exception) -> Unit
     ) {
         getDoc(projectId)
-            ?.update(userId, FieldValue.delete())
-            ?.addOnSuccessListener { onSuccess() }
-            ?.addOnFailureListener(onFailure)
+            .update(userId, FieldValue.delete())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener(onFailure)
     }
 
     override fun addListener(

@@ -10,7 +10,7 @@ import java.io.Serializable
 @Parcelize
 data class Candidature(
     val projectId: ProjectId,
-    val userID: String,
+    val userId: String,
     val profile: ImmutableProfile,
     val cv: CurriculumVitae,
     val state: State
