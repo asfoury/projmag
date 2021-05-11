@@ -22,7 +22,7 @@ class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
-    val favorites: Boolean = true
+    val favorites: Boolean = false
 ) {
 
     companion object {
