@@ -2,10 +2,13 @@ package com.sdp13epfl2021.projmag.video
 
 import java.util.concurrent.TimeUnit
 
+
+/**
+ * This builds some subtile for the video, using text along a time stamp
+ * Then you can use `build()` to return the generated subtitle file
+ */
 class SubtitleBuilder {
     companion object {
-        const val START = true
-        const val END = !START
 
         const val WEBVTT = "WEBVTT"
 
@@ -26,27 +29,44 @@ class SubtitleBuilder {
         }
     }
 
+    /**
+     * The start of the current subtitle
+     */
     var start: Int = 0
-        private set
+        set(pos) {
+            field = pos
+            if (end < pos) {
+                end = pos
+            }
+        }
+
+    /**
+     * the end of the current subtitle
+     */
     var end: Int = 0
-        private set
+        set(pos) {
+            if (pos < start) {
+                start = pos
+            }
+            field = pos
+        }
 
     private val subtitle: MutableList<SubtitlePart> = mutableListOf()
 
-    fun setStartOrEnd(or: Boolean, pos: Int) {
-        if (or == START) {
-            start = pos
-            end = if (end < pos) pos else end
-        } else {
-            start = if (pos < start) pos else start
-            end = pos
-        }
-    }
-
+    /**
+     * Add text to the current subtitle with `start` and `end` timestamps
+     *
+     * @param content the text of the subtitle
+     */
     fun add(content: String) {
         subtitle.add(SubtitlePart(content, start, end))
     }
 
+    /**
+     * Build the subtitle file and returns it
+     *
+     * @return the subtitle file
+     */
     fun build(): String {
         val str = "$WEBVTT\n\n"
         return subtitle.fold(str) { s, e -> s + (e.toString()) }

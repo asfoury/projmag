@@ -8,10 +8,13 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.SkillDescription
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Companion.SkillDescription.SkillLevel
-import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVUtils.addNotExisting
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.SkillDescription
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.SkillDescription.SkillLevel
 
+
+/**
+ * A Fragment, where the user should input various skills
+ */
 class SkillsFragment : Fragment() {
 
     private val skillList: MutableList<SkillDescription> = mutableListOf()
@@ -46,13 +49,15 @@ class SkillsFragment : Fragment() {
 
     /**
      * Return the data given by the user
+     *
+     * @return the result of this fragment as a list of skills
      */
     fun get() = skillList
 
 
     private fun addToSkillList(skill: SkillDescription) {
         if (skill.isValid()) {
-            skillList.addNotExisting(skill)
+            skillList.addIfNotExisting(skill)
             skillList.sortBy { -(it.skillLevel.ordinal) }
             skillListAdapter.notifyDataSetChanged()
         } else {

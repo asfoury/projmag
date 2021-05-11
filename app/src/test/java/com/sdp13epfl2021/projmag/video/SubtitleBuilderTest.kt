@@ -1,8 +1,6 @@
 package com.sdp13epfl2021.projmag.video
 
-import com.sdp13epfl2021.projmag.video.SubtitleBuilder
-import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.END
-import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.START
+
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
@@ -25,8 +23,8 @@ class SubtitleBuilderTest {
     @Test
     fun buildingWorks() {
         val builder = SubtitleBuilder()
-        builder.setStartOrEnd(START, timeStampStart)
-        builder.setStartOrEnd(END, timeStampEnd)
+        builder.start = timeStampStart
+        builder.end = timeStampEnd
         builder.add(subtitleText)
         assertEquals(formattedWebvttSubtitle, builder.build())
     }
