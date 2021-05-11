@@ -127,11 +127,6 @@ class ProjectInformationActivity : AppCompatActivity() {
                projectId,
                 {
                     if (userId != null) {
-                        val candidature = Candidature(projectId,
-                            userId!!,
-                            ImmutableProfile.EMPTY_PROFILE,
-                            CurriculumVitae.EMPTY_CV,
-                            Candidature.State.Waiting)
                         if (alreadyApplied) {
                             candidatureDatabase.removeCandidature(
                                 projectId,
@@ -143,6 +138,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                                 { showToast("only unapply successful", Toast.LENGTH_SHORT) }
                             )
                         } else {
+                            val candidature = Candidature(projectId,
+                                userId!!,
+                                ImmutableProfile.EMPTY_PROFILE,
+                                CurriculumVitae.EMPTY_CV,
+                                Candidature.State.Waiting)
                             candidatureDatabase.pushCandidature(
                                 candidature,
                                 Candidature.State.Waiting,
