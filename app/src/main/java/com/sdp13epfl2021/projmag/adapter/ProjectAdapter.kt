@@ -47,7 +47,7 @@ class ProjectAdapter(
     private fun sortDataset() {
         dataset.sortWith { a, b ->
             if (a.isTaken == b.isTaken) {
-                a.creationDate.compareTo(b.creationDate)
+                b.creationDate.compareTo(a.creationDate)
             } else {
                 a.isTaken.compareTo(b.isTaken)
             }
