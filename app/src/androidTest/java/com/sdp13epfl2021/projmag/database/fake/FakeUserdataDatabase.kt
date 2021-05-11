@@ -70,7 +70,7 @@ class FakeUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-if (apply) {
+        if (apply) {
             applied.add(projectId)
         } else {
             applied.remove(projectId)

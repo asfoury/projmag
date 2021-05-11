@@ -50,7 +50,8 @@ class ProjectAdapter(
     }
 
     /**
-     * Make dataset listen for changes to the projects.
+     * Make dataset listen for changes to the projects and fetches
+     * all projects from database.
      */
     init {
         utils.projectDatabase.addProjectsChangeListener { change ->

@@ -30,7 +30,14 @@ class FakeCandidatureDatabase(
         val newMap2 = candidatures[projectID] ?: emptyMap()
         candidaturesState[projectID] = newMap1 + (userID to newState)
         candidatures[projectID] = newMap2 + (userID to candidature)
-        onChanges[projectID]?.let { it.forEach { it(projectID, candidatures[projectID]?.values?.toList() ?: emptyList()) } }
+        onChanges[projectID]?.let {
+            it.forEach {
+                it(
+                    projectID,
+                    candidatures[projectID]?.values?.toList() ?: emptyList()
+                )
+            }
+        }
         onSuccess()
     }
 
@@ -38,6 +45,8 @@ class FakeCandidatureDatabase(
         projectID: ProjectId,
         onChange: (ProjectId, List<Candidature>) -> Unit
     ) {
-        onChanges[projectID]?.let { it.add(onChange) } ?: run { onChanges[projectID] = mutableListOf(onChange)}
+        onChanges[projectID]?.let { it.add(onChange) } ?: run {
+            onChanges[projectID] = mutableListOf(onChange)
+        }
     }
 }
