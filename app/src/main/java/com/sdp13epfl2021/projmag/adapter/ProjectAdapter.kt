@@ -40,8 +40,18 @@ class ProjectAdapter(
     var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
+    /**
+     * Sort the list of projects, first are the projects not taken, sorted with newest date first.
+     * If the activity is created with a link, it will put it at the top.
+     */
     private fun sortDataset() {
-        dataset.sortBy { project -> project.isTaken }
+        dataset.sortWith { a, b ->
+            if (a.isTaken == b.isTaken) {
+                a.creationDate.compareTo(b.creationDate)
+            } else {
+                a.isTaken.compareTo(b.isTaken)
+            }
+        }
         if (fromLink) {
             dataset.sortByDescending { project -> projectIdLink == project.id }
         }
