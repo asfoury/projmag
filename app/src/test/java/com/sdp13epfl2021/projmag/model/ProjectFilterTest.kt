@@ -66,4 +66,14 @@ class ProjectFilterTest {
         assertEquals(true, pf.master)
         assertEquals(false, pf.applied)
     }
+
+    @Test
+    fun favoriteWorks(){
+        var filterFavourite = ProjectFilter(favorites = true)
+
+        filterFavourite.setFavouriteCheck { p -> p.id == id }
+        assertEquals(true, filterFavourite(project))
+        
+
+    }
 }

@@ -108,6 +108,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/filter_title_applied" />
 
             <CheckBox
+                android:id="@+id/filter_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/filter_favorites"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filter_applied" />
+
+            <CheckBox
                 android:id="@+id/filter_bachelor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -136,11 +146,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <CheckBox
-            android:id="@+id/filter_favorites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Favourites" />
+
 
     </LinearLayout>
 </ScrollView>

@@ -204,6 +204,7 @@ class ProjectsListActivity : AppCompatActivity() {
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
         view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
+        view.findViewById<CheckBox>(R.id.filter_favorite).isChecked = pf.favorites
 
         view.findViewById<ImageButton>(R.id.filter_settings_button).setOnClickListener {
             startActivity(Intent(this, PreferencesActivity::class.java))
@@ -231,7 +232,7 @@ class ProjectsListActivity : AppCompatActivity() {
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
 
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        val favorites = view.findViewById<CheckBox>(R.id.filter_favorites).isChecked
+        val favorites = view.findViewById<CheckBox>(R.id.filter_favorite).isChecked
 
         setProjectFilter(
             if (useFilterPref) {

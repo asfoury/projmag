@@ -85,6 +85,7 @@
 
     <string name="tag_selection_instructions">Add tags : select the right tags for your project and add/remove by clicking on them</string>
     <string name="tag_add_button_title">add tags</string>
+    <string name="filter_favorites">favourites</string>
 
     <string name="favorite_add_button">add project to favorites</string>
     <string name="favorite_remove_button">remove project from favorites</string>
