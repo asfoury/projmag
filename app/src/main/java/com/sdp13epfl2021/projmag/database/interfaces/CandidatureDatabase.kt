@@ -39,6 +39,21 @@ interface CandidatureDatabase {
     )
 
     /**
+     * Remove a candidature from a project.
+     *
+     * @param projectId the projectId of the project of the candidature
+     * @param userId ID of the user whose candidature remove
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
+    fun removeCandidature(
+        projectId: ProjectId,
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
      * Add a listener to a particular project candidature.
      *
      * @param projectID the id of the project to register.

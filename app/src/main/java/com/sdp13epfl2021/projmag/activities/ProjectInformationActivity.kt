@@ -26,9 +26,12 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.model.Candidature
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -59,7 +62,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var projectDir: File
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
-    private var userID: String? = null
+    private var userId: String? = null
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -106,10 +109,12 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val userDataDatabase = Utils.getInstance(this).userdataDatabase
+        val utils = Utils.getInstance(this)
+        val userdataDatabase = utils.userdataDatabase
+        val candidatureDatabase = utils.candidatureDatabase
         var alreadyApplied = false
         setApplyButtonText(applyButton,null)
-        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
+        userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
         },{})
@@ -117,13 +122,40 @@ class ProjectInformationActivity : AppCompatActivity() {
         applyButton.isEnabled = !projectVar.isTaken
 
         applyButton.setOnClickListener {
-            userDataDatabase.applyUnapply(
+            userdataDatabase.applyUnapply(
                 !alreadyApplied,
                projectId,
                 {
-                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-                    alreadyApplied = !alreadyApplied
-                    setApplyButtonText(applyButton, alreadyApplied)
+                    if (userId != null) {
+                        val candidature = Candidature(projectId,
+                            userId!!,
+                            ImmutableProfile.EMPTY_PROFILE,
+                            CurriculumVitae.EMPTY_CV,
+                            Candidature.State.Waiting)
+                        if (alreadyApplied) {
+                            candidatureDatabase.removeCandidature(
+                                projectId,
+                                userId!!,
+                                { showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                                    alreadyApplied = !alreadyApplied
+                                    setApplyButtonText(applyButton, alreadyApplied)
+                                },
+                                { showToast("only unapply successful", Toast.LENGTH_SHORT) }
+                            )
+                        } else {
+                            candidatureDatabase.pushCandidature(
+                                candidature,
+                                Candidature.State.Waiting,
+                                { showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                                    alreadyApplied = !alreadyApplied
+                                    setApplyButtonText(applyButton, alreadyApplied)},
+                                { showToast("only apply successful", Toast.LENGTH_SHORT) }
+                            )
+                        }
+
+                    } else {
+                        showToast(getString(R.string.failure), Toast.LENGTH_LONG)
+                    }
                 },
                 {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
             )
@@ -136,7 +168,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_project_information)
 
         val utils = Utils.getInstance(this)
-        userID = utils.auth.currentUser?.uid
+        userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
 
@@ -375,7 +407,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.waitingListButton)?.isVisible = (userID == projectVar.authorId)
+        menu.findItem(R.id.waitingListButton)?.isVisible = (userId == projectVar.authorId)
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -395,7 +427,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             startActivity(sendIntent)
             return true
         } else if (item.itemId == R.id.waitingListButton) {
-            if (userID == projectVar.authorId) {
+            if (userId == projectVar.authorId) {
                 val intent = Intent(this, WaitingListActivity::class.java)
                 intent.putExtra(MainActivity.projectIdString, projectVar.id)
                 startActivity(intent)

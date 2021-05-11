@@ -27,6 +27,9 @@ data class CurriculumVitae(
     val skills: List<SkillDescription>,
 ) : Parcelable, Serializable {
 
+    companion object {
+        val EMPTY_CV = CurriculumVitae("", ArrayList(), ArrayList(), ArrayList(), ArrayList())
+    }
 
     @Parcelize
     /**

@@ -125,6 +125,15 @@ class OfflineCachedCandidatureDatabase(
         db.pushCandidature(candidature, newState, onSuccess, onFailure)
     }
 
+    override fun removeCandidature(
+        projectId: ProjectId,
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun addListener(
         projectID: ProjectId,
         onChange: (ProjectId, List<Candidature>) -> Unit
