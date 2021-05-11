@@ -1,5 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
+import com.sdp13epfl2021.projmag.database.Utils
+
 /**
  *  An Immutable project Filter
  *  It's constructor takes filtering parameters and its `invoke` function operator
@@ -19,7 +21,8 @@ package com.sdp13epfl2021.projmag.model
 class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
-    val applied: Boolean = false
+    val applied: Boolean = false,
+    val favorites: Boolean = true
 ) {
 
     companion object {
@@ -33,7 +36,8 @@ class ProjectFilter(
             ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
-                applied = data["applied"] as? Boolean ?: false
+                applied = data["applied"] as? Boolean ?: false,
+                favorites = data["favorites"] as? Boolean ?: false
             )
 
     }
@@ -42,6 +46,7 @@ class ProjectFilter(
      * A function used to see if the user has applied to the project
      */
     private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
+    private var isFavouriteProject : ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints
@@ -61,6 +66,9 @@ class ProjectFilter(
         if (applied) {
             matches = matches && (isAppliedProject?.let { it(project) } ?: true)
         }
+        if(favorites){
+            matches = matches && (isFavouriteProject?.let { it(project) } ?: true)
+        }
         return matches
     }
 
@@ -75,4 +83,17 @@ class ProjectFilter(
         isAppliedProject = appCheck
         return this
     }
+
+    /**
+     * Function that will check if the project is contained in the favorites
+     *
+     * @param favCheck : Function that will take a project and indicate if it's in the favorite list
+     * @return
+     */
+    fun setFavouriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
+        isFavouriteProject = favCheck
+        return this
+    }
+
+
 }
