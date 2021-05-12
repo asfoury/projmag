@@ -11,6 +11,7 @@ class FakeUserdataDatabase(
     var favorites: MutableSet<ProjectId> = HashSet(),
     var cvs: MutableMap<String, CurriculumVitae> = HashMap(),
     var applied: MutableSet<ProjectId> = HashSet(),
+    var profiles: MutableMap<String, ImmutableProfile> = HashMap()
 ) : UserdataDatabase {
 
 
@@ -114,6 +115,6 @@ class FakeUserdataDatabase(
         onSuccess: (profile: ImmutableProfile?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        onSuccess(profiles[userID])
     }
 }

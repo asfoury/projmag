@@ -6,6 +6,10 @@ import com.sdp13epfl2021.projmag.database.fake.FakeUserdataDatabase
 import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedUserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.model.Gender
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
+import com.sdp13epfl2021.projmag.model.Role
+import com.sdp13epfl2021.projmag.model.Success
 import junit.framework.TestCase.*
 import org.junit.Test
 import java.io.File
@@ -15,6 +19,7 @@ class OfflineCachedUserdataDatabaseTest {
 
 
     private val userID = "fakeUserID"
+    private val emptyUserID = "fakeUserIDWithoutData"
 
     private val cv: CurriculumVitae = CurriculumVitae(
         "summary",
@@ -31,6 +36,15 @@ class OfflineCachedUserdataDatabaseTest {
         listOf(),
         listOf()
     )
+
+    private val profile: ImmutableProfile = (ImmutableProfile.build(
+        "lastName2",
+        "firstName2",
+        21,
+        Gender.MALE,
+        123456,
+        "021 123 45 67", Role.STUDENT
+    ) as Success).value
 
 
     private val onFailureNotExpected: (Exception) -> Unit = {
@@ -125,6 +139,33 @@ class OfflineCachedUserdataDatabaseTest {
         assertEquals(expected, future2.get())
 
         tempDir.deleteRecursively()
+    }
+
+    @Test(timeout = 1000)
+    fun getProfileWorks() {
+        val tempDir: File = Files.createTempDir()
+        val fakeDB = FakeUserdataDatabase(userID, profiles = hashMapOf(userID to profile))
+        val db1: UserdataDatabase = OfflineCachedUserdataDatabase(fakeDB, userID, tempDir)
+
+        val future1: CompletableFuture<ImmutableProfile?> = CompletableFuture()
+        db1.getProfile(userID, {
+            future1.complete(it)
+        }, onFailureNotExpected)
+        assertEquals(profile, future1.get())
+
+        val future2: CompletableFuture<ImmutableProfile?> = CompletableFuture()
+        db1.getProfile(emptyUserID, {
+            future2.complete(it)
+        }, onFailureNotExpected)
+        assertEquals(null, future2.get())
+
+        val emptyFakeDB = FakeUserdataDatabase()
+        val db2: UserdataDatabase = OfflineCachedUserdataDatabase(emptyFakeDB, userID, tempDir)
+        val future3: CompletableFuture<ImmutableProfile?> = CompletableFuture()
+        db2.getProfile(userID, {
+            future3.complete(it)
+        }, onFailureNotExpected)
+        assertEquals(profile, future3.get())
     }
 
 }
