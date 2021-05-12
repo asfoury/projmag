@@ -1,5 +1,8 @@
 package com.sdp13epfl2021.projmag.model
 
+/**
+ * This Enum is used to describe user gender
+ */
 enum class Gender {
     MALE{
         override fun toString(): String {

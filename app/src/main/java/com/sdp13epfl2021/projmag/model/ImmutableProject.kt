@@ -55,6 +55,24 @@ data class ImmutableProject(
         const val MAX_DESCRIPTION_SIZE = 4000
         private const val MAX_STUDENT_NUMBER = 10
 
+        /**
+         * Function that allows create a Project
+         * returns a project wrapped in a success wrapper, or a failure with the explanation wrapped as a string
+         *
+         * @param id : project id from firebase
+         * @param name : name of the project
+         * @param lab : lab of the project
+         * @param teacher : person responsible for the lab
+         * @param TA : person responsible for the project
+         * @param nbParticipant : number of participants
+         * @param assigned : list of the assigned students
+         * @param masterProject : is this project available for a 12 credits master project
+         * @param bachelorProject : is this project available as a bachelor semester project
+         * @param tags : tags associated to the project
+         * @param isTaken : Is this project already taken
+         * @param description : description of the project
+         */
+
         fun build(
             id: String,
             name: String,

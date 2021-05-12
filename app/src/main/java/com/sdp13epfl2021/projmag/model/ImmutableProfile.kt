@@ -4,6 +4,10 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
+/**
+ * This Class is used to define a Profile
+ */
+
 @Parcelize
 
 data class ImmutableProfile private constructor(val lastName : String, val firstName : String,
