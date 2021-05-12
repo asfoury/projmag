@@ -49,18 +49,6 @@ class PreferencesActivityTests {
         }
     }
 
-/*    @Before
-    fun setup(){
-        @BeforeClass
-        fun setup(){
-            Mockito.`when`(userDB.getPreferences(anyObject(), anyObject())).then {
-                @Suppress("UNCHECKED_CAST")
-                val l = it.arguments[0] as? Function1<ProjectFilter?, Unit>
-                l!!.invoke(filter)
-            }
-            Mockito.`when`(userDB.toString()).thenReturn("hello")
-        }
-    }*/
 
     @Test
     fun preferencesAreLoadedCorrectly() {

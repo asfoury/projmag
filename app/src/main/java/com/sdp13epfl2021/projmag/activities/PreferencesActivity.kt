@@ -60,10 +60,6 @@ class PreferencesActivity : AppCompatActivity() {
         master = findViewById(R.id.filter_master)
         applied = findViewById(R.id.filter_applied)
 
-    }
-
-    override fun onStart() {
-        super.onStart()
         userDB.getPreferences(
             { pf ->
                 pf?.let {
