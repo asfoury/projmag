@@ -142,13 +142,14 @@ class FirebaseCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        candidature: Candidature,
+        projectId: ProjectId,
+        userId: String,
         newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getDoc(candidature.projectId)
-            .set(mapOf(candidature.userId to newState), SetOptions.merge())
+        getDoc(projectId)
+            .set(mapOf(userId to newState), SetOptions.merge())
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }

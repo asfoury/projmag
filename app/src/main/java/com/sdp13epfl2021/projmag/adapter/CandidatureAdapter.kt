@@ -63,7 +63,8 @@ class CandidatureAdapter(activity: Activity, private val utils: Utils, private v
     private fun createListener(holder: CandidatureHolder, candidature: Candidature, state: Candidature.State, successMsg: String): (View) -> Unit {
         return { view: View ->
             utils.candidatureDatabase.pushCandidature(
-                candidature,
+                projectId,
+                candidature.userId,
                 state,
                 {
                     showToast(successMsg)

@@ -123,15 +123,9 @@ class ProjectInformationActivity : AppCompatActivity() {
                 { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
         } else {
-            val candidature = Candidature(
+            candidatureDatabase.pushCandidature(
                 projectId,
                 userId!!,
-                ImmutableProfile.EMPTY_PROFILE,
-                CurriculumVitae.EMPTY_CV,
-                Candidature.State.Waiting
-            )
-            candidatureDatabase.pushCandidature(
-                candidature,
                 Candidature.State.Waiting,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)

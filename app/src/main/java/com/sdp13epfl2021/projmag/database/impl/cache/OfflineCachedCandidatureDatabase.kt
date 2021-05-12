@@ -114,16 +114,17 @@ class OfflineCachedCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        candidature: Candidature,
+        projectId: ProjectId,
+        userId: String,
         newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val projectId: ProjectId = candidature.projectId
-        val oldList: List<Candidature> = candidatures[projectId] ?: emptyList()
-        candidatures[projectId] = oldList + candidature
-        saveCandidature(projectId)
-        db.pushCandidature(candidature, newState, onSuccess, onFailure)
+//        val projectId: ProjectId = candidature.projectId
+//        val oldList: List<Candidature> = candidatures[projectId] ?: emptyList()
+//        candidatures[projectId] = oldList + candidature
+//        saveCandidature(projectId)
+        db.pushCandidature(projectId, userId, newState, onSuccess, onFailure)
     }
 
     override fun removeCandidature(

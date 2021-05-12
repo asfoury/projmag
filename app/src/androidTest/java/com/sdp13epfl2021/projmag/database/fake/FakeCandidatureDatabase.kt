@@ -19,18 +19,19 @@ class FakeCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        candidature: Candidature,
+        projectId: ProjectId,
+        userId: String,
         newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val projectId = candidature.projectId
-        val userId = candidature.userId
-        val newMap1 = candidaturesState[projectId] ?: emptyMap()
-        val newMap2 = candidatures[projectId] ?: emptyMap()
-        candidaturesState[projectId] = newMap1 + (userId to newState)
-        candidatures[projectId] = newMap2 + (userId to candidature)
-        onChanges[projectId]?.let { it.forEach { it(projectId, candidatures[projectId]?.values?.toList() ?: emptyList()) } }
+//        val projectId = candidature.projectId
+//        val userId = candidature.userId
+//        val newMap1 = candidaturesState[projectId] ?: emptyMap()
+//        val newMap2 = candidatures[projectId] ?: emptyMap()
+//        candidaturesState[projectId] = newMap1 + (userId to newState)
+//        candidatures[projectId] = newMap2 + (userId to candidature)
+//        onChanges[projectId]?.let { it.forEach { it(projectId, candidatures[projectId]?.values?.toList() ?: emptyList()) } }
         onSuccess()
     }
 
