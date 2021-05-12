@@ -1,7 +1,5 @@
 package com.sdp13epfl2021.projmag.model
 
-import com.sdp13epfl2021.projmag.database.Utils
-
 /**
  *  An Immutable project Filter
  *  It's constructor takes filtering parameters and its `invoke` function operator
@@ -22,7 +20,7 @@ class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
-    val favorites: Boolean = false
+    val favorite: Boolean = false
 ) {
 
     companion object {
@@ -37,7 +35,7 @@ class ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
                 applied = data["applied"] as? Boolean ?: false,
-                favorites = data["favorites"] as? Boolean ?: false
+                favorite = data["favorites"] as? Boolean ?: false
             )
 
     }
@@ -66,7 +64,7 @@ class ProjectFilter(
         if (applied) {
             matches = matches && (isAppliedProject?.let { it(project) } ?: true)
         }
-        if(favorites){
+        if(favorite){
             matches = matches && (isFavouriteProject?.let { it(project) } ?: true)
         }
         return matches

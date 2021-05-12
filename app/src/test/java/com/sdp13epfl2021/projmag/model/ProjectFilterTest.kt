@@ -69,11 +69,11 @@ class ProjectFilterTest {
 
     @Test
     fun favoriteWorks(){
-        var filterFavourite = ProjectFilter(favorites = true)
+        var filterFavourite = ProjectFilter(favorite = true)
 
         filterFavourite.setFavouriteCheck { p -> p.id == id }
         assertEquals(true, filterFavourite(project))
-        
+
 
     }
 }

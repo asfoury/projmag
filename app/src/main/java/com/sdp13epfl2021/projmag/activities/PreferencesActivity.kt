@@ -36,6 +36,8 @@ class PreferencesActivity : AppCompatActivity() {
      */
     private lateinit var applied: CheckBox
 
+    private lateinit var favorite: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.project_filter_settings)
@@ -53,6 +55,8 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor = findViewById(R.id.filter_bachelor)
         master = findViewById(R.id.filter_master)
         applied = findViewById(R.id.filter_applied)
+        favorite = findViewById(R.id.filter_favorite)
+
     }
 
     override fun onStart() {
@@ -87,7 +91,9 @@ class PreferencesActivity : AppCompatActivity() {
         ProjectFilter(
             bachelor = bachelor.isChecked,
             master = master.isChecked,
-            applied = applied.isChecked
+            applied = applied.isChecked,
+            favorite = favorite.isChecked
+
         )
 
     /**
@@ -99,6 +105,7 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor.isChecked = pf.bachelor
         master.isChecked = pf.master
         applied.isChecked = pf.applied
+        favorite.isChecked = pf.favorite
     }
 
     /**
