@@ -235,57 +235,56 @@ class FirebaseUserdataDatabase(
     }
 
     override fun getProfile(
+        userID: String,
         onSuccess: (profile: ImmutableProfile?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val userUid = getUser()?.uid
-        if (userUid != null) {
-            val docRef = firestore.collection(FirebaseUserdataDatabase.USER_PROFILE).document(userUid)
-            docRef.get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        val firstName = (document["firstName"] as? String)
-                        val lastName = (document["lastName"] as? String)
-                        val age = (document["age"] as? Long)?.toInt()
-                        val sciper = (document["sciper"] as? Long)?.toInt()
-                        val phoneNumber = (document["phoneNumber"] as? String)
+        firestore
+            .collection(USER_PROFILE)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val firstName = (document["firstName"] as? String)
+                    val lastName = (document["lastName"] as? String)
+                    val age = (document["age"] as? Long)?.toInt()
+                    val sciper = (document["sciper"] as? Long)?.toInt()
+                    val phoneNumber = (document["phoneNumber"] as? String)
 
-                        val gender = when (document["gender"] as? String) {
-                            Gender.MALE.name -> Gender.MALE
-                            Gender.FEMALE.name -> Gender.FEMALE
-                            else -> Gender.OTHER
-                        }
+                    val gender = when (document["gender"] as? String) {
+                        Gender.MALE.name -> Gender.MALE
+                        Gender.FEMALE.name -> Gender.FEMALE
+                        else -> Gender.OTHER
+                    }
 
-                        val role = when (document["role"] as? String) {
-                            Role.TEACHER.name -> Role.TEACHER
-                            Role.STUDENT.name -> Role.STUDENT
-                            else -> Role.OTHER
-                        }
+                    val role = when (document["role"] as? String) {
+                        Role.TEACHER.name -> Role.TEACHER
+                        Role.STUDENT.name -> Role.STUDENT
+                        else -> Role.OTHER
+                    }
 
-                        if (firstName != null && lastName != null && age != null && sciper != null && phoneNumber != null) {
-                            when (val resProfile = ImmutableProfile.build(
-                                lastName,
-                                firstName,
-                                age,
-                                gender,
-                                sciper,
-                                phoneNumber,
-                                role
-                            )) {
-                                is Success -> {
-                                    onSuccess(resProfile.value)
-                                }
-                                is Failure -> {
-                                    onFailure(Exception("Failure reason : ${resProfile.reason}"))
-                                }
+                    if (firstName != null && lastName != null && age != null && sciper != null && phoneNumber != null) {
+                        when (val resProfile = ImmutableProfile.build(
+                            lastName,
+                            firstName,
+                            age,
+                            gender,
+                            sciper,
+                            phoneNumber,
+                            role
+                        )) {
+                            is Success -> {
+                                onSuccess(resProfile.value)
                             }
-                        } else {
-                            onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, sciper = $sciper, phoneNumber = $phoneNumber."))
+                            is Failure -> {
+                                onFailure(Exception("Failure reason : ${resProfile.reason}"))
+                            }
                         }
+                    } else {
+                        onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, sciper = $sciper, phoneNumber = $phoneNumber."))
                     }
                 }
-        } else {
-            onFailure(Exception("Document is null"))
-        }
+            }
+
     }
 }

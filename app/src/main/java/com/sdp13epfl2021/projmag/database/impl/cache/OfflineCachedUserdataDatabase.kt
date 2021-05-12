@@ -29,10 +29,12 @@ class OfflineCachedUserdataDatabase(
     private val cvFilename: String = "cv.data"
     private val favoritesFilename: String = "favorites.data"
     private val appliedFilename: String = "applied.data"
+    private val profileFilename: String = "profile.data"
 
     private val cvs: MutableMap<String, CurriculumVitae> = HashMap()
     private val favorites: MutableSet<ProjectId> = HashSet()
     private val applied: MutableSet<ProjectId> = HashSet()
+    private val profiles: MutableMap<String, ImmutableProfile> = HashMap()
 
     private val localUserDir: File = File(usersDir, localUserID)
 
@@ -56,15 +58,24 @@ class OfflineCachedUserdataDatabase(
     private fun loadUsersData() {
         try {
             usersDir.listFiles()?.forEach { file ->
-                when (file.name) {
-                    cvFilename -> loadFromFile(file, CurriculumVitae::class)
-                        ?.let { cv ->
-                            file.parent?.let { userID ->
-                                cvs.put(userID, cv)
-                            }
+                file.parentFile?.name?.let { userID ->
+                    when (file.name) {
+                        cvFilename -> loadFromFile(
+                            file,
+                            CurriculumVitae::class
+                        )?.let { cv ->
+                            cvs[userID] = cv
                         }
-                    //TODO load profiles when merge here
-                    //others
+
+                        profileFilename -> loadFromFile(
+                            file,
+                            ImmutableProfile::class
+                        )?.let { profile ->
+                            profiles[userID] = profile
+                        }
+
+                        //others
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -178,13 +189,19 @@ class OfflineCachedUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        profiles[localUserID] = profile
+        db.uploadProfile(profile, onSuccess, onFailure)
     }
 
     override fun getProfile(
+        userID: String,
         onSuccess: (profile: ImmutableProfile?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        profiles[userID]?.let {
+            onSuccess(it)
+        } ?: run {
+            db.getProfile(userID, onSuccess, onFailure)
+        }
     }
 }
