@@ -167,15 +167,15 @@ class FirebaseCandidatureDatabaseTest {
         val result2: CompletableFuture<Int> = CompletableFuture()
         val result3: CompletableFuture<Int> = CompletableFuture()
 
-        candidatureDB.pushCandidature(candidature, Candidature.State.Accepted, {
+        candidatureDB.pushCandidature(candidature.projectId, candidature.userId, Candidature.State.Accepted, {
             result1.complete(1)
         }, onFailureNotExpected)
 
-        candidatureDB.pushCandidature(candidature, Candidature.State.Accepted, {
+        candidatureDB.pushCandidature(candidature.projectId, candidature.userId, Candidature.State.Accepted, {
             result2.complete(2)
         }, onFailureNotExpected)
 
-        candidatureDB.pushCandidature(candidature, Candidature.State.Waiting, {
+        candidatureDB.pushCandidature(candidature.projectId, candidature.userId, Candidature.State.Waiting, {
             result3.complete(3)
         }, onFailureNotExpected)
 

@@ -70,7 +70,7 @@ class OfflineCachedCandidatureDatabaseTest {
         val db1: CandidatureDatabase = OfflineCachedCandidatureDatabase(fakeDB, tempDir)
         val candidature = Candidature(projectId, userID, profile, cv, Candidature.State.Waiting)
 
-        db1.pushCandidature(candidature, Candidature.State.Waiting, {}, onFailureNotExpected)
+        db1.pushCandidature(candidature.projectId, candidature.userId, Candidature.State.Waiting, {}, onFailureNotExpected)
 
         val future1: CompletableFuture<List<Candidature>> = CompletableFuture()
         db1.getListOfCandidatures(projectId, {
