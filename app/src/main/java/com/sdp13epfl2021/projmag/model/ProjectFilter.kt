@@ -15,6 +15,8 @@ package com.sdp13epfl2021.projmag.model
  *                  no effect on filtering.
  * @property applied if it is true will require the project to be one the user applied to
  *                   (i.e. `isAppliedProject` is true), otherwise it has no effect on filtering.
+ * @property favorite if it is true will require the project to be in the favorite list to
+ *                   (i.e. `favoriteProject` is true), otherwise it has no effect on filtering.
  */
 class ProjectFilter(
     val bachelor: Boolean = false,
@@ -86,7 +88,7 @@ class ProjectFilter(
      * Function that will check if the project is contained in the favorites
      *
      * @param favCheck : Function that will take a project and indicate if it's in the favorite list
-     * @return
+     * @return returns the filter
      */
     fun setFavouriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
         isFavouriteProject = favCheck

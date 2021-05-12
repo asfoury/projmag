@@ -116,7 +116,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
     override fun onResume() {
         updateAppliedProjects()
-        updateFavouriteProjects()
+        updateFavoriteProjects()
         updatePreferences()
         super.onResume()
     }
@@ -132,7 +132,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }, {})
     }
 
-    private fun updateFavouriteProjects(){
+    private fun updateFavoriteProjects(){
         utils.userdataDatabase.getListOfFavoriteProjects({ list ->
             favoriteList.clear()
             favoriteList.addAll(list)
