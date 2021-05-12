@@ -47,6 +47,8 @@ import kotlin.collections.ArrayList
 
 class ProjectInformationActivity : AppCompatActivity() {
 
+
+    //TODO :  do a PR to correct the apply button code and the favorite button code together
     companion object {
         const val LOADING_STRING = "LOADING"
         const val APPLY_STRING = "APPLY"
@@ -190,6 +192,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         userDataDatabase.getListOfFavoriteProjects({ projectIds ->
             val isFavorite = projectIds.contains(projectId)
             //we clicked on the favourites button and the project is in the favourite list
+            favButton.isEnabled = true
             if (isFavorite && isClick) {
                 userDataDatabase.removeFromFavorite(projectId,
                     { onSuccessFavorite(isFavorite) },
@@ -243,6 +246,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
         videoView = findViewById(R.id.info_video)
         favButton = findViewById(R.id.addFavoriteInProject)
+        favButton.isEnabled = false
 
 
         // get the project
@@ -330,12 +334,15 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>){
+        //get the favorite list and when it's available provide it to the function that is
+        //responsible for downloading videos in volatile or non volatile memory
         userDataDatabase.getListOfFavoriteProjects({ favorites ->
             addVideoAfterDownloadedWithFavoritePersistence(videosLinks, favorites.contains(projectVar.id))
         },{
 
         })
     }
+
     // download all videos and add them to the video player
     private fun addVideoAfterDownloadedWithFavoritePersistence(videosLinks: List<String>, isFavorite : Boolean ) {
 
@@ -346,7 +353,10 @@ class ProjectInformationActivity : AppCompatActivity() {
                 storingVideo(link, cacheDir)
             }
         }
+
     }
+
+
 
     private fun storingVideo(link : String, directory : File){
         fileDB.getFile(link, directory, { file ->

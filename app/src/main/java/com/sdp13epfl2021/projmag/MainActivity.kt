@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        UserTypeChoice.isProfessor = getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE).getBoolean(UserTypeChoice.isUserProf, true)
+        UserTypeChoice.isProfessor = true
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser

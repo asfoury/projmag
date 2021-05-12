@@ -259,6 +259,12 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun checkIfApplied(project: ImmutableProject): Boolean =
         appliedProjects.contains(project.id)
 
+    /**
+     * Checks if the project is contained in the current user favorite list
+     *
+     * @param project the project to check
+     * @return true if the project is in the favorites, false else
+     */
     private fun checkIfFavourite(project: ImmutableProject): Boolean =
         favoriteList.contains(project.id)
 
