@@ -83,6 +83,12 @@ class OfflineCachedUserdataDatabase(
         }
     }
 
+    private fun getFile(userID: String, filename: String): File {
+        val userDir: File = File(usersDir, userID)
+        userDir.mkdirs()
+        return File(userDir, filename)
+    }
+
     private fun saveFavorites() {
         saveToFile(favoritesFile, SerializedStringListWrapper(favorites.toList()))
     }
@@ -143,7 +149,13 @@ class OfflineCachedUserdataDatabase(
         cvs[userID]?.let {
             onSuccess(it)
         } ?: run {
-            db.getCv(userID, onSuccess, onFailure)
+            db.getCv(userID, { cv ->
+                cv?.let {
+                    cvs[userID] = cv
+                    saveToFile(getFile(userID, cvFilename), cv)
+                }
+                onSuccess(cv)
+            }, onFailure)
         }
     }
 
@@ -201,7 +213,13 @@ class OfflineCachedUserdataDatabase(
         profiles[userID]?.let {
             onSuccess(it)
         } ?: run {
-            db.getProfile(userID, onSuccess, onFailure)
+            db.getProfile(userID, { profile ->
+                profile?.let {
+                    profiles[userID] = profile
+                    saveToFile(getFile(userID, profileFilename), profile)
+                }
+                onSuccess(profile)
+            }, onFailure)
         }
     }
 }
