@@ -57,24 +57,26 @@ class OfflineCachedUserdataDatabase(
 
     private fun loadUsersData() {
         try {
-            usersDir.listFiles()?.forEach { file ->
-                file.parentFile?.name?.let { userID ->
-                    when (file.name) {
-                        cvFilename -> loadFromFile(
-                            file,
-                            CurriculumVitae::class
-                        )?.let { cv ->
-                            cvs[userID] = cv
-                        }
+            usersDir.listFiles()?.forEach { userDir ->
+                userDir.listFiles()?.forEach { file ->
+                    file.parentFile?.name?.let { userID ->
+                        when (file.name) {
+                            cvFilename -> loadFromFile(
+                                file,
+                                CurriculumVitae::class
+                            )?.let { cv ->
+                                cvs[userID] = cv
+                            }
 
-                        profileFilename -> loadFromFile(
-                            file,
-                            ImmutableProfile::class
-                        )?.let { profile ->
-                            profiles[userID] = profile
-                        }
+                            profileFilename -> loadFromFile(
+                                file,
+                                ImmutableProfile::class
+                            )?.let { profile ->
+                                profiles[userID] = profile
+                            }
 
-                        //others
+                            //others
+                        }
                     }
                 }
             }
