@@ -10,7 +10,11 @@ import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
+import com.sdp13epfl2021.projmag.model.*
 import javax.inject.Inject
+
+
+
 
 /**
  * An implementation of a user-data database
@@ -46,6 +50,8 @@ class FirebaseUserdataDatabase @Inject constructor(
          *  The field containing cv
          */
         const val PREF_FIELD = "preferences"
+
+        const val USER_PROFILE = "user-profile"
     }
 
 
@@ -202,5 +208,89 @@ class FirebaseUserdataDatabase @Inject constructor(
             ?.set(hashMapOf(PREF_FIELD to pf))
             ?.addOnSuccessListener { onSuccess() }
             ?.addOnFailureListener(onFailure)
+    }
+
+    override fun uploadProfile(
+        profile: ImmutableProfile,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val profile = hashMapOf(
+            "firstName" to profile.firstName,
+            "lastName" to profile.lastName,
+            "age" to profile.age,
+            "gender" to profile.gender.name,
+            "phoneNumber" to profile.phoneNumber,
+            "role" to profile.role.name,
+            "sciper" to profile.sciper
+        )
+        val id = getUser()?.uid
+        if (id != null) {
+            firestore.collection(FirebaseUserdataDatabase.USER_PROFILE).document(id)
+                .set(profile)
+                .addOnSuccessListener {
+                    onSuccess()
+                }
+                .addOnFailureListener {
+                    onFailure(it)
+                }
+        } else {
+            onFailure(Exception("user id is null"))
+        }
+    }
+
+    override fun getProfile(
+        onSuccess: (profile: ImmutableProfile?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val userUid = getUser()?.uid
+        if (userUid != null) {
+            val docRef = firestore.collection(FirebaseUserdataDatabase.USER_PROFILE).document(userUid)
+            docRef.get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val firstName = (document["firstName"] as? String)
+                        val lastName = (document["lastName"] as? String)
+                        val age = (document["age"] as? Long)?.toInt()
+                        val sciper = (document["sciper"] as? Long)?.toInt()
+                        val phoneNumber = (document["phoneNumber"] as? String)
+
+                        val gender = when (document["gender"] as? String) {
+                            Gender.MALE.name -> Gender.MALE
+                            Gender.FEMALE.name -> Gender.FEMALE
+                            else -> Gender.OTHER
+                        }
+
+                        val role = when (document["role"] as? String) {
+                            Role.TEACHER.name -> Role.TEACHER
+                            Role.STUDENT.name -> Role.STUDENT
+                            else -> Role.OTHER
+                        }
+
+                        if (firstName != null && lastName != null && age != null && sciper != null && phoneNumber != null) {
+                            when (val resProfile = ImmutableProfile.build(
+                                lastName,
+                                firstName,
+                                age,
+                                gender,
+                                sciper,
+                                phoneNumber,
+                                role
+                            )) {
+                                is Success -> {
+                                    onSuccess(resProfile.value)
+                                }
+                                is Failure -> {
+                                    onFailure(Exception("Failure reason : ${resProfile.reason}"))
+                                }
+                            }
+                        } else {
+                            onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, sciper = $sciper, phoneNumber = $phoneNumber."))
+                        }
+                    }
+                }
+        } else {
+            onFailure(Exception("Document is null"))
+        }
     }
 }
