@@ -45,7 +45,6 @@ class ProjectsListActivity : AppCompatActivity() {
         updateAppliedProjects()
 
         utils.userdataDatabase.getListOfFavoriteProjects({
-            favoriteList.clear()
             favoriteList.addAll(it)}, {})
 
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
@@ -117,6 +116,7 @@ class ProjectsListActivity : AppCompatActivity() {
 
     override fun onResume() {
         updateAppliedProjects()
+        updateFavouriteProjects()
         updatePreferences()
         super.onResume()
     }
