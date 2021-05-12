@@ -9,17 +9,23 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * An activity where the user can set it's preferences for projects.
- * This preferences are pushed to the Datatbase
+ * These preferences are pushed to the Database
  */
+@AndroidEntryPoint
 class PreferencesActivity : AppCompatActivity() {
     /**
-     * The database of user's informations
+     * The database of user's information
      */
-    private val userDB = Utils.getInstance(this).userdataDatabase
+    @Inject
+    lateinit var userDB: UserdataDatabase
+
 
     /**
      * Check box that require the project to ask for a bachelor degree
@@ -53,6 +59,7 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor = findViewById(R.id.filter_bachelor)
         master = findViewById(R.id.filter_master)
         applied = findViewById(R.id.filter_applied)
+
     }
 
     override fun onStart() {

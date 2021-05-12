@@ -16,7 +16,7 @@ package com.sdp13epfl2021.projmag.model
  * @property applied if it is true will require the project to be one the user applied to
  *                   (i.e. `isAppliedProject` is true), otherwise it has no effect on filtering.
  */
-class ProjectFilter(
+data class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false

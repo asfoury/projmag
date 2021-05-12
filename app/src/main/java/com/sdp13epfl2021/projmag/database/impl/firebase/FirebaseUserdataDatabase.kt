@@ -10,12 +10,13 @@ import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
+import javax.inject.Inject
 
 /**
  * An implementation of a user-data database
  * using Google Firebase/FireStore
  */
-class FirebaseUserdataDatabase(
+class FirebaseUserdataDatabase @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
 ) : UserdataDatabase {
