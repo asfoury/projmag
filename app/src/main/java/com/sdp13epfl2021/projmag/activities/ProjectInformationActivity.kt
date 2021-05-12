@@ -27,9 +27,11 @@ import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
+import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -63,6 +65,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
     private var userId: String? = null
+    private var alreadyApplied: Boolean = false
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -107,57 +110,64 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun onApplyClick(applyButton: Button, candidatureDatabase: CandidatureDatabase, projectId: ProjectId, ) {
+        if (alreadyApplied) {
+            candidatureDatabase.removeCandidature(
+                projectId,
+                userId!!,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setApplyButtonText(applyButton, alreadyApplied)
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+            )
+        } else {
+            val candidature = Candidature(
+                projectId,
+                userId!!,
+                ImmutableProfile.EMPTY_PROFILE,
+                CurriculumVitae.EMPTY_CV,
+                Candidature.State.Waiting
+            )
+            candidatureDatabase.pushCandidature(
+                candidature,
+                Candidature.State.Waiting,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setApplyButtonText(applyButton, alreadyApplied)
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+            )
+        }
+    }
+
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         val utils = Utils.getInstance(this)
         val userdataDatabase = utils.userdataDatabase
         val candidatureDatabase = utils.candidatureDatabase
-        var alreadyApplied = false
-        setApplyButtonText(applyButton,null)
+        setApplyButtonText(applyButton, null)
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
-        },{})
+        }, {})
 
         applyButton.isEnabled = !projectVar.isTaken
 
         applyButton.setOnClickListener {
             userdataDatabase.applyUnapply(
                 !alreadyApplied,
-               projectId,
+                projectId,
                 {
                     if (userId != null) {
-                        if (alreadyApplied) {
-                            candidatureDatabase.removeCandidature(
-                                projectId,
-                                userId!!,
-                                { showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-                                    alreadyApplied = !alreadyApplied
-                                    setApplyButtonText(applyButton, alreadyApplied)
-                                },
-                                { showToast("only unapply successful", Toast.LENGTH_SHORT) }
-                            )
-                        } else {
-                            val candidature = Candidature(projectId,
-                                userId!!,
-                                ImmutableProfile.EMPTY_PROFILE,
-                                CurriculumVitae.EMPTY_CV,
-                                Candidature.State.Waiting)
-                            candidatureDatabase.pushCandidature(
-                                candidature,
-                                Candidature.State.Waiting,
-                                { showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-                                    alreadyApplied = !alreadyApplied
-                                    setApplyButtonText(applyButton, alreadyApplied)},
-                                { showToast("only apply successful", Toast.LENGTH_SHORT) }
-                            )
-                        }
-
+                        onApplyClick(applyButton, candidatureDatabase, projectId)
                     } else {
-                        showToast(getString(R.string.failure), Toast.LENGTH_LONG)
+                        showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
                     }
                 },
-                {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
 
         }
@@ -219,7 +229,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setUpApplyButton(findViewById(R.id.applyButton) as Button)
+        setUpApplyButton(findViewById<Button>(R.id.applyButton))
     }
 
     // pause/start when we touch the video
@@ -396,7 +406,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun createDynamicLink() : Uri {
+    private fun createDynamicLink(): Uri {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
             domainUriPrefix = "https://projmag.page.link/"
@@ -413,7 +423,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_project_information, menu)
+        menuInflater.inflate(R.menu.menu_project_information, menu)
         return true
     }
 
@@ -435,17 +445,16 @@ class ProjectInformationActivity : AppCompatActivity() {
                 //this should not happen, unless the user was disconnected after loading the project view
                 showToast(resources.getString(R.string.waiting_not_allowed), Toast.LENGTH_LONG)
             }
-        }
-        else if(item.itemId == R.id.generateQRCodeButton) {
+        } else if (item.itemId == R.id.generateQRCodeButton) {
             val linkToSend = createDynamicLink()
 
-            val qrImage = QRCode.from(linkToSend.toString()).withSize(800,800)
+            val qrImage = QRCode.from(linkToSend.toString()).withSize(800, 800)
             val stream = ByteArrayOutputStream()
             qrImage.bitmap().compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray: ByteArray = stream.toByteArray()
 
             val intent = Intent(this, QRCodeActivity::class.java)
-            intent.putExtra("qrcode",byteArray)
+            intent.putExtra("qrcode", byteArray)
             startActivity(intent)
             return true
         }

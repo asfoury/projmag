@@ -129,6 +129,7 @@
     <string name="failed_send_pref">Failed to Send Preferences</string>
     <string name="invalid_data">Invalid data</string>
     <string name="couldnt_get_data">Couldn\'t get data</string>
+    <string name="failed">failed</string>
 
 
 </resources>
