@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
 import com.sdp13epfl2021.projmag.adapter.CandidatureAdapter
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.*
+import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.*
@@ -83,22 +83,35 @@ class WaitingListTest {
     val userdataDB = FakeUserdataDatabase()
     val fileDB = FakeFileDatabase()
     val candidatureDB = FakeCandidatureDatabase(
-        mapOf(pid to mapOf(
-            uid1 to Candidature.State.Waiting,
-            uid2 to Candidature.State.Waiting,
-            uid3 to Candidature.State.Rejected,
-            uid4 to Candidature.State.Accepted,
-        )).toMutableMap(),
-        mapOf(pid to mapOf(
-            uid1 to cand1,
-            uid2 to cand2,
-            uid3 to cand3,
-            uid4 to cand4
-        )).toMutableMap()
+        mapOf(
+            pid to mapOf(
+                uid1 to Candidature.State.Waiting,
+                uid2 to Candidature.State.Waiting,
+                uid3 to Candidature.State.Rejected,
+                uid4 to Candidature.State.Accepted,
+            )
+        ).toMutableMap(),
+        mapOf(
+            pid to mapOf(
+                uid1 to cand1,
+                uid2 to cand2,
+                uid3 to cand3,
+                uid4 to cand4
+            )
+        ).toMutableMap()
     )
     val metadataDB = FakeMetadataDatabase()
     val context: Context = ApplicationProvider.getApplicationContext()
-    val utils = Utils.getInstance(context, true, auth, userdataDB, candidatureDB, fileDB, metadataDB, projectsDB)
+    val utils = Utils.getInstance(
+        context,
+        true,
+        auth,
+        userdataDB,
+        candidatureDB,
+        fileDB,
+        metadataDB,
+        projectsDB
+    )
 
     private fun getIntent(): Intent {
         val intent = Intent(context, WaitingListActivity::class.java)
@@ -107,7 +120,8 @@ class WaitingListTest {
         return intent
     }
 
-    @get:Rule var activityScenarioRule = ActivityScenarioRule<WaitingListActivity>(getIntent())
+    @get:Rule
+    var activityScenarioRule = ActivityScenarioRule<WaitingListActivity>(getIntent())
 
     @After
     fun clean() {
@@ -115,7 +129,11 @@ class WaitingListTest {
         Utils.getInstance(context, true)
     }
 
-    private fun dummyCandidature(projectId: ProjectId, userID: String, state: Candidature.State): Candidature {
+    private fun dummyCandidature(
+        projectId: ProjectId,
+        userID: String,
+        state: Candidature.State
+    ): Candidature {
         return Candidature(projectId, userID, dummyProfile(userID), dummyCV(userID), state)
     }
 
@@ -201,15 +219,19 @@ class WaitingListTest {
     private fun clickAccept(recycler: Matcher<View>, pos: Int) {
         clickButton(recycler, pos, R.id.waiting_accept)
     }
+
     private fun clickReject(recycler: Matcher<View>, pos: Int) {
         clickButton(recycler, pos, R.id.waiting_reject)
     }
+
     private fun clickProfile(recycler: Matcher<View>, pos: Int) {
         clickButton(recycler, pos, R.id.waiting_profile)
     }
+
     private fun clickCV(recycler: Matcher<View>, pos: Int) {
         clickButton(recycler, pos, R.id.waiting_cv)
     }
+
     private fun clickButton(recycler: Matcher<View>, pos: Int, id: Int) {
         val card = Matchers.allOf(childAtPosition(recycler, pos))
         onView(
