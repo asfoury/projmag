@@ -22,7 +22,7 @@ import java.io.File
 class OfflineCachedUserdataDatabase(
     private val db: UserdataDatabase,
     private val localUserID: String,
-    private val usersDir: File
+    private val usersRootDir: File
 
 ) : UserdataDatabase {
 
@@ -36,7 +36,7 @@ class OfflineCachedUserdataDatabase(
     private val applied: MutableSet<ProjectId> = HashSet()
     private val profiles: MutableMap<String, ImmutableProfile> = HashMap()
 
-    private val localUserDir: File = File(usersDir, localUserID)
+    private val localUserDir: File = File(usersRootDir, localUserID)
 
     private val cvFile: File = File(localUserDir, cvFilename)
     private val favoritesFile: File = File(localUserDir, favoritesFilename)
@@ -57,7 +57,7 @@ class OfflineCachedUserdataDatabase(
 
     private fun loadUsersData() {
         try {
-            usersDir.listFiles()?.forEach { userDir ->
+            usersRootDir.listFiles()?.forEach { userDir ->
                 userDir.listFiles()?.forEach { file ->
                     file.parentFile?.name?.let { userID ->
                         when (file.name) {
@@ -86,7 +86,7 @@ class OfflineCachedUserdataDatabase(
     }
 
     private fun getFile(userID: String, filename: String): File {
-        val userDir: File = File(usersDir, userID)
+        val userDir: File = File(usersRootDir, userID)
         userDir.mkdirs()
         return File(userDir, filename)
     }
