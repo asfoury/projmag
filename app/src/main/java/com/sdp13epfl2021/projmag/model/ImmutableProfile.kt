@@ -18,8 +18,6 @@ data class ImmutableProfile private constructor(
         private const val MAX_AGE = 120
         private const val MIN_AGE = 15
 
-        val EMPTY_PROFILE = ImmutableProfile("", "", 0, Gender.OTHER, 0, "", Role.OTHER)
-
 
         /**
          * Function that allows creating a profile with tests

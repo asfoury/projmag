@@ -27,10 +27,7 @@ import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
@@ -69,6 +66,8 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var userId: String? = null
     private var alreadyApplied: Boolean = false
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
+    private lateinit var userdataDatabase: UserdataDatabase
+    private lateinit var candidatureDatabase: CandidatureDatabase
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -147,11 +146,10 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         val utils = Utils.getInstance(this)
-        val userdataDatabase = utils.userdataDatabase
-        val candidatureDatabase = utils.candidatureDatabase
+        userdataDatabase = utils.userdataDatabase
+        candidatureDatabase = utils.candidatureDatabase
         setApplyButtonText(applyButton, null)
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
-            appliedProjectsIds.clear()
             appliedProjectsIds.addAll(projectIds)
             var alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
