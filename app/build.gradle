@@ -95,7 +95,11 @@ dependencies {
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
+    jacoco.excludes = [
+            'jdk.internal.*',
+            // exclude hilt modules
+            'com.sdp13epfl2021.projmag.database.di.*'
+    ]
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
