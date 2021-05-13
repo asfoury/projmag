@@ -27,7 +27,6 @@ data class CurriculumVitae(
     val skills: List<SkillDescription>,
 ) : Parcelable, Serializable {
 
-
     @Parcelize
     /**
      * Description a job/school over a period of time

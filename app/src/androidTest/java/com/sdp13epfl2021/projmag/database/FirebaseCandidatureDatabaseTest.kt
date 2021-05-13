@@ -163,7 +163,7 @@ class FirebaseCandidatureDatabaseTest {
 
         assertEquals(3, result.size)
         assertTrue(result.all { c -> c.projectId == PID })
-        val usersID = result.map { c -> c.userID }
+        val usersID = result.map { c -> c.userId }
         assertTrue(usersID.contains(userIDAccepted))
         assertTrue(usersID.contains(userIDRejected))
         assertTrue(usersID.contains(userIDWaiting))
@@ -175,17 +175,35 @@ class FirebaseCandidatureDatabaseTest {
         val result2: CompletableFuture<Int> = CompletableFuture()
         val result3: CompletableFuture<Int> = CompletableFuture()
 
-        candidatureDB.pushCandidature(candidature, Candidature.State.Accepted, {
-            result1.complete(1)
-        }, onFailureNotExpected)
+        candidatureDB.pushCandidature(
+            candidature.projectId,
+            candidature.userId,
+            Candidature.State.Accepted,
+            {
+                result1.complete(1)
+            },
+            onFailureNotExpected
+        )
 
-        candidatureDB.pushCandidature(candidature, Candidature.State.Accepted, {
-            result2.complete(2)
-        }, onFailureNotExpected)
+        candidatureDB.pushCandidature(
+            candidature.projectId,
+            candidature.userId,
+            Candidature.State.Accepted,
+            {
+                result2.complete(2)
+            },
+            onFailureNotExpected
+        )
 
-        candidatureDB.pushCandidature(candidature, Candidature.State.Waiting, {
-            result3.complete(3)
-        }, onFailureNotExpected)
+        candidatureDB.pushCandidature(
+            candidature.projectId,
+            candidature.userId,
+            Candidature.State.Waiting,
+            {
+                result3.complete(3)
+            },
+            onFailureNotExpected
+        )
 
         assertEquals(1, result1.get())
         assertEquals(2, result2.get())

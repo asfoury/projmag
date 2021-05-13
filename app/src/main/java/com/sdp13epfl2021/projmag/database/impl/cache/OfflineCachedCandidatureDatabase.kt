@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.database.impl.cache
 
+import android.os.Build
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.loadFromFile
@@ -88,7 +89,7 @@ class OfflineCachedCandidatureDatabase(
      */
     private fun merge(projectID: ProjectId, remoteList: List<Candidature>): List<Candidature> {
         val localList: List<Candidature> = getLocalCandidatures(projectID).filter { c ->
-            remoteList.all { r -> r.userID != c.userID }
+            remoteList.all { r -> r.userId != c.userId }
         }
         val totalList = localList + remoteList
         candidatures[projectID] = totalList
@@ -113,16 +114,31 @@ class OfflineCachedCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        candidature: Candidature,
+        projectId: ProjectId,
+        userId: String,
         newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val projectId: ProjectId = candidature.projectId
-        val oldList: List<Candidature> = candidatures[projectId] ?: emptyList()
-        candidatures[projectId] = oldList + candidature
+//        val projectId: ProjectId = candidature.projectId
+//        val oldList: List<Candidature> = candidatures[projectId] ?: emptyList()
+//        candidatures[projectId] = oldList + candidature
+//        saveCandidature(projectId)
+        db.pushCandidature(projectId, userId, newState, onSuccess, onFailure)
+    }
+
+    override fun removeCandidature(
+        projectId: ProjectId,
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val oldList = candidatures[projectId] ?: emptyList()
+        val newList = oldList.toMutableList()
+        newList.removeAll { candidature -> candidature.userId == userId}
+        candidatures[projectId] = newList.toList()
         saveCandidature(projectId)
-        db.pushCandidature(candidature, newState, onSuccess, onFailure)
+        db.removeCandidature(projectId, userId, onSuccess, onFailure)
     }
 
     override fun addListener(
