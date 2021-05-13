@@ -148,7 +148,12 @@ class FirebaseUserdataDatabase(
         onSuccess: (CurriculumVitae?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        firestore
+            .collection(ROOT)
+            .document(userID)
+            .get()
+            .addOnSuccessListener { onSuccess(it[CV_FIELD] as? CurriculumVitae) }
+            .addOnFailureListener(onFailure)
     }
 
     override fun applyUnapply(
