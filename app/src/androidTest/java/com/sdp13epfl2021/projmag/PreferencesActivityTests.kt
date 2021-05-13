@@ -8,7 +8,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.PreferencesActivity
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabaseModule
+import com.sdp13epfl2021.projmag.database.interfaces.DataBaseModules
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.mockito.Mockito
 
-@UninstallModules(UserdataDatabaseModule::class)
+@UninstallModules(DataBaseModules::class)
 @HiltAndroidTest
 class PreferencesActivityTests {
 
