@@ -11,7 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
 
 /**
@@ -39,9 +39,8 @@ class ProfilePageActivity : AppCompatActivity() {
             //buttonAddCv.setVisibility(View.INVISIBLE)
         }
 
-        UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
-            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
-                .show()
+        FirebaseUserdataDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
+            Toast.makeText(this,getString(R.string.profile_loading_failed)   , Toast.LENGTH_LONG).show()
         }
 
 
@@ -52,11 +51,9 @@ class ProfilePageActivity : AppCompatActivity() {
         }
         buttonSubChange.setOnClickListener {
             val profile = createProfileFromFields()
-            if (profile != null) {
-                UserProfileDatabase(Firebase.firestore, Firebase.auth).uploadProfile(
-                    profile,
-                    {},
-                    {})
+
+            if(profile != null) {
+                FirebaseUserdataDatabase(Firebase.firestore, Firebase.auth).uploadProfile(profile, {}, {})
             }
             val intent = Intent(this, ProjectsListActivity::class.java)
             startActivity(intent)

@@ -27,6 +27,7 @@ data class ImmutableProject(
     val description: String,
     val videoURI: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
+    val creationDate: Date = Date()
 ) : Parcelable {
     companion object {
         object FieldNames {
@@ -45,6 +46,7 @@ data class ImmutableProject(
             const val DESCRIPTION = "description"
             const val VIDEO_URI = "videoURI"
             const val ALLOWED_SECTIONS = "allowedSections"
+            const val CREATION_DATE = "creationDate"
         }
 
         const val MAX_PROJECT_NAME_SIZE = 120
@@ -67,7 +69,8 @@ data class ImmutableProject(
             isTaken: Boolean,
             description: String,
             videoURI: List<String> = listOf(),
-            allowedSections: List<String> = listOf()
+            allowedSections: List<String> = listOf(),
+            creationDate: Date = Date()
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -99,7 +102,8 @@ data class ImmutableProject(
                         isTaken,
                         description,
                         videoURI,
-                        allowedSections
+                        allowedSections,
+                        creationDate
                     )
                 )
             }
@@ -131,7 +135,8 @@ data class ImmutableProject(
                     isTaken = map[FieldNames.IS_TAKEN] as Boolean,
                     description = map[FieldNames.DESCRIPTION] as String,
                     videoURI = map[FieldNames.VIDEO_URI] as List<String>,
-                    allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>
+                    allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>,
+                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long)
                 )
                 return when (result) {
                     is Success -> result.value
@@ -168,6 +173,7 @@ data class ImmutableProject(
      * @param tags : tags associated to the project
      * @param isTaken : Is this project already taken
      * @param description : description of the project
+     * @param creationDate : the date of the creation
      */
     fun buildCopy(
         id: String = this.id,
@@ -184,7 +190,8 @@ data class ImmutableProject(
         isTaken: Boolean = this.isTaken,
         description: String = this.description,
         videoURI: List<String> = this.videoURI,
-        allowedSections: List<String> = this.allowedSections
+        allowedSections: List<String> = this.allowedSections,
+        creationDate: Date = this.creationDate
     ) = build(
         id,
         name,
@@ -200,7 +207,8 @@ data class ImmutableProject(
         isTaken,
         description,
         videoURI,
-        allowedSections
+        allowedSections,
+        creationDate
     )
 
     /**
@@ -225,7 +233,8 @@ data class ImmutableProject(
         FieldNames.IS_TAKEN to isTaken,
         FieldNames.DESCRIPTION to description,
         FieldNames.VIDEO_URI to videoURI,
-        FieldNames.ALLOWED_SECTIONS to allowedSections
+        FieldNames.ALLOWED_SECTIONS to allowedSections,
+        FieldNames.CREATION_DATE to creationDate.time
     )
 
 

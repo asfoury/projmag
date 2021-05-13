@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class FakeUserdataDatabase(
@@ -95,6 +96,21 @@ class FakeUserdataDatabase(
     override fun pushPreferences(
         pf: ProjectFilter,
         onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun uploadProfile(
+        profile: ImmutableProfile,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getProfile(
+        onSuccess: (profile: ImmutableProfile?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         TODO("Not yet implemented")

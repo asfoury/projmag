@@ -12,7 +12,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
-import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -52,7 +52,7 @@ class UserProfileDatabaseTest {
     @Before
     fun setupMocks() {
         Mockito
-            .`when`(mockFirebaseFirestore.collection(UserProfileDatabase.ROOT))
+            .`when`(mockFirebaseFirestore.collection(FirebaseUserdataDatabase.USER_PROFILE))
             .thenReturn(mockColRef)
 
         Mockito
@@ -114,7 +114,7 @@ class UserProfileDatabaseTest {
 
     @Test
     fun checkThatGettingProfileWorks() {
-        val udb = UserProfileDatabase(mockFirebaseFirestore, mockFirebaseAuth)
+        val udb = FirebaseUserdataDatabase(mockFirebaseFirestore, mockFirebaseAuth)
         udb.getProfile({
             assertEquals(exampleUserProfile?.firstName, it?.firstName)
             assertEquals(exampleUserProfile?.lastName, it?.lastName)
@@ -132,7 +132,7 @@ class UserProfileDatabaseTest {
 
     @Test
     fun checkThatUploadingProfileWorks() {
-        val udb = UserProfileDatabase(mockFirebaseFirestore, mockFirebaseAuth)
+        val udb = FirebaseUserdataDatabase(mockFirebaseFirestore, mockFirebaseAuth)
         if (exampleUserProfile != null) {
             udb.uploadProfile(exampleUserProfile, {}, {})
         }
