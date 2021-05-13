@@ -16,7 +16,6 @@ data class ImmutableProfile private constructor(
 ) :
     Parcelable, Serializable {
 
-
     companion object {
         private const val MAX_LAST_NAME_SIZE = 40
         private const val MAX_FIRST_NAME_SIZE = 40
