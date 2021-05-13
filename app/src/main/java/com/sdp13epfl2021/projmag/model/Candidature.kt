@@ -17,6 +17,7 @@ data class Candidature(
 
     enum class State {
         Waiting, Accepted, Rejected;
+
         companion object {
             fun enumOf(s: String?): State? {
                 return when (s) {

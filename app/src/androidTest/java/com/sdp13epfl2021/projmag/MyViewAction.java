@@ -1,8 +1,10 @@
 package com.sdp13epfl2021.projmag;
 
 import android.view.View;
+
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+
 import org.hamcrest.Matcher;
 
 

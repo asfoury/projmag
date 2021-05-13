@@ -1,4 +1,3 @@
-
 package com.sdp13epfl2021.projmag.activities
 
 import android.content.Intent
@@ -16,9 +15,11 @@ import com.sdp13epfl2021.projmag.model.Tag
 import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import java.io.Serializable
 
-
+/**
+ * Activity in which to add tags to a project
+ */
 class TagsSelectorActivity : AppCompatActivity() {
-    private val selectedTags : MutableSet<Tag> = mutableSetOf()
+    private val selectedTags: MutableSet<Tag> = mutableSetOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tags_selector)
@@ -31,10 +32,8 @@ class TagsSelectorActivity : AppCompatActivity() {
         tagRecyclerView.setHasFixedSize(true)
 
         //handling of the buttons and the app
-        handleListeningOnElementsOfTagRecyclerView(tagRecyclerView, tagsDataset )
+        handleListeningOnElementsOfTagRecyclerView(tagRecyclerView, tagsDataset)
         saveButtonHandling(saveButton)
-
-
 
 
     }
@@ -45,7 +44,10 @@ class TagsSelectorActivity : AppCompatActivity() {
      * @param tagRecyclerView : the tag recycler view
      * @param tagsDataset : the dataset of tags
      */
-    private fun handleListeningOnElementsOfTagRecyclerView(tagRecyclerView: RecyclerView, tagsDataset: List<Tag>){
+    private fun handleListeningOnElementsOfTagRecyclerView(
+        tagRecyclerView: RecyclerView,
+        tagsDataset: List<Tag>
+    ) {
         tagRecyclerView.addOnItemTouchListener(
             MakeRecyclerListItemsClickListenable(
                 this,
@@ -53,12 +55,12 @@ class TagsSelectorActivity : AppCompatActivity() {
                 object : MakeRecyclerListItemsClickListenable.OnItemClickListener {
 
                     override fun onItemClick(view: View, position: Int) {
-                        val holder = tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
-                        if(selectedTags.contains(tagsDataset[position])) {
+                        val holder =
+                            tagRecyclerView.findViewHolderForLayoutPosition(position) as TagAdapter.TagViewHolder
+                        if (selectedTags.contains(tagsDataset[position])) {
                             holder.textView.setBackgroundColor(Color.RED)
                             selectedTags.remove(tagsDataset[position])
-                        }
-                        else{
+                        } else {
                             holder.textView.setBackgroundColor(Color.GREEN)
                             selectedTags.add(tagsDataset[position])
 
@@ -77,22 +79,22 @@ class TagsSelectorActivity : AppCompatActivity() {
      * returns the list of selected tags to the previous activity for project creation
      * @param saveButton : the button the user presses to save a project
      */
-    private fun saveButtonHandling(saveButton: Button){
-        saveButton.setOnClickListener{
+    private fun saveButtonHandling(saveButton: Button) {
+        saveButton.setOnClickListener {
             val returnIntent = Intent()
             val tagsManager = TagsBaseManager()
-            val tags  = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
+            val tags = tagsManager.tagsListToStringList(selectedTags).toTypedArray()
 
             //This should work because String is inherently serializable but I could get crashes
-            returnIntent.putExtra(MainActivity.tagsList,  tags as Serializable)
+            returnIntent.putExtra(MainActivity.tagsList, tags as Serializable)
             setResult(RESULT_OK, returnIntent)
             finish()
         }
     }
-    fun allSelectedTags() : MutableSet<Tag>{
+
+    fun allSelectedTags(): MutableSet<Tag> {
         return selectedTags
     }
-
 
 
 }
