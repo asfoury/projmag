@@ -11,8 +11,7 @@
 
 
 ## Kaourintin (Scrum Master)
-I finished the section part, the favorite feature. I started thinking on how to implement properly local video storing and think that it is a separate task that requires
-time. I reviewed two pull requests. I did not start looking at an AR API.
+I finished the section part, the favorite feature. I started thinking on how to implement properly local video storing and think that it is a separate task that requires time. I reviewed two pull requests. An interesting AR API on android studio looks to be quickstart, i've started following their tutorials
 
 ## Paul 
 
