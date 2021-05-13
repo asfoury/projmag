@@ -172,7 +172,7 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun setProjectFilter(pf: ProjectFilter?) {
         pf?.apply {
             setApplicationCheck { checkIfApplied(it) }
-            setFavouriteCheck { checkIfFavourite(it) }
+            setFavoriteCheck { checkIfFavorite(it) }
             projectFilter = this
         }
     }
@@ -273,7 +273,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * @param project the project to check
      * @return true if the project is in the favorites, false else
      */
-    private fun checkIfFavourite(project: ImmutableProject): Boolean =
+    private fun checkIfFavorite(project: ImmutableProject): Boolean =
         favoriteList.contains(project.id)
 
     /**

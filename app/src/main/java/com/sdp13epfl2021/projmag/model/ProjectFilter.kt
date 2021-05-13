@@ -46,7 +46,7 @@ class ProjectFilter(
      * A function used to see if the user has applied to the project
      */
     private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
-    private var isFavouriteProject : ((ImmutableProject) -> Boolean)? = null
+    private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints
@@ -67,7 +67,7 @@ class ProjectFilter(
             matches = matches && (isAppliedProject?.let { it(project) } ?: true)
         }
         if(favorite){
-            matches = matches && (isFavouriteProject?.let { it(project) } ?: true)
+            matches = matches && (isFavoriteProject?.let { it(project) } ?: true)
         }
         return matches
     }
@@ -90,8 +90,8 @@ class ProjectFilter(
      * @param favCheck : Function that will take a project and indicate if it's in the favorite list
      * @return this filter
      */
-    fun setFavouriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
-        isFavouriteProject = favCheck
+    fun setFavoriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
+        isFavoriteProject = favCheck
         return this
     }
 
