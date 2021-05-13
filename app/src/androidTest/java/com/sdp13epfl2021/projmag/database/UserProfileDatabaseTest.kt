@@ -60,6 +60,10 @@ class UserProfileDatabaseTest {
             .thenReturn(mockDocRef)
 
         Mockito
+            .`when`(mockColRef.document(uid))
+            .thenReturn(mockDocRef)
+
+        Mockito
             .`when`(mockFirebaseAuth.currentUser)
             .thenReturn(mockFirebaseUser)
 
@@ -115,7 +119,7 @@ class UserProfileDatabaseTest {
     @Test
     fun checkThatGettingProfileWorks() {
         val udb = FirebaseUserdataDatabase(mockFirebaseFirestore, mockFirebaseAuth)
-        udb.getProfile({
+        udb.getProfile(uid, {
             assertEquals(exampleUserProfile?.firstName, it?.firstName)
             assertEquals(exampleUserProfile?.lastName, it?.lastName)
             assertEquals(exampleUserProfile?.age, it?.age)
