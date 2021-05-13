@@ -7,14 +7,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,6 +18,7 @@ import javax.inject.Named
  * Activity in which one can create their profile by filling in fields
  * such as names, age, sciper, etc...
  */
+@AndroidEntryPoint
 class ProfilePageActivity : AppCompatActivity() {
 
     @Inject
@@ -43,7 +40,7 @@ class ProfilePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
         buttonAddCv = findViewById(R.id.button_add_cv)
-        buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
+        buttonSubChange = findViewById(R.id.button_sub_change_profile)
 
         if (UserTypeChoice.isProfessor) {
             findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
