@@ -9,7 +9,8 @@ import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
-import com.sdp13epfl2021.projmag.model.*
+import com.sdp13epfl2021.projmag.model.Candidature
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -84,40 +85,15 @@ class FirebaseCandidatureDatabase(
         var waiting = true
         var profile: ImmutableProfile? = null
         var cv: CurriculumVitae? = null
-        /*userdataDatabase.getProfile(userID, { profile = it }, { waiting = false})*/ //TODO add when implemented
-        /*userdataDatabase.getCV(userID, { cv = it }, { waiting = false })*/ //TODO add when implemented
-        profile = dummyProfile(userID)
-        cv = dummyCV(userID)
+        userdataDatabase.getProfile(userID, { profile = it }, { waiting = false })
+        userdataDatabase.getCv(userID, { cv = it }, { waiting = false })
 
         while (waiting && (profile == null || cv == null)) {
             delay(10)
         }
         if (profile != null && cv != null) {
-            candidatures.add(Candidature(projectID, userID, profile, cv, state))
+            candidatures.add(Candidature(projectID, userID, profile!!, cv!!, state))
         }
-    }
-
-    //TODO Remove after Profile/CV are implemented
-    private fun dummyProfile(userID: String): ImmutableProfile {
-        return (ImmutableProfile.build(
-            userID,
-            userID,
-            21,
-            Gender.MALE,
-            123456,
-            "021 123 45 67", Role.STUDENT
-        ) as Success).value
-    }
-
-    //TODO Remove after Profile/CV are implemented
-    private fun dummyCV(userID: String): CurriculumVitae {
-        return CurriculumVitae(
-            "summary of $userID",
-            emptyList(),
-            emptyList(),
-            emptyList(),
-            emptyList()
-        )
     }
 
 
