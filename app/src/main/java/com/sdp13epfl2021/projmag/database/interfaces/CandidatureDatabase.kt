@@ -26,14 +26,31 @@ interface CandidatureDatabase {
      * Push a candidature to a project and edit its state if present
      * Waiting should be used for new candidature.
      *
-     * @param candidature the candidature of this user
+     * @param projectId the project the user is applying to
+     * @param userId id of the user applying
      * @param newState the new state of the candidature
      * @param onSuccess called on success
      * @param onFailure called with an exception on failure
      */
     fun pushCandidature(
-        candidature: Candidature,
+        projectId: ProjectId,
+        userId: String,
         newState: Candidature.State,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    /**
+     * Remove a candidature from a project.
+     *
+     * @param projectId the projectId of the project of the candidature
+     * @param userId ID of the user whose candidature remove
+     * @param onSuccess called on success
+     * @param onFailure called with an exception on failure
+     */
+    fun removeCandidature(
+        projectId: ProjectId,
+        userId: String,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
