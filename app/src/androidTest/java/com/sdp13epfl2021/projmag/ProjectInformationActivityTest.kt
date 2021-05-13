@@ -9,13 +9,17 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
+import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity.Companion.APPLY_STRING
+import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity.Companion.UNAPPLY_STRING
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -225,7 +229,12 @@ class ProjectInformationActivityTest {
     @Test
     fun clickOnApplyButton() {
         Thread.sleep(2000)
-        onView(withId(R.id.applyButton)).perform(scrollTo()).perform(click())
+        val applyButton = onView(withId(R.id.applyButton))
+        applyButton.check(matches(withText(APPLY_STRING)))
+        applyButton.perform(scrollTo()).perform(click())
+        applyButton.check(matches(withText(UNAPPLY_STRING)))
+        applyButton.perform(scrollTo()).perform(click())
+        applyButton.check(matches(withText(APPLY_STRING)))
     }
 
     @Test
