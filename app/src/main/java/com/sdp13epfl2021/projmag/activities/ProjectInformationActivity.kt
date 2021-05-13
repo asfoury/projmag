@@ -29,11 +29,10 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
+import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +47,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity displaying the information and media of a project and from which
+ * one can apply to the project or send it using a deep link or QR code.
+ */
 class ProjectInformationActivity : AppCompatActivity() {
 
     companion object {
@@ -145,6 +147,10 @@ class ProjectInformationActivity : AppCompatActivity() {
         val candidatureDatabase = utils.candidatureDatabase
         setApplyButtonText(applyButton, null)
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
+        val userDataDatabase = Utils.getInstance(this).userdataDatabase
+        var alreadyApplied = false
+        setApplyButtonText(applyButton, null)
+        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
         }, {})
@@ -163,6 +169,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                     }
                 },
                 { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+
             )
 
         }
@@ -418,12 +425,18 @@ class ProjectInformationActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-
+    /**
+     * Creates menu with a share button and a QR code button.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_project_information, menu)
         return true
     }
 
+    /**
+     * QR code button opens QRCodeActivity and share button generates
+     * a deep link and opens the android share activity.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
             val linkToSend = createDynamicLink()

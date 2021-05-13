@@ -2,7 +2,6 @@ package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
-import java.lang.Exception
 
 /**
  * An implementation of MetadataDatabase using Firebase firestore.

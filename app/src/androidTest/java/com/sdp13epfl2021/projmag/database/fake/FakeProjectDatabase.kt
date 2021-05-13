@@ -1,8 +1,8 @@
 package com.sdp13epfl2021.projmag.database.fake
 
 import com.sdp13epfl2021.projmag.database.ProjectChange
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Success
@@ -19,18 +19,18 @@ class FakeProjectDatabase(projectsBeginning: List<ImmutableProject> = emptyList(
 
     fun add(project: ImmutableProject) {
         projects = projects + project
-        listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.ADDED, project)) }
+        listeners.forEach { it -> it(ProjectChange(ProjectChange.Type.ADDED, project)) }
     }
 
     fun modify(project: ImmutableProject) {
         projects = projects.filter { p -> p.id != project.id }
         projects = projects + project
-        listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
+        listeners.forEach { it -> it(ProjectChange(ProjectChange.Type.MODIFIED, project)) }
     }
 
     fun remove(project: ImmutableProject) {
         projects = projects - project
-        listeners.forEach{ it -> it(ProjectChange(ProjectChange.Type.REMOVED, project)) }
+        listeners.forEach { it -> it(ProjectChange(ProjectChange.Type.REMOVED, project)) }
     }
 
     override fun getAllIds(
@@ -68,8 +68,8 @@ class FakeProjectDatabase(projectsBeginning: List<ImmutableProject> = emptyList(
         onSuccess: (List<ImmutableProject>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val tagsList = tags.map { tag -> tag.toLowerCase(Locale.ROOT)}
-        onSuccess(projects.filter { tagsList.any {tag -> tagsList.contains(tag.toLowerCase(Locale.ROOT))} })
+        val tagsList = tags.map { tag -> tag.toLowerCase(Locale.ROOT) }
+        onSuccess(projects.filter { tagsList.any { tag -> tagsList.contains(tag.toLowerCase(Locale.ROOT)) } })
     }
 
     override fun pushProject(
@@ -82,8 +82,20 @@ class FakeProjectDatabase(projectsBeginning: List<ImmutableProject> = emptyList(
         val newProject = project.let {
             ImmutableProject(
                 pid,
-                it.name, it.lab, it.authorId, it.teacher, it.TA, it.nbParticipant, it.assigned, it.masterProject,
-                it.bachelorProject, it.tags, it.isTaken, it.description, it.videoURI, it.allowedSections
+                it.name,
+                it.lab,
+                it.authorId,
+                it.teacher,
+                it.TA,
+                it.nbParticipant,
+                it.assigned,
+                it.masterProject,
+                it.bachelorProject,
+                it.tags,
+                it.isTaken,
+                it.description,
+                it.videoURI,
+                it.allowedSections
             )
         }
         add(newProject)
@@ -108,7 +120,7 @@ class FakeProjectDatabase(projectsBeginning: List<ImmutableProject> = emptyList(
         val oldProject = projects.find { p -> p.id == id }
         if (oldProject != null) {
             projects = projects - oldProject
-            val newProject = oldProject.buildCopy( videoURI = oldProject.videoURI + uri)
+            val newProject = oldProject.buildCopy(videoURI = oldProject.videoURI + uri)
             when (newProject) {
                 is Success -> {
                     projects = projects + newProject.value

@@ -6,7 +6,8 @@ import com.sdp13epfl2021.projmag.database.fake.FakeUserdataDatabase
 import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedUserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
-import junit.framework.TestCase.*
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import org.junit.Test
 import java.io.File
 import java.util.concurrent.CompletableFuture

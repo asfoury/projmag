@@ -6,7 +6,14 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class MakeRecyclerListItemsClickListenable(context: Context, recyclerView: RecyclerView, private val mListener: OnItemClickListener?) : RecyclerView.OnItemTouchListener {
+/**
+ * Makes the project list items clickable
+ */
+class MakeRecyclerListItemsClickListenable(
+    context: Context,
+    recyclerView: RecyclerView,
+    private val mListener: OnItemClickListener?
+) : RecyclerView.OnItemTouchListener {
 
     private val mGestureDetector: GestureDetector
 
@@ -18,19 +25,23 @@ class MakeRecyclerListItemsClickListenable(context: Context, recyclerView: Recyc
 
     init {
 
-        mGestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                return true
-            }
-
-            override fun onLongPress(e: MotionEvent) {
-                val childView = recyclerView.findChildViewUnder(e.x, e.y)
-
-                if (childView != null && mListener != null) {
-                    mListener.onItemLongClick(childView, recyclerView.getChildAdapterPosition(childView))
+        mGestureDetector =
+            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    return true
                 }
-            }
-        })
+
+                override fun onLongPress(e: MotionEvent) {
+                    val childView = recyclerView.findChildViewUnder(e.x, e.y)
+
+                    if (childView != null && mListener != null) {
+                        mListener.onItemLongClick(
+                            childView,
+                            recyclerView.getChildAdapterPosition(childView)
+                        )
+                    }
+                }
+            })
     }
 
     override fun onInterceptTouchEvent(view: RecyclerView, e: MotionEvent): Boolean {
@@ -45,4 +56,5 @@ class MakeRecyclerListItemsClickListenable(context: Context, recyclerView: Recyc
 
     override fun onTouchEvent(view: RecyclerView, motionEvent: MotionEvent) {}
 
-    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}}
+    override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+}

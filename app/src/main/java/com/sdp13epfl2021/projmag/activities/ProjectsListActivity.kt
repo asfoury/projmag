@@ -18,11 +18,14 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkStri
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
+/**
+ * Displays a list of projects. User can filter based on various criteria and search by name.
+ */
 class ProjectsListActivity : AppCompatActivity() {
 
     private lateinit var projectAdapter: ProjectAdapter
@@ -34,7 +37,9 @@ class ProjectsListActivity : AppCompatActivity() {
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
 
-
+    /**
+     * Creates and displays list of projects.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
@@ -42,6 +47,7 @@ class ProjectsListActivity : AppCompatActivity() {
         utils = Utils.getInstance(this)
         updateAppliedProjects()
 
+        // if app was opened from deep link, extract relevant information to open the right project
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
         var projectId = ""
         if (fromLink) {
@@ -51,7 +57,8 @@ class ProjectsListActivity : AppCompatActivity() {
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
 
-        projectAdapter = ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+        projectAdapter =
+            ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
 
 
@@ -73,6 +80,9 @@ class ProjectsListActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Adds search button and functionality, filter button, user button to menu.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_project_list, menu)
         val item = menu?.findItem(R.id.searchButton)
@@ -125,7 +135,6 @@ class ProjectsListActivity : AppCompatActivity() {
             appliedProjects.addAll(list)
         }, {})
     }
-
 
 
     /**

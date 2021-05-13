@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import com.sdp13epfl2021.projmag.activities.SignInActivity
 import com.sdp13epfl2021.projmag.activities.UserTypeChoice
@@ -24,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         const val cv: String = "CV"                     //CurriculumVitae
         const val profile: String = "profile"           //ImmutableProfile
         const val tagsList: String = "tagsList"         //Array string (originally of tags)
-        const val  sectionsList:String = "sectionsList" //Array string
+        const val sectionsList: String = "sectionsList" //Array string
     }
 
     private lateinit var mAuth: FirebaseAuth
@@ -33,11 +32,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        UserTypeChoice.isProfessor = getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE).getBoolean(UserTypeChoice.isUserProf, true)
+        UserTypeChoice.isProfessor =
+            getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE).getBoolean(
+                UserTypeChoice.isUserProf,
+                true
+            )
 
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
-    
+
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
          * Else send him to DashboardActivity*/
         Handler(Looper.getMainLooper()).postDelayed({
@@ -63,27 +66,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleLink() {
-        FirebaseDynamicLinks.getInstance().getDynamicLink(intent).addOnSuccessListener {
-                pendingDynamicLinkData ->
-            var dynamicLink: Uri? = null
-            if (pendingDynamicLinkData != null) {
-                dynamicLink = pendingDynamicLinkData.link!!
-            }
-            var fromLink = false
-            var projectId: String? = ""
-            if (dynamicLink != null) {
-                projectId = dynamicLink.path?.substring(11)
-                fromLink = true
-            }
+        FirebaseDynamicLinks.getInstance().getDynamicLink(intent)
+            .addOnSuccessListener { pendingDynamicLinkData ->
+                var dynamicLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    dynamicLink = pendingDynamicLinkData.link!!
+                }
+                var fromLink = false
+                var projectId: String? = ""
+                if (dynamicLink != null) {
+                    projectId = dynamicLink.path?.substring(11)
+                    fromLink = true
+                }
 
-            goToList { i ->
-                i.putExtra(fromLinkString, fromLink)
-                i.putExtra(projectIdString, projectId)
-            }
+                goToList { i ->
+                    i.putExtra(fromLinkString, fromLink)
+                    i.putExtra(projectIdString, projectId)
+                }
 
-        }.addOnFailureListener {
-            Toast.makeText(applicationContext, getString(R.string.failure), Toast.LENGTH_LONG).show()
-            goToList({})
-        }
+            }.addOnFailureListener {
+                Toast.makeText(applicationContext, getString(R.string.failure), Toast.LENGTH_LONG)
+                    .show()
+                goToList({})
+            }
     }
 }

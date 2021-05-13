@@ -4,14 +4,18 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.fake.FakeUserdataDatabase
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseCandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
-import junit.framework.Assert.*
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -34,11 +38,14 @@ class FirebaseCandidatureDatabaseTest {
     private val mockDS = Mockito.mock(DocumentSnapshot::class.java) as DocumentSnapshot
 
     private val mockVoidTask: Task<Void> = Mockito.mock(Task::class.java) as Task<Void>
-    private val mockDSTask: Task<DocumentSnapshot> = Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
+    private val mockDSTask: Task<DocumentSnapshot> =
+        Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
 
     private val userDB: UserdataDatabase = FakeUserdataDatabase()
-    private val candidatureDB = FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuth, userDB)
-    private val candidatureDBWithoutAuth = FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuthFailed, userDB)
+    private val candidatureDB =
+        FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuth, userDB)
+    private val candidatureDBWithoutAuth =
+        FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuthFailed, userDB)
 
 
     val userIDRejected = "001"
@@ -60,7 +67,8 @@ class FirebaseCandidatureDatabaseTest {
             21,
             Gender.MALE,
             123456,
-            "021 123 45 67", Role.STUDENT) as Success).value,
+            "021 123 45 67", Role.STUDENT
+        ) as Success).value,
         CurriculumVitae(
             "summary 2",
             emptyList(),
@@ -98,16 +106,18 @@ class FirebaseCandidatureDatabaseTest {
         Mockito
             .`when`(mockDS.exists())
             .thenReturn(true)
-        
+
         Mockito
             .`when`(mockDS.data)
-            .thenReturn(mapOf(
-                userIDAccepted to "Accepted",
-                userIDRejected to "Rejected",
-                userIDWaiting to "Waiting",
-                userIDInvalidType to 300,
-                userIDEmpty to null
-            ))
+            .thenReturn(
+                mapOf(
+                    userIDAccepted to "Accepted",
+                    userIDRejected to "Rejected",
+                    userIDWaiting to "Waiting",
+                    userIDInvalidType to 300,
+                    userIDEmpty to null
+                )
+            )
 
 
         //FirebaseAuth
@@ -137,8 +147,6 @@ class FirebaseCandidatureDatabaseTest {
                 osl?.onSuccess(mockDS)
                 mockVoidTask
             }
-
-
 
 
     }
