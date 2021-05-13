@@ -4,7 +4,7 @@
 
 ## Giovanni
 
-
+This week first  I add KDoc to some fuction. Then my second task was to find way to have the orientation of the telephone, this take me time to find a good way of to that in the documentation but then the implementation was not hard. For this two task my time estimation was accrute  
 ## Luke
 
 ## Arnaud
