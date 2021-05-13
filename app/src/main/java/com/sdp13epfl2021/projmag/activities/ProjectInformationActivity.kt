@@ -132,10 +132,10 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         var alreadyApplied = false
-        setButtonText(applyButton, null,getString(R.string.unnaplyText), getString(R.string.applyText))
+        setButtonText(applyButton, null,getString(R.string.unaply_text), getString(R.string.apply_text))
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
-            setButtonText(applyButton, alreadyApplied,getString(R.string.unnaplyText), getString(R.string.applyText))
+            setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
         }, {})
 
         applyButton.isEnabled = !projectVar.isTaken
@@ -150,8 +150,8 @@ class ProjectInformationActivity : AppCompatActivity() {
                     setButtonText(
                         applyButton,
                         alreadyApplied,
-                        getString(R.string.unnaplyText),
-                        getString(R.string.applyText)
+                        getString(R.string.unaply_text),
+                        getString(R.string.apply_text)
                     )
                 },
                 { showToast(getString(R.string.failure), Toast.LENGTH_LONG) }
