@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class CachedProjectDatabaseTest {
     private val tagManager = TagsBaseManager()
-    private val tagList : List<String> = tagManager.tagsListToStringList(tagManager.getAllTags())
-    private val sectionList : List<String> = SectionBaseManager.sectionList()
+    private val tagList: List<String> = tagManager.tagsListToStringList(tagManager.getAllTags())
+    private val sectionList: List<String> = SectionBaseManager.sectionList()
     private val p1 = ImmutableProject(
         "12345",
         "What fraction of Google searches are answered by Wikipedia?",

@@ -35,7 +35,7 @@ class UserProfileDatabase(
      * @param onSuccess the closure that's when a profile is uploaded successfully
      * @param onFailure the closure that's called if the upload fails
      */
-    public fun uploadProfile(
+    fun uploadProfile(
         profile: ImmutableProfile,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
@@ -60,7 +60,7 @@ class UserProfileDatabase(
                     onFailure(it)
                 }
         } else {
-          onFailure(Exception("user id is null"))
+            onFailure(Exception("user id is null"))
         }
     }
 
@@ -69,7 +69,7 @@ class UserProfileDatabase(
      * @param onSuccess the closure that's when a profile is downloaded successfully with the fetched profile passed to it
      * @param onFailure the closure that's called if the download fails
      */
-    public fun getProfile(
+    fun getProfile(
         onSuccess: (profile: ImmutableProfile?) -> Unit,
         onFailure: (Exception) -> kotlin.Unit
     ) {

@@ -1,4 +1,3 @@
-
 package com.sdp13epfl2021.projmag
 
 import android.app.Activity
@@ -24,8 +23,11 @@ import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
 
 
-const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FROM_TO_SUBTITLE_MESSAGE"
+const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE_MESSAGE"
 
+/**
+ * Activity consisting of a form one can use to create and submit a project.
+ */
 class Form : AppCompatActivity() {
 
     companion object {
@@ -46,14 +48,14 @@ class Form : AppCompatActivity() {
     private var subtitles: String? = null
 
     private var listTags: Array<String> = emptyArray()
-    private var listSections : Array<String> = emptyArray()
+    private var listSections: Array<String> = emptyArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addtagButton: Button = findViewById(R.id.addTagsButton)
-        val addSectionButton : Button = findViewById(R.id.addSectionButton)
+        val addSectionButton: Button = findViewById(R.id.addSectionButton)
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(
@@ -66,7 +68,7 @@ class Form : AppCompatActivity() {
         addtagButton.setOnClickListener {
             switchToTagsSelectionActivity()
         }
-        addSectionButton.setOnClickListener{
+        addSectionButton.setOnClickListener {
             switchToSectionSelectionActivity()
         }
         findViewById<TextView>(R.id.title_form).requestFocus()
@@ -138,8 +140,7 @@ class Form : AppCompatActivity() {
                     listTags = tagData
                 }
             }
-        }
-        else if(resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECTION_ACCESS){
+        } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECTION_ACCESS) {
             if (data != null) {
                 val secList = data.getStringArrayExtra(MainActivity.sectionsList)
                 if (secList != null) {
@@ -150,114 +151,114 @@ class Form : AppCompatActivity() {
     }
 
 
-        /**
-         * Extract string text content form an EditText view
-         */
-        private fun getTextFromEditText(id: Int): String = findViewById<EditText>(id).run {
-            text.toString()
-        }
+    /**
+     * Extract string text content form an EditText view
+     */
+    private fun getTextFromEditText(id: Int): String = findViewById<EditText>(id).run {
+        text.toString()
+    }
 
-        /**
-         * Show a toast message on the UI thread
-         * This is useful when using async callbacks
-         */
-        private fun showToast(msg: String) = runOnUiThread {
-            Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-        }
+    /**
+     * Show a toast message on the UI thread
+     * This is useful when using async callbacks
+     */
+    private fun showToast(msg: String) = runOnUiThread {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    }
 
-        /**
-         * Construct a Project with data present in the view
-         */
-        private fun constructProject(): Result<ImmutableProject> {
-            return ImmutableProject.build(
-                id = "", //id is defined by firebase itself
-                name = getTextFromEditText(R.id.form_edit_text_project_name),
-                lab = getTextFromEditText(R.id.form_edit_text_laboratory),
-                authorId = Firebase.auth.currentUser!!.uid,
-                teacher = getTextFromEditText(R.id.form_edit_text_teacher),
-                TA = getTextFromEditText(R.id.form_edit_text_project_TA),
-                nbParticipant = try {
-                    getTextFromEditText(R.id.form_nb_of_participant).toInt()
-                } catch (_: NumberFormatException) {
-                    0
-                },
-                masterProject = findViewById<CheckBox>(R.id.form_check_box_MP).isChecked,
-                bachelorProject = findViewById<CheckBox>(R.id.form_check_box_SP).isChecked,
-                isTaken = false,
-                description = getTextFromEditText(R.id.form_project_description),
-                assigned = listOf(),
-                tags = listTags.toList(),
-                allowedSections = listSections.toList()
-            )
-        }
+    /**
+     * Construct a Project with data present in the view
+     */
+    private fun constructProject(): Result<ImmutableProject> {
+        return ImmutableProject.build(
+            id = "", //id is defined by firebase itself
+            name = getTextFromEditText(R.id.form_edit_text_project_name),
+            lab = getTextFromEditText(R.id.form_edit_text_laboratory),
+            authorId = Firebase.auth.currentUser!!.uid,
+            teacher = getTextFromEditText(R.id.form_edit_text_teacher),
+            TA = getTextFromEditText(R.id.form_edit_text_project_TA),
+            nbParticipant = try {
+                getTextFromEditText(R.id.form_nb_of_participant).toInt()
+            } catch (_: NumberFormatException) {
+                0
+            },
+            masterProject = findViewById<CheckBox>(R.id.form_check_box_MP).isChecked,
+            bachelorProject = findViewById<CheckBox>(R.id.form_check_box_SP).isChecked,
+            isTaken = false,
+            description = getTextFromEditText(R.id.form_project_description),
+            assigned = listOf(),
+            tags = listTags.toList(),
+            allowedSections = listSections.toList()
+        )
+    }
 
 
-        /**
-         * Finish the activity from another thread
-         * Useful when using async callbacks
-         */
-        private fun finishFromOtherThread() = runOnUiThread {
-            finish()
-        }
+    /**
+     * Finish the activity from another thread
+     * Useful when using async callbacks
+     */
+    private fun finishFromOtherThread() = runOnUiThread {
+        finish()
+    }
 
-        /**
-         * Submit project and video with information in the view.
-         * Expected to be called when clicking on a submission button on the view
-         */
-        private fun submit(view: View) = Firebase.auth.uid?.let {
-            setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
-            val utils = Utils.getInstance(this)
-            ProjectUploader(
-                utils.projectDatabase,
-                utils.fileDatabase,
-                utils.metadataDatabase,
-                utils.candidatureDatabase,
-                ::showToast,
-                { setSubmitButtonEnabled(true) },
-                ::finishFromOtherThread
-            ).checkProjectAndThenUpload(
-                constructProject(),
-                videoUri,
-                subtitles
-            )
-        }
+    /**
+     * Submit project and video with information in the view.
+     * Expected to be called when clicking on a submission button on the view
+     */
+    private fun submit(view: View) = Firebase.auth.uid?.let {
+        setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
+        val utils = Utils.getInstance(this)
+        ProjectUploader(
+            utils.projectDatabase,
+            utils.fileDatabase,
+            utils.metadataDatabase,
+            utils.candidatureDatabase,
+            ::showToast,
+            { setSubmitButtonEnabled(true) },
+            ::finishFromOtherThread
+        ).checkProjectAndThenUpload(
+            constructProject(),
+            videoUri,
+            subtitles
+        )
+    }
 
-        /**
-         * Switch to the tag selection activity that will then comeback to this activity
-         * And update the project list if the activity finishes properly
-         */
-        private fun switchToTagsSelectionActivity() {
-            //why do i need to do the :: class.java to make it work
-            val intent = Intent(this, TagsSelectorActivity::class.java)
-            startActivityForResult(intent, REQUEST_TAG_ACCESS)
-
-        }
-
-        private fun switchToSectionSelectionActivity(){
-            val intent = Intent(this, SectionSelectionActivity::class.java)
-            startActivityForResult(intent, REQUEST_SELECTION_ACCESS)
-        }
-
+    /**
+     * Switch to the tag selection activity that will then comeback to this activity
+     * And update the project list if the activity finishes properly
+     */
+    private fun switchToTagsSelectionActivity() {
+        //why do i need to do the :: class.java to make it work
+        val intent = Intent(this, TagsSelectorActivity::class.java)
+        startActivityForResult(intent, REQUEST_TAG_ACCESS)
 
     }
 
-    object FormHelper {
-        fun playVideoFromLocalPath(
-            playVidButton: Button,
-            subtitleButton: Button,
-            vidView: VideoView,
-            mediaController: MediaController,
-            uri: Uri
-        ) {
-            playVidButton.isEnabled = true
-            playVidButton.setOnClickListener {
-                vidView.setMediaController(mediaController)
-                vidView.setVideoURI(uri)
-                vidView.start()
-                vidView.visibility = VISIBLE
-            }
-            subtitleButton.isEnabled = true
-        }
+    private fun switchToSectionSelectionActivity() {
+        val intent = Intent(this, SectionSelectionActivity::class.java)
+        startActivityForResult(intent, REQUEST_SELECTION_ACCESS)
     }
+
+
+}
+
+object FormHelper {
+    fun playVideoFromLocalPath(
+        playVidButton: Button,
+        subtitleButton: Button,
+        vidView: VideoView,
+        mediaController: MediaController,
+        uri: Uri
+    ) {
+        playVidButton.isEnabled = true
+        playVidButton.setOnClickListener {
+            vidView.setMediaController(mediaController)
+            vidView.setVideoURI(uri)
+            vidView.start()
+            vidView.visibility = VISIBLE
+        }
+        subtitleButton.isEnabled = true
+    }
+}
 
 

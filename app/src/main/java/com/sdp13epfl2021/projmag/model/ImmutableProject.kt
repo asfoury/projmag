@@ -1,15 +1,12 @@
-    package com.sdp13epfl2021.projmag.model
+package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
-import java.io.Serializable
-import java.lang.ClassCastException
-import java.lang.NullPointerException
 import java.util.*
 
-    sealed class Result<T>
+sealed class Result<T>
 data class Success<T>(val value: T) : Result<T>()
 data class Failure<T>(val reason: String) : Result<T>()
 
@@ -30,9 +27,10 @@ data class ImmutableProject(
     val description: String,
     val videoURI: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
+    val creationDate: Date = Date()
 ) : Parcelable {
     companion object {
-        public object FieldNames {
+        object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
@@ -48,6 +46,7 @@ data class ImmutableProject(
             const val DESCRIPTION = "description"
             const val VIDEO_URI = "videoURI"
             const val ALLOWED_SECTIONS = "allowedSections"
+            const val CREATION_DATE = "creationDate"
         }
 
         const val MAX_PROJECT_NAME_SIZE = 120
@@ -88,7 +87,8 @@ data class ImmutableProject(
             isTaken: Boolean,
             description: String,
             videoURI: List<String> = listOf(),
-            allowedSections: List<String> = listOf()
+            allowedSections: List<String> = listOf(),
+            creationDate: Date = Date()
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -102,7 +102,7 @@ data class ImmutableProject(
                             "students currently assigned but only $nbParticipant allowed to work for the project"
                 )
                 //!sectionsManager.isListValid(allowedSections) -> Failure("a section in the section list doesn't exist $allowedSections")
-                 //!tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist $tags")
+                //!tagsManager.isListOfStringsValidTags(tags) -> Failure("a tag in the tag list doesn't exist $tags")
 
                 else -> Success(
                     ImmutableProject(
@@ -120,7 +120,8 @@ data class ImmutableProject(
                         isTaken,
                         description,
                         videoURI,
-                        allowedSections
+                        allowedSections,
+                        creationDate
                     )
                 )
             }
@@ -152,7 +153,8 @@ data class ImmutableProject(
                     isTaken = map[FieldNames.IS_TAKEN] as Boolean,
                     description = map[FieldNames.DESCRIPTION] as String,
                     videoURI = map[FieldNames.VIDEO_URI] as List<String>,
-                    allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>
+                    allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>,
+                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long)
                 )
                 return when (result) {
                     is Success -> result.value
@@ -189,6 +191,7 @@ data class ImmutableProject(
      * @param tags : tags associated to the project
      * @param isTaken : Is this project already taken
      * @param description : description of the project
+     * @param creationDate : the date of the creation
      */
     fun buildCopy(
         id: String = this.id,
@@ -205,10 +208,25 @@ data class ImmutableProject(
         isTaken: Boolean = this.isTaken,
         description: String = this.description,
         videoURI: List<String> = this.videoURI,
-        allowedSections: List<String> = this.allowedSections
+        allowedSections: List<String> = this.allowedSections,
+        creationDate: Date = this.creationDate
     ) = build(
-        id, name, lab, authorId, teacher, TA, nbParticipant, assigned, masterProject, bachelorProject,
-        tags, isTaken, description, videoURI, allowedSections
+        id,
+        name,
+        lab,
+        authorId,
+        teacher,
+        TA,
+        nbParticipant,
+        assigned,
+        masterProject,
+        bachelorProject,
+        tags,
+        isTaken,
+        description,
+        videoURI,
+        allowedSections,
+        creationDate
     )
 
     /**
@@ -233,11 +251,9 @@ data class ImmutableProject(
         FieldNames.IS_TAKEN to isTaken,
         FieldNames.DESCRIPTION to description,
         FieldNames.VIDEO_URI to videoURI,
-        FieldNames.ALLOWED_SECTIONS to allowedSections
+        FieldNames.ALLOWED_SECTIONS to allowedSections,
+        FieldNames.CREATION_DATE to creationDate.time
     )
-
-
-
 
 
 }

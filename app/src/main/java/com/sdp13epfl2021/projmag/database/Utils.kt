@@ -40,7 +40,12 @@ class Utils(
             reset: Boolean = false,
             auth: FirebaseAuth = Firebase.auth,
             userdataDB: UserdataDatabase = createUserDB(context, auth, reset),
-            candidatureDB: CandidatureDatabase = createCandidatureDB(context, auth, userdataDB, reset),
+            candidatureDB: CandidatureDatabase = createCandidatureDB(
+                context,
+                auth,
+                userdataDB,
+                reset
+            ),
             fileDB: FileDatabase = FirebaseFileDatabase(Firebase.storage, auth),
             metadataDB: MetadataDatabase = FirebaseMetadataDatabase(Firebase.firestore),
             projectDB: ProjectDatabase = createProjectDB(context, candidatureDB, reset)
@@ -51,7 +56,11 @@ class Utils(
             return instance!!
         }
 
-        private fun createProjectDB(context: Context, candidatureDB: CandidatureDatabase, reset: Boolean): ProjectDatabase {
+        private fun createProjectDB(
+            context: Context,
+            candidatureDB: CandidatureDatabase,
+            reset: Boolean
+        ): ProjectDatabase {
             return if (reset || instance?.projectDatabase == null) {
                 CachedProjectDatabase(
                     OfflineProjectDatabase(
@@ -67,7 +76,11 @@ class Utils(
             }
         }
 
-        private fun createUserDB(context: Context, auth: FirebaseAuth, reset: Boolean): UserdataDatabase {
+        private fun createUserDB(
+            context: Context,
+            auth: FirebaseAuth,
+            reset: Boolean
+        ): UserdataDatabase {
             return if (reset || instance?.userdataDatabase == null) {
                 OfflineCachedUserdataDatabase(
                     FirebaseUserdataDatabase(
@@ -82,7 +95,12 @@ class Utils(
             }
         }
 
-        private fun createCandidatureDB(context: Context, auth: FirebaseAuth, userdataDB: UserdataDatabase, reset: Boolean): CandidatureDatabase {
+        private fun createCandidatureDB(
+            context: Context,
+            auth: FirebaseAuth,
+            userdataDB: UserdataDatabase,
+            reset: Boolean
+        ): CandidatureDatabase {
             return if (reset || instance?.candidatureDatabase == null) {
                 OfflineCachedCandidatureDatabase(
                     FirebaseCandidatureDatabase(Firebase.firestore, auth, userdataDB),
