@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.database.impl.firebase
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
@@ -141,13 +142,26 @@ class FirebaseCandidatureDatabase(
     }
 
     override fun pushCandidature(
-        candidature: Candidature,
+        projectId: ProjectId,
+        userId: String,
         newState: Candidature.State,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        getDoc(candidature.projectId)
-            .set(mapOf(candidature.userID to newState), SetOptions.merge())
+        getDoc(projectId)
+            .set(mapOf(userId to newState), SetOptions.merge())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener(onFailure)
+    }
+
+    override fun removeCandidature(
+        projectId: ProjectId,
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        getDoc(projectId)
+            .update(userId, FieldValue.delete())
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }

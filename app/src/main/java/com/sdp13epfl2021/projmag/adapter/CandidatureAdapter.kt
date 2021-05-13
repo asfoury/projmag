@@ -94,7 +94,8 @@ class CandidatureAdapter(
     ): (View) -> Unit {
         return { view: View ->
             utils.candidatureDatabase.pushCandidature(
-                candidature,
+                projectId,
+                candidature.userId,
                 state,
                 {
                     showToast(successMsg)
