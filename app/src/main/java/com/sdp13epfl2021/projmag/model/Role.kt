@@ -1,15 +1,17 @@
 package com.sdp13epfl2021.projmag.model
 
 enum class Role {
-    STUDENT{
+    STUDENT {
         override fun toString(): String {
             return "Student"
         }
-           },TEACHER{
+    },
+    TEACHER {
         override fun toString(): String {
             return "Teacher"
         }
-    },OTHER{
+    },
+    OTHER {
         override fun toString(): String {
             return "Other"
         }

@@ -26,9 +26,9 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -39,10 +39,14 @@ import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity displaying the information and media of a project and from which
+ * one can apply to the project or send it using a deep link or QR code.
+ */
 class ProjectInformationActivity : AppCompatActivity() {
 
     companion object {
@@ -108,24 +112,24 @@ class ProjectInformationActivity : AppCompatActivity() {
         val projectId = projectVar.id
         val userDataDatabase = Utils.getInstance(this).userdataDatabase
         var alreadyApplied = false
-        setApplyButtonText(applyButton,null)
+        setApplyButtonText(applyButton, null)
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
-        },{})
+        }, {})
 
         applyButton.isEnabled = !projectVar.isTaken
 
         applyButton.setOnClickListener {
             userDataDatabase.applyUnapply(
                 !alreadyApplied,
-               projectId,
+                projectId,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
                     setApplyButtonText(applyButton, alreadyApplied)
                 },
-                {showToast(getString(R.string.failure), Toast.LENGTH_LONG)}
+                { showToast(getString(R.string.failure), Toast.LENGTH_LONG) }
             )
 
         }
@@ -147,6 +151,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
+        val creationDate = findViewById<TextView>(R.id.info_creation_date)
         videoView = findViewById(R.id.info_video)
 
 
@@ -161,6 +166,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             responsible.text = project.teacher
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
+            creationDate.text = SimpleDateFormat(getString(R.string.diplay_creation_date_format), Locale.getDefault()).format(project.creationDate)
             type.text =
                 if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
                 else if (project.bachelorProject) getString(R.string.display_bachelor_only)
@@ -187,7 +193,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setUpApplyButton(findViewById(R.id.applyButton) as Button)
+        setUpApplyButton(findViewById<Button>(R.id.applyButton))
     }
 
     // pause/start when we touch the video
@@ -364,7 +370,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun createDynamicLink() : Uri {
+    private fun createDynamicLink(): Uri {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("https://www.example.com/projectid=" + projectVar.id)
             domainUriPrefix = "https://projmag.page.link/"
@@ -379,12 +385,18 @@ class ProjectInformationActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-
+    /**
+     * Creates menu with a share button and a QR code button.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_project_information, menu)
+        menuInflater.inflate(R.menu.menu_project_information, menu)
         return true
     }
 
+    /**
+     * QR code button opens QRCodeActivity and share button generates
+     * a deep link and opens the android share activity.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
             val linkToSend = createDynamicLink()
@@ -403,17 +415,16 @@ class ProjectInformationActivity : AppCompatActivity() {
                 //this should not happen, unless the user was disconnected after loading the project view
                 showToast(resources.getString(R.string.waiting_not_allowed), Toast.LENGTH_LONG)
             }
-        }
-        else if(item.itemId == R.id.generateQRCodeButton) {
+        } else if (item.itemId == R.id.generateQRCodeButton) {
             val linkToSend = createDynamicLink()
 
-            val qrImage = QRCode.from(linkToSend.toString()).withSize(800,800)
+            val qrImage = QRCode.from(linkToSend.toString()).withSize(800, 800)
             val stream = ByteArrayOutputStream()
             qrImage.bitmap().compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray: ByteArray = stream.toByteArray()
 
             val intent = Intent(this, QRCodeActivity::class.java)
-            intent.putExtra("qrcode",byteArray)
+            intent.putExtra("qrcode", byteArray)
             startActivity(intent)
             return true
         }

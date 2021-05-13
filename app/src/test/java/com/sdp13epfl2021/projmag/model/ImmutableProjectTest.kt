@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.model
 import junit.framework.TestCase.*
 import org.junit.Assert
 import org.junit.Test
+import java.util.*
 
 class ImmutableProjectTest {
     private val id = "zoerjfoerfj"
@@ -128,7 +129,8 @@ class ImmutableProjectTest {
                 tags = get("tags") as List<String>,
                 isTaken = get("isTaken") as Boolean,
                 description = get("description") as String,
-                allowedSections = get("allowedSections") as List<String>
+                allowedSections = get("allowedSections") as List<String>,
+                creationDate = Date(get("creationDate") as Long)
             )
         }
 
@@ -151,7 +153,8 @@ class ImmutableProjectTest {
             "isTaken" to project.isTaken,
             "description" to project.description,
             "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections
+            "allowedSections" to project.allowedSections,
+            "creationDate" to project.creationDate.time
         )
 
 

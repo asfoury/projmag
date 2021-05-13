@@ -8,13 +8,13 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
-import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
-import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 
 @Suppress("UNCHECKED_CAST")
 class FirebaseUserdataTest {

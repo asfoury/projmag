@@ -6,7 +6,9 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
 
-
+/**
+ * Displays a QR code containing a deep link towards the relevant project.
+ */
 class QRCodeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -2,9 +2,9 @@
 
 package com.sdp13epfl2021.projmag.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -13,6 +13,9 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
 import com.sdp13epfl2021.projmag.database.Utils
 
+/**
+ * Activity in which one can create and submit a CV.
+ */
 class CVCreationActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2

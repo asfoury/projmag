@@ -6,11 +6,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.PreferencesActivity
-import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.prefs.Preferences
 
 @RunWith(AndroidJUnit4::class)
 class PreferencesActivityTests {

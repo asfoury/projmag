@@ -14,9 +14,7 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Language
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.PeriodDescription
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.SkillDescription
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
