@@ -30,7 +30,7 @@ data class ImmutableProject(
     val creationDate: Date = Date()
 ) : Parcelable {
     companion object {
-        public object FieldNames {
+        object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
