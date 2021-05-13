@@ -1,18 +1,17 @@
 package com.sdp13epfl2021.projmag.database
 
-import com.google.common.io.Files
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
 import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedCandidatureDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
-import com.sdp13epfl2021.projmag.model.*
-import junit.framework.TestCase.assertEquals
+import com.sdp13epfl2021.projmag.model.Gender
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
+import com.sdp13epfl2021.projmag.model.Role
+import com.sdp13epfl2021.projmag.model.Success
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
 import java.io.File
-import java.util.concurrent.CompletableFuture
 
 class OfflineCachedCandidatureDatabaseTest {
 

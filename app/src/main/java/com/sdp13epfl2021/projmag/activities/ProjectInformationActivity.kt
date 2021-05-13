@@ -26,13 +26,12 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Candidature
-import com.sdp13epfl2021.projmag.model.ImmutableProfile
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -113,7 +112,11 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun onApplyClick(applyButton: Button, candidatureDatabase: CandidatureDatabase, projectId: ProjectId, ) {
+    private fun onApplyClick(
+        applyButton: Button,
+        candidatureDatabase: CandidatureDatabase,
+        projectId: ProjectId,
+    ) {
         if (alreadyApplied) {
             candidatureDatabase.removeCandidature(
                 projectId,
@@ -147,32 +150,32 @@ class ProjectInformationActivity : AppCompatActivity() {
         val candidatureDatabase = utils.candidatureDatabase
         setApplyButtonText(applyButton, null)
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
-        val userDataDatabase = Utils.getInstance(this).userdataDatabase
-        var alreadyApplied = false
-        setApplyButtonText(applyButton, null)
-        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
-            alreadyApplied = projectIds.contains(projectId)
-            setApplyButtonText(applyButton, alreadyApplied)
+            val userDataDatabase = Utils.getInstance(this).userdataDatabase
+            var alreadyApplied = false
+            setApplyButtonText(applyButton, null)
+            userDataDatabase.getListOfAppliedToProjects({ projectIds ->
+                alreadyApplied = projectIds.contains(projectId)
+                setApplyButtonText(applyButton, alreadyApplied)
+            }, {})
+
+            applyButton.isEnabled = !projectVar.isTaken
+
+            applyButton.setOnClickListener {
+                userdataDatabase.applyUnapply(
+                    !alreadyApplied,
+                    projectId,
+                    {
+                        if (userId != null) {
+                            onApplyClick(applyButton, candidatureDatabase, projectId)
+                        } else {
+                            showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
+                        }
+                    },
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+
+                )
+            }
         }, {})
-
-        applyButton.isEnabled = !projectVar.isTaken
-
-        applyButton.setOnClickListener {
-            userdataDatabase.applyUnapply(
-                !alreadyApplied,
-                projectId,
-                {
-                    if (userId != null) {
-                        onApplyClick(applyButton, candidatureDatabase, projectId)
-                    } else {
-                        showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
-                    }
-                },
-                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
-
-            )
-
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -206,7 +209,10 @@ class ProjectInformationActivity : AppCompatActivity() {
             responsible.text = project.teacher
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
-            creationDate.text = SimpleDateFormat(getString(R.string.diplay_creation_date_format), Locale.getDefault()).format(project.creationDate)
+            creationDate.text = SimpleDateFormat(
+                getString(R.string.diplay_creation_date_format),
+                Locale.getDefault()
+            ).format(project.creationDate)
             type.text =
                 if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
                 else if (project.bachelorProject) getString(R.string.display_bachelor_only)
