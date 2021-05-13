@@ -11,12 +11,18 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.impl.firebase.UserProfileDatabase
+import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
 
-
+/**
+ * Activity in which one can create their profile by filling in fields
+ * such as names, age, sciper, etc...
+ */
 class ProfilePageActivity : AppCompatActivity() {
 
+    lateinit var userdataDatabase: UserdataDatabase
     lateinit var imageView: ImageView
     lateinit var button: Button
     lateinit var buttonAddCv: Button
@@ -28,37 +34,41 @@ class ProfilePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
+        val utils = Utils.getInstance(this)
+        userdataDatabase = utils.userdataDatabase
+        val userID = utils.auth.currentUser?.uid ?: "localID" //TODO remove after DI
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 
-        if(UserTypeChoice.isProfessor){
-            findViewById<TextView>(R.id.profile_sciper).setVisibility(View.INVISIBLE)
+        if (UserTypeChoice.isProfessor) {
+            findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
             //buttonAddCv.setVisibility(View.INVISIBLE)
         }
 
-        UserProfileDatabase(Firebase.firestore, Firebase.auth).getProfile(::loadUserProfile) {
+        userdataDatabase.getProfile(userID, ::loadUserProfile) {
             Toast.makeText(this,getString(R.string.profile_loading_failed)   , Toast.LENGTH_LONG).show()
         }
 
 
-        buttonAddCv.setOnClickListener{
-            val intent = Intent(this,CVCreationActivity::class.java)
+        buttonAddCv.setOnClickListener {
+            val intent = Intent(this, CVCreationActivity::class.java)
             startActivity(intent)
             finish()
         }
-        buttonSubChange.setOnClickListener{
+        buttonSubChange.setOnClickListener {
             val profile = createProfileFromFields()
+
             if(profile != null) {
-                UserProfileDatabase(Firebase.firestore, Firebase.auth).uploadProfile(profile, {}, {})
+                userdataDatabase.uploadProfile(profile, {}, {})
             }
-            val intent = Intent(this,ProjectsListActivity::class.java)
+            val intent = Intent(this, ProjectsListActivity::class.java)
             startActivity(intent)
             finish()
         }
 
     }
 
-    private fun loadUserProfile(profile : ImmutableProfile?) {
+    private fun loadUserProfile(profile: ImmutableProfile?) {
         if (profile != null) {
             findViewById<EditText>(R.id.profile_firstname).setText(profile.firstName)
             findViewById<EditText>(R.id.profile_lastname).setText(profile.lastName)
@@ -67,7 +77,8 @@ class ProfilePageActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.profile_phone_number).setText(profile.phoneNumber)
             findViewById<EditText>(R.id.profile_sciper).setText(profile.sciper.toString())
         } else {
-            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -80,12 +91,12 @@ class ProfilePageActivity : AppCompatActivity() {
         }
     }
 
-    private fun createProfileFromFields() : ImmutableProfile? {
+    private fun createProfileFromFields(): ImmutableProfile? {
         val firstName = findViewById<EditText>(R.id.profile_firstname).text.toString()
         val lastName = findViewById<EditText>(R.id.profile_lastname).text.toString()
         val age = findViewById<EditText>(R.id.profile_age).text.toString()
 
-        val gender = when(findViewById<EditText>(R.id.profile_genre).text.toString()){
+        val gender = when (findViewById<EditText>(R.id.profile_genre).text.toString()) {
             Gender.MALE.name -> Gender.MALE
             Gender.FEMALE.name -> Gender.FEMALE
             else -> Gender.OTHER
@@ -95,9 +106,11 @@ class ProfilePageActivity : AppCompatActivity() {
         val sciper = findViewById<EditText>(R.id.profile_sciper).text.toString()
 
 
-        val profile =  ImmutableProfile.build(lastName,firstName,Integer.valueOf(age),gender , Integer.valueOf(sciper) ,phoneNumber,
-            role)
-        return when(profile) {
+        val profile = ImmutableProfile.build(
+            lastName, firstName, Integer.valueOf(age), gender, Integer.valueOf(sciper), phoneNumber,
+            role
+        )
+        return when (profile) {
             is Success -> {
                 profile.value
             }

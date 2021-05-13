@@ -63,7 +63,7 @@
     <string name="master">Master</string>
     <string name="display_bachelor_and_master">Bachelor &amp; Master semester</string>
     <string name="display_not_found">Project not found</string>
-
+    <string name="diplay_creation_date_format">"EEEE, d MMM yyyy"</string>
 
     <string name="video_subtitling_title">Video Subtitling</string>
     <string name="video_subtitling_begin_end_time">Begin/End Time</string>

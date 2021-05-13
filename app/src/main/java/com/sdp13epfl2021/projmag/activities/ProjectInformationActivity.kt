@@ -41,10 +41,14 @@ import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity displaying the information and media of a project and from which
+ * one can apply to the project or send it using a deep link or QR code.
+ */
 class ProjectInformationActivity : AppCompatActivity() {
 
 
@@ -243,6 +247,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
+        val creationDate = findViewById<TextView>(R.id.info_creation_date)
         videoView = findViewById(R.id.info_video)
         favButton = findViewById(R.id.addFavoriteInProject)
         favButton.isEnabled = false
@@ -259,6 +264,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             responsible.text = project.teacher
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
+            creationDate.text = SimpleDateFormat(getString(R.string.diplay_creation_date_format), Locale.getDefault()).format(project.creationDate)
             type.text =
                 if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
                 else if (project.bachelorProject) getString(R.string.display_bachelor_only)
@@ -287,6 +293,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         setUpApplyButton(findViewById<Button>(R.id.applyButton))
         setUpFavoritesButton()
+
     }
 
     // pause/start when we touch the video
@@ -502,12 +509,18 @@ class ProjectInformationActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-
+    /**
+     * Creates menu with a share button and a QR code button.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_project_information, menu)
         return true
     }
 
+    /**
+     * QR code button opens QRCodeActivity and share button generates
+     * a deep link and opens the android share activity.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
             val linkToSend = createDynamicLink()

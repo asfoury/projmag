@@ -8,7 +8,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
-import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 import com.sdp13epfl2021.projmag.adapter.TagAdapter
 import org.junit.Rule
 import org.junit.Test
@@ -16,11 +15,11 @@ import org.junit.Test
 class SectionSelectorActivityTest {
     val thirdItem = 3
 
-    private lateinit var intent : Intent
+    private lateinit var intent: Intent
 
     @get:Rule
-    var activityRule: ActivityScenarioRule<SectionSelectionActivity>
-            = ActivityScenarioRule(SectionSelectionActivity::class.java)
+    var activityRule: ActivityScenarioRule<SectionSelectionActivity> =
+        ActivityScenarioRule(SectionSelectionActivity::class.java)
 
 
     //recycler view comes into view

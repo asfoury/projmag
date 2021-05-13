@@ -23,7 +23,9 @@ import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Adapter for project to recycler view. Allows projects to be displayed in project list.
+ */
 class ProjectAdapter(
     private val activity: Activity,
     private val utils: Utils,
@@ -40,13 +42,27 @@ class ProjectAdapter(
     var datasetAll: List<ImmutableProject> = emptyList()
     val dataset: MutableList<ImmutableProject> = datasetAll.toMutableList()
 
+    /**
+     * Sort the list of projects, first are the projects not taken, sorted with newest date first.
+     * If the activity is created with a link, it will put it at the top.
+     */
     private fun sortDataset() {
-        dataset.sortBy { project -> project.isTaken }
+        dataset.sortWith { a, b ->
+            if (a.isTaken == b.isTaken) {
+                b.creationDate.compareTo(a.creationDate)
+            } else {
+                a.isTaken.compareTo(b.isTaken)
+            }
+        }
         if (fromLink) {
             dataset.sortByDescending { project -> projectIdLink == project.id }
         }
     }
 
+    /**
+     * Make dataset listen for changes to the projects and fetches
+     * all projects from database.
+     */
     init {
         utils.projectDatabase.addProjectsChangeListener { change ->
             when (change.type) {
@@ -84,6 +100,9 @@ class ProjectAdapter(
         dataset.remove(project)
     }
 
+    /**
+     * Holder of project fields to display in list.
+     */
     class ProjectViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
@@ -138,7 +157,7 @@ class ProjectAdapter(
 
     }
 
-    fun greyOut() {
+    private fun greyOut() {
         for (project in dataset) {
             val i = dataset.indexOf(project)
             if (project.isTaken) {
@@ -150,18 +169,17 @@ class ProjectAdapter(
     }
 
 
-
-    private fun tagAndSectionsChipViewSetup(project: ImmutableProject, holder: ProjectViewHolder){
+    private fun tagAndSectionsChipViewSetup(project: ImmutableProject, holder: ProjectViewHolder) {
         val green = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.light_green))
         val teal = ColorStateList.valueOf(ContextCompat.getColor(activity, R.color.teal_700))
         chipAdding(project.tags, holder, green)
-        chipAdding(project.allowedSections, holder,teal)
+        chipAdding(project.allowedSections, holder, teal)
     }
 
-    private fun chipAdding(list:List<String>, holder:ProjectViewHolder, color:ColorStateList){
-        for(text in list){
+    private fun chipAdding(list: List<String>, holder: ProjectViewHolder, color: ColorStateList) {
+        for (text in list) {
             val chipView: Chip = Chip(activity)
-            chipView.text = text as CharSequence
+            chipView.text = text
             chipView.chipBackgroundColor = color
             holder.chipGroupView.addView(chipView)
         }
@@ -180,6 +198,9 @@ class ProjectAdapter(
         return ProjectListFilter()
     }
 
+    /**
+     * Filter for project list, used when searching for a project by name.
+     */
     private inner class ProjectListFilter(val projectFilter: ProjectFilter = ProjectFilter()) :
         Filter() {
 

@@ -26,6 +26,7 @@ class FirebaseFileDatabaseTest {
     private val rootUsers = "users"
 
     private val fileUrl = "https://example.com/firestore/a/b/310771/video_test.mp4"
+
     //private val fileUri = Uri.parse(fileUrl)
     private val filename = "video_test.mp4"
     private val tempFolder = Files.createTempDirectory("firebase_temp_test").toFile()
@@ -34,7 +35,6 @@ class FirebaseFileDatabaseTest {
     private val invalidFolder = File("/$")
 
     private val invalidFile = File("/$")
-
 
 
     private val mockFirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
