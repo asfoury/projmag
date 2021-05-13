@@ -1,7 +1,7 @@
 # Summary for week 9
 
 ## Mohamed
-
+This week I refactored the userprofile and userdata and merged them into a single class, this was my first task, I was unable to start working on my second task before the sprint deadline because it depended on a task that was also being implemented this sprint. We figured that out in our first standup meeting but I was not sure if the other task would be ready in time or not. We then discussed the possibility of me taking another task but given that I already worked on a task I was not sure if I had time for the other one (AR using the camera), I ended up working about 6 hours this sprint on the first task and doing code reviews, for the next sprints I will try not to take a task that depends on something that needs to be done in the same sprint.
 ## Giovanni
 
 This week first  I add KDoc to some fuction. Then my second task was to find way to have the orientation of the telephone, this take me time to find a good way of to that in the documentation but then the implementation was not hard. For this two task my time estimation was accrute  
