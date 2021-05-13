@@ -29,7 +29,6 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
@@ -62,7 +61,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
     private var userID: String? = null
-    private lateinit var userDataDatabase : UserdataDatabase
+    private lateinit var userdataDatabase : UserdataDatabase
 
 
     @Synchronized
@@ -134,7 +133,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val projectId = projectVar.id
         var alreadyApplied = false
         setButtonText(applyButton, null,getString(R.string.unnaplyText), getString(R.string.applyText))
-        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
+        userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
             setButtonText(applyButton, alreadyApplied,getString(R.string.unnaplyText), getString(R.string.applyText))
         }, {})
@@ -142,7 +141,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         applyButton.isEnabled = !projectVar.isTaken
 
         applyButton.setOnClickListener {
-            userDataDatabase.applyUnapply(
+            userdataDatabase.applyUnapply(
                 !alreadyApplied,
                 projectId,
                 {
@@ -176,7 +175,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         handleFavoriteButtonText(projectId, false)
 
 
-        //handle click on the add favourite button
+        //handle click on the add favorite button
         favButton.setOnClickListener {
             handleFavoriteButtonText(projectId, true)
         }
@@ -185,25 +184,25 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     /**
-     * Function that contacts the database, pushes/removes the project from the favourite list,
+     * Function that contacts the database, pushes/removes the project from the favorite list,
      * and changes the button value to the right value
      *
      * @param projectId : id of the project to push
-     * @param isClick : differentiate the initialisation of the favourite button from a click on the button
+     * @param isClick : differentiate the initialisation of the favorite button from a click on the button
      */
     private fun handleFavoriteButtonText(projectId: String, isClick: Boolean) {
-        userDataDatabase.getListOfFavoriteProjects({ projectIds ->
+        userdataDatabase.getListOfFavoriteProjects({ projectIds ->
             val isFavorite = projectIds.contains(projectId)
-            //we clicked on the favourites button and the project is in the favourite list
+            //we clicked on the favorites button and the project is in the favorite list
             favButton.isEnabled = true
             if (isFavorite && isClick) {
-                userDataDatabase.removeFromFavorite(projectId,
+                userdataDatabase.removeFromFavorite(projectId,
                     { onSuccessFavorite(isFavorite) },
                     { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
             }
-            //clicked on the favourites button and the project isn't in the favourite list
+            //clicked on the favorites button and the project isn't in the favorite list
             else if (isClick) {
-                userDataDatabase.pushFavoriteProject(projectId,
+                userdataDatabase.pushFavoriteProject(projectId,
                     { onSuccessFavorite(isFavorite) },
                     { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
             }
@@ -238,7 +237,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         userID = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
-        userDataDatabase = utils.userdataDatabase
+        userdataDatabase = utils.userdataDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
@@ -342,7 +341,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>){
         //get the favorite list and when it's available provide it to the function that is
         //responsible for downloading videos in volatile or non volatile memory
-        userDataDatabase.getListOfFavoriteProjects({ favorites ->
+        userdataDatabase.getListOfFavoriteProjects({ favorites ->
             addVideoAfterDownloadedWithFavoritePersistence(videosLinks, favorites.contains(projectVar.id))
         },{
 
