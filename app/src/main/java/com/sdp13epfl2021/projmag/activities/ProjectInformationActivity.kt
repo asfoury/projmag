@@ -155,25 +155,24 @@ class ProjectInformationActivity : AppCompatActivity() {
             appliedProjectsIds.addAll(projectIds)
             var alreadyApplied = projectIds.contains(projectId)
             setApplyButtonText(applyButton, alreadyApplied)
-
             applyButton.isEnabled = !projectVar.isTaken
-
-            applyButton.setOnClickListener {
-                userdataDatabase.applyUnapply(
-                    !alreadyApplied,
-                    projectId,
-                    {
-                        if (userId != null) {
-                            onApplyClick(applyButton, candidatureDatabase, projectId)
-                        } else {
-                            showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
-                        }
-                    },
-                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
-
-                )
-            }
         }, {})
+
+        applyButton.setOnClickListener {
+            userdataDatabase.applyUnapply(
+                !alreadyApplied,
+                projectId,
+                {
+                    if (userId != null) {
+                        onApplyClick(applyButton, candidatureDatabase, projectId)
+                    } else {
+                        showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
+                    }
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
