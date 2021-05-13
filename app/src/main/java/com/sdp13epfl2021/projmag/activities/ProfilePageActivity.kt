@@ -15,6 +15,8 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Activity in which one can create their profile by filling in fields
@@ -22,7 +24,13 @@ import com.sdp13epfl2021.projmag.model.*
  */
 class ProfilePageActivity : AppCompatActivity() {
 
+    @Inject
     lateinit var userdataDatabase: UserdataDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userID: String
+
     lateinit var imageView: ImageView
     lateinit var button: Button
     lateinit var buttonAddCv: Button
@@ -34,9 +42,6 @@ class ProfilePageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
-        val utils = Utils.getInstance(this)
-        userdataDatabase = utils.userdataDatabase
-        val userID = utils.auth.currentUser?.uid ?: "localID" //TODO remove after DI
         buttonAddCv = findViewById(R.id.button_add_cv)
         buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 

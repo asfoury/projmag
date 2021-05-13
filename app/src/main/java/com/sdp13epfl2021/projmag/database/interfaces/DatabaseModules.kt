@@ -42,7 +42,13 @@ object DataBaseModules {
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Provides
+    @Singleton
+    @Named("currentUserId")
+    fun provideCurrentUserID(auth: FirebaseAuth): String = auth.uid ?: ""
+
+    @Provides
     @Named("fileCacheUserDB")
     fun fileForCache(@ApplicationContext applicationContext: Context): File =
         File(applicationContext.filesDir, "users")
+
 }
