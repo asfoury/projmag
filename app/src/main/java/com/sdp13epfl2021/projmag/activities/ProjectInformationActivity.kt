@@ -39,6 +39,7 @@ import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -147,6 +148,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val nbOfStudents = findViewById<TextView>(R.id.info_nb_students)
         val type = findViewById<TextView>(R.id.info_available_for)
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
+        val creationDate = findViewById<TextView>(R.id.info_creation_date)
         videoView = findViewById(R.id.info_video)
 
 
@@ -161,6 +163,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             responsible.text = project.teacher
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
+            creationDate.text = SimpleDateFormat(getString(R.string.diplay_creation_date_format), Locale.getDefault()).format(project.creationDate)
             type.text =
                 if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
                 else if (project.bachelorProject) getString(R.string.display_bachelor_only)
