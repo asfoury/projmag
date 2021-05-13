@@ -15,6 +15,10 @@ I finished the section part, the favorite feature. I started thinking on how to 
 time. I reviewed two pull requests. I did not start looking at an AR API.
 
 ## Paul 
+This week, I started implementing Dependency Injection, using the Dagger Hilt framework.
+I spend most of the time reading the documentation, as some stuff were not introduced in the last semester project.
+Then I began modifying the tests of two activities, using these new DI.
+Next week, I hope to continue working on this.
 
 
 ## Overall Team
