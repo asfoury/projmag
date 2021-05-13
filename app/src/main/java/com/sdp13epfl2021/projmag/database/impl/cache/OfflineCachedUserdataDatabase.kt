@@ -6,6 +6,7 @@ import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.database.loadFromFile
 import com.sdp13epfl2021.projmag.database.saveToFile
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.io.File
 
@@ -170,5 +171,20 @@ class OfflineCachedUserdataDatabase(
         onFailure: (Exception) -> Unit
     ) {
         db.pushPreferences(pf, onSuccess, onFailure)
+    }
+
+    override fun uploadProfile(
+        profile: ImmutableProfile,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getProfile(
+        onSuccess: (profile: ImmutableProfile?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 }
