@@ -1,7 +1,5 @@
 package com.sdp13epfl2021.projmag.database.interfaces
 
-import java.lang.Exception
-
 /**
  * An interface for a Database of various Metadata
  */

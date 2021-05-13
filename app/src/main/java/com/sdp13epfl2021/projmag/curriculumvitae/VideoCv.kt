@@ -59,9 +59,9 @@ class VideoCv : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, intent)
         if (resultCode == Activity.RESULT_OK && requestCode == pickVideo) {
             if (intent?.data != null) {
-                videoUri = intent?.data
+                videoUri = intent.data
                 videoView.setVideoURI(videoUri)
-                videoView.start();
+                videoView.start()
             }
         }
     }

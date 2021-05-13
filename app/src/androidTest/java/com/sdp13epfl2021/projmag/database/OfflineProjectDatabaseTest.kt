@@ -1,4 +1,3 @@
-
 package com.sdp13epfl2021.projmag.database
 
 import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
@@ -22,9 +21,51 @@ class OfflineProjectDatabaseTest {
     private val projectsDir = Files.createTempDirectory("offline_test").toFile()
     private val unreadableDir = Files.createTempDirectory("offline_test_invalid").toFile()
 
-    private val p1 = ImmutableProject("12345","What fraction of Google searches are answered by Wikipedia?","DLAB","authorID23", "Robert West","TA1",1, listOf<String>(),false,true, listOf("data analysis","large datasets","database","systems","database","systems"),false,"Description of project1")
-    private val p2 = ImmutableProject("11111","Real-time reconstruction of deformable objects","CVLAB","authorID29", "Teacher2","TA2",1, listOf<String>(),false,true, listOf("Computer Vision","ML"),false,"Description of project2")
-    private val p3 = ImmutableProject("00000","Implement a fast driver for a 100 Gb/s network card","DSLAB","authorID31", "Teacher5","TA5",3, listOf<String>(),false,true, listOf("Low Level","Networking","Driver"),false,"Description of project5")
+    private val p1 = ImmutableProject(
+        "12345",
+        "What fraction of Google searches are answered by Wikipedia?",
+        "DLAB",
+        "authorID23",
+        "Robert West",
+        "TA1",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf("data analysis", "large datasets", "database", "systems", "database", "systems"),
+        false,
+        "Description of project1"
+    )
+    private val p2 = ImmutableProject(
+        "11111",
+        "Real-time reconstruction of deformable objects",
+        "CVLAB",
+        "authorID29",
+        "Teacher2",
+        "TA2",
+        1,
+        listOf<String>(),
+        false,
+        true,
+        listOf("Computer Vision", "ML"),
+        false,
+        "Description of project2"
+    )
+    private val p3 = ImmutableProject(
+        "00000",
+        "Implement a fast driver for a 100 Gb/s network card",
+        "DSLAB",
+        "authorID31",
+        "Teacher5",
+        "TA5",
+        3,
+        listOf<String>(),
+        false,
+        true,
+        listOf("Low Level", "Networking", "Driver"),
+        false,
+        "Description of project5"
+    )
 
     private val fakeCandidatureDB: CandidatureDatabase = FakeCandidatureDatabase()
 
@@ -150,7 +191,6 @@ class OfflineProjectDatabaseTest {
         }, onFailureNotExpected)
         while (result2 == null);
         assertEquals(listOf(p3), result2)
-
 
 
         val p3File = File(File(projectsDir, p3.id), "project.data")

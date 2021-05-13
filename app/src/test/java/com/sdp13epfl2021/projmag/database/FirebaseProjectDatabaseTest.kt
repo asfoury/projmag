@@ -13,6 +13,7 @@ import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import java.util.*
 
 
 /**
@@ -56,12 +57,13 @@ class FirebaseProjectDatabaseTest {
     val tagManager = TagsBaseManager()
     val tagList = tagManager.tagsListToStringList(tagManager.getAllTags())
     val sectionList = SectionBaseManager.sectionList().toList()
+    val creationDate = Date()
 
     val ID = "some-id"
 
     val result = ImmutableProject.build(ID, name, labName, authorId, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList) as Success<ImmutableProject>
+        listOf(), sectionList, creationDate) as Success<ImmutableProject>
     val project = result.value
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
@@ -174,7 +176,8 @@ class FirebaseProjectDatabaseTest {
             "isTaken" to project.isTaken,
             "description" to project.description,
             "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections
+            "allowedSections" to project.allowedSections,
+            "creationDate" to project.creationDate.time
 
         ))
         /*
@@ -215,7 +218,8 @@ class FirebaseProjectDatabaseTest {
             "isTaken" to project.isTaken,
             "description" to project.description,
             "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections
+            "allowedSections" to project.allowedSections,
+            "creationDate" to project.creationDate.time
         ))
         /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
