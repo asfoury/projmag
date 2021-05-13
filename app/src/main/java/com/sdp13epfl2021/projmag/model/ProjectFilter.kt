@@ -88,7 +88,7 @@ class ProjectFilter(
      * Function that will check if the project is contained in the favorites
      *
      * @param favCheck : Function that will take a project and indicate if it's in the favorite list
-     * @return returns the filter
+     * @return this filter
      */
     fun setFavouriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
         isFavouriteProject = favCheck
