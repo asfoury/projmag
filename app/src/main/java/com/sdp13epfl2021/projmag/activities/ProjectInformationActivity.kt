@@ -110,9 +110,18 @@ class ProjectInformationActivity : AppCompatActivity() {
         trueText: String, falseText: String
     ) {
         button.text = when (isOn) {
-            null -> getString(R.string.loading)
-            true -> trueText
-            false -> falseText
+            null -> {
+                button.isEnabled = false
+                getString(R.string.loading)
+            }
+            true -> {
+                button.isEnabled = true
+                trueText
+            }
+            false -> {
+                button.isEnabled = true
+                falseText
+            }
         }
     }
 
