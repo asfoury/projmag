@@ -73,27 +73,27 @@ class OfflineCachedCandidatureDatabase(
     /**
      * Get the current candidatures for a given projectId in the cache.
      *
-     * @param projectID the id of the project.
+     * @param projectId the id of the project.
      *
      * @return a list of candidatures
      */
-    private fun getLocalCandidatures(projectID: ProjectId): List<Candidature> {
-        return candidatures[projectID] ?: emptyList()
+    private fun getLocalCandidatures(projectId: ProjectId): List<Candidature> {
+        return candidatures[projectId] ?: emptyList()
     }
 
     /**
      * Update the local cache with the remoteList merge to the local candidatures.
      * Then save the new candidatures to local storage.
-     * @param projectID the id of the project.
+     * @param projectId the id of the project.
      * @param remoteList the remote list of candidatures.
      */
-    private fun merge(projectID: ProjectId, remoteList: List<Candidature>): List<Candidature> {
-        val localList: List<Candidature> = getLocalCandidatures(projectID).filter { c ->
+    private fun merge(projectId: ProjectId, remoteList: List<Candidature>): List<Candidature> {
+        val localList: List<Candidature> = getLocalCandidatures(projectId).filter { c ->
             remoteList.all { r -> r.userId != c.userId }
         }
         val totalList = localList + remoteList
-        candidatures[projectID] = totalList
-        saveCandidature(projectID)
+        candidatures[projectId] = totalList
+        saveCandidature(projectId)
         return totalList
     }
 
