@@ -48,13 +48,6 @@ import kotlin.collections.ArrayList
 class ProjectInformationActivity : AppCompatActivity() {
 
 
-    //TODO :  do a PR to correct the apply button code and the favorite button code together
-    companion object {
-        const val LOADING_STRING = "LOADING"
-        const val APPLY_STRING = "APPLY"
-        const val UNAPPLY_STRING = "UNAPPLY"
-    }
-
     private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
     private lateinit var metadataDB: MetadataDatabase
@@ -105,20 +98,19 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     /**
      * Function that given a boolean and strings set the value of the button according to the string
-     * values
+     * values. When the boolean is null it shows loading by default.
      *
      * @param button button to manipulate
      * @param isOn boolean value indicating the value of the boolean
-     * @param nullText text to show when the boolean is null (usually when button value is loading)
      * @param trueText text to show on the button when the boolean value is true
      * @param falseText text to show on the button when the boolean value is false
      */
     private fun setButtonText(
-        button: Button, isOn: Boolean?, nullText: String,
+        button: Button, isOn: Boolean?,
         trueText: String, falseText: String
     ) {
         button.text = when (isOn) {
-            null -> nullText
+            null -> getString(R.string.loading)
             true -> trueText
             false -> falseText
         }
@@ -128,10 +120,10 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
         var alreadyApplied = false
-        setButtonText(applyButton, null, LOADING_STRING, UNAPPLY_STRING, APPLY_STRING)
+        setButtonText(applyButton, null,getString(R.string.unnaplyText), getString(R.string.applyText))
         userDataDatabase.getListOfAppliedToProjects({ projectIds ->
             alreadyApplied = projectIds.contains(projectId)
-            setButtonText(applyButton, alreadyApplied, LOADING_STRING, UNAPPLY_STRING, APPLY_STRING)
+            setButtonText(applyButton, alreadyApplied,getString(R.string.unnaplyText), getString(R.string.applyText))
         }, {})
 
         applyButton.isEnabled = !projectVar.isTaken
@@ -146,9 +138,8 @@ class ProjectInformationActivity : AppCompatActivity() {
                     setButtonText(
                         applyButton,
                         alreadyApplied,
-                        LOADING_STRING,
-                        UNAPPLY_STRING,
-                        APPLY_STRING
+                        getString(R.string.unnaplyText),
+                        getString(R.string.applyText)
                     )
                 },
                 { showToast(getString(R.string.failure), Toast.LENGTH_LONG) }
@@ -164,7 +155,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         setButtonText(
             favButton,
             null,
-            LOADING_STRING,
             getString(R.string.favorite_remove_button),
             getString(R.string.favorite_add_button)
         )
@@ -208,7 +198,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             else {
                 setButtonText(
                     favButton, isFavorite,
-                    LOADING_STRING, getString(R.string.favorite_remove_button),
+                    getString(R.string.favorite_remove_button),
                     getString(R.string.favorite_add_button)
                 )
             }
@@ -221,7 +211,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         showToast(getString(R.string.success), Toast.LENGTH_SHORT)
         setButtonText(
             favButton, !isFavorite,
-            LOADING_STRING, getString(R.string.favorite_remove_button),
+            getString(R.string.favorite_remove_button),
             getString(R.string.favorite_add_button)
         )
     }

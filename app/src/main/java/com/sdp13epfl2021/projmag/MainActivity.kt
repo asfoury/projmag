@@ -33,10 +33,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        UserTypeChoice.isProfessor = true
+        UserTypeChoice.isProfessor = getSharedPreferences(UserTypeChoice.savedTypeChoice, Context.MODE_PRIVATE).getBoolean(UserTypeChoice.isUserProf, true)
 
         mAuth = FirebaseAuth.getInstance()
-        val user = mAuth.currentUser
+        val user = mAuth.currentUser   
     
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
          * Else send him to DashboardActivity*/
