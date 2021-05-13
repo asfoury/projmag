@@ -68,6 +68,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var current: Int = -1
     private var userId: String? = null
     private var alreadyApplied: Boolean = false
+    private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -150,13 +151,10 @@ class ProjectInformationActivity : AppCompatActivity() {
         val candidatureDatabase = utils.candidatureDatabase
         setApplyButtonText(applyButton, null)
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
-            val userDataDatabase = Utils.getInstance(this).userdataDatabase
-            var alreadyApplied = false
-            setApplyButtonText(applyButton, null)
-            userDataDatabase.getListOfAppliedToProjects({ projectIds ->
-                alreadyApplied = projectIds.contains(projectId)
-                setApplyButtonText(applyButton, alreadyApplied)
-            }, {})
+            appliedProjectsIds.clear()
+            appliedProjectsIds.addAll(projectIds)
+            var alreadyApplied = projectIds.contains(projectId)
+            setApplyButtonText(applyButton, alreadyApplied)
 
             applyButton.isEnabled = !projectVar.isTaken
 
