@@ -8,7 +8,9 @@
 ## Luke
 
 ## Arnaud
-
+This week I added the date of creation to project.  
+I changed the default sorting of the list of projects, now projects are sorted by date, the newest at the top.  
+I spent less time than expected for my task, so I also add some missing implementations of database.
 
 ## Kaourintin (Scrum Master)
 I finished the section part, the favorite feature. I started thinking on how to implement properly local video storing and think that it is a separate task that requires
