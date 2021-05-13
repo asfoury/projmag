@@ -14,7 +14,7 @@ I spent less time than expected for my task, so I also add some missing implemen
 
 ## Kaourintin (Scrum Master)
 I finished the section part, the favorite feature. I started thinking on how to implement properly local video storing and think that it is a separate task that requires
-time. I reviewed two pull requests. I did not start looking at an AR API.
+time. I reviewed two pull requests. I briefly looked at AR APIs and started seeing how to use quickstart library to achieve our goals
 
 ## Paul 
 This week, I started implementing Dependency Injection, using the Dagger Hilt framework.
@@ -24,6 +24,6 @@ Next week, I hope to continue working on this.
 
 
 ## Overall Team
-Our main goals this week was to fix put the necessary kdoc everywhere it was needed from the code review and to finish key features of the app.
-We achieved this. The secondary goals were to start adressing dependency injection and start looking at the API's necessary for the disturbance sprint. Due to
+Our main goals this week was to  put the necessary kdoc everywhere it was needed from the code review and to finish key features of the app.
+We achieved this. The secondary goals were to start adressing dependency injection and start looking at the APIs necessary for the disturbance sprint. Due to
 lack of time we only did this partially although we have a few PR's on this already.
