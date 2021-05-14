@@ -47,6 +47,8 @@ class FirebaseUserdataDatabase(
         const val PREF_FIELD = "preferences"
 
         const val USER_PROFILE = "user-profile"
+
+        private val AUTH_EXCEPTION: Exception = SecurityException("User need to be authenticated")
     }
 
 
@@ -98,7 +100,7 @@ class FirebaseUserdataDatabase(
                 },
                 onFailure
             )
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -111,7 +113,7 @@ class FirebaseUserdataDatabase(
                 .addOnSuccessListener { doc ->
                     onSuccess((doc[FAVORITES_FIELD] as? List<ProjectId>) ?: listOf())
                 }.addOnFailureListener(onFailure)
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun removeFromFavorite(
@@ -129,7 +131,7 @@ class FirebaseUserdataDatabase(
                 },
                 onFailure
             )
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun pushCv(
@@ -141,6 +143,7 @@ class FirebaseUserdataDatabase(
             hashMapOf(CV_FIELD to cv),
             SetOptions.merge()
         )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
+        ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun getCv(
@@ -171,7 +174,7 @@ class FirebaseUserdataDatabase(
             doc.update(APPLIED_TO_FIELD, fieldValue)
                 .addOnSuccessListener { onSuccess() }
                 .addOnFailureListener(onFailure)
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -184,7 +187,7 @@ class FirebaseUserdataDatabase(
                 .addOnSuccessListener { doc ->
                     onSuccess((doc[APPLIED_TO_FIELD] as? List<ProjectId>) ?: listOf())
                 }.addOnFailureListener(onFailure)
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -197,6 +200,7 @@ class FirebaseUserdataDatabase(
             ?.addOnSuccessListener { doc ->
                 onSuccess(doc?.get(PREF_FIELD)?.let { ProjectFilter(it as Map<String, Any>) })
             }?.addOnFailureListener(onFailure)
+            ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun pushPreferences(
@@ -208,6 +212,7 @@ class FirebaseUserdataDatabase(
             ?.set(hashMapOf(PREF_FIELD to pf))
             ?.addOnSuccessListener { onSuccess() }
             ?.addOnFailureListener(onFailure)
+            ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun uploadProfile(
@@ -235,7 +240,7 @@ class FirebaseUserdataDatabase(
                     onFailure(it)
                 }
         } else {
-            onFailure(Exception("user id is null"))
+            onFailure(AUTH_EXCEPTION)
         }
     }
 
@@ -288,8 +293,11 @@ class FirebaseUserdataDatabase(
                     } else {
                         onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, sciper = $sciper, phoneNumber = $phoneNumber."))
                     }
+                } else {
+                    onSuccess(null)
                 }
             }
+            .addOnFailureListener(onFailure)
 
     }
 }
