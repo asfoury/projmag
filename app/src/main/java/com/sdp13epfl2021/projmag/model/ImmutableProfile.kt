@@ -4,6 +4,10 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
+/**
+ * This Class is used to define a Profile
+ */
+
 @Parcelize
 
 data class ImmutableProfile private constructor(
@@ -11,7 +15,6 @@ data class ImmutableProfile private constructor(
     val age: Int, val gender: Gender, val sciper: Int?, val phoneNumber: String, val role: Role
 ) :
     Parcelable, Serializable {
-
 
     companion object {
         private const val MAX_LAST_NAME_SIZE = 40

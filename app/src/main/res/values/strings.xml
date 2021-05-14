@@ -136,6 +136,8 @@
     <string name="couldnt_get_data">Couldn\'t get data</string>
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
+    <string name="failed">failed</string>
+
 
 
 </resources>

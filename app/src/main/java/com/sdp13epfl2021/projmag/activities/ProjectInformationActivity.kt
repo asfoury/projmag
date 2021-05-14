@@ -30,6 +30,8 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.*
+import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -60,8 +62,11 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var favButton: Button
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
-    private var userID: String? = null
-    private lateinit var userdataDatabase : UserdataDatabase
+    private var userId: String? = null
+    private var alreadyApplied: Boolean = false
+    private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
+    private lateinit var userdataDatabase: UserdataDatabase
+    private lateinit var candidatureDatabase: CandidatureDatabase
 
 
     @Synchronized
@@ -129,34 +134,65 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
 
+    private fun onApplyClick(
+        applyButton: Button,
+        candidatureDatabase: CandidatureDatabase,
+        projectId: ProjectId,
+    ) {
+        if (alreadyApplied) {
+            candidatureDatabase.removeCandidature(
+                projectId,
+                userId!!,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+            )
+        } else {
+            candidatureDatabase.pushCandidature(
+                projectId,
+                userId!!,
+                Candidature.State.Waiting,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+            )
+        }
+    }
+
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        var alreadyApplied = false
+        val utils = Utils.getInstance(this)
+        userdataDatabase = utils.userdataDatabase
+        candidatureDatabase = utils.candidatureDatabase
         setButtonText(applyButton, null,getString(R.string.unaply_text), getString(R.string.apply_text))
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
-            alreadyApplied = projectIds.contains(projectId)
+            appliedProjectsIds.addAll(projectIds)
+            var alreadyApplied = projectIds.contains(projectId)
             setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
-        }, {})
+            applyButton.isEnabled = !projectVar.isTaken
 
-        applyButton.isEnabled = !projectVar.isTaken
+        }, {})
 
         applyButton.setOnClickListener {
             userdataDatabase.applyUnapply(
                 !alreadyApplied,
                 projectId,
                 {
-                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-                    alreadyApplied = !alreadyApplied
-                    setButtonText(
-                        applyButton,
-                        alreadyApplied,
-                        getString(R.string.unaply_text),
-                        getString(R.string.apply_text)
-                    )
+                    if (userId != null) {
+                        onApplyClick(applyButton, candidatureDatabase, projectId)
+                    } else {
+                        showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
+                    }
                 },
-                { showToast(getString(R.string.failure), Toast.LENGTH_LONG) }
-            )
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
 
+            )
         }
     }
 
@@ -234,7 +270,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_project_information)
 
         val utils = Utils.getInstance(this)
-        userID = utils.auth.currentUser?.uid
+        userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
         userdataDatabase = utils.userdataDatabase
@@ -263,7 +299,10 @@ class ProjectInformationActivity : AppCompatActivity() {
             responsible.text = project.teacher
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
-            creationDate.text = SimpleDateFormat(getString(R.string.diplay_creation_date_format), Locale.getDefault()).format(project.creationDate)
+            creationDate.text = SimpleDateFormat(
+                getString(R.string.diplay_creation_date_format),
+                Locale.getDefault()
+            ).format(project.creationDate)
             type.text =
                 if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
                 else if (project.bachelorProject) getString(R.string.display_bachelor_only)
@@ -504,7 +543,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.waitingListButton)?.isVisible = (userID == projectVar.authorId)
+        menu.findItem(R.id.waitingListButton)?.isVisible = (userId == projectVar.authorId)
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -530,7 +569,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             startActivity(sendIntent)
             return true
         } else if (item.itemId == R.id.waitingListButton) {
-            if (userID == projectVar.authorId) {
+            if (userId == projectVar.authorId) {
                 val intent = Intent(this, WaitingListActivity::class.java)
                 intent.putExtra(MainActivity.projectIdString, projectVar.id)
                 startActivity(intent)
