@@ -85,8 +85,18 @@ class FirebaseCandidatureDatabase(
         var waiting = true
         var profile: ImmutableProfile? = null
         var cv: CurriculumVitae? = null
-        userdataDatabase.getProfile(userID, { profile = it }, { waiting = false })
-        userdataDatabase.getCv(userID, { cv = it }, { waiting = false })
+        userdataDatabase.getProfile(userID, {
+            profile = it
+            if (it == null) {
+                waiting = false
+            }
+        }, { waiting = false })
+        userdataDatabase.getCv(userID, {
+            cv = it
+            if (it == null) {
+                waiting = false
+            }
+       }, { waiting = false })
 
         while (waiting && (profile == null || cv == null)) {
             delay(10)
