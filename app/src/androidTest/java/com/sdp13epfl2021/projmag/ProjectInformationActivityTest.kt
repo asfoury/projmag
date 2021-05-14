@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag
 
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings.Global.getString
 import android.widget.ScrollView
 import android.widget.VideoView
 import androidx.test.core.app.ApplicationProvider
@@ -18,8 +19,6 @@ import androidx.test.filters.LargeTest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
-import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity.Companion.APPLY_STRING
-import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity.Companion.UNAPPLY_STRING
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -227,14 +226,18 @@ class ProjectInformationActivityTest {
     }
 
     @Test
+    //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
+        var applyString : String = "APPLY"
+        var unapplyString : String = "UNAPPLY"
+
         Thread.sleep(2000)
         val applyButton = onView(withId(R.id.applyButton))
-        applyButton.check(matches(withText(APPLY_STRING)))
+        applyButton.check(matches(withText(applyString)))
         applyButton.perform(scrollTo()).perform(click())
-        applyButton.check(matches(withText(UNAPPLY_STRING)))
+        applyButton.check(matches(withText(unapplyString)))
         applyButton.perform(scrollTo()).perform(click())
-        applyButton.check(matches(withText(APPLY_STRING)))
+        applyButton.check(matches(withText(applyString)))
     }
 
     @Test
