@@ -220,25 +220,14 @@ class FirebaseUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val profile = hashMapOf(
-            "firstName" to profile.firstName,
-            "lastName" to profile.lastName,
-            "age" to profile.age,
-            "gender" to profile.gender.name,
-            "phoneNumber" to profile.phoneNumber,
-            "role" to profile.role.name,
-            "sciper" to profile.sciper
-        )
         val id = getUser()?.uid
         if (id != null) {
-            firestore.collection(FirebaseUserdataDatabase.USER_PROFILE).document(id)
+            firestore
+                .collection(USER_PROFILE)
+                .document(id)
                 .set(profile)
-                .addOnSuccessListener {
-                    onSuccess()
-                }
-                .addOnFailureListener {
-                    onFailure(it)
-                }
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener(onFailure)
         } else {
             onFailure(AUTH_EXCEPTION)
         }
@@ -273,7 +262,7 @@ class FirebaseUserdataDatabase(
                         else -> Role.OTHER
                     }
 
-                    if (firstName != null && lastName != null && age != null && sciper != null && phoneNumber != null) {
+                    if (firstName != null && lastName != null && age != null && phoneNumber != null) {
                         when (val resProfile = ImmutableProfile.build(
                             lastName,
                             firstName,
