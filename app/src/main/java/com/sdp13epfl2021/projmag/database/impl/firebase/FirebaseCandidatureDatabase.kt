@@ -11,12 +11,10 @@ import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * An implementation of a candidature database
@@ -49,22 +47,20 @@ class FirebaseCandidatureDatabase(
      * @param projectID the id of the project.
      * @return a list of candidatures.
      */
-    private fun buildCandidature(
+    private suspend fun buildCandidature(
         dataMap: Map<String, Any>,
         projectID: ProjectId
     ): List<Candidature> {
         val candidatures = ConcurrentLinkedQueue<Candidature>()
-        runBlocking {
-            dataMap.map {
-                launch(Dispatchers.IO) {
-                    val userID = it.key
-                    val state = Candidature.State.enumOf(it.value as? String)
-                    if (state != null) {
-                        addCandidature(candidatures, projectID, userID, state)
-                    }
+        dataMap.map {
+            GlobalScope.launch(Dispatchers.IO) {
+                val userID = it.key
+                val state = Candidature.State.enumOf(it.value as? String)
+                if (state != null) {
+                    addCandidature(candidatures, projectID, userID, state)
                 }
-            }.forEach { it.join() }
-        }
+            }
+        }.joinAll()
         return candidatures.toList()
     }
 
@@ -82,27 +78,32 @@ class FirebaseCandidatureDatabase(
         userID: String,
         state: Candidature.State
     ) {
-        var waiting = true
-        var profile: ImmutableProfile? = null
-        var cv: CurriculumVitae? = null
-        userdataDatabase.getProfile(userID, {
-            profile = it
-            if (it == null) {
-                waiting = false
-            }
-        }, { waiting = false })
-        userdataDatabase.getCv(userID, {
-            cv = it
-            if (it == null) {
-                waiting = false
-            }
-       }, { waiting = false })
+        val waiting = AtomicBoolean(true)
+        val profileDeferred: CompletableDeferred<ImmutableProfile?> = CompletableDeferred()
+        val cvDeferred: CompletableDeferred<CurriculumVitae?> = CompletableDeferred()
 
-        while (waiting && (profile == null || cv == null)) {
+        userdataDatabase.getProfile(userID, { profile ->
+            profileDeferred.complete(profile)
+            if (profile == null) {
+                waiting.set(false)
+            }
+        }, { waiting.set(false) })
+
+        userdataDatabase.getCv(userID, { cv ->
+            cvDeferred.complete(cv)
+            if (cv == null) {
+                waiting.set(false)
+            }
+        }, { waiting.set(false) })
+
+        while (waiting.get() && (profileDeferred.isActive || cvDeferred.isActive)) {
             delay(10)
         }
+        val profile: ImmutableProfile? = if (profileDeferred.isCompleted) profileDeferred.getCompleted() else null
+        val cv: CurriculumVitae? = if (cvDeferred.isCompleted) cvDeferred.getCompleted() else null
+
         if (profile != null && cv != null) {
-            candidatures.add(Candidature(projectID, userID, profile!!, cv!!, state))
+            candidatures.add(Candidature(projectID, userID, profile, cv, state))
         }
     }
 
@@ -117,9 +118,10 @@ class FirebaseCandidatureDatabase(
             .addOnSuccessListener { doc ->
                 if (doc.exists()) {
                     doc?.data?.let {
-                        onSuccess(buildCandidature(it, projectID))
-                    }
-                        ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
+                        GlobalScope.launch {
+                            onSuccess(buildCandidature(it, projectID))
+                        }
+                    } ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
                 } else {
                     onSuccess(emptyList())
                 }
@@ -159,8 +161,10 @@ class FirebaseCandidatureDatabase(
         getDoc(projectID)
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.data?.let {
-                    val candidatures: List<Candidature> = buildCandidature(it, projectID)
-                    onChange(projectID, candidatures)
+                    GlobalScope.launch {
+                        val candidatures: List<Candidature> = buildCandidature(it, projectID)
+                        onChange(projectID, candidatures)
+                    }
                 }
             }
     }
