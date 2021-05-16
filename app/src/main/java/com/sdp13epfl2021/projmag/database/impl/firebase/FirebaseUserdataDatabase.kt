@@ -146,6 +146,7 @@ class FirebaseUserdataDatabase(
         ?: onFailure(AUTH_EXCEPTION)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun getCv(
         userID: String,
         onSuccess: (CurriculumVitae?) -> Unit,
@@ -155,7 +156,19 @@ class FirebaseUserdataDatabase(
             .collection(ROOT)
             .document(userID)
             .get()
-            .addOnSuccessListener { onSuccess(it[CV_FIELD] as? CurriculumVitae) }
+            .addOnSuccessListener {
+                try {
+                    val cvMap = it[CV_FIELD] as Map<String, Any>
+                    val summary = cvMap["summary"] as String
+                    val education = cvMap["education"] as List<CurriculumVitae.PeriodDescription>
+                    val jobExperience = cvMap["jobExperience"] as List<CurriculumVitae.PeriodDescription>
+                    val languages = cvMap["languages"] as List<CurriculumVitae.Language>
+                    val skills = cvMap["skills"] as List<CurriculumVitae.SkillDescription>
+                    onSuccess(CurriculumVitae(summary, education, jobExperience, languages, skills))
+                } catch (e: Exception) {
+                    onFailure(e)
+                }
+            }
             .addOnFailureListener(onFailure)
     }
 
