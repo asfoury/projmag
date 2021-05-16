@@ -30,17 +30,20 @@ class OfflineCachedUserdataDatabase(
     private val favoritesFilename: String = "favorites.data"
     private val appliedFilename: String = "applied.data"
     private val profileFilename: String = "profile.data"
+    private val preferencesFilename: String = "preferences.data"
 
     private val cvs: MutableMap<String, CurriculumVitae> = HashMap()
     private val favorites: MutableSet<ProjectId> = HashSet()
     private val applied: MutableSet<ProjectId> = HashSet()
     private val profiles: MutableMap<String, ImmutableProfile> = HashMap()
+    private var preferences: ProjectFilter? = null
 
     private val localUserDir: File = File(usersRootDir, localUserID)
 
     private val cvFile: File = File(localUserDir, cvFilename)
     private val favoritesFile: File = File(localUserDir, favoritesFilename)
     private val appliedFile: File = File(localUserDir, appliedFilename)
+    private val preferencesFile: File = File(localUserDir, preferencesFilename)
 
 
     init {
@@ -52,6 +55,9 @@ class OfflineCachedUserdataDatabase(
         }
         loadFromFile(appliedFile, SerializedStringListWrapper::class)?.let {
             applied.addAll(it.list)
+        }
+        loadFromFile(preferencesFile, ProjectFilter::class)?.let {
+            preferences = it
         }
     }
 
@@ -187,7 +193,17 @@ class OfflineCachedUserdataDatabase(
         onSuccess: (ProjectFilter?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        db.getPreferences(onSuccess, onFailure)
+        preferences?.let {
+            onSuccess(it)
+        } ?: run {
+            db.getPreferences({
+                it?.let {
+                    preferences = it
+                    saveToFile(preferencesFile, it)
+                }
+                onSuccess(it)
+            }, onFailure)
+        }
     }
 
     override fun pushPreferences(
@@ -195,6 +211,8 @@ class OfflineCachedUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
+        preferences = pf
+        saveToFile(preferencesFile, pf)
         db.pushPreferences(pf, onSuccess, onFailure)
     }
 
@@ -204,6 +222,7 @@ class OfflineCachedUserdataDatabase(
         onFailure: (Exception) -> Unit
     ) {
         profiles[localUserID] = profile
+        saveToFile(getFile(localUserID, profileFilename), profile)
         db.uploadProfile(profile, onSuccess, onFailure)
     }
 
