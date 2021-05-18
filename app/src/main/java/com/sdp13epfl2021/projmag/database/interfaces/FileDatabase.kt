@@ -79,4 +79,7 @@ interface FileDatabase {
         onFailure: (Exception) -> Unit
     )
 
+
+    fun getFileName(fileUrl: String) : String
+
 }

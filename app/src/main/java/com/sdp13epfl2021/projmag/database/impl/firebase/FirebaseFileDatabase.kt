@@ -133,4 +133,9 @@ class FirebaseFileDatabase(
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
+
+    override fun getFileName(fileUrl: String): String {
+        return storage.getReferenceFromUrl(fileUrl).name
+    }
+
 }

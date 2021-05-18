@@ -20,6 +20,7 @@ import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -67,6 +68,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
     private lateinit var userdataDatabase: UserdataDatabase
     private lateinit var candidatureDatabase: CandidatureDatabase
+    private lateinit var projectDatabase: ProjectDatabase
 
 
     @Synchronized
@@ -274,6 +276,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
         userdataDatabase = utils.userdataDatabase
+        projectDatabase = utils.projectDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
@@ -319,7 +322,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
                 addPauseOnTouchListener(controller)
                 setupPlayerListeners(controller)
-                handleVideoWithFavoritePersistenceFiltering(project.videoURI)
+                handleVideo(project.videoURI)
             }
         } else {
             showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
@@ -377,23 +380,29 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>){
-        //get the favorite list and when it's available provide it to the function that is
-        //responsible for downloading videos in volatile or non volatile memory
+    private fun handleVideo(videosLinks: List<String>){
+        //TODO : change the firebase Auth get instance to hilt dependency injection when possible
+        //get the favorite list, the applied To list and the own projects list
         userdataDatabase.getListOfFavoriteProjects({ favorites ->
-            addVideoAfterDownloadedWithFavoritePersistence(videosLinks, favorites.contains(projectVar.id))
+            projectDatabase.getAllProjects({projects ->
+                addVideoDownload(videosLinks, favorites.contains(projectVar.id),
+            projects.filter { project -> project.authorId == FirebaseAuth.getInstance().uid })},
+                {})
+
         },{
 
         })
     }
 
     // download all videos and add them to the video player
-    private fun addVideoAfterDownloadedWithFavoritePersistence(videosLinks: List<String>, isFavorite : Boolean ) {
+    private fun addVideoDownload(videosLinks: List<String>, isFavorite : Boolean, ownProjects: List<ImmutableProject> ) {
 
         videosLinks.forEach { link ->
-            if(isFavorite){//storing the video with persistence
+            if(isFavorite || ownProjects.any {project -> project.id == projectVar.id}){//storing the video in the permanent memory
+                deletingAndCopyingVideo(link, cacheDir, projectDir)
                 storingVideo(link, projectDir)
             }else {
+                deletingAndCopyingVideo(link, projectDir, cacheDir)//storing
                 storingVideo(link, cacheDir)
             }
         }
@@ -416,6 +425,18 @@ class ProjectInformationActivity : AppCompatActivity() {
             )
         }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
     }
+
+    private fun deletingAndCopyingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
+        val file = File(deleteDirectory, fileDB.getFileName(fileUrl))
+        if(file.exists()){
+            val newFile = File(copyDirectory, fileDB.getFileName(fileUrl))
+            file.copyRecursively(newFile, true)
+            file.deleteRecursively()
+        }
+
+    }
+
+
 
 
 
