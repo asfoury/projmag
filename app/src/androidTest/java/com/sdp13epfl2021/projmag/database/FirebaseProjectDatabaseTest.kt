@@ -39,10 +39,12 @@ class FirebaseProjectDatabaseTest {
 
     val mockFirebaseFirestoreEmtpy = Mockito.mock(FirebaseFirestore::class.java)
     val mockColRefEmpty = Mockito.mock(CollectionReference::class.java)
-    val mockTaskColEmpty: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
+    val mockTaskColEmpty: Task<QuerySnapshot> =
+        Mockito.mock(Task::class.java) as Task<QuerySnapshot>
     val mockQSEmpty: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
     val mockDocRefEmpty = Mockito.mock(DocumentReference::class.java)
-    val mockTaskDocEmpty: Task<DocumentSnapshot> = Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
+    val mockTaskDocEmpty: Task<DocumentSnapshot> =
+        Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
     val mockDSEmpty: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQueryEmpty: Query = Mockito.mock(Query::class.java)
 
@@ -61,9 +63,11 @@ class FirebaseProjectDatabaseTest {
 
     val ID = "some-id"
 
-    val result = ImmutableProject.build(ID, name, labName, authorId, projectManager, teacher, numberStudents,
+    val result = ImmutableProject.build(
+        ID, name, labName, authorId, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList, creationDate) as Success<ImmutableProject>
+        listOf(), sectionList, creationDate
+    ) as Success<ImmutableProject>
     val project = result.value
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
@@ -162,24 +166,26 @@ class FirebaseProjectDatabaseTest {
 
         // --- mockDS ---
         Mockito.`when`(mockDS.id).thenReturn(project.id)
-        Mockito.`when`(mockDS.data).thenReturn(mapOf(
-            "name" to project.name,
-            "lab" to project.lab,
-            "authorID" to project.authorId,
-            "teacher" to project.teacher,
-            "TA" to project.TA,
-            "nbParticipant" to project.nbParticipant,
-            "assigned" to project.assigned,
-            "masterProject" to project.masterProject,
-            "bachelorProject" to project.bachelorProject,
-            "tags" to project.tags,
-            "isTaken" to project.isTaken,
-            "description" to project.description,
-            "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections,
-            "creationDate" to project.creationDate.time
+        Mockito.`when`(mockDS.data).thenReturn(
+            mapOf(
+                "name" to project.name,
+                "lab" to project.lab,
+                "authorID" to project.authorId,
+                "teacher" to project.teacher,
+                "TA" to project.TA,
+                "nbParticipant" to project.nbParticipant,
+                "assigned" to project.assigned,
+                "masterProject" to project.masterProject,
+                "bachelorProject" to project.bachelorProject,
+                "tags" to project.tags,
+                "isTaken" to project.isTaken,
+                "description" to project.description,
+                "videoURI" to project.videoURI,
+                "allowedSections" to project.allowedSections,
+                "creationDate" to project.creationDate.time
 
-        ))
+            )
+        )
         /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockDS["lab"]).thenReturn(project.lab)
@@ -204,23 +210,25 @@ class FirebaseProjectDatabaseTest {
         Mockito
             .`when`(mockQDS.id)
             .thenReturn(ID)
-        Mockito.`when`(mockQDS.data).thenReturn(mapOf(
-            "name" to project.name,
-            "lab" to project.lab,
-            "authorID" to project.authorId,
-            "teacher" to project.teacher,
-            "TA" to project.TA,
-            "nbParticipant" to project.nbParticipant,
-            "assigned" to project.assigned,
-            "masterProject" to project.masterProject,
-            "bachelorProject" to project.bachelorProject,
-            "tags" to project.tags,
-            "isTaken" to project.isTaken,
-            "description" to project.description,
-            "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections,
-            "creationDate" to project.creationDate.time
-        ))
+        Mockito.`when`(mockQDS.data).thenReturn(
+            mapOf(
+                "name" to project.name,
+                "lab" to project.lab,
+                "authorID" to project.authorId,
+                "teacher" to project.teacher,
+                "TA" to project.TA,
+                "nbParticipant" to project.nbParticipant,
+                "assigned" to project.assigned,
+                "masterProject" to project.masterProject,
+                "bachelorProject" to project.bachelorProject,
+                "tags" to project.tags,
+                "isTaken" to project.isTaken,
+                "description" to project.description,
+                "videoURI" to project.videoURI,
+                "allowedSections" to project.allowedSections,
+                "creationDate" to project.creationDate.time
+            )
+        )
         /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockQDS["lab"]).thenReturn(project.lab)
@@ -336,7 +344,7 @@ class FirebaseProjectDatabaseTest {
 
         val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getAllProjects(
-            { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
+            { lp -> assertEquals(emptyList<ImmutableProject>(), lp) },
             { assert(false) }
         )
     }
@@ -353,7 +361,7 @@ class FirebaseProjectDatabaseTest {
         val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getProjectsFromName(
             project.name,
-            { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
+            { lp -> assertEquals(emptyList<ImmutableProject>(), lp) },
             { assert(false) }
         )
     }
