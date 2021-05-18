@@ -90,7 +90,9 @@ class PreferencesActivity : AppCompatActivity() {
         ProjectFilter(
             bachelor = bachelor.isChecked,
             master = master.isChecked,
-            applied = applied.isChecked
+            applied = applied.isChecked,
+            favorite = favorite.isChecked
+
         )
 
     /**
@@ -102,6 +104,7 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor.isChecked = pf.bachelor
         master.isChecked = pf.master
         applied.isChecked = pf.applied
+        favorite.isChecked = pf.favorite
     }
 
     /**
