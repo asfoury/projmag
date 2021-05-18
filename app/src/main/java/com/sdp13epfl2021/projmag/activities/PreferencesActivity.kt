@@ -42,6 +42,11 @@ class PreferencesActivity : AppCompatActivity() {
      */
     private lateinit var applied: CheckBox
 
+    /**
+     * Check box that require the project to be in the user's favorites
+     */
+    private lateinit var favorite: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.project_filter_settings)
@@ -59,6 +64,8 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor = findViewById(R.id.filter_bachelor)
         master = findViewById(R.id.filter_master)
         applied = findViewById(R.id.filter_applied)
+        favorite = findViewById(R.id.filter_favorite)
+
 
         userDB.getPreferences(
             { pf ->
