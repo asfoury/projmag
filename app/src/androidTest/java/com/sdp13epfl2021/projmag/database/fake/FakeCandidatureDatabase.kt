@@ -31,7 +31,7 @@ class FakeCandidatureDatabase(
         val oldCand = newMap2[userId]
         if (oldCand != null) {
             val newCand = Candidature(projectId, userId, oldCand.profile, oldCand.cv, newState)
-            candidatures[projectId] = newMap2 - userId + (userId to newCand)
+            candidatures[projectId] = newMap2 + (userId to newCand)
         }
         onChanges[projectId]?.let { it.forEach { it(projectId, candidatures[projectId]?.values?.toList() ?: emptyList()) } }
         onSuccess()
