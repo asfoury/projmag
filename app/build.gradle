@@ -42,6 +42,10 @@ android {
     }
 }
 
+hilt {
+    enableTransformForLocalTests = false
+}
+
 dependencies {
     implementation 'com.github.kenglxn.QRGen:android:2.6.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -89,8 +93,6 @@ dependencies {
 
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.35.1'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.35'
-
-
 }
 
 
