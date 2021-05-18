@@ -4,7 +4,7 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseProjectDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
@@ -121,15 +121,15 @@ class FirebaseProjectDatabaseTest {
         Mockito
             .`when`(
                 mockDocRef.update(
-                    JavaToKotlinHelper.anyObject<String>(),
-                    JavaToKotlinHelper.anyObject()
+                    anyObject<String>(),
+                    anyObject()
                 )
             )
             .thenReturn(mockTaskVoid)
 
         // --- mockTaskCol ---
         Mockito
-            .`when`(mockTaskCol.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskCol.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<QuerySnapshot>
                 a.onSuccess(mockQS)
@@ -142,7 +142,7 @@ class FirebaseProjectDatabaseTest {
 
         // --- mockTaskDoc ---
         Mockito
-            .`when`(mockTaskDoc.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskDoc.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
                 a.onSuccess(mockDS)
@@ -155,7 +155,7 @@ class FirebaseProjectDatabaseTest {
 
         // --- mockTaskDoc ---
         Mockito
-            .`when`(mockTaskVoid.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskVoid.addOnSuccessListener(anyObject()))
             .then {
                 mockTaskVoid
             }
@@ -258,7 +258,7 @@ class FirebaseProjectDatabaseTest {
             .`when`(mockColRefEmpty.get())
             .thenReturn(mockTaskColEmpty)
         Mockito
-            .`when`(mockTaskColEmpty.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskColEmpty.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<QuerySnapshot>
                 a.onSuccess(null)
@@ -271,7 +271,7 @@ class FirebaseProjectDatabaseTest {
             .`when`(mockDocRefEmpty.get())
             .thenReturn(mockTaskDocEmpty)
         Mockito
-            .`when`(mockTaskDocEmpty.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskDocEmpty.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
                 a.onSuccess(null)
