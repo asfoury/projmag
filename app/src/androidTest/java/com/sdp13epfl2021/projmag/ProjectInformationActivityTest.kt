@@ -3,7 +3,6 @@ package com.sdp13epfl2021.projmag
 
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings.Global.getString
 import android.widget.ScrollView
 import android.widget.VideoView
 import androidx.test.core.app.ApplicationProvider
@@ -147,6 +146,7 @@ class ProjectInformationActivityTest {
     var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
 
 
+
     @After
     fun clean() {
         videoSNKFile.delete()
@@ -232,12 +232,30 @@ class ProjectInformationActivityTest {
         var unapplyString : String = "UNAPPLY"
 
         Thread.sleep(2000)
+
         val applyButton = onView(withId(R.id.applyButton))
         applyButton.check(matches(withText(applyString)))
         applyButton.perform(scrollTo()).perform(click())
         applyButton.check(matches(withText(unapplyString)))
         applyButton.perform(scrollTo()).perform(click())
         applyButton.check(matches(withText(applyString)))
+    }
+
+
+    @Test
+    //TODO : call the proper string ressource in string.xml w mockito
+    fun clickOnFavoriteButton() {
+        var favoriteString : String = "add project to favorites"
+        var removeFavoriteString : String = "remove project from favorites"
+
+        Thread.sleep(2000)
+
+        val favoriteButton = onView(withId(R.id.favoriteButton))
+        favoriteButton.check(matches(withText(favoriteString)))
+        favoriteButton.perform(scrollTo()).perform(click())
+        favoriteButton.check(matches(withText(removeFavoriteString)))
+        favoriteButton.perform(scrollTo()).perform(click())
+        favoriteButton.check(matches(withText(favoriteString)))
     }
 
     @Test

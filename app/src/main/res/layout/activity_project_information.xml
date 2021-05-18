@@ -116,7 +116,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/info_creation_date" />
 
 		<Button
-			android:id="@+id/addFavoriteInProject"
+			android:id="@+id/favoriteButton"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/favorite_add_button"

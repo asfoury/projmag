@@ -287,7 +287,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
         val creationDate = findViewById<TextView>(R.id.info_creation_date)
         videoView = findViewById(R.id.info_video)
-        favButton = findViewById(R.id.addFavoriteInProject)
+        favButton = findViewById(R.id.favoriteButton)
         favButton.isEnabled = false
 
 
