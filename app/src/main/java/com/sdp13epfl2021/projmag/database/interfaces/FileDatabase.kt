@@ -79,7 +79,12 @@ interface FileDatabase {
         onFailure: (Exception) -> Unit
     )
 
-
+    /**
+     * Asynchronously get the actual filename from the firebase database
+     *
+     * @param fileUrl the file url
+     * @return the firebase file name
+     */
     fun getFileName(fileUrl: String) : String
 
 }

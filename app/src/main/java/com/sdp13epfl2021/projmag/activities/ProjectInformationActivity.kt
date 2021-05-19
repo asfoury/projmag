@@ -46,6 +46,8 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import com.google.common.io.Files
+
 
 /**
  * Activity displaying the information and media of a project and from which
@@ -399,10 +401,10 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         videosLinks.forEach { link ->
             if(isFavorite || ownProjects.any {project -> project.id == projectVar.id}){//storing the video in the permanent memory
-                deletingAndCopyingVideo(link, cacheDir, projectDir)
+                movingVideo(link, cacheDir, projectDir)
                 storingVideo(link, projectDir)
             }else {
-                deletingAndCopyingVideo(link, projectDir, cacheDir)//storing
+                movingVideo(link, projectDir, cacheDir)//storing
                 storingVideo(link, cacheDir)
             }
         }
@@ -426,12 +428,11 @@ class ProjectInformationActivity : AppCompatActivity() {
         }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
     }
 
-    private fun deletingAndCopyingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
+    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
         val file = File(deleteDirectory, fileDB.getFileName(fileUrl))
         if(file.exists()){
             val newFile = File(copyDirectory, fileDB.getFileName(fileUrl))
-            file.copyRecursively(newFile, true)
-            file.deleteRecursively()
+            Files.move(file, newFile)
         }
 
     }
