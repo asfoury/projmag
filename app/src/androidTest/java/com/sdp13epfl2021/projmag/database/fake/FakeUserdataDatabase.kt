@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database.fake
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
 class FakeUserdataDatabase(
@@ -10,6 +11,7 @@ class FakeUserdataDatabase(
     var favorites: MutableSet<ProjectId> = HashSet(),
     var cvs: MutableMap<String, CurriculumVitae> = HashMap(),
     var applied: MutableSet<ProjectId> = HashSet(),
+    var profiles: MutableMap<String, ImmutableProfile> = HashMap()
 ) : UserdataDatabase {
 
 
@@ -70,7 +72,7 @@ class FakeUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-if (apply) {
+        if (apply) {
             applied.add(projectId)
         } else {
             applied.remove(projectId)
@@ -98,5 +100,21 @@ if (apply) {
         onFailure: (Exception) -> Unit
     ) {
         TODO("Not yet implemented")
+    }
+
+    override fun uploadProfile(
+        profile: ImmutableProfile,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getProfile(
+        userID: String,
+        onSuccess: (profile: ImmutableProfile?) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        onSuccess(profiles[userID])
     }
 }
