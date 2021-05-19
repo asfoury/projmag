@@ -273,6 +273,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
+        //initialize all the necessary databases 
         val utils = Utils.getInstance(this)
         userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
@@ -382,6 +383,13 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Function that downloads a video either in the proj dir permanent app memory if it's
+     * a favorite or one of our own projects. Else, the video is stored in the cache dir which is a
+     * memory that is deleted by the phone if it needs it. This function calls a callback and will do
+     * nothing if the userDatabase or the projectDatabase didn't respond for some reason.
+     * @param videosLinks links of the videos to be downloaded
+     */
     private fun handleVideo(videosLinks: List<String>){
         //TODO : change the firebase Auth get instance to hilt dependency injection when possible
         //get the favorite list, the applied To list and the own projects list
@@ -428,6 +436,13 @@ class ProjectInformationActivity : AppCompatActivity() {
         }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
     }
 
+    /**
+     * moves a video from the delete Directory to the copy Directory
+     *
+     * @param fileUrl url of the file to be moved
+     * @param deleteDirectory directory from which it has to be moved
+     * @param copyDirectory directory in which it is moved to
+     */
     private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
         val file = File(deleteDirectory, fileDB.getFileName(fileUrl))
         if(file.exists()){
