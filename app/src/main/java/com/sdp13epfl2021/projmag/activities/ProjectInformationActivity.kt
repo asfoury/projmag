@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.service.autofill.FillEventHistory
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -47,6 +48,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.common.io.Files
+import java.lang.IllegalArgumentException
+import java.nio.channels.FileLockInterruptionException
 
 
 /**
@@ -273,7 +276,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
-        //initialize all the necessary databases 
+        //initialize all the necessary databases
         val utils = Utils.getInstance(this)
         userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
@@ -442,13 +445,20 @@ class ProjectInformationActivity : AppCompatActivity() {
      * @param fileUrl url of the file to be moved
      * @param deleteDirectory directory from which it has to be moved
      * @param copyDirectory directory in which it is moved to
+     * @return true if move was a success or there was no need to move, false else
      */
-    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
+    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File): Boolean{
         val file = File(deleteDirectory, fileDB.getFileName(fileUrl))
         if(file.exists()){
             val newFile = File(copyDirectory, fileDB.getFileName(fileUrl))
-            Files.move(file, newFile)
+            try{
+                Files.move(file, newFile)
+            }catch(e: Exception){
+                return false
+            }
+            return true
         }
+        return true
 
     }
 
