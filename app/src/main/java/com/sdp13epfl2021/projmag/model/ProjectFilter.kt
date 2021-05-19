@@ -22,7 +22,8 @@ class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
-    val favorite: Boolean = false
+    val favorite: Boolean = false,
+    val own: Boolean = false
 ) {
 
     companion object {
@@ -37,7 +38,8 @@ class ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
                 applied = data["applied"] as? Boolean ?: false,
-                favorite = data["favorites"] as? Boolean ?: false
+                favorite = data["favorites"] as? Boolean ?: false,
+                own = data["own"] as? Boolean ?: false
             )
 
     }
@@ -47,6 +49,7 @@ class ProjectFilter(
      */
     private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
     private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
+    private var isOwnProject: ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints
@@ -69,6 +72,9 @@ class ProjectFilter(
         if(favorite){
             matches = matches && (isFavoriteProject?.let { it(project) } ?: true)
         }
+        if (own) {
+            matches = matches && (isOwnProject?.let { it(project) } ?: true)
+        }
         return matches
     }
 
@@ -76,7 +82,6 @@ class ProjectFilter(
      * Set the function that will check if the project is one the those the user applied to.
      *
      * @param appCheck Function that take a project and indicates if the user applied to it
-     *
      * @return this filter
      */
     fun setApplicationCheck(appCheck: (ImmutableProject) -> Boolean): ProjectFilter {
@@ -92,6 +97,17 @@ class ProjectFilter(
      */
     fun setFavoriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
         isFavoriteProject = favCheck
+        return this
+    }
+
+    /**
+     * Function that will check if the project was made by the user
+     *
+     * @param ownCheck function that takes a project and indicates whether it was made by the user
+     * @return this filter
+     */
+    fun setOwnCheck(ownCheck: (ImmutableProject) -> Boolean): ProjectFilter {
+        isOwnProject = ownCheck
         return this
     }
 
