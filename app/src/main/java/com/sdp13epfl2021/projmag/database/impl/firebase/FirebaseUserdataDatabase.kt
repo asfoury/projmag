@@ -48,7 +48,7 @@ class FirebaseUserdataDatabase(
 
         const val USER_PROFILE = "user-profile"
 
-        private val AUTH_EXCEPTION: Exception = SecurityException("User need to be authenticated")
+        private val AUTH_EXCEPTION: Exception = SecurityException("User needs to be authenticated")
     }
 
 
