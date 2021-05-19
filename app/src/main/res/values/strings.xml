@@ -85,6 +85,11 @@
 
     <string name="tag_selection_instructions">Add tags : select the right tags for your project and add/remove by clicking on them</string>
     <string name="tag_add_button_title">add tags</string>
+    <string name="filter_favorites">favorites</string>
+
+    <string name="favorite_add_button">add project to favorites</string>
+    <string name="favorite_remove_button">remove project from favorites</string>
+
     <string name="tag_save_button">Save</string>
     <string name="failure">failure</string>
 
@@ -129,6 +134,10 @@
     <string name="failed_send_pref">Failed to Send Preferences</string>
     <string name="invalid_data">Invalid data</string>
     <string name="couldnt_get_data">Couldn\'t get data</string>
+    <string name="apply_text">APPLY</string>
+    <string name="unaply_text">UNAPPLY</string>
+    <string name="failed">failed</string>
+
 
 
 </resources>

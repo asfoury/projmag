@@ -8,6 +8,7 @@ import com.sdp13epfl2021.projmag.model.ProjectFilter
  * An interface to manage a database containing user data, such as favorites, cv, applications, preferences.
  */
 interface UserdataDatabase {
+
     /**
      * Push the ID of a favorite `Project` to the database
      * Call `onSuccess` if the operation succeeded

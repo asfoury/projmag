@@ -29,6 +29,9 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.*
+import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import kotlinx.coroutines.Dispatchers
@@ -49,11 +52,6 @@ import kotlin.collections.ArrayList
  */
 class ProjectInformationActivity : AppCompatActivity() {
 
-    companion object {
-        val LOADING_STRING = "LOADING"
-        val APPLY_STRING = "APPLY"
-        val UNAPPLY_STRING = "UNAPPLY"
-    }
 
     private lateinit var projectVar: ImmutableProject
     private lateinit var fileDB: FileDatabase
@@ -61,9 +59,15 @@ class ProjectInformationActivity : AppCompatActivity() {
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
+    private lateinit var favButton: Button
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
-    private var userID: String? = null
+    private var userId: String? = null
+    private var alreadyApplied: Boolean = false
+    private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
+    private lateinit var userdataDatabase: UserdataDatabase
+    private lateinit var candidatureDatabase: CandidatureDatabase
+
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -100,49 +104,176 @@ class ProjectInformationActivity : AppCompatActivity() {
         videoView.start()
     }
 
-    private fun setApplyButtonText(applyButton: Button, applied: Boolean?) {
-        applyButton.text = when (applied) {
-            null -> LOADING_STRING
-            true -> UNAPPLY_STRING
-            false -> APPLY_STRING
+    /**
+     * Function that given a boolean and strings set the value of the button according to the string
+     * values. When the boolean is null it shows loading by default.
+     *
+     * @param button button to manipulate
+     * @param isOn boolean value indicating the value of the boolean
+     * @param trueText text to show on the button when the boolean value is true
+     * @param falseText text to show on the button when the boolean value is false
+     */
+    private fun setButtonText(
+        button: Button, isOn: Boolean?,
+        trueText: String, falseText: String
+    ) {
+        button.text = when (isOn) {
+            null -> {
+                button.isEnabled = false
+                getString(R.string.loading)
+            }
+            true -> {
+                button.isEnabled = true
+                trueText
+            }
+            false -> {
+                button.isEnabled = true
+                falseText
+            }
+        }
+    }
+
+
+    private fun onApplyClick(
+        applyButton: Button,
+        candidatureDatabase: CandidatureDatabase,
+        projectId: ProjectId,
+    ) {
+        if (alreadyApplied) {
+            candidatureDatabase.removeCandidature(
+                projectId,
+                userId!!,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+            )
+        } else {
+            candidatureDatabase.pushCandidature(
+                projectId,
+                userId!!,
+                Candidature.State.Waiting,
+                {
+                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                    alreadyApplied = !alreadyApplied
+                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+            )
         }
     }
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val userDataDatabase = Utils.getInstance(this).userdataDatabase
-        var alreadyApplied = false
-        setApplyButtonText(applyButton, null)
-        userDataDatabase.getListOfAppliedToProjects({ projectIds ->
-            alreadyApplied = projectIds.contains(projectId)
-            setApplyButtonText(applyButton, alreadyApplied)
+        val utils = Utils.getInstance(this)
+        userdataDatabase = utils.userdataDatabase
+        candidatureDatabase = utils.candidatureDatabase
+        setButtonText(applyButton, null,getString(R.string.unaply_text), getString(R.string.apply_text))
+        userdataDatabase.getListOfAppliedToProjects({ projectIds ->
+            appliedProjectsIds.addAll(projectIds)
+            var alreadyApplied = projectIds.contains(projectId)
+            setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+            applyButton.isEnabled = !projectVar.isTaken
+
         }, {})
 
-        applyButton.isEnabled = !projectVar.isTaken
-
         applyButton.setOnClickListener {
-            userDataDatabase.applyUnapply(
+            userdataDatabase.applyUnapply(
                 !alreadyApplied,
                 projectId,
                 {
-                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-                    alreadyApplied = !alreadyApplied
-                    setApplyButtonText(applyButton, alreadyApplied)
+                    if (userId != null) {
+                        onApplyClick(applyButton, candidatureDatabase, projectId)
+                    } else {
+                        showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
+                    }
                 },
-                { showToast(getString(R.string.failure), Toast.LENGTH_LONG) }
-            )
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
 
+            )
         }
     }
+
+    private fun setUpFavoritesButton() {
+        val projectId = projectVar.id
+
+        //until data is loaded from database, show loading
+        setButtonText(
+            favButton,
+            null,
+            getString(R.string.favorite_remove_button),
+            getString(R.string.favorite_add_button)
+        )
+
+        //load data from the database and set the favorite add button to the right value
+        handleFavoriteButtonText(projectId, false)
+
+
+        //handle click on the add favorite button
+        favButton.setOnClickListener {
+            handleFavoriteButtonText(projectId, true)
+        }
+
+
+    }
+
+    /**
+     * Function that contacts the database, pushes/removes the project from the favorite list,
+     * and changes the button value to the right value
+     *
+     * @param projectId : id of the project to push
+     * @param isClick : differentiate the initialisation of the favorite button from a click on the button
+     */
+    private fun handleFavoriteButtonText(projectId: String, isClick: Boolean) {
+        userdataDatabase.getListOfFavoriteProjects({ projectIds ->
+            val isFavorite = projectIds.contains(projectId)
+            //we clicked on the favorites button and the project is in the favorite list
+            favButton.isEnabled = true
+            if (isFavorite && isClick) {
+                userdataDatabase.removeFromFavorite(projectId,
+                    { onSuccessFavorite(isFavorite) },
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
+            }
+            //clicked on the favorites button and the project isn't in the favorite list
+            else if (isClick) {
+                userdataDatabase.pushFavoriteProject(projectId,
+                    { onSuccessFavorite(isFavorite) },
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
+            }
+            //initialize the button
+            else {
+                setButtonText(
+                    favButton, isFavorite,
+                    getString(R.string.favorite_remove_button),
+                    getString(R.string.favorite_add_button)
+                )
+            }
+
+
+        }, { showToast("failure to contact the database", Toast.LENGTH_SHORT) })
+    }
+
+    private fun onSuccessFavorite(isFavorite: Boolean) {
+        showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+        setButtonText(
+            favButton, !isFavorite,
+            getString(R.string.favorite_remove_button),
+            getString(R.string.favorite_add_button)
+        )
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
         val utils = Utils.getInstance(this)
-        userID = utils.auth.currentUser?.uid
+        userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase
         metadataDB = utils.metadataDatabase
+        userdataDatabase = utils.userdataDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
@@ -153,6 +284,8 @@ class ProjectInformationActivity : AppCompatActivity() {
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
         val creationDate = findViewById<TextView>(R.id.info_creation_date)
         videoView = findViewById(R.id.info_video)
+        favButton = findViewById(R.id.addFavoriteInProject)
+        favButton.isEnabled = false
 
 
         // get the project
@@ -166,7 +299,10 @@ class ProjectInformationActivity : AppCompatActivity() {
             responsible.text = project.teacher
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
-            creationDate.text = SimpleDateFormat(getString(R.string.diplay_creation_date_format), Locale.getDefault()).format(project.creationDate)
+            creationDate.text = SimpleDateFormat(
+                getString(R.string.diplay_creation_date_format),
+                Locale.getDefault()
+            ).format(project.creationDate)
             type.text =
                 if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
                 else if (project.bachelorProject) getString(R.string.display_bachelor_only)
@@ -183,7 +319,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
                 addPauseOnTouchListener(controller)
                 setupPlayerListeners(controller)
-                addVideoAfterDownloaded(project.videoURI)
+                handleVideoWithFavoritePersistenceFiltering(project.videoURI)
             }
         } else {
             showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
@@ -194,6 +330,8 @@ class ProjectInformationActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         setUpApplyButton(findViewById<Button>(R.id.applyButton))
+        setUpFavoritesButton()
+
     }
 
     // pause/start when we touch the video
@@ -220,9 +358,9 @@ class ProjectInformationActivity : AppCompatActivity() {
         videoView.setMediaController(controller)
 
         // set the controller buttons to play next/prev video
-        controller.setPrevNextListeners({ next ->
+        controller.setPrevNextListeners({
             readNextVideo()
-        }, { prev ->
+        }, {
             readPrevVideo()
         })
 
@@ -239,23 +377,47 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    // download all videos and add them to the video player
-    private fun addVideoAfterDownloaded(videosLinks: List<String>) {
-        videosLinks.forEach { link ->
-            fileDB.getFile(link, projectDir, { file ->
-                val uri = Uri.fromFile(file)
-                metadataDB.getSubtitlesFromVideo(
-                    link,
-                    Locale.ENGLISH.language,
-                    { subs ->
-                        subs?.let {
-                            addVideo(uri, it)
-                        } ?: run { addVideo(uri, null) }
-                    }, { addVideo(uri, null) }
-                )
-            }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
-        }
+    private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>){
+        //get the favorite list and when it's available provide it to the function that is
+        //responsible for downloading videos in volatile or non volatile memory
+        userdataDatabase.getListOfFavoriteProjects({ favorites ->
+            addVideoAfterDownloadedWithFavoritePersistence(videosLinks, favorites.contains(projectVar.id))
+        },{
+
+        })
     }
+
+    // download all videos and add them to the video player
+    private fun addVideoAfterDownloadedWithFavoritePersistence(videosLinks: List<String>, isFavorite : Boolean ) {
+
+        videosLinks.forEach { link ->
+            if(isFavorite){//storing the video with persistence
+                storingVideo(link, projectDir)
+            }else {
+                storingVideo(link, cacheDir)
+            }
+        }
+
+    }
+
+
+
+    private fun storingVideo(link : String, directory : File){
+        fileDB.getFile(link, directory, { file ->
+            val uri = Uri.fromFile(file)
+            metadataDB.getSubtitlesFromVideo(
+                link,
+                Locale.ENGLISH.language,
+                { subs ->
+                    subs?.let {
+                        addVideo(uri, it)
+                    } ?: run { addVideo(uri, null) }
+                }, { addVideo(uri, null) }
+            )
+        }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
+    }
+
+
 
     private fun setupDescriptionWithHTML(cleanDescription: String) {
         val imageGetter = ImageGetter2(resources, projectDir)
@@ -381,7 +543,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.waitingListButton)?.isVisible = (userID == projectVar.authorId)
+        menu.findItem(R.id.waitingListButton)?.isVisible = (userId == projectVar.authorId)
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -407,7 +569,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             startActivity(sendIntent)
             return true
         } else if (item.itemId == R.id.waitingListButton) {
-            if (userID == projectVar.authorId) {
+            if (userId == projectVar.authorId) {
                 val intent = Intent(this, WaitingListActivity::class.java)
                 intent.putExtra(MainActivity.projectIdString, projectVar.id)
                 startActivity(intent)
