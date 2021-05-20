@@ -8,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +24,6 @@ class PreferencesActivity : AppCompatActivity() {
      */
     @Inject
     lateinit var userDB: UserdataDatabase
-
 
     /**
      * Check box that require the project to ask for a bachelor degree
@@ -47,6 +45,11 @@ class PreferencesActivity : AppCompatActivity() {
      */
     private lateinit var favorite: CheckBox
 
+    /**
+     * Check box that require the project to be in the user's created projects
+     */
+    private lateinit var own: CheckBox
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.project_filter_settings)
@@ -64,9 +67,15 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor = findViewById(R.id.filter_bachelor)
         master = findViewById(R.id.filter_master)
         applied = findViewById(R.id.filter_applied)
-        favorite = findViewById(R.id.filter_favorite)
+        favorite = findViewById(R.id.filter_favorites)
+        own = findViewById(R.id.filter_own)
 
-
+        if (UserTypeChoice.isProfessor) {
+            applied.visibility = View.INVISIBLE
+        } else {
+            own.visibility = View.INVISIBLE
+        }
+        
         userDB.getPreferences(
             { pf ->
                 pf?.let {
@@ -98,8 +107,8 @@ class PreferencesActivity : AppCompatActivity() {
             bachelor = bachelor.isChecked,
             master = master.isChecked,
             applied = applied.isChecked,
-            favorite = favorite.isChecked
-
+            favorite = favorite.isChecked,
+            own = own.isChecked
         )
 
     /**
@@ -112,6 +121,7 @@ class PreferencesActivity : AppCompatActivity() {
         master.isChecked = pf.master
         applied.isChecked = pf.applied
         favorite.isChecked = pf.favorite
+        own.isChecked = pf.own
     }
 
     /**

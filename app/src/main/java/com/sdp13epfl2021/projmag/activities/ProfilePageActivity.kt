@@ -7,12 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
 
@@ -46,7 +42,8 @@ class ProfilePageActivity : AppCompatActivity() {
         }
 
         userdataDatabase.getProfile(userID, ::loadUserProfile) {
-            Toast.makeText(this,getString(R.string.profile_loading_failed)   , Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
+                .show()
         }
 
 
@@ -58,7 +55,7 @@ class ProfilePageActivity : AppCompatActivity() {
         buttonSubChange.setOnClickListener {
             val profile = createProfileFromFields()
 
-            if(profile != null) {
+            if (profile != null) {
                 userdataDatabase.uploadProfile(profile, {}, {})
             }
             val intent = Intent(this, ProjectsListActivity::class.java)
