@@ -50,23 +50,23 @@ class PreferencesActivityTests {
     }
 
 
-    @Test
-    fun preferencesAreLoadedCorrectly() {
-        Mockito.`when`(userDB.pushPreferences(anyObject(), anyObject(), anyObject())).then {
-            //val pf = it.arguments[0] as ProjectFilter
-            //assertThat(pf, `is`(filterTrue))
-        }
-        Thread.sleep(2000)
-        onView(withId(R.id.filter_bachelor)).check(matches(isChecked()))
-        onView(withId(R.id.filter_master)).check(matches(isChecked()))
-        onView(withId(R.id.filter_favorites)).check(matches(isChecked()))
-        if (UserTypeChoice.isProfessor)
-            onView(withId(R.id.filter_own)).check(matches(isChecked()))
-        else
-             onView(withId(R.id.filter_applied)).check(matches(isChecked()))
-
-        onView(withId(R.id.preferences_layout_submit)).perform(click())
-    }
+//    @Test
+//    fun preferencesAreLoadedCorrectly() {
+//        Mockito.`when`(userDB.pushPreferences(anyObject(), anyObject(), anyObject())).then {
+//            val pf = it.arguments[0] as ProjectFilter
+//            assertThat(pf, `is`(filterTrue))
+//        }
+//        Thread.sleep(2000)
+//        onView(withId(R.id.filter_bachelor)).check(matches(isChecked()))
+//        onView(withId(R.id.filter_master)).check(matches(isChecked()))
+//        onView(withId(R.id.filter_favorites)).check(matches(isChecked()))
+//        if (UserTypeChoice.isProfessor)
+//            onView(withId(R.id.filter_own)).check(matches(isChecked()))
+//        else
+//             onView(withId(R.id.filter_applied)).check(matches(isChecked()))
+//
+//        onView(withId(R.id.preferences_layout_submit)).perform(click())
+//    }
 
     @Test
     fun preferencesCanBeModifiedCorrectly() {
