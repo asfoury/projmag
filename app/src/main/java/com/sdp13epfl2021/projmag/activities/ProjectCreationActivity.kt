@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -9,26 +9,32 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
-import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
+import com.sdp13epfl2021.projmag.MainActivity
+import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.ProjectUploader
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
 import com.sdp13epfl2021.projmag.video.VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY
 import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Named
 
 
-const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE_MESSAGE"
+const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.activities.FORM_TO_SUBTITLE_MESSAGE"
 
 /**
  * Activity consisting of a form one can use to create and submit a project.
  */
-class Form : AppCompatActivity() {
+@AndroidEntryPoint
+class ProjectCreationActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_VIDEO_ACCESS = 1
@@ -37,12 +43,22 @@ class Form : AppCompatActivity() {
         private const val REQUEST_SELECTION_ACCESS = 4
     }
 
+    @Inject
+    lateinit var projectDB: ProjectDatabase
 
-    //tag selection related variables
-    private lateinit var tagRecyclerView: RecyclerView
+    @Inject
+    lateinit var fileDB: FileDatabase
 
+    @Inject
+    lateinit var metadataDB: MetadataDatabase
 
-    //video related variables
+    @Inject
+    lateinit var candidatureDB: CandidatureDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userID: String
+
 
     private var videoUri: Uri? = null
     private var subtitles: String? = null
@@ -174,7 +190,7 @@ class Form : AppCompatActivity() {
             id = "", //id is defined by firebase itself
             name = getTextFromEditText(R.id.form_edit_text_project_name),
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
-            authorId = Firebase.auth.currentUser!!.uid,
+            authorId = userID,
             teacher = getTextFromEditText(R.id.form_edit_text_teacher),
             TA = getTextFromEditText(R.id.form_edit_text_project_TA),
             nbParticipant = try {
@@ -207,12 +223,11 @@ class Form : AppCompatActivity() {
      */
     private fun submit(view: View) = Firebase.auth.uid?.let {
         setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
-        val utils = Utils.getInstance(this)
         ProjectUploader(
-            utils.projectDatabase,
-            utils.fileDatabase,
-            utils.metadataDatabase,
-            utils.candidatureDatabase,
+            projectDB,
+            fileDB,
+            metadataDB,
+            candidatureDB,
             ::showToast,
             { setSubmitButtonEnabled(true) },
             ::finishFromOtherThread
