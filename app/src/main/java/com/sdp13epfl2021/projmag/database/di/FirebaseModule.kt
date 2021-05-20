@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.database.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
