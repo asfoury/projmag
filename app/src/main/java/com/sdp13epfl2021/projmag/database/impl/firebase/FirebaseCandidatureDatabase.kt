@@ -102,7 +102,8 @@ class FirebaseCandidatureDatabase(
         while (waiting.get() && (profileDeferred.isActive || cvDeferred.isActive)) {
             delay(10)
         }
-        val profile: ImmutableProfile? = if (profileDeferred.isCompleted) profileDeferred.getCompleted() else null
+        val profile: ImmutableProfile? =
+            if (profileDeferred.isCompleted) profileDeferred.getCompleted() else null
         val cv: CurriculumVitae? = if (cvDeferred.isCompleted) cvDeferred.getCompleted() else null
 
         if (profile != null && cv != null) {

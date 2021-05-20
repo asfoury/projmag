@@ -69,7 +69,6 @@ class FirebaseCandidatureDatabaseTest {
         FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuthFailed, userDB)
 
 
-
     val onFailureNotExpected: (Exception) -> Unit = { e: Exception ->
         assertTrue(false)
     }

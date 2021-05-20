@@ -14,8 +14,6 @@ import com.sdp13epfl2021.projmag.model.*
 import javax.inject.Inject
 
 
-
-
 /**
  * An implementation of a user-data database
  * using Google Firebase/FireStore
@@ -148,7 +146,7 @@ class FirebaseUserdataDatabase @Inject constructor(
             hashMapOf(CV_FIELD to cv),
             SetOptions.merge()
         )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
-        ?: onFailure(AUTH_EXCEPTION)
+            ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -166,7 +164,8 @@ class FirebaseUserdataDatabase @Inject constructor(
                     val cvMap = it[CV_FIELD] as Map<String, Any>
                     val summary = cvMap["summary"] as String
                     val education = cvMap["education"] as List<CurriculumVitae.PeriodDescription>
-                    val jobExperience = cvMap["jobExperience"] as List<CurriculumVitae.PeriodDescription>
+                    val jobExperience =
+                        cvMap["jobExperience"] as List<CurriculumVitae.PeriodDescription>
                     val languages = cvMap["languages"] as List<CurriculumVitae.Language>
                     val skills = cvMap["skills"] as List<CurriculumVitae.SkillDescription>
                     onSuccess(CurriculumVitae(summary, education, jobExperience, languages, skills))
@@ -258,8 +257,7 @@ class FirebaseUserdataDatabase @Inject constructor(
     ) {
         firestore
             .collection(USER_PROFILE)
-            .document(userID)
-            .get()
+            .document(userID).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val firstName = (document["firstName"] as? String)

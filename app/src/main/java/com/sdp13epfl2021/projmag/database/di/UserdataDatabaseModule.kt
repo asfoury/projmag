@@ -17,9 +17,9 @@ object UserdataDatabaseModule {
     @Provides
     @Singleton
     fun bindUserdataDatabase(
-            userDB: FirebaseUserdataDatabase,
-            @Named("userID") uid: String,
-            @Named("userRootDir") dir: File
+        userDB: FirebaseUserdataDatabase,
+        @Named("userID") uid: String,
+        @Named("userRootDir") dir: File
     ): UserdataDatabase =
         OfflineCachedUserdataDatabase(
             db = userDB,

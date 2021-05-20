@@ -140,7 +140,8 @@ class OfflineCachedCandidatureDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        candidatures[projectId] = getLocalCandidatures(projectId).filter { candidature -> candidature.userId != userId }
+        candidatures[projectId] =
+            getLocalCandidatures(projectId).filter { candidature -> candidature.userId != userId }
         saveCandidature(projectId)
         db.removeCandidature(projectId, userId, onSuccess, onFailure)
     }

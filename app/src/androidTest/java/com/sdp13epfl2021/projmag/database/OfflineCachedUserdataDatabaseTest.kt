@@ -10,7 +10,8 @@ import com.sdp13epfl2021.projmag.model.Gender
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.Role
 import com.sdp13epfl2021.projmag.model.Success
-import junit.framework.TestCase.*
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import org.junit.Test
 import java.io.File
 import java.util.concurrent.CompletableFuture
