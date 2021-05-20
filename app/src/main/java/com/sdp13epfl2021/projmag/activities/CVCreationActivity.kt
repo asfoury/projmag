@@ -12,11 +12,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Activity in which one can create and submit a CV.
  */
+@AndroidEntryPoint
 class CVCreationActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var userDB: UserdataDatabase
 
     private lateinit var viewPager: ViewPager2
     private val cvFrags = CVFragmentCollection()
@@ -40,12 +47,10 @@ class CVCreationActivity : AppCompatActivity() {
 
     private fun onFinish() {
         val cv = buildCV()
-        val utils = Utils.getInstance(this)
-        val userDataFirebase = utils.userdataDatabase
-        userDataFirebase.pushCv(cv, {
-            Toast.makeText(this, "Success!", Toast.LENGTH_LONG).show()
+        userDB.pushCv(cv, {
+            Toast.makeText(this, getString(R.string.success), Toast.LENGTH_LONG).show()
         }, {
-            Toast.makeText(this, "Failure!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.failure), Toast.LENGTH_LONG).show()
         })
         finish()
     }
