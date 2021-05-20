@@ -1,5 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
+import java.io.Serializable
+
 /**
  *  An Immutable project Filter
  *  It's constructor takes filtering parameters and its `invoke` function operator
@@ -23,7 +25,7 @@ data class ProjectFilter(
     val master: Boolean = false,
     val applied: Boolean = false,
     val favorite: Boolean = false
-) {
+) : Serializable {
 
     companion object {
         /**
@@ -45,8 +47,8 @@ data class ProjectFilter(
     /**
      * A function used to see if the user has applied to the project
      */
-    private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
-    private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
+    @Transient private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
+    @Transient private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints

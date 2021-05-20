@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projmag.database.impl.cache
 
-import android.os.Build
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.loadFromFile
@@ -73,27 +72,27 @@ class OfflineCachedCandidatureDatabase(
     /**
      * Get the current candidatures for a given projectId in the cache.
      *
-     * @param projectID the id of the project.
+     * @param projectId the id of the project.
      *
      * @return a list of candidatures
      */
-    private fun getLocalCandidatures(projectID: ProjectId): List<Candidature> {
-        return candidatures[projectID] ?: emptyList()
+    private fun getLocalCandidatures(projectId: ProjectId): List<Candidature> {
+        return candidatures[projectId] ?: emptyList()
     }
 
     /**
      * Update the local cache with the remoteList merge to the local candidatures.
      * Then save the new candidatures to local storage.
-     * @param projectID the id of the project.
+     * @param projectId the id of the project.
      * @param remoteList the remote list of candidatures.
      */
-    private fun merge(projectID: ProjectId, remoteList: List<Candidature>): List<Candidature> {
-        val localList: List<Candidature> = getLocalCandidatures(projectID).filter { c ->
+    private fun merge(projectId: ProjectId, remoteList: List<Candidature>): List<Candidature> {
+        val localList: List<Candidature> = getLocalCandidatures(projectId).filter { c ->
             remoteList.all { r -> r.userId != c.userId }
         }
         val totalList = localList + remoteList
-        candidatures[projectID] = totalList
-        saveCandidature(projectID)
+        candidatures[projectId] = totalList
+        saveCandidature(projectId)
         return totalList
     }
 
@@ -120,10 +119,18 @@ class OfflineCachedCandidatureDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-//        val projectId: ProjectId = candidature.projectId
-//        val oldList: List<Candidature> = candidatures[projectId] ?: emptyList()
-//        candidatures[projectId] = oldList + candidature
-//        saveCandidature(projectId)
+        val oldList: List<Candidature> = getLocalCandidatures(projectId)
+        oldList.find { candidature -> candidature.userId == userId }?.let { oldCandidature ->
+            val newCandidature = Candidature(
+                projectId,
+                userId,
+                oldCandidature.profile,
+                oldCandidature.cv,
+                newState
+            )
+            candidatures[projectId] = oldList - oldCandidature + newCandidature
+            saveCandidature(projectId)
+        }
         db.pushCandidature(projectId, userId, newState, onSuccess, onFailure)
     }
 
@@ -133,10 +140,7 @@ class OfflineCachedCandidatureDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val oldList = candidatures[projectId] ?: emptyList()
-        val newList = oldList.toMutableList()
-        newList.removeAll { candidature -> candidature.userId == userId}
-        candidatures[projectId] = newList.toList()
+        candidatures[projectId] = getLocalCandidatures(projectId).filter { candidature -> candidature.userId != userId }
         saveCandidature(projectId)
         db.removeCandidature(projectId, userId, onSuccess, onFailure)
     }
