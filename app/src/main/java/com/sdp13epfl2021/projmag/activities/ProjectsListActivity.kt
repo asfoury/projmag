@@ -68,7 +68,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+        recyclerView = findViewById(R.id.recycler_view_project)
 
         projectAdapter =
             ProjectAdapter(this, projectDB, recyclerView, fromLink, projectId)
