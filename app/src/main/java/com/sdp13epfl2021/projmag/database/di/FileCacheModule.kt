@@ -15,7 +15,12 @@ import javax.inject.Named
 object FileCacheModule {
     @Provides
     @Named("fileCacheUserDB")
-    fun fileForCache(@ApplicationContext applicationContext: Context): File =
+    fun fileForCacheUserDB(@ApplicationContext applicationContext: Context): File =
         File(applicationContext.filesDir, "users")
+
+    @Provides
+    @Named("fileCacheProjectDB")
+    fun fileForCacheProjectDB(@ApplicationContext applicationContext: Context): File =
+        File(applicationContext.filesDir, "projects")
 
 }

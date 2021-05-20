@@ -39,7 +39,7 @@ data class ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
                 applied = data["applied"] as? Boolean ?: false,
-                favorite = data["favorites"] as? Boolean ?: false
+                favorite = data["favorite"] as? Boolean ?: false
             )
 
     }

@@ -3,6 +3,7 @@ package com.sdp13epfl2021.projmag.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,22 +19,31 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkStri
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Displays a list of projects. User can filter based on various criteria and search by name.
  */
+@AndroidEntryPoint
 class ProjectsListActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var userDB:UserdataDatabase
+
+    @Inject
+    lateinit var projectDB:ProjectDatabase
 
     private lateinit var projectAdapter: ProjectAdapter
 
     private lateinit var recyclerView: RecyclerView
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private  val favoriteList :  MutableList<ProjectId> = ArrayList()
-    private lateinit var utils: Utils
     private var projectFilter: ProjectFilter = ProjectFilter()
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
@@ -45,10 +55,9 @@ class ProjectsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
 
-        utils = Utils.getInstance(this)
         updateAppliedProjects()
 
-        utils.userdataDatabase.getListOfFavoriteProjects({
+        userDB.getListOfFavoriteProjects({
             favoriteList.addAll(it)}, {})
 
         // if app was opened from deep link, extract relevant information to open the right project
@@ -62,7 +71,7 @@ class ProjectsListActivity : AppCompatActivity() {
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
 
         projectAdapter =
-            ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+            ProjectAdapter(this, projectDB, recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
 
 
@@ -135,14 +144,14 @@ class ProjectsListActivity : AppCompatActivity() {
      * Update the list of projects, which the user applied to, from the Database
      */
     private fun updateAppliedProjects() {
-        utils.userdataDatabase.getListOfAppliedToProjects({ list ->
+        userDB.getListOfAppliedToProjects({ list ->
             appliedProjects.clear()
             appliedProjects.addAll(list)
         }, {})
     }
 
     private fun updateFavoriteProjects(){
-        utils.userdataDatabase.getListOfFavoriteProjects({ list ->
+        userDB.getListOfFavoriteProjects({ list ->
             favoriteList.clear()
             favoriteList.addAll(list)
         }, {})
@@ -194,6 +203,7 @@ class ProjectsListActivity : AppCompatActivity() {
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ -> }
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
+                Log.d("debug-list",userPref.toString())
                 filter(view)
             }.show()
     }
@@ -220,6 +230,8 @@ class ProjectsListActivity : AppCompatActivity() {
         view.findViewById<SwitchCompat>(R.id.filter_preferences_switch).apply {
             setOnCheckedChangeListener { _, isChecked ->
                 useFilterPref = isChecked
+
+                updatePreferences()
 
                 view.findViewById<View>(R.id.filter_preferences_layout).visibility =
                     if (isChecked) View.GONE else View.VISIBLE
@@ -280,7 +292,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * Fetch the user preference from Database and update.
      */
     private fun updatePreferences() {
-        utils.userdataDatabase.getPreferences(
+        userDB.getPreferences(
             { pf -> pf?.let { userPref = it } },
             {}
         )

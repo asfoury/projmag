@@ -16,7 +16,7 @@ import javax.inject.Singleton
 object UserdataDatabaseModule {
     @Provides
     @Singleton
-    fun bindUserdataDatabase(
+    fun providesUserdataDatabase(
         userDB: FirebaseUserdataDatabase,
         @Named("currentUserId") uid: String,
         @Named("fileCacheUserDB") dir: File
