@@ -8,7 +8,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,7 +67,7 @@ class PreferencesActivity : AppCompatActivity() {
         bachelor = findViewById(R.id.filter_bachelor)
         master = findViewById(R.id.filter_master)
         applied = findViewById(R.id.filter_applied)
-        favorite = findViewById(R.id.filter_favorite)
+        favorite = findViewById(R.id.filter_favorites)
         own = findViewById(R.id.filter_own)
 
         if (UserTypeChoice.isProfessor) {
