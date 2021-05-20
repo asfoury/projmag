@@ -8,6 +8,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -155,8 +156,25 @@ class ProjectsListActivityTest {
     fun filterDoNotCrash() {
         onView(withId(R.id.filterButton)).perform(click())
         val ok = ApplicationProvider.getApplicationContext<Context>().getString(R.string.ok)
-        onView(withId(R.id.filter_bachelor)).perform(click())
-        onView(withId(R.id.filter_master)).perform(click())
+        val bachelor = onView(withId(R.id.filter_bachelor))
+        val master = onView(withId(R.id.filter_master))
+        val favorites = onView(withId(R.id.filter_favorites))
+        val applied = onView(withId(R.id.filter_applied))
+        val own = onView(withId(R.id.filter_own))
+        bachelor.perform(click())
+        bachelor.check(matches(isChecked()))
+        master.perform(click())
+        master.check(matches(isChecked()))
+        favorites.perform(click())
+        favorites.check(matches(isChecked()))
+        if (userIsAProfessor) {
+            own.perform(click())
+            own.check(matches(isChecked()))
+        } else {
+            applied.perform(click())
+            applied.check(matches(isChecked()))
+        }
+
         onView(withText(ok)).perform(click())
     }
 }

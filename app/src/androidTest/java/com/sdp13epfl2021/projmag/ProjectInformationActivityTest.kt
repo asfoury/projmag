@@ -3,7 +3,6 @@ package com.sdp13epfl2021.projmag
 
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings.Global.getString
 import android.widget.ScrollView
 import android.widget.VideoView
 import androidx.test.core.app.ApplicationProvider
@@ -228,8 +227,8 @@ class ProjectInformationActivityTest {
     @Test
     //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
-        var applyString : String = "APPLY"
-        var unapplyString : String = "UNAPPLY"
+        var applyString: String = "APPLY"
+        var unapplyString: String = "UNAPPLY"
 
         Thread.sleep(2000)
         val applyButton = onView(withId(R.id.applyButton))

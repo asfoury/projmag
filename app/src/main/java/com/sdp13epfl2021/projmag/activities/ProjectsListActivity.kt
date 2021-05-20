@@ -36,8 +36,9 @@ class ProjectsListActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
-    private  val favoriteList :  MutableList<ProjectId> = ArrayList()
+    private val favoriteList: MutableList<ProjectId> = ArrayList()
     private lateinit var utils: Utils
+    private var userId: String? = null
     private var projectFilter: ProjectFilter = ProjectFilter()
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
@@ -51,10 +52,12 @@ class ProjectsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_projects_list)
 
         utils = Utils.getInstance(this)
+        userId = utils.auth.uid
         updateAppliedProjects()
 
         utils.userdataDatabase.getListOfFavoriteProjects({
-            favoriteList.addAll(it)}, {})
+            favoriteList.addAll(it)
+        }, {})
 
         // if app was opened from deep link, extract relevant information to open the right project
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
@@ -74,6 +77,11 @@ class ProjectsListActivity : AppCompatActivity() {
 
         recyclerView.setHasFixedSize(false)
 
+        setUpFab()
+
+    }
+
+    private fun setUpFab() {
         // get the fab and make it go to the Form activity
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener {
@@ -81,11 +89,9 @@ class ProjectsListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
         if (!UserTypeChoice.isProfessor) {
             fab.visibility = View.INVISIBLE
         }
-
         candidatureDatabase = utils.candidatureDatabase
 
         appliedProjects.forEach{
@@ -108,7 +114,6 @@ class ProjectsListActivity : AppCompatActivity() {
                     }
             }
         }
-
     }
 
     /**
@@ -168,7 +173,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }, {})
     }
 
-    private fun updateFavoriteProjects(){
+    private fun updateFavoriteProjects() {
         utils.userdataDatabase.getListOfFavoriteProjects({ list ->
             favoriteList.clear()
             favoriteList.addAll(list)
@@ -200,6 +205,7 @@ class ProjectsListActivity : AppCompatActivity() {
         pf?.apply {
             setApplicationCheck { checkIfApplied(it) }
             setFavoriteCheck { checkIfFavorite(it) }
+            setOwnCheck { checkIfOwn(it) }
             projectFilter = this
         }
     }
@@ -236,14 +242,31 @@ class ProjectsListActivity : AppCompatActivity() {
         val pf = projectFilter
         val view = layoutInflater.inflate(R.layout.project_filter_settings, null)
 
+        val applied = view.findViewById<CheckBox>(R.id.filter_applied)
+        val own = view.findViewById<CheckBox>(R.id.filter_own)
+
+        if (UserTypeChoice.isProfessor) {
+            applied.visibility = View.INVISIBLE
+        } else {
+            own.visibility = View.INVISIBLE
+        }
+
         view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked = pf.bachelor
         view.findViewById<CheckBox>(R.id.filter_master).isChecked = pf.master
-        view.findViewById<CheckBox>(R.id.filter_applied).isChecked = pf.applied
-        view.findViewById<CheckBox>(R.id.filter_favorite).isChecked = pf.favorite
+        applied.isChecked = pf.applied
+        own.isChecked = pf.own
+        view.findViewById<CheckBox>(R.id.filter_favorites).isChecked = pf.favorite
 
         view.findViewById<ImageButton>(R.id.filter_settings_button).setOnClickListener {
             startActivity(Intent(this, PreferencesActivity::class.java))
         }
+
+        setUpPreferencesSwitch(view)
+
+        return view
+    }
+
+    private fun setUpPreferencesSwitch(view: View) {
         view.findViewById<SwitchCompat>(R.id.filter_preferences_switch).apply {
             setOnCheckedChangeListener { _, isChecked ->
                 useFilterPref = isChecked
@@ -253,7 +276,6 @@ class ProjectsListActivity : AppCompatActivity() {
             }
             isChecked = useFilterPref
         }
-        return view
     }
 
     /**
@@ -265,9 +287,9 @@ class ProjectsListActivity : AppCompatActivity() {
     private fun filter(view: View) {
         val bachelor = view.findViewById<CheckBox>(R.id.filter_bachelor).isChecked
         val master = view.findViewById<CheckBox>(R.id.filter_master).isChecked
-
         val applied = view.findViewById<CheckBox>(R.id.filter_applied).isChecked
-        val favorite = view.findViewById<CheckBox>(R.id.filter_favorite).isChecked
+        val favorite = view.findViewById<CheckBox>(R.id.filter_favorites).isChecked
+        val own = view.findViewById<CheckBox>(R.id.filter_own).isChecked
 
         setProjectFilter(
             if (useFilterPref) {
@@ -278,6 +300,7 @@ class ProjectsListActivity : AppCompatActivity() {
                     master = master,
                     applied = applied,
                     favorite = favorite,
+                    own = own
                 )
             }
         )
@@ -302,6 +325,17 @@ class ProjectsListActivity : AppCompatActivity() {
      */
     private fun checkIfFavorite(project: ImmutableProject): Boolean =
         favoriteList.contains(project.id)
+
+    /**
+     * Checks if the project was made by the current user
+     *
+     * @param project the project to check
+     * @return true if the project was made by the user, false else
+     */
+    private fun checkIfOwn(project: ImmutableProject): Boolean {
+        return userId != null && project.authorId == userId
+    }
+
 
     /**
      * Fetch the user preference from Database and update.

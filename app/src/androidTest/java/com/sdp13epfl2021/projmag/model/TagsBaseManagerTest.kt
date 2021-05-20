@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projmag.model
 
-import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import org.junit.Assert
 import org.junit.Test
@@ -9,7 +8,7 @@ class TagsBaseManagerTest {
     @Test
     fun tagAddTest() {
         val tagBase = TagsBaseManager()
-        tagBase.addTag(Tag("hellogoodsir"));
+        tagBase.addTag(Tag("hellogoodsir"))
 
     }
 
