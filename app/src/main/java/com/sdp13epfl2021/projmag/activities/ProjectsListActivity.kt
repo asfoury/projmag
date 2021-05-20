@@ -90,22 +90,22 @@ class ProjectsListActivity : AppCompatActivity() {
 
         appliedProjects.forEach{
             utils.candidatureDatabase.addListener(it) { _: ProjectId, list : List<Candidature> ->
-                val candidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
-                if(candidatureThatChanged != null) {
-                    if(candidatureThatChanged.state == Candidature.State.Accepted) {
-                        val otherCandidatures = appliedProjects.filter { projectId -> (candidatureThatChanged.projectId != projectId) }
+                val ownCandidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                    if(ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
+                        val otherCandidatures = appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
                         otherCandidatures.forEach { otherCandidatureId ->
-                            candidatureDatabase.removeCandidature(
-                                    otherCandidatureId,
-                                    utils.auth.currentUser?.uid!!,
-                                    {},
-                                    {}
-                            )
+                            utils.auth.currentUser?.uid?.let {
+                                uid ->
+                                candidatureDatabase.removeCandidature(
+                                        otherCandidatureId,
+                                        uid,
+                                        {},
+                                        {}
+                                )
+                            }
                             utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
-                            Log.d("MYTEST", "Removed a project")
                         }
                     }
-                }
             }
         }
 
