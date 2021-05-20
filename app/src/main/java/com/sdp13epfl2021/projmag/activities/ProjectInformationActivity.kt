@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.service.autofill.FillEventHistory
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -45,8 +44,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.google.common.io.Files
-import java.lang.IllegalArgumentException
-import java.nio.channels.FileLockInterruptionException
+
 
 
 /**
@@ -192,7 +190,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         )
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             appliedProjectsIds.addAll(projectIds)
-            var alreadyApplied = projectIds.contains(projectId)
+            val alreadyApplied = projectIds.contains(projectId)
             setButtonText(
                 applyButton,
                 alreadyApplied,
