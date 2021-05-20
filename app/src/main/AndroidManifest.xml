@@ -23,7 +23,7 @@
         android:theme="@style/Theme.Projmag">
         <activity
             android:name=".activities.PreferencesActivity"
-            android:parentActivityName=".activities.ProjectsListActivity"F
+            android:parentActivityName=".activities.ProjectsListActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity android:name=".activities.QRCodeActivity" />
