@@ -15,10 +15,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.FormHelper
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
-import com.sdp13epfl2021.projmag.database.di.CandidatureDatabaseModule
-import com.sdp13epfl2021.projmag.database.di.FileDatabaseModule
-import com.sdp13epfl2021.projmag.database.di.MetadataDatabaseModule
-import com.sdp13epfl2021.projmag.database.di.ProjectDatabaseModule
+import com.sdp13epfl2021.projmag.database.di.*
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
@@ -30,28 +27,31 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.mockito.Mockito
 import java.io.File
+import javax.inject.Named
 
-@UninstallModules(
-    ProjectDatabaseModule::class,
-    FileDatabaseModule::class,
-    MetadataDatabaseModule::class,
-    CandidatureDatabaseModule::class
-)
 @HiltAndroidTest
+@UninstallModules(
+        ProjectDatabaseModule::class,
+        FileDatabaseModule::class,
+        MetadataDatabaseModule::class,
+        CandidatureDatabaseModule::class,
+        UserIdModule::class
+)
 class ProjectCreationActivityTest {
 
     private var activityRule: ActivityScenarioRule<ProjectCreationActivity> =
-        ActivityScenarioRule(ProjectCreationActivity::class.java)
+            ActivityScenarioRule(ProjectCreationActivity::class.java)
 
     @get:Rule
     var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
-        .around(activityRule)
+            .around(activityRule)
 
 
     private val description = """
@@ -68,20 +68,20 @@ class ProjectCreationActivityTest {
             """.trimIndent()
 
     private val project = (ImmutableProject.build(
-        id = "",
-        authorId = "authorId",
-        name = "Project1",
-        lab = "lab",
-        teacher = "teacher",
-        TA = "TA",
-        nbParticipant = 1,
-        assigned = listOf("student"),
-        masterProject = true,
-        bachelorProject = true,
-        tags = listOf(),
-        isTaken = false,
-        description = description,
-        videoURI = listOf()
+            id = "",
+            authorId = "authorId",
+            name = "Project1",
+            lab = "lab",
+            teacher = "teacher",
+            TA = "TA",
+            nbParticipant = 1,
+            assigned = listOf("student"),
+            masterProject = true,
+            bachelorProject = true,
+            tags = listOf(),
+            isTaken = false,
+            description = description,
+            videoURI = listOf()
     ) as Success<ImmutableProject>).value
 
 
@@ -96,6 +96,10 @@ class ProjectCreationActivityTest {
 
     @BindValue
     val candidatureDB: CandidatureDatabase = Mockito.mock(CandidatureDatabase::class.java)
+
+    @BindValue
+    @Named("currentUserId")
+    val userID: String = "uid"
 
 
     private lateinit var instrumentationContext: Context
@@ -112,39 +116,41 @@ class ProjectCreationActivityTest {
             assertEquals(project, p)
         }
 
+        Mockito.`when`(candidatureDB.addListener(anyObject(), anyObject())).then {}
+
         // need to swipe down to make sure textFields are visible when running tests
         onView(withId(R.id.project_submission_scrollview))
-            .perform(ViewActions.swipeDown())
+                .perform(ViewActions.swipeDown())
 
         Thread.sleep(2000)
 
         onView(withId(R.id.form_edit_text_laboratory))
-            .perform(replaceText(project.lab))
+                .perform(replaceText(project.lab))
 
         onView(withId(R.id.form_edit_text_project_name))
-            .perform(replaceText(project.name))
+                .perform(replaceText(project.name))
 
         onView(withId(R.id.form_edit_text_teacher))
-            .perform(replaceText(project.teacher))
+                .perform(replaceText(project.teacher))
 
         onView(withId(R.id.form_edit_text_project_TA))
-            .perform(replaceText(project.TA))
+                .perform(replaceText(project.TA))
 
         onView(withId(R.id.form_nb_of_participant))
-            .perform(replaceText(project.nbParticipant.toString()))
+                .perform(replaceText(project.nbParticipant.toString()))
 
         onView(withId(R.id.form_check_box_MP))
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.form_check_box_SP))
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.form_project_description))
-            .perform(
-                replaceText(
-                    project.description
+                .perform(
+                        replaceText(
+                                project.description
+                        )
                 )
-            )
     }
 
     @Test
@@ -156,15 +162,15 @@ class ProjectCreationActivityTest {
         val vidView = VideoView(instrumentationContext)
 
         FormHelper.playVideoFromLocalPath(
-            vidButton,
-            subButton,
-            vidView,
-            mediaController,
-            fakeStringPath
+                vidButton,
+                subButton,
+                vidView,
+                mediaController,
+                fakeStringPath
         )
-        assert(vidButton.isEnabled)
-        assert(subButton.isEnabled)
-        assert(vidButton.hasOnClickListeners())
-        assert(!vidView.isPlaying)
+        assertTrue(vidButton.isEnabled)
+        assertTrue(subButton.isEnabled)
+        assertTrue(vidButton.hasOnClickListeners())
+        assertTrue(!vidView.isPlaying)
     }
 }

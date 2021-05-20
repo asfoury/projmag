@@ -20,7 +20,7 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import org.junit.Assert
+import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -64,7 +64,7 @@ class ProfilePageActivityTest {
         Mockito.mock(UserdataDatabase::class.java).apply {
             Mockito.`when`(this.getProfile(anyObject(), anyObject(), anyObject()))
                 .then {
-                    Assert.assertEquals(userID, it.arguments[0])
+                    assertEquals(userID, it.arguments[0])
                     @Suppress("UNCHECKED_CAST")
                     val success = it.arguments[1] as Function1<ImmutableProfile, Unit>
                     success(dummyProfile)
@@ -93,14 +93,16 @@ class ProfilePageActivityTest {
 
     @Test
     fun profileIsSubmittedCorrectly() {
+        Thread.sleep(1000) // wait UI to UPDATE
+
         Mockito.`when`(userDB.uploadProfile(anyObject(), anyObject(), anyObject())).then {
             val profile = it.arguments[0] as ImmutableProfile
-            Assert.assertEquals(otherDummyProfile, profile)
+            assertEquals(otherDummyProfile, profile)
         }
 
         onView(withId(R.id.profile_lastname)).perform(
-            scrollTo(),
-            replaceText(otherDummyProfile.lastName)
+                scrollTo(),
+                replaceText(otherDummyProfile.lastName)
         )
         onView(withId(R.id.profile_firstname)).perform(
             scrollTo(),

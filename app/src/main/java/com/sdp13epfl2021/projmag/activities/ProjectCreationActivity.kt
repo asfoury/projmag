@@ -9,8 +9,6 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.ProjectUploader
@@ -221,16 +219,16 @@ class ProjectCreationActivity : AppCompatActivity() {
      * Submit project and video with information in the view.
      * Expected to be called when clicking on a submission button on the view
      */
-    private fun submit(view: View) = Firebase.auth.uid?.let {
+    private fun submit(view: View) = let {
         setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
         ProjectUploader(
-            projectDB,
-            fileDB,
-            metadataDB,
-            candidatureDB,
-            ::showToast,
-            { setSubmitButtonEnabled(true) },
-            ::finishFromOtherThread
+                projectDB,
+                fileDB,
+                metadataDB,
+                candidatureDB,
+                ::showToast,
+                { setSubmitButtonEnabled(true) },
+                ::finishFromOtherThread
         ).checkProjectAndThenUpload(
             constructProject(),
             videoUri,

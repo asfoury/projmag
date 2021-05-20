@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.database.di
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.sdp13epfl2021.projmag.database.impl.cache.CachedProjectDatabase
 import com.sdp13epfl2021.projmag.database.impl.cache.OfflineProjectDatabase
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseProjectDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
@@ -19,13 +20,15 @@ object ProjectDatabaseModule {
     @Provides
     @Singleton
     fun provideProjectDatabase(
-        fs: FirebaseFirestore,
-        @Named("fileCacheProjectDB") dir: File,
-        candidatureDB: CandidatureDatabase
+            fs: FirebaseFirestore,
+            @Named("fileCacheProjectDB") dir: File,
+            candidatureDB: CandidatureDatabase
     ): ProjectDatabase =
-        OfflineProjectDatabase(
-            FirebaseProjectDatabase(fs),
-            dir,
-            candidatureDB
-        )
+            CachedProjectDatabase(
+                    OfflineProjectDatabase(
+                            FirebaseProjectDatabase(fs),
+                            dir,
+                            candidatureDB
+                    )
+            )
 }

@@ -1,8 +1,7 @@
 package com.sdp13epfl2021.projmag.database.di
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.database.impl.cache.OfflineCachedCandidatureDatabase
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseCandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
@@ -20,13 +19,14 @@ import javax.inject.Singleton
 object CandidatureDatabaseModule {
     @Provides
     @Singleton
-    fun provideCandidatureDabatbase(
-        auth: FirebaseAuth,
-        userdataDB: UserdataDatabase,
-        @Named("fileCacheProjectDB") dir: File
+    fun provideCandidatureDatabase(
+            fs: FirebaseFirestore,
+            auth: FirebaseAuth,
+            userdataDB: UserdataDatabase,
+            @Named("fileCacheProjectDB") dir: File
     ): CandidatureDatabase =
-        OfflineCachedCandidatureDatabase(
-            FirebaseCandidatureDatabase(Firebase.firestore, auth, userdataDB),
-            dir
-        )
+            OfflineCachedCandidatureDatabase(
+                    FirebaseCandidatureDatabase(fs, auth, userdataDB),
+                    dir
+            )
 }
