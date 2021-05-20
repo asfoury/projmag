@@ -403,7 +403,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
+
     /**
      * Function that downloads a video either in the proj dir permanent app memory if it's
      * a favorite or one of our own projects. Else, the video is stored in the cache dir which is a
@@ -421,23 +421,11 @@ class ProjectInformationActivity : AppCompatActivity() {
                 {})
 
         },{
-=======
-    private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>) {
-        //get the favorite list and when it's available provide it to the function that is
-        //responsible for downloading videos in volatile or non volatile memory
-        userdataDatabase.getListOfFavoriteProjects({ favorites ->
-            addVideoAfterDownloadedWithFavoritePersistence(
-                videosLinks,
-                favorites.contains(projectVar.id)
-            )
-        }, {
->>>>>>> main
 
         })
     }
 
     // download all videos and add them to the video player
-<<<<<<< HEAD
     private fun addVideoDownload(videosLinks: List<String>, isFavorite : Boolean, ownProjects: List<ImmutableProject> ) {
 
         videosLinks.forEach { link ->
@@ -446,17 +434,6 @@ class ProjectInformationActivity : AppCompatActivity() {
                 storingVideo(link, projectDir)
             }else {
                 movingVideo(link, projectDir, cacheDir)//storing
-=======
-    private fun addVideoAfterDownloadedWithFavoritePersistence(
-        videosLinks: List<String>,
-        isFavorite: Boolean
-    ) {
-
-        videosLinks.forEach { link ->
-            if (isFavorite) {//storing the video with persistence
-                storingVideo(link, projectDir)
-            } else {
->>>>>>> main
                 storingVideo(link, cacheDir)
             }
         }
