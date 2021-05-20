@@ -9,13 +9,18 @@ import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.model.ProjectFilter
 import com.sdp13epfl2021.projmag.model.*
+import javax.inject.Inject
+
+
+
 
 /**
  * An implementation of a user-data database
  * using Google Firebase/FireStore
  */
-class FirebaseUserdataDatabase(
+class FirebaseUserdataDatabase @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
 ) : UserdataDatabase {
@@ -47,6 +52,8 @@ class FirebaseUserdataDatabase(
         const val PREF_FIELD = "preferences"
 
         const val USER_PROFILE = "user-profile"
+
+        private val AUTH_EXCEPTION: Exception = SecurityException("User needs to be authenticated")
     }
 
 
@@ -98,7 +105,7 @@ class FirebaseUserdataDatabase(
                 },
                 onFailure
             )
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -111,7 +118,7 @@ class FirebaseUserdataDatabase(
                 .addOnSuccessListener { doc ->
                     onSuccess((doc[FAVORITES_FIELD] as? List<ProjectId>) ?: listOf())
                 }.addOnFailureListener(onFailure)
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun removeFromFavorite(
@@ -129,7 +136,7 @@ class FirebaseUserdataDatabase(
                 },
                 onFailure
             )
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun pushCv(
@@ -141,14 +148,33 @@ class FirebaseUserdataDatabase(
             hashMapOf(CV_FIELD to cv),
             SetOptions.merge()
         )?.addOnSuccessListener { onSuccess() }?.addOnFailureListener(onFailure)
+        ?: onFailure(AUTH_EXCEPTION)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun getCv(
         userID: String,
         onSuccess: (CurriculumVitae?) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        firestore
+            .collection(ROOT)
+            .document(userID)
+            .get()
+            .addOnSuccessListener {
+                try {
+                    val cvMap = it[CV_FIELD] as Map<String, Any>
+                    val summary = cvMap["summary"] as String
+                    val education = cvMap["education"] as List<CurriculumVitae.PeriodDescription>
+                    val jobExperience = cvMap["jobExperience"] as List<CurriculumVitae.PeriodDescription>
+                    val languages = cvMap["languages"] as List<CurriculumVitae.Language>
+                    val skills = cvMap["skills"] as List<CurriculumVitae.SkillDescription>
+                    onSuccess(CurriculumVitae(summary, education, jobExperience, languages, skills))
+                } catch (e: Exception) {
+                    onFailure(e)
+                }
+            }
+            .addOnFailureListener(onFailure)
     }
 
     override fun applyUnapply(
@@ -166,7 +192,7 @@ class FirebaseUserdataDatabase(
             doc.update(APPLIED_TO_FIELD, fieldValue)
                 .addOnSuccessListener { onSuccess() }
                 .addOnFailureListener(onFailure)
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -179,7 +205,7 @@ class FirebaseUserdataDatabase(
                 .addOnSuccessListener { doc ->
                     onSuccess((doc[APPLIED_TO_FIELD] as? List<ProjectId>) ?: listOf())
                 }.addOnFailureListener(onFailure)
-        }
+        } ?: onFailure(AUTH_EXCEPTION)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -192,6 +218,7 @@ class FirebaseUserdataDatabase(
             ?.addOnSuccessListener { doc ->
                 onSuccess(doc?.get(PREF_FIELD)?.let { ProjectFilter(it as Map<String, Any>) })
             }?.addOnFailureListener(onFailure)
+            ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun pushPreferences(
@@ -203,6 +230,7 @@ class FirebaseUserdataDatabase(
             ?.set(hashMapOf(PREF_FIELD to pf))
             ?.addOnSuccessListener { onSuccess() }
             ?.addOnFailureListener(onFailure)
+            ?: onFailure(AUTH_EXCEPTION)
     }
 
     override fun uploadProfile(
@@ -210,27 +238,16 @@ class FirebaseUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val profile = hashMapOf(
-            "firstName" to profile.firstName,
-            "lastName" to profile.lastName,
-            "age" to profile.age,
-            "gender" to profile.gender.name,
-            "phoneNumber" to profile.phoneNumber,
-            "role" to profile.role.name,
-            "sciper" to profile.sciper
-        )
         val id = getUser()?.uid
         if (id != null) {
-            firestore.collection(FirebaseUserdataDatabase.USER_PROFILE).document(id)
+            firestore
+                .collection(USER_PROFILE)
+                .document(id)
                 .set(profile)
-                .addOnSuccessListener {
-                    onSuccess()
-                }
-                .addOnFailureListener {
-                    onFailure(it)
-                }
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener(onFailure)
         } else {
-            onFailure(Exception("user id is null"))
+            onFailure(AUTH_EXCEPTION)
         }
     }
 
@@ -263,7 +280,7 @@ class FirebaseUserdataDatabase(
                         else -> Role.OTHER
                     }
 
-                    if (firstName != null && lastName != null && age != null && sciper != null && phoneNumber != null) {
+                    if (firstName != null && lastName != null && age != null && phoneNumber != null) {
                         when (val resProfile = ImmutableProfile.build(
                             lastName,
                             firstName,
@@ -283,8 +300,11 @@ class FirebaseUserdataDatabase(
                     } else {
                         onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, sciper = $sciper, phoneNumber = $phoneNumber."))
                     }
+                } else {
+                    onSuccess(null)
                 }
             }
+            .addOnFailureListener(onFailure)
 
     }
 }

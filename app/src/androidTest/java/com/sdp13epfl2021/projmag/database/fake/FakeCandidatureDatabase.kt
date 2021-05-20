@@ -25,13 +25,15 @@ class FakeCandidatureDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-//        val projectId = candidature.projectId
-//        val userId = candidature.userId
-//        val newMap1 = candidaturesState[projectId] ?: emptyMap()
-//        val newMap2 = candidatures[projectId] ?: emptyMap()
-//        candidaturesState[projectId] = newMap1 + (userId to newState)
-//        candidatures[projectId] = newMap2 + (userId to candidature)
-//        onChanges[projectId]?.let { it.forEach { it(projectId, candidatures[projectId]?.values?.toList() ?: emptyList()) } }
+        val newMap1 = candidaturesState[projectId] ?: emptyMap()
+        val newMap2 = candidatures[projectId] ?: emptyMap()
+        candidaturesState[projectId] = newMap1 + (userId to newState)
+        val oldCand = newMap2[userId]
+        if (oldCand != null) {
+            val newCand = Candidature(projectId, userId, oldCand.profile, oldCand.cv, newState)
+            candidatures[projectId] = newMap2 + (userId to newCand)
+        }
+        onChanges[projectId]?.let { it.forEach { it(projectId, candidatures[projectId]?.values?.toList() ?: emptyList()) } }
         onSuccess()
     }
 

@@ -9,12 +9,15 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest
+import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseUserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import junit.framework.TestCase.assertEquals
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import java.util.concurrent.CompletableFuture
 
 @Suppress("UNCHECKED_CAST")
 class FirebaseUserdataTest {
@@ -23,6 +26,26 @@ class FirebaseUserdataTest {
         private const val UID = "some-user-id"
     }
 
+    private val userId = "001"
+    private val cv = CurriculumVitae(
+        "summary of $userId",
+            listOf(
+                CurriculumVitae.PeriodDescription(
+                    "name1",
+                    "location1",
+                    "description1",
+                    2010,
+                    2012
+                )
+            ),
+            emptyList(),
+            emptyList(),
+            emptyList()
+    )
+
+    private val onFailureNotExpected: (Exception) -> Unit = {
+        assert(false)
+    }
 
     private val mockFirebaseFirestore = Mockito.mock(FirebaseFirestore::class.java)
     private val mockFirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
@@ -49,6 +72,10 @@ class FirebaseUserdataTest {
         Mockito
             .`when`(mockColRef.document(UID))
             .thenReturn(mockDocRef)
+
+        Mockito
+                .`when`(mockColRef.document(userId))
+                .thenReturn(mockDocRef)
 
         //DocRef
         Mockito
@@ -108,6 +135,14 @@ class FirebaseUserdataTest {
                 mockVoidTask
             }
 
+        Mockito.`when`(mockDS["cv"]).thenReturn(mapOf(
+            "summary" to cv.summary,
+            "education" to cv.education,
+            "jobExperience" to cv.jobExperience,
+            "languages" to cv.languages,
+            "skills" to cv.skills,
+        ))
+
     }
 
     @Test
@@ -135,5 +170,15 @@ class FirebaseUserdataTest {
             {},
             {}
         )
+    }
+
+    @Test
+    fun getCvWorks() {
+        val result: CompletableFuture<CurriculumVitae?> = CompletableFuture()
+        database.getCv(userId, {
+            result.complete(it)
+        }, onFailureNotExpected)
+        assertEquals(cv, result.get())
+
     }
 }

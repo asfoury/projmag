@@ -7,26 +7,30 @@ import org.junit.Test
 
 class TagsBaseManagerTest {
     @Test
-    fun tagAddTest(){
+    fun tagAddTest() {
         val tagBase = TagsBaseManager()
         tagBase.addTag(Tag("hellogoodsir"));
 
     }
 
     @Test
-    fun tagLengthTest(){
+    fun tagLengthTest() {
         val tagsBase = TagsBaseManager()
         assert(tagsBase.maxTagSize() == 40)
     }
 
     @Test
-    fun tagAddTestErrors(){
+    fun tagAddTestErrors() {
         val tagBase = TagsBaseManager()
         tagBase.addTag(Tag("Machine learning"))
 
         //tag is too long
-        val error = tagBase.addTag(Tag("voluntarily going over the maximum character limit " +
-                "wheep doop doop da dooble dooble do do do"))
+        val error = tagBase.addTag(
+            Tag(
+                "voluntarily going over the maximum character limit " +
+                        "wheep doop doop da dooble dooble do do do"
+            )
+        )
         Assert.assertEquals(TagsBaseManager.InputResult.TooLong, error)
 
         //tag already exists
