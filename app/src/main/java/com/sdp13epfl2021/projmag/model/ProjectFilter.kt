@@ -1,5 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
+import java.io.Serializable
+
 /**
  *  An Immutable project Filter
  *  It's constructor takes filtering parameters and its `invoke` function operator
@@ -18,13 +20,13 @@ package com.sdp13epfl2021.projmag.model
  * @property favorite if it is true will require the project to be in the favorite list to
  *                   (i.e. `favoriteProject` is true), otherwise it has no effect on filtering.
  */
-class ProjectFilter(
+data class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
     val favorite: Boolean = false,
     val own: Boolean = false
-) {
+) : Serializable {
 
     companion object {
         /**
@@ -47,8 +49,11 @@ class ProjectFilter(
     /**
      * A function used to see if the user has applied to the project
      */
+    @Transient
     private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
-    private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
+    @Transient
+    private var isFavoriteProject: ((ImmutableProject) -> Boolean)? = null
+    @Transient
     private var isOwnProject: ((ImmutableProject) -> Boolean)? = null
 
     /**
@@ -60,21 +65,16 @@ class ProjectFilter(
      */
     operator fun invoke(project: ImmutableProject): Boolean {
         var matches = true
-        if (bachelor) {
+        if (bachelor)
             matches = matches && project.bachelorProject
-        }
-        if (master) {
+        if (master)
             matches = matches && project.masterProject
-        }
-        if (applied) {
+        if (applied)
             matches = matches && (isAppliedProject?.let { it(project) } ?: true)
-        }
-        if(favorite){
+        if (favorite)
             matches = matches && (isFavoriteProject?.let { it(project) } ?: true)
-        }
-        if (own) {
+        if (own)
             matches = matches && (isOwnProject?.let { it(project) } ?: true)
-        }
         return matches
     }
 

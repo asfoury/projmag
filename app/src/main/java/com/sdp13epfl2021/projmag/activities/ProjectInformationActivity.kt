@@ -27,9 +27,6 @@ import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -146,7 +143,12 @@ class ProjectInformationActivity : AppCompatActivity() {
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
-                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+                    setButtonText(
+                        applyButton,
+                        alreadyApplied,
+                        getString(R.string.unaply_text),
+                        getString(R.string.apply_text)
+                    )
                 },
                 { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
@@ -158,7 +160,12 @@ class ProjectInformationActivity : AppCompatActivity() {
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
-                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+                    setButtonText(
+                        applyButton,
+                        alreadyApplied,
+                        getString(R.string.unaply_text),
+                        getString(R.string.apply_text)
+                    )
                 },
                 { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
@@ -170,11 +177,21 @@ class ProjectInformationActivity : AppCompatActivity() {
         val utils = Utils.getInstance(this)
         userdataDatabase = utils.userdataDatabase
         candidatureDatabase = utils.candidatureDatabase
-        setButtonText(applyButton, null,getString(R.string.unaply_text), getString(R.string.apply_text))
+        setButtonText(
+            applyButton,
+            null,
+            getString(R.string.unaply_text),
+            getString(R.string.apply_text)
+        )
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             appliedProjectsIds.addAll(projectIds)
             var alreadyApplied = projectIds.contains(projectId)
-            setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
+            setButtonText(
+                applyButton,
+                alreadyApplied,
+                getString(R.string.unaply_text),
+                getString(R.string.apply_text)
+            )
             applyButton.isEnabled = !projectVar.isTaken
 
         }, {})
@@ -377,23 +394,29 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>){
+    private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>) {
         //get the favorite list and when it's available provide it to the function that is
         //responsible for downloading videos in volatile or non volatile memory
         userdataDatabase.getListOfFavoriteProjects({ favorites ->
-            addVideoAfterDownloadedWithFavoritePersistence(videosLinks, favorites.contains(projectVar.id))
-        },{
+            addVideoAfterDownloadedWithFavoritePersistence(
+                videosLinks,
+                favorites.contains(projectVar.id)
+            )
+        }, {
 
         })
     }
 
     // download all videos and add them to the video player
-    private fun addVideoAfterDownloadedWithFavoritePersistence(videosLinks: List<String>, isFavorite : Boolean ) {
+    private fun addVideoAfterDownloadedWithFavoritePersistence(
+        videosLinks: List<String>,
+        isFavorite: Boolean
+    ) {
 
         videosLinks.forEach { link ->
-            if(isFavorite){//storing the video with persistence
+            if (isFavorite) {//storing the video with persistence
                 storingVideo(link, projectDir)
-            }else {
+            } else {
                 storingVideo(link, cacheDir)
             }
         }
@@ -401,8 +424,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
 
-
-    private fun storingVideo(link : String, directory : File){
+    private fun storingVideo(link: String, directory: File) {
         fileDB.getFile(link, directory, { file ->
             val uri = Uri.fromFile(file)
             metadataDB.getSubtitlesFromVideo(
@@ -416,7 +438,6 @@ class ProjectInformationActivity : AppCompatActivity() {
             )
         }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
     }
-
 
 
     private fun setupDescriptionWithHTML(cleanDescription: String) {
