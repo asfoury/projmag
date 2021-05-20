@@ -80,7 +80,7 @@ interface FileDatabase {
     )
 
     /**
-     * Asynchronously get the actual filename from the firebase database
+     *  get the actual filename from the database
      *
      * @param fileUrl the file url
      * @return the firebase file name
