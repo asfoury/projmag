@@ -107,7 +107,7 @@ class ProfilePageActivity : AppCompatActivity() {
 
 
         val profile = ImmutableProfile.build(
-            lastName, firstName, Integer.valueOf(age), gender, Integer.valueOf(sciper), phoneNumber,
+            lastName, firstName, Integer.valueOf(age), gender, sciper.toIntOrNull(), phoneNumber,
             role
         )
         return when (profile) {

@@ -168,4 +168,23 @@ class OfflineCachedUserdataDatabaseTest {
         assertEquals(profile, future3.get())
     }
 
+
+    @Test(timeout = 1000)
+    fun pushProfileWorks() {
+        val tempDir: File = Files.createTempDir()
+        val fakeDB = FakeUserdataDatabase(userID)
+        val db1: UserdataDatabase = OfflineCachedUserdataDatabase(fakeDB, userID, tempDir)
+
+        val future: CompletableFuture<ImmutableProfile?> = CompletableFuture()
+        db1.uploadProfile(profile, {
+            val db2: UserdataDatabase = OfflineCachedUserdataDatabase(fakeDB, userID, tempDir)
+            db2.getProfile(userID, {
+                future.complete(it)
+            }, onFailureNotExpected)
+        }, onFailureNotExpected)
+
+        assertEquals(profile, future.get())
+
+        tempDir.deleteRecursively()
+    }
 }
