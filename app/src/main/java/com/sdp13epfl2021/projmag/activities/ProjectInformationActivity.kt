@@ -25,6 +25,7 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
+import com.sdp13epfl2021.projmag.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
@@ -331,12 +332,12 @@ class ProjectInformationActivity : AppCompatActivity() {
             setupDescriptionWithHTML(project.description)
 
             videoView.isInvisible = true // hide the videoView before a video is loaded
-            if (project.videoURI.isNotEmpty()) {
+            if (project.videoUri.isNotEmpty()) {
                 val controller = MediaController(this)
 
                 addPauseOnTouchListener(controller)
                 setupPlayerListeners(controller)
-                handleVideoWithFavoritePersistenceFiltering(project.videoURI)
+                handleVideoWithFavoritePersistenceFiltering(project.videoUri)
             }
         } else {
             showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
@@ -565,6 +566,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         menu.findItem(R.id.waitingListButton)?.isVisible = (userId == projectVar.authorId)
+        menu.findItem(R.id.editButton)?.isVisible = (userId == projectVar.authorId)
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -583,7 +585,6 @@ class ProjectInformationActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.shareButton) {
             val linkToSend = createDynamicLink()
-
             val sendIntent = Intent(Intent.ACTION_SEND)
             sendIntent.putExtra(Intent.EXTRA_TEXT, linkToSend.toString())
             sendIntent.type = "text/plain"
@@ -610,6 +611,11 @@ class ProjectInformationActivity : AppCompatActivity() {
             intent.putExtra("qrcode", byteArray)
             startActivity(intent)
             return true
+        } else if (item.itemId == R.id.editButton) {
+            val intent = Intent(this, ProjectCreationActivity::class.java)
+            intent.putExtra("edit",projectVar)
+            startActivity(intent)
+            finish()
         }
         return super.onOptionsItemSelected(item)
     }

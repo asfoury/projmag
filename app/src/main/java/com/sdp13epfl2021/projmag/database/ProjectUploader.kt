@@ -81,10 +81,11 @@ class ProjectUploader(
             { id ->
                 candidatureDB.addListener(id) { _, _ -> }
                 videoUri?.let { uri ->
-                    uploadVideo(id, uri, subtitles)
+                    if (project.videoUri[0] != uri.toString())
+                        uploadVideo(id, uri, subtitles)
                 }
                     ?: run {
-                        showMsg("Project pushed (without video) with ID : $id")
+                        showMsg("Project pushed with ID : $id")
                         onSuccess()
                     }
             },

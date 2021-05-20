@@ -28,7 +28,7 @@ const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.FORM_TO_SUBTITLE
 /**
  * Activity consisting of a form one can use to create and submit a project.
  */
-class Form : AppCompatActivity() {
+class ProjectCreationActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_VIDEO_ACCESS = 1
@@ -37,22 +37,24 @@ class Form : AppCompatActivity() {
         private const val REQUEST_SELECTION_ACCESS = 4
     }
 
+    private var projectToEdit: ImmutableProject? = null
+    private var changedVid = false
 
     //tag selection related variables
     private lateinit var tagRecyclerView: RecyclerView
 
-
     //video related variables
-
     private var videoUri: Uri? = null
     private var subtitles: String? = null
-
     private var listTags: Array<String> = emptyArray()
     private var listSections: Array<String> = emptyArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
+
+        projectToEdit = intent.extras?.getParcelable("edit") as ImmutableProject?
+
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addtagButton: Button = findViewById(R.id.addTagsButton)
         val addSectionButton: Button = findViewById(R.id.addSectionButton)
@@ -74,8 +76,28 @@ class Form : AppCompatActivity() {
         findViewById<TextView>(R.id.title_form).requestFocus()
         findViewById<Button>(R.id.form_add_subtitle).setOnClickListener(::onClickSubtitleButton)
         findViewById<Button>(R.id.form_button_sub).setOnClickListener(::submit)
+
+        if (projectToEdit != null) {
+            setInitialValues(projectToEdit!!)
+        }
     }
 
+    private fun setInitialValues(project: ImmutableProject) {
+        findViewById<TextView>(R.id.form_edit_text_project_name).text = project.name
+        findViewById<TextView>(R.id.form_edit_text_laboratory).text = project.lab
+        findViewById<TextView>(R.id.form_edit_text_teacher).text = project.teacher
+        findViewById<TextView>(R.id.form_edit_text_project_TA).text = project.TA
+        findViewById<TextView>(R.id.form_nb_of_participant).text = project.nbParticipant.toString()
+        findViewById<CheckBox>(R.id.form_check_box_SP).isChecked = project.bachelorProject
+        findViewById<CheckBox>(R.id.form_check_box_MP).isChecked = project.masterProject
+        findViewById<TextView>(R.id.form_project_description).text = project.description
+        listTags = project.tags.toTypedArray()
+        listSections = project.allowedSections.toTypedArray()
+        if (!project.videoUri.isEmpty()) {
+            videoUri = Uri.parse(project.videoUri[0])
+            setUpVideo()
+        }
+    }
 
     /**
      * Disable submission button
@@ -98,6 +120,20 @@ class Form : AppCompatActivity() {
         )
     }
 
+    private fun setUpVideo() {
+        val vidView = findViewById<VideoView>(R.id.videoView)
+        val playVidButton = findViewById<Button>(R.id.play_video)
+        val subtitleButton = findViewById<Button>(R.id.form_add_subtitle)
+        val mediaController = MediaController(this)
+
+        FormHelper.playVideoFromLocalPath(
+            playVidButton,
+            subtitleButton,
+            vidView,
+            mediaController,
+            videoUri!!
+        )
+    }
 
     /**
      * This function is called after the user comes back
@@ -106,22 +142,13 @@ class Form : AppCompatActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val vidView = findViewById<VideoView>(R.id.videoView)
+        changedVid = true
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_ACCESS) {
             if (data?.data != null) {
                 // THIS IS THE VID URI
                 videoUri = data.data
 
-                val playVidButton = findViewById<Button>(R.id.play_video)
-                val subtitleButton = findViewById<Button>(R.id.form_add_subtitle)
-                val mediaController = MediaController(this)
-
-                FormHelper.playVideoFromLocalPath(
-                    playVidButton,
-                    subtitleButton,
-                    vidView,
-                    mediaController,
-                    videoUri!!
-                )
+                setUpVideo()
             }
         } else if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_VIDEO_SUBTITLING) {
             if (data != null) {
@@ -171,7 +198,7 @@ class Form : AppCompatActivity() {
      */
     private fun constructProject(): Result<ImmutableProject> {
         return ImmutableProject.build(
-            id = "", //id is defined by firebase itself
+            id = if(projectToEdit == null) "" else projectToEdit!!.id, //id is defined by firebase itself
             name = getTextFromEditText(R.id.form_edit_text_project_name),
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
             authorId = Firebase.auth.currentUser!!.uid,
@@ -188,7 +215,8 @@ class Form : AppCompatActivity() {
             description = getTextFromEditText(R.id.form_project_description),
             assigned = listOf(),
             tags = listTags.toList(),
-            allowedSections = listSections.toList()
+            allowedSections = listSections.toList(),
+            videoURI = if (videoUri != null) listOf(videoUri.toString()) else listOf()
         )
     }
 
@@ -218,7 +246,7 @@ class Form : AppCompatActivity() {
             ::finishFromOtherThread
         ).checkProjectAndThenUpload(
             constructProject(),
-            videoUri,
+            if (changedVid) videoUri else null,
             subtitles
         )
     }

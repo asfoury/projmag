@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.sdp13epfl2021.projmag.Form
+import com.sdp13epfl2021.projmag.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
@@ -80,7 +80,7 @@ class ProjectsListActivity : AppCompatActivity() {
         // get the fab and make it go to the Form activity
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener {
-            val intent = Intent(this, Form::class.java)
+            val intent = Intent(this, ProjectCreationActivity::class.java)
             startActivity(intent)
         }
 

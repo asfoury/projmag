@@ -54,7 +54,7 @@
         <activity android:name=".activities.WaitingListActivity" />
         <activity android:name=".activities.SignInActivity" />
         <activity
-            android:name=".Form"
+            android:name=".ProjectCreationActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

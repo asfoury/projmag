@@ -151,10 +151,15 @@ class FirebaseProjectDatabase(private val firestore: FirebaseFirestore) : Projec
         onFailure: (Exception) -> Unit
     ) {
         project.let {
-            firestore.collection(ROOT).add(
-                it.toMapString()
-            )
-                .addOnSuccessListener { id -> onSuccess(id.id) }
+            if (project.id.isEmpty()) {
+                firestore.collection(ROOT).add(
+                    it.toMapString()
+                ).addOnSuccessListener { id -> onSuccess(id.id) }
+            } else {
+                firestore.collection(ROOT).document(project.id).set(
+                    it.toMapString()
+                ).addOnSuccessListener { id -> onSuccess(project.id) }
+            }
                 .addOnFailureListener { ex -> onFailure(ex) }
         }
     }
@@ -186,7 +191,7 @@ class FirebaseProjectDatabase(private val firestore: FirebaseFirestore) : Projec
                     docRef
                         .update(
                             FieldNames.VIDEO_URI,
-                            project.videoURI + uri
+                            project.videoUri + uri
                         )
                         .addOnSuccessListener { onSuccess() }
                         .addOnFailureListener(onFailure)

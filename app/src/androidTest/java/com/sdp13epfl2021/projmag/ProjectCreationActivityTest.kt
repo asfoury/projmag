@@ -20,8 +20,8 @@ import java.io.File
 
 class ProjectCreationActivityTest {
     @get:Rule
-    var activityRule: ActivityScenarioRule<Form> =
-        ActivityScenarioRule(Form::class.java)
+    var activityRule: ActivityScenarioRule<ProjectCreationActivity> =
+        ActivityScenarioRule(ProjectCreationActivity::class.java)
 
 
     lateinit var instrumentationContext: Context
