@@ -1,5 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
+import java.io.Serializable
+
 /**
  *  An Immutable project Filter
  *  It's constructor takes filtering parameters and its `invoke` function operator
@@ -18,12 +20,13 @@ package com.sdp13epfl2021.projmag.model
  * @property favorite if it is true will require the project to be in the favorite list to
  *                   (i.e. `favoriteProject` is true), otherwise it has no effect on filtering.
  */
-class ProjectFilter(
+data class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
-    val favorite: Boolean = false
-) {
+    val favorite: Boolean = false,
+    val own: Boolean = false
+) : Serializable {
 
     companion object {
         /**
@@ -37,7 +40,8 @@ class ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
                 applied = data["applied"] as? Boolean ?: false,
-                favorite = data["favorites"] as? Boolean ?: false
+                favorite = data["favorites"] as? Boolean ?: false,
+                own = data["own"] as? Boolean ?: false
             )
 
     }
@@ -45,8 +49,9 @@ class ProjectFilter(
     /**
      * A function used to see if the user has applied to the project
      */
-    private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
-    private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
+    @Transient private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
+    @Transient private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
+    @Transient private var isOwnProject: ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints
@@ -57,18 +62,16 @@ class ProjectFilter(
      */
     operator fun invoke(project: ImmutableProject): Boolean {
         var matches = true
-        if (bachelor) {
+        if (bachelor)
             matches = matches && project.bachelorProject
-        }
-        if (master) {
+        if (master)
             matches = matches && project.masterProject
-        }
-        if (applied) {
+        if (applied)
             matches = matches && (isAppliedProject?.let { it(project) } ?: true)
-        }
-        if(favorite){
+        if (favorite)
             matches = matches && (isFavoriteProject?.let { it(project) } ?: true)
-        }
+        if (own)
+            matches = matches && (isOwnProject?.let { it(project) } ?: true)
         return matches
     }
 
@@ -76,7 +79,6 @@ class ProjectFilter(
      * Set the function that will check if the project is one the those the user applied to.
      *
      * @param appCheck Function that take a project and indicates if the user applied to it
-     *
      * @return this filter
      */
     fun setApplicationCheck(appCheck: (ImmutableProject) -> Boolean): ProjectFilter {
@@ -92,6 +94,17 @@ class ProjectFilter(
      */
     fun setFavoriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
         isFavoriteProject = favCheck
+        return this
+    }
+
+    /**
+     * Function that will check if the project was made by the user
+     *
+     * @param ownCheck function that takes a project and indicates whether it was made by the user
+     * @return this filter
+     */
+    fun setOwnCheck(ownCheck: (ImmutableProject) -> Boolean): ProjectFilter {
+        isOwnProject = ownCheck
         return this
     }
 

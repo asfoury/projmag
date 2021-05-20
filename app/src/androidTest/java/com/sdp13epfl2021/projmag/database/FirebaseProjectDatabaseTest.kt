@@ -4,11 +4,14 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseProjectDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
-import com.sdp13epfl2021.projmag.model.*
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.SectionBaseManager
+import com.sdp13epfl2021.projmag.model.Success
+import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -39,10 +42,12 @@ class FirebaseProjectDatabaseTest {
 
     val mockFirebaseFirestoreEmtpy = Mockito.mock(FirebaseFirestore::class.java)
     val mockColRefEmpty = Mockito.mock(CollectionReference::class.java)
-    val mockTaskColEmpty: Task<QuerySnapshot> = Mockito.mock(Task::class.java) as Task<QuerySnapshot>
+    val mockTaskColEmpty: Task<QuerySnapshot> =
+        Mockito.mock(Task::class.java) as Task<QuerySnapshot>
     val mockQSEmpty: QuerySnapshot = Mockito.mock(QuerySnapshot::class.java)
     val mockDocRefEmpty = Mockito.mock(DocumentReference::class.java)
-    val mockTaskDocEmpty: Task<DocumentSnapshot> = Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
+    val mockTaskDocEmpty: Task<DocumentSnapshot> =
+        Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
     val mockDSEmpty: DocumentSnapshot = Mockito.mock(DocumentSnapshot::class.java)
     val mockQueryEmpty: Query = Mockito.mock(Query::class.java)
 
@@ -61,9 +66,11 @@ class FirebaseProjectDatabaseTest {
 
     val ID = "some-id"
 
-    val result = ImmutableProject.build(ID, name, labName, authorId, projectManager, teacher, numberStudents,
+    val result = ImmutableProject.build(
+        ID, name, labName, authorId, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList, creationDate) as Success<ImmutableProject>
+        listOf(), sectionList, creationDate
+    ) as Success<ImmutableProject>
     val project = result.value
 
     private fun newQDSIterator() = object : MutableIterator<QueryDocumentSnapshot> {
@@ -117,15 +124,15 @@ class FirebaseProjectDatabaseTest {
         Mockito
             .`when`(
                 mockDocRef.update(
-                    JavaToKotlinHelper.anyObject<String>(),
-                    JavaToKotlinHelper.anyObject()
+                    anyObject<String>(),
+                    anyObject()
                 )
             )
             .thenReturn(mockTaskVoid)
 
         // --- mockTaskCol ---
         Mockito
-            .`when`(mockTaskCol.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskCol.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<QuerySnapshot>
                 a.onSuccess(mockQS)
@@ -138,7 +145,7 @@ class FirebaseProjectDatabaseTest {
 
         // --- mockTaskDoc ---
         Mockito
-            .`when`(mockTaskDoc.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskDoc.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
                 a.onSuccess(mockDS)
@@ -151,7 +158,7 @@ class FirebaseProjectDatabaseTest {
 
         // --- mockTaskDoc ---
         Mockito
-            .`when`(mockTaskVoid.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskVoid.addOnSuccessListener(anyObject()))
             .then {
                 mockTaskVoid
             }
@@ -162,24 +169,26 @@ class FirebaseProjectDatabaseTest {
 
         // --- mockDS ---
         Mockito.`when`(mockDS.id).thenReturn(project.id)
-        Mockito.`when`(mockDS.data).thenReturn(mapOf(
-            "name" to project.name,
-            "lab" to project.lab,
-            "authorID" to project.authorId,
-            "teacher" to project.teacher,
-            "TA" to project.TA,
-            "nbParticipant" to project.nbParticipant,
-            "assigned" to project.assigned,
-            "masterProject" to project.masterProject,
-            "bachelorProject" to project.bachelorProject,
-            "tags" to project.tags,
-            "isTaken" to project.isTaken,
-            "description" to project.description,
-            "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections,
-            "creationDate" to project.creationDate.time
+        Mockito.`when`(mockDS.data).thenReturn(
+            mapOf(
+                "name" to project.name,
+                "lab" to project.lab,
+                "authorID" to project.authorId,
+                "teacher" to project.teacher,
+                "TA" to project.TA,
+                "nbParticipant" to project.nbParticipant,
+                "assigned" to project.assigned,
+                "masterProject" to project.masterProject,
+                "bachelorProject" to project.bachelorProject,
+                "tags" to project.tags,
+                "isTaken" to project.isTaken,
+                "description" to project.description,
+                "videoURI" to project.videoURI,
+                "allowedSections" to project.allowedSections,
+                "creationDate" to project.creationDate.time
 
-        ))
+            )
+        )
         /*
         Mockito.`when`(mockDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockDS["lab"]).thenReturn(project.lab)
@@ -204,23 +213,25 @@ class FirebaseProjectDatabaseTest {
         Mockito
             .`when`(mockQDS.id)
             .thenReturn(ID)
-        Mockito.`when`(mockQDS.data).thenReturn(mapOf(
-            "name" to project.name,
-            "lab" to project.lab,
-            "authorID" to project.authorId,
-            "teacher" to project.teacher,
-            "TA" to project.TA,
-            "nbParticipant" to project.nbParticipant,
-            "assigned" to project.assigned,
-            "masterProject" to project.masterProject,
-            "bachelorProject" to project.bachelorProject,
-            "tags" to project.tags,
-            "isTaken" to project.isTaken,
-            "description" to project.description,
-            "videoURI" to project.videoURI,
-            "allowedSections" to project.allowedSections,
-            "creationDate" to project.creationDate.time
-        ))
+        Mockito.`when`(mockQDS.data).thenReturn(
+            mapOf(
+                "name" to project.name,
+                "lab" to project.lab,
+                "authorID" to project.authorId,
+                "teacher" to project.teacher,
+                "TA" to project.TA,
+                "nbParticipant" to project.nbParticipant,
+                "assigned" to project.assigned,
+                "masterProject" to project.masterProject,
+                "bachelorProject" to project.bachelorProject,
+                "tags" to project.tags,
+                "isTaken" to project.isTaken,
+                "description" to project.description,
+                "videoURI" to project.videoURI,
+                "allowedSections" to project.allowedSections,
+                "creationDate" to project.creationDate.time
+            )
+        )
         /*
         Mockito.`when`(mockQDS["name"]).thenReturn(project.name)
         Mockito.`when`(mockQDS["lab"]).thenReturn(project.lab)
@@ -250,7 +261,7 @@ class FirebaseProjectDatabaseTest {
             .`when`(mockColRefEmpty.get())
             .thenReturn(mockTaskColEmpty)
         Mockito
-            .`when`(mockTaskColEmpty.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskColEmpty.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<QuerySnapshot>
                 a.onSuccess(null)
@@ -263,7 +274,7 @@ class FirebaseProjectDatabaseTest {
             .`when`(mockDocRefEmpty.get())
             .thenReturn(mockTaskDocEmpty)
         Mockito
-            .`when`(mockTaskDocEmpty.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+            .`when`(mockTaskDocEmpty.addOnSuccessListener(anyObject()))
             .then {
                 val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
                 a.onSuccess(null)
@@ -336,7 +347,7 @@ class FirebaseProjectDatabaseTest {
 
         val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getAllProjects(
-            { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
+            { lp -> assertEquals(emptyList<ImmutableProject>(), lp) },
             { assert(false) }
         )
     }
@@ -353,7 +364,7 @@ class FirebaseProjectDatabaseTest {
         val dbEmpty: ProjectDatabase = FirebaseProjectDatabase(mockFirebaseFirestoreEmtpy)
         dbEmpty.getProjectsFromName(
             project.name,
-            { lp -> assertEquals(emptyList<ImmutableProject>(), lp)},
+            { lp -> assertEquals(emptyList<ImmutableProject>(), lp) },
             { assert(false) }
         )
     }

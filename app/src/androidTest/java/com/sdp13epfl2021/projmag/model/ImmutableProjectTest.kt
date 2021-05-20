@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
-import junit.framework.TestCase.*
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
@@ -24,27 +25,32 @@ class ImmutableProjectTest {
     private val sectionList = SectionBaseManager.sectionList().toList()
 
 
-    val result = ImmutableProject.build(id, name, labName, authorID, projectManager, teacher, numberStudents,
+    val result = ImmutableProject.build(
+        id, name, labName, authorID, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList) as Success<ImmutableProject>
+        listOf(), sectionList
+    ) as Success<ImmutableProject>
     val project = result.value
+
     @Test
-    fun initializationAndSanitizationTests(){
+    fun initializationAndSanitizationTests() {
         val tags = mutableListOf<String>()
         val sections = mutableListOf<String>()
-        if(tagList.isNotEmpty()) {
+        if (tagList.isNotEmpty()) {
             tags.add(tagList[0])
         }
-        if(sectionList.isNotEmpty()){
+        if (sectionList.isNotEmpty()) {
             sections.add(sectionList[0])
         }
 
 
-        val result = ImmutableProject.build(id, name, labName, authorID, projectManager, teacher, numberStudents,
+        val result = ImmutableProject.build(
+            id, name, labName, authorID, projectManager, teacher, numberStudents,
             listStudents, true, true, tags, false, description,
-            listOf(), sections)
+            listOf(), sections
+        )
 
-        when(result){
+        when (result) {
             is Success -> {
 
                 //testing the getters
@@ -63,7 +69,8 @@ class ImmutableProjectTest {
                 Assert.assertEquals(tags, project.tags)
                 Assert.assertEquals(sections, project.allowedSections)
                 //testing the limit of functions
-                val longName = "ultra epic robloxx coder ultimate guy but with a name that's long aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                val longName =
+                    "ultra epic robloxx coder ultimate guy but with a name that's long aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                 when (project.buildCopy(name = longName)) {
                     is Success -> assert(false)
                     is Failure -> assert(true)
@@ -97,7 +104,10 @@ class ImmutableProjectTest {
                     is Failure -> assert(true)
                 }
 
-                when(project.buildCopy(assigned = listOf("aaa", "bbb", "ccc"), nbParticipant = 2)) {
+                when (project.buildCopy(
+                    assigned = listOf("aaa", "bbb", "ccc"),
+                    nbParticipant = 2
+                )) {
                     is Success -> assert(false)
                     is Failure -> assert(true)
                 }

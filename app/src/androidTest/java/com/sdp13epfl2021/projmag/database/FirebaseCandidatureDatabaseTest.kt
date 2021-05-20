@@ -41,18 +41,33 @@ class FirebaseCandidatureDatabaseTest {
     private val mockDSTask: Task<DocumentSnapshot> =
         Mockito.mock(Task::class.java) as Task<DocumentSnapshot>
 
-    private val userDB: UserdataDatabase = FakeUserdataDatabase()
-    private val candidatureDB =
-        FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuth, userDB)
-    private val candidatureDBWithoutAuth =
-        FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuthFailed, userDB)
-
-
     val userIDRejected = "001"
     val userIDAccepted = "002"
     val userIDWaiting = "003"
     val userIDInvalidType = "004"
     val userIDEmpty = "005"
+
+    private val userDB: UserdataDatabase = FakeUserdataDatabase(
+        profiles = hashMapOf(
+            userIDRejected to dummyProfile(userIDRejected),
+            userIDAccepted to dummyProfile(userIDAccepted),
+            userIDWaiting to dummyProfile(userIDWaiting),
+            userIDInvalidType to dummyProfile(userIDInvalidType),
+            userIDEmpty to dummyProfile(userIDEmpty),
+        ),
+        cvs = hashMapOf(
+            userIDRejected to dummyCv(userIDRejected),
+            userIDAccepted to dummyCv(userIDAccepted),
+            userIDWaiting to dummyCv(userIDWaiting),
+            userIDInvalidType to dummyCv(userIDInvalidType),
+            userIDEmpty to dummyCv(userIDEmpty),
+        )
+    )
+    private val candidatureDB =
+        FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuth, userDB)
+    private val candidatureDBWithoutAuth =
+        FirebaseCandidatureDatabase(mockFirebaseFirestore, mockFirebaseAuthFailed, userDB)
+
 
     val onFailureNotExpected: (Exception) -> Unit = { e: Exception ->
         assertTrue(false)
@@ -78,6 +93,27 @@ class FirebaseCandidatureDatabaseTest {
         ),
         Candidature.State.Waiting
     )
+
+    private fun dummyProfile(userId: String): ImmutableProfile {
+        return (ImmutableProfile.build(
+            "lastName_$userId",
+            "firstName_$userId",
+            21,
+            Gender.MALE,
+            123456,
+            "021 123 45 67", Role.STUDENT
+        ) as Success).value
+    }
+
+    private fun dummyCv(userId: String): CurriculumVitae {
+        return CurriculumVitae(
+            "summary of $userId",
+            emptyList(),
+            emptyList(),
+            emptyList(),
+            emptyList()
+        )
+    }
 
     @Before
     fun setupMocks() {

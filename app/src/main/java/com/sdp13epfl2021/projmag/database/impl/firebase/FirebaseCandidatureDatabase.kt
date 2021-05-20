@@ -9,13 +9,12 @@ import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
-import com.sdp13epfl2021.projmag.model.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.sdp13epfl2021.projmag.model.Candidature
+import com.sdp13epfl2021.projmag.model.ImmutableProfile
+import kotlinx.coroutines.*
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * An implementation of a candidature database
@@ -48,22 +47,20 @@ class FirebaseCandidatureDatabase(
      * @param projectID the id of the project.
      * @return a list of candidatures.
      */
-    private fun buildCandidature(
+    private suspend fun buildCandidature(
         dataMap: Map<String, Any>,
         projectID: ProjectId
     ): List<Candidature> {
         val candidatures = ConcurrentLinkedQueue<Candidature>()
-        runBlocking {
-            dataMap.map {
-                launch(Dispatchers.IO) {
-                    val userID = it.key
-                    val state = Candidature.State.enumOf(it.value as? String)
-                    if (state != null) {
-                        addCandidature(candidatures, projectID, userID, state)
-                    }
+        dataMap.map {
+            GlobalScope.launch(Dispatchers.IO) {
+                val userID = it.key
+                val state = Candidature.State.enumOf(it.value as? String)
+                if (state != null) {
+                    addCandidature(candidatures, projectID, userID, state)
                 }
-            }.forEach { it.join() }
-        }
+            }
+        }.joinAll()
         return candidatures.toList()
     }
 
@@ -81,43 +78,37 @@ class FirebaseCandidatureDatabase(
         userID: String,
         state: Candidature.State
     ) {
-        var waiting = true
-        var profile: ImmutableProfile? = null
-        var cv: CurriculumVitae? = null
-        /*userdataDatabase.getProfile(userID, { profile = it }, { waiting = false})*/ //TODO add when implemented
-        /*userdataDatabase.getCV(userID, { cv = it }, { waiting = false })*/ //TODO add when implemented
-        profile = dummyProfile(userID)
-        cv = dummyCV(userID)
+        val waiting = AtomicBoolean(true)
+        val profileDeferred: CompletableDeferred<ImmutableProfile?> = CompletableDeferred()
+        val cvDeferred: CompletableDeferred<CurriculumVitae?> = CompletableDeferred()
 
-        while (waiting && (profile == null || cv == null)) {
+        userdataDatabase.getProfile(userID, { profile ->
+            profileDeferred.complete(profile)
+            // If the profile is null, we stop to wait because no candidature will be added
+            if (profile == null) {
+                waiting.set(false)
+            }
+        }, { waiting.set(false) }) // If a problem occurs, we stop to wait because no candidature will be added
+
+        userdataDatabase.getCv(userID, { cv ->
+            cvDeferred.complete(cv)
+            // If the cv is null, we stop to wait because no candidature will be added
+            if (cv == null) {
+                waiting.set(false)
+            }
+        }, { waiting.set(false) }) // If a problem occurs, we stop to wait because no candidature will be added
+
+        //We wait until a problem or a null value occurs, or if both values are available
+        while (waiting.get() && (profileDeferred.isActive || cvDeferred.isActive)) {
             delay(10)
         }
+        val profile: ImmutableProfile? =
+            if (profileDeferred.isCompleted) profileDeferred.getCompleted() else null
+        val cv: CurriculumVitae? = if (cvDeferred.isCompleted) cvDeferred.getCompleted() else null
+
         if (profile != null && cv != null) {
             candidatures.add(Candidature(projectID, userID, profile, cv, state))
         }
-    }
-
-    //TODO Remove after Profile/CV are implemented
-    private fun dummyProfile(userID: String): ImmutableProfile {
-        return (ImmutableProfile.build(
-            userID,
-            userID,
-            21,
-            Gender.MALE,
-            123456,
-            "021 123 45 67", Role.STUDENT
-        ) as Success).value
-    }
-
-    //TODO Remove after Profile/CV are implemented
-    private fun dummyCV(userID: String): CurriculumVitae {
-        return CurriculumVitae(
-            "summary of $userID",
-            emptyList(),
-            emptyList(),
-            emptyList(),
-            emptyList()
-        )
     }
 
 
@@ -131,9 +122,10 @@ class FirebaseCandidatureDatabase(
             .addOnSuccessListener { doc ->
                 if (doc.exists()) {
                     doc?.data?.let {
-                        onSuccess(buildCandidature(it, projectID))
-                    }
-                        ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
+                        GlobalScope.launch {
+                            onSuccess(buildCandidature(it, projectID))
+                        }
+                    } ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
                 } else {
                     onSuccess(emptyList())
                 }
@@ -173,8 +165,10 @@ class FirebaseCandidatureDatabase(
         getDoc(projectID)
             .addSnapshotListener { snapshot, _ ->
                 snapshot?.data?.let {
-                    val candidatures: List<Candidature> = buildCandidature(it, projectID)
-                    onChange(projectID, candidatures)
+                    GlobalScope.launch {
+                        val candidatures: List<Candidature> = buildCandidature(it, projectID)
+                        onChange(projectID, candidatures)
+                    }
                 }
             }
     }
