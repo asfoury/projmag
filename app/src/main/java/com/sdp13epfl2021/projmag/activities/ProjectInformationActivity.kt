@@ -19,11 +19,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
@@ -46,6 +48,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Activity displaying the information and media of a project and from which
@@ -68,6 +71,8 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
     private lateinit var userdataDatabase: UserdataDatabase
     private lateinit var candidatureDatabase: CandidatureDatabase
+
+    private lateinit var candidatureListeners : HashMap<ProjectId, ListenerRegistration>
 
 
     @Synchronized
@@ -134,6 +139,40 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleChangesInStatusForAppliedProject(applyButton: Button, projectId: ProjectId) {
+            val listener = candidatureDatabase.addListener(projectId) { _: ProjectId, list : List<Candidature> ->
+            val candidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == userId }
+            if(candidatureThatChanged != null) {
+                if(candidatureThatChanged.state == Candidature.State.Accepted) {
+                    Log.d("MYTEST", "You have been accepted to a project")
+                    val otherCandidatures = appliedProjectsIds.filter { projectId -> (candidatureThatChanged.projectId != projectId) }
+                    Log.d("MYTEST", "size of other = ${otherCandidatures.size}")
+                    otherCandidatures.forEach { otherCandidatureId ->
+                        candidatureDatabase.removeCandidature(
+                                otherCandidatureId,
+                                userId!!,
+                                {
+                                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
+                                    setButtonText(applyButton, false,getString(R.string.unaply_text), getString(R.string.apply_text))
+                                },
+                                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+                        )
+                        userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+                        Log.d("MYTEST", "Removed a project")
+                    }
+                } else if(candidatureThatChanged.state == Candidature.State.Rejected) {
+                    Log.d("MYTEST", "A project you applied to is no longer available")
+                } else {
+                    Log.d("MYTEST", "Still on the waiting list")
+                }
+            }
+        }
+
+        candidatureListeners[projectId] = listener
+
+
+    }
+
 
     private fun onApplyClick(
             applyButton: Button,
@@ -151,6 +190,15 @@ class ProjectInformationActivity : AppCompatActivity() {
                     },
                     { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
+            // remove the listener on the project because user no longer cares about the project
+            val projectListener = candidatureListeners[projectId]
+            if(projectListener != null) {
+                projectListener.remove()
+                candidatureListeners.remove(projectId)
+            } else {
+                Log.d("MYTEST","Listener is null in remove case")
+            }
+
         } else {
             candidatureDatabase.pushCandidature(
                     projectId,
@@ -163,36 +211,14 @@ class ProjectInformationActivity : AppCompatActivity() {
                     },
                     { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
+            // set up listener to listen to changes to the state of the candidature
+            handleChangesInStatusForAppliedProject(applyButton, projectId)
         }
 
-        candidatureDatabase.addListener(projectId) { projectThatChangedId : ProjectId, list : List<Candidature> ->
-            Log.d("MYTEST", "size of list: ${list.size}")
-            val candidatureThatChanged = list.filter { candidature -> candidature.projectId == projectThatChangedId }
-            if(candidatureThatChanged .size == 1) {
-                if(candidatureThatChanged [0].state == Candidature.State.Accepted) {
-                    Log.d("MYTEST", "You have been accepted to a project")
-                    val otherCandidatures = appliedProjectsIds.filter { projectId -> (candidatureThatChanged[0].projectId != projectThatChangedId) }
-                    Log.d("MYTEST", "size of other = ${otherCandidatures.size}, size of list: ${list.size}")
-                    otherCandidatures.forEach { otherCandidatureId ->
-                        candidatureDatabase.removeCandidature(
-                                otherCandidatureId,
-                                userId!!,
-                                {
-                                    showToast(getString(R.string.success), Toast.LENGTH_SHORT)
-                                    alreadyApplied = !alreadyApplied
-                                    setButtonText(applyButton, alreadyApplied,getString(R.string.unaply_text), getString(R.string.apply_text))
-                                },
-                                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
-                        )
-                        Log.d("MYTEST", "Removed a project")
-                    }
-                } else if(candidatureThatChanged [0].state == Candidature.State.Rejected) {
-                    Log.d("MYTEST", "A project you applied to is no longer available")
-                } else {
-                    Log.d("MYTEST", "Still on the waiting list")
-                }
-            }
+        for((k, v) in candidatureListeners) {
+            Log.d("MYTEST", "Project id: $k")
         }
+
     }
 
     private fun setUpApplyButton(applyButton: Button) {
@@ -361,6 +387,9 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         setUpApplyButton(findViewById<Button>(R.id.applyButton))
         setUpFavoritesButton()
+
+        Log.d("MYTEST","oncreate getting called")
+        candidatureListeners = HashMap()
 
     }
 
