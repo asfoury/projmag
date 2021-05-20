@@ -20,7 +20,7 @@ import java.io.Serializable
  * @property favorite if it is true will require the project to be in the favorite list to
  *                   (i.e. `favoriteProject` is true), otherwise it has no effect on filtering.
  */
-class ProjectFilter(
+data class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
     val applied: Boolean = false,
