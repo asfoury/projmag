@@ -240,9 +240,10 @@ class ProjectInformationActivityTest {
     }
 
     @Test
-    fun clickOnWaitingListButton() {
+    fun clickOnWaitingListAndEditButton() {
         Thread.sleep(2000)
         onView(withId(R.id.waitingListButton)).perform(click())
+        onView(withId(R.id.editButton)).perform(click())
     }
 }
 
