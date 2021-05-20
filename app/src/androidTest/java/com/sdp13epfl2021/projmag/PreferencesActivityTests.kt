@@ -7,8 +7,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.PreferencesActivity
-import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.activities.UserTypeChoice
 import com.sdp13epfl2021.projmag.database.di.UserdataDatabaseModule
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -59,7 +60,10 @@ class PreferencesActivityTests {
         Thread.sleep(2000)
         onView(withId(R.id.filter_bachelor)).check(matches(isChecked()))
         onView(withId(R.id.filter_master)).check(matches(isChecked()))
-        onView(withId(R.id.filter_applied)).check(matches(isChecked()))
+        if (UserTypeChoice.isProfessor)
+            onView(withId(R.id.filter_own)).check(matches(isChecked()))
+        else
+             onView(withId(R.id.filter_applied)).check(matches(isChecked()))
 
         onView(withId(R.id.preferences_layout_submit)).perform(click())
     }
@@ -74,7 +78,10 @@ class PreferencesActivityTests {
 
         onView(withId(R.id.filter_bachelor)).perform(click())
         onView(withId(R.id.filter_master)).perform(click())
-        onView(withId(R.id.filter_applied)).perform(click())
+        if (UserTypeChoice.isProfessor)
+            onView(withId(R.id.filter_own)).perform(click())
+         else
+            onView(withId(R.id.filter_applied)).perform(click())
 
         onView(withId(R.id.preferences_layout_submit)).perform(click())
     }

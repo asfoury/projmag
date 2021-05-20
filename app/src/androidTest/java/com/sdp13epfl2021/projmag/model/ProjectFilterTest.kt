@@ -1,7 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
-import org.junit.Test
 import junit.framework.TestCase.assertEquals
+import org.junit.Test
 
 class ProjectFilterTest {
     private val id = "id"
@@ -68,7 +68,7 @@ class ProjectFilterTest {
     }
 
     @Test
-    fun favoriteWorks(){
+    fun favoriteWorks() {
         var filterFavorite = ProjectFilter(favorite = true)
 
         filterFavorite.setFavoriteCheck { p -> p.id == id }

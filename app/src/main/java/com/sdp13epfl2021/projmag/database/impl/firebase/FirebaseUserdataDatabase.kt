@@ -257,8 +257,7 @@ class FirebaseUserdataDatabase @Inject constructor(
     ) {
         firestore
             .collection(USER_PROFILE)
-            .document(userID)
-            .get()
+            .document(userID).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val firstName = (document["firstName"] as? String)

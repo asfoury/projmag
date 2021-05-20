@@ -29,18 +29,18 @@ class FirebaseUserdataTest {
     private val userId = "001"
     private val cv = CurriculumVitae(
         "summary of $userId",
-            listOf(
-                CurriculumVitae.PeriodDescription(
-                    "name1",
-                    "location1",
-                    "description1",
-                    2010,
-                    2012
-                )
-            ),
-            emptyList(),
-            emptyList(),
-            emptyList()
+        listOf(
+            CurriculumVitae.PeriodDescription(
+                "name1",
+                "location1",
+                "description1",
+                2010,
+                2012
+            )
+        ),
+        emptyList(),
+        emptyList(),
+        emptyList()
     )
 
     private val onFailureNotExpected: (Exception) -> Unit = {
@@ -74,8 +74,8 @@ class FirebaseUserdataTest {
             .thenReturn(mockDocRef)
 
         Mockito
-                .`when`(mockColRef.document(userId))
-                .thenReturn(mockDocRef)
+            .`when`(mockColRef.document(userId))
+            .thenReturn(mockDocRef)
 
         //DocRef
         Mockito
@@ -135,13 +135,15 @@ class FirebaseUserdataTest {
                 mockVoidTask
             }
 
-        Mockito.`when`(mockDS["cv"]).thenReturn(mapOf(
-            "summary" to cv.summary,
-            "education" to cv.education,
-            "jobExperience" to cv.jobExperience,
-            "languages" to cv.languages,
-            "skills" to cv.skills,
-        ))
+        Mockito.`when`(mockDS["cv"]).thenReturn(
+            mapOf(
+                "summary" to cv.summary,
+                "education" to cv.education,
+                "jobExperience" to cv.jobExperience,
+                "languages" to cv.languages,
+                "skills" to cv.skills,
+            )
+        )
 
     }
 

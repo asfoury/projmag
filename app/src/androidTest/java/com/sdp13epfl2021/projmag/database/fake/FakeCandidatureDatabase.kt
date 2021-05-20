@@ -33,7 +33,14 @@ class FakeCandidatureDatabase(
             val newCand = Candidature(projectId, userId, oldCand.profile, oldCand.cv, newState)
             candidatures[projectId] = newMap2 + (userId to newCand)
         }
-        onChanges[projectId]?.let { it.forEach { it(projectId, candidatures[projectId]?.values?.toList() ?: emptyList()) } }
+        onChanges[projectId]?.let {
+            it.forEach {
+                it(
+                    projectId,
+                    candidatures[projectId]?.values?.toList() ?: emptyList()
+                )
+            }
+        }
         onSuccess()
     }
 

@@ -26,7 +26,6 @@ class PreferencesActivity : AppCompatActivity() {
     @Inject
     lateinit var userDB: UserdataDatabase
 
-
     /**
      * Check box that require the project to ask for a bachelor degree
      */
@@ -47,6 +46,9 @@ class PreferencesActivity : AppCompatActivity() {
      */
     private lateinit var favorite: CheckBox
 
+    /**
+     * Check box that require the project to be in the user's created projects
+     */
     private lateinit var own: CheckBox
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +70,7 @@ class PreferencesActivity : AppCompatActivity() {
         applied = findViewById(R.id.filter_applied)
         favorite = findViewById(R.id.filter_favorite)
         own = findViewById(R.id.filter_own)
+
         if (UserTypeChoice.isProfessor) {
             applied.visibility = View.INVISIBLE
         } else {
