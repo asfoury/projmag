@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 /.idea/runConfigurations.xml
 /.idea/misc.xml
+/.idea/gradle.xml
+/.idea/*
 .DS_Store
 /build
 /captures

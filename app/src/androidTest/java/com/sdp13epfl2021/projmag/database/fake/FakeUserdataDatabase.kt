@@ -107,7 +107,8 @@ class FakeUserdataDatabase(
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        profiles[userID] = profile
+        onSuccess()
     }
 
     override fun getProfile(

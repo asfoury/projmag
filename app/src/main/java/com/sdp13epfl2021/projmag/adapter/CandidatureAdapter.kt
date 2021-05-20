@@ -39,8 +39,10 @@ class CandidatureAdapter(
         utils.candidatureDatabase.getListOfCandidatures(
             projectId,
             {
-                candidatures.addAll(it)
-                notifyDataSetChanged()
+                activity.runOnUiThread {
+                    candidatures.addAll(it)
+                    notifyDataSetChanged()
+                }
             },
             { showToast(resources.getString(R.string.db_error_msg, it)) }
         )
