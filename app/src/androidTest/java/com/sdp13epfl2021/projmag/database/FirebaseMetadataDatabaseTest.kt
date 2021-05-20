@@ -3,7 +3,7 @@ package com.sdp13epfl2021.projmag.database
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
-import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseMetadataDatabase
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
@@ -36,21 +36,21 @@ class FirebaseMetadataDatabaseTest {
 
         Mockito.`when`(mockDocRef.get()).thenReturn(mockTaskDoc)
 
-        Mockito.`when`(mockDocRef.set(JavaToKotlinHelper.anyObject())).thenReturn(mockTaskVoid)
+        Mockito.`when`(mockDocRef.set(anyObject())).thenReturn(mockTaskVoid)
 
         Mockito.`when`(mockDS.get(lang)).thenReturn(subtitles)
 
-        Mockito.`when`(mockTaskDoc.addOnSuccessListener(JavaToKotlinHelper.anyObject())).then {
+        Mockito.`when`(mockTaskDoc.addOnSuccessListener(anyObject())).then {
             val a = it.arguments[0] as OnSuccessListener<DocumentSnapshot>
             a.onSuccess(mockDS)
             mockTaskDoc
         }
-        Mockito.`when`(mockTaskDoc.addOnFailureListener(JavaToKotlinHelper.anyObject()))
+        Mockito.`when`(mockTaskDoc.addOnFailureListener(anyObject()))
             .thenReturn(mockTaskDoc)
 
-        Mockito.`when`(mockTaskVoid.addOnSuccessListener(JavaToKotlinHelper.anyObject()))
+        Mockito.`when`(mockTaskVoid.addOnSuccessListener(anyObject()))
             .thenReturn(mockTaskVoid)
-        Mockito.`when`(mockTaskVoid.addOnFailureListener(JavaToKotlinHelper.anyObject()))
+        Mockito.`when`(mockTaskVoid.addOnFailureListener(anyObject()))
             .thenReturn(mockTaskVoid)
     }
 

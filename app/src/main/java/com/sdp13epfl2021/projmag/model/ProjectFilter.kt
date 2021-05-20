@@ -15,11 +15,14 @@ package com.sdp13epfl2021.projmag.model
  *                  no effect on filtering.
  * @property applied if it is true will require the project to be one the user applied to
  *                   (i.e. `isAppliedProject` is true), otherwise it has no effect on filtering.
+ * @property favorite if it is true will require the project to be in the favorite list to
+ *                   (i.e. `favoriteProject` is true), otherwise it has no effect on filtering.
  */
 data class ProjectFilter(
     val bachelor: Boolean = false,
     val master: Boolean = false,
-    val applied: Boolean = false
+    val applied: Boolean = false,
+    val favorite: Boolean = false
 ) {
 
     companion object {
@@ -33,7 +36,8 @@ data class ProjectFilter(
             ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
-                applied = data["applied"] as? Boolean ?: false
+                applied = data["applied"] as? Boolean ?: false,
+                favorite = data["favorites"] as? Boolean ?: false
             )
 
     }
@@ -42,6 +46,7 @@ data class ProjectFilter(
      * A function used to see if the user has applied to the project
      */
     private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
+    private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints
@@ -61,6 +66,9 @@ data class ProjectFilter(
         if (applied) {
             matches = matches && (isAppliedProject?.let { it(project) } ?: true)
         }
+        if(favorite){
+            matches = matches && (isFavoriteProject?.let { it(project) } ?: true)
+        }
         return matches
     }
 
@@ -75,4 +83,17 @@ data class ProjectFilter(
         isAppliedProject = appCheck
         return this
     }
+
+    /**
+     * Function that will check if the project is contained in the favorites
+     *
+     * @param favCheck : Function that will take a project and indicate if it's in the favorite list
+     * @return this filter
+     */
+    fun setFavoriteCheck(favCheck: (ImmutableProject) -> Boolean): ProjectFilter {
+        isFavoriteProject = favCheck
+        return this
+    }
+
+
 }

@@ -9,7 +9,6 @@ plugins {
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -41,7 +40,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
 }
+
 
 dependencies {
     implementation 'com.github.kenglxn.QRGen:android:2.6.0'
@@ -85,13 +86,25 @@ dependencies {
     androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
     androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
 
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.35'
-    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.35'
+    // Hilt
+
+    implementation 'com.google.dagger:hilt-android:2.35.1'
+    kapt 'com.google.dagger:hilt-compiler:2.35.1'
+
+    // For instrumentation tests
+    androidTestImplementation  'com.google.dagger:hilt-android-testing:2.35.1'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.35.1'
+
+    // For local unit tests
+    //testImplementation 'com.google.dagger:hilt-android-testing:2.35.1'
+    //kaptTest 'com.google.dagger:hilt-compiler:2.35.1'
 
 }
 
+
+kapt {
+    correctErrorTypes true
+}
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
@@ -115,7 +128,9 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             '**/*Hilt*.*',
             'hilt_aggregated_deps/**',
             '**/*_Factory.class',
-            '**/*_MembersInjector.class'
+            '**/*_MembersInjector.class',
+            '**/di/*',
+            '**/ProjmagApplication.class'
     ]
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"

@@ -15,7 +15,7 @@ Next sprint, I need to add KDoc and fix the issues from the code review to my co
 
 ## Kaourintin 
 I finally completed the massive code overhaul (which by the way a few of the reported problems from the review were actually patched in this)
-and started working on my task on the favourites. I Have done every kind of code by now so I just want to keep doing stuff and imprving the app. Need to fix my UI tests ASAP to include more testing and finish the favourites UI.
+and started working on my task on the favorites. I Have done every kind of code by now so I just want to keep doing stuff and imprving the app. Need to fix my UI tests ASAP to include more testing and finish the favorites UI.
 
 ## Paul (Scrum Master)
 This week I had to implement preferences for projects. This went smoothly. I work a decent amount of time. As we recieved the code review from our TAs, I was able to fix some of my bad coding habits. However I had some issue in testing as Dagger Hilt dependency injection is still not a part of our project.

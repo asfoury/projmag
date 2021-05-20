@@ -5,7 +5,7 @@ import org.junit.Test
 
 class TagTest {
     @Test
-    fun tagTests(){
+    fun tagTests() {
         val nice = "nice"
         val notnice = "notnice"
 

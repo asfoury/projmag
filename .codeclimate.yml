@@ -14,5 +14,3 @@ exclude_patterns:
 - "**/test/"
 - "**/androidTest/"
 - "**test"
-- "**/ProjmagApplication.kt"
-- "**/DatabaseModules.kt"

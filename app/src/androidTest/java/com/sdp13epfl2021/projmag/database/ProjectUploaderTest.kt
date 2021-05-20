@@ -1,7 +1,7 @@
 package com.sdp13epfl2021.projmag.database
 
 import android.net.Uri
-import com.sdp13epfl2021.projmag.JavaToKotlinHelper
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
@@ -51,9 +51,9 @@ class ProjectUploaderTest {
         Mockito
             .`when`(
                 mockProjectDB.pushProject(
-                    JavaToKotlinHelper.anyObject(),
-                    JavaToKotlinHelper.anyObject(),
-                    JavaToKotlinHelper.anyObject()
+                    anyObject(),
+                    anyObject(),
+                    anyObject()
                 )
             )
             .then {
@@ -63,10 +63,10 @@ class ProjectUploaderTest {
 
         Mockito.`when`(
             mockProjectDB.updateVideoWithProject(
-                JavaToKotlinHelper.anyObject(),
-                JavaToKotlinHelper.anyObject(),
-                JavaToKotlinHelper.anyObject(),
-                JavaToKotlinHelper.anyObject()
+                anyObject(),
+                anyObject(),
+                anyObject(),
+                anyObject()
             )
         ).then {
             val onSuccess = it.arguments[2] as (() -> Unit)
@@ -76,9 +76,9 @@ class ProjectUploaderTest {
         /* MOCK_FILE_DB */
         Mockito.`when`(
             mockFileDB.pushFileFromUri(
-                JavaToKotlinHelper.anyObject(),
-                JavaToKotlinHelper.anyObject(),
-                JavaToKotlinHelper.anyObject()
+                anyObject(),
+                anyObject(),
+                anyObject()
             )
         ).then {
             val onSuccess = it.arguments[1] as ((Uri) -> Unit)
@@ -91,8 +91,8 @@ class ProjectUploaderTest {
                 Mockito.anyString(),
                 Mockito.anyString(),
                 Mockito.anyString(),
-                JavaToKotlinHelper.anyObject(),
-                JavaToKotlinHelper.anyObject()
+                anyObject(),
+                anyObject()
             )
         ).then {}
 
