@@ -3,11 +3,13 @@ package com.sdp13epfl2021.projmag.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -19,7 +21,9 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdStr
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
 import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 
@@ -38,6 +42,7 @@ class ProjectsListActivity : AppCompatActivity() {
     private var projectFilter: ProjectFilter = ProjectFilter()
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
+    private lateinit var candidatureDatabase: CandidatureDatabase
 
     /**
      * Creates and displays list of projects.
@@ -86,6 +91,28 @@ class ProjectsListActivity : AppCompatActivity() {
 
         if (!UserTypeChoice.isProfessor) {
             fab.visibility = View.INVISIBLE
+        }
+        candidatureDatabase = utils.candidatureDatabase
+
+        appliedProjects.forEach{
+            utils.candidatureDatabase.addListener(it) { _: ProjectId, list : List<Candidature> ->
+                val ownCandidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                    if(ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
+                        val otherCandidatures = appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
+                        otherCandidatures.forEach { otherCandidatureId ->
+                            utils.auth.currentUser?.uid?.let {
+                                uid ->
+                                candidatureDatabase.removeCandidature(
+                                        otherCandidatureId,
+                                        uid,
+                                        {},
+                                        {}
+                                )
+                            }
+                            utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+                        }
+                    }
+            }
         }
     }
 
