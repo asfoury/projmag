@@ -3,13 +3,11 @@ package com.sdp13epfl2021.projmag.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -142,7 +140,7 @@ class ProjectsListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.profileButton -> {
-                val intent = Intent(this, ProfilePageActivity::class.java)
+                val intent = Intent(this, ProfileEditPageActivity::class.java)
                 startActivity(intent)
                 true
             }
