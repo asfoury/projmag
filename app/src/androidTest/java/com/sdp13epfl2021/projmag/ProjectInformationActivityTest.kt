@@ -249,6 +249,7 @@ class ProjectInformationActivityTest {
         Intents.init()
         onView(withId(R.id.waitingListButton)).perform(click())
         intended(hasComponent(WaitingListActivity::class.java.name))
+        Intents.release()
     }
 
     @Test
@@ -256,6 +257,7 @@ class ProjectInformationActivityTest {
         Intents.init()
         onView(withId(R.id.editButton)).perform(click())
         intended(hasComponent(ProjectCreationActivity::class.java.name))
+        Intents.release()
     }
 }
 
