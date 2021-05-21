@@ -78,7 +78,32 @@ class ProjectsListActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(false)
 
         setUpFab()
+        addListenersToAppliedProjects()
+    }
 
+    private fun addListenersToAppliedProjects() {
+        candidatureDatabase = utils.candidatureDatabase
+
+        appliedProjects.forEach{
+            utils.candidatureDatabase.addListener(it) { _: ProjectId, list : List<Candidature> ->
+                val ownCandidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                if(ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
+                    val otherCandidatures = appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
+                    otherCandidatures.forEach { otherCandidatureId ->
+                        utils.auth.currentUser?.uid?.let {
+                                uid ->
+                            candidatureDatabase.removeCandidature(
+                                otherCandidatureId,
+                                uid,
+                                {},
+                                {}
+                            )
+                        }
+                        utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpFab() {
@@ -91,28 +116,6 @@ class ProjectsListActivity : AppCompatActivity() {
 
         if (!UserTypeChoice.isProfessor) {
             fab.visibility = View.INVISIBLE
-        }
-        candidatureDatabase = utils.candidatureDatabase
-
-        appliedProjects.forEach{
-            utils.candidatureDatabase.addListener(it) { _: ProjectId, list : List<Candidature> ->
-                val ownCandidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
-                    if(ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
-                        val otherCandidatures = appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
-                        otherCandidatures.forEach { otherCandidatureId ->
-                            utils.auth.currentUser?.uid?.let {
-                                uid ->
-                                candidatureDatabase.removeCandidature(
-                                        otherCandidatureId,
-                                        uid,
-                                        {},
-                                        {}
-                                )
-                            }
-                            utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
-                        }
-                    }
-            }
         }
     }
 
