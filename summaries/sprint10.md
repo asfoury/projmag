@@ -17,7 +17,7 @@ I also fixed two bug about the profile.
 I spent about 8 hours as expected.
 
 ## Kaourintin
-
+This week I did a cleaner implementation of local video storage and also added storing of own projects videos. I had a bit of time left so I tried helping on the AR task and followed a tutorial for adding 3D objects to the camera. I spent a bit more than 8 hours with the CR thrown in.
 ## Paul
 This week I continued and finished the setup for Hilt dependency injection.
 I also tested my setup my implementing DI for the PreferencesActivity, which is working.
