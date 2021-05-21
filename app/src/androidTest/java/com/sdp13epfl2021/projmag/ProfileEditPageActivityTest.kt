@@ -32,6 +32,8 @@ class ProfileEditPageActivityTest {
             clearText(),
             typeText("0101010100")
         )
+
+        onView(withId(R.id.buttonSubChangeProfil)).perform(scrollTo()).perform(click())
     }
 
 }
