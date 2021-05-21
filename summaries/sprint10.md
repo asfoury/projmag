@@ -12,6 +12,9 @@ this task me more time then expected because there is not many documentation abo
 This week I had 3 tasks. I completed the first one in more time than expected (6hrs instead of 3, did some CRs as well). I then looked into my second task (notifications) for an hour and a half with little luck, so I moved onto my third, making projects editable. This is not yet merged since I finished coding quite late (and having spent much more than 8hrs). I have so far spent about 5hrs on this task but it is not yet merged, this is not counting the CRs I've done. I need to estimate my time more correctly.
 
 ## Arnaud
+This week I finished to complete all the missing implementations of databases.  
+I also fixed two bug about the profile.  
+I spent about 8 hours as expected.
 
 ## Kaourintin
 
