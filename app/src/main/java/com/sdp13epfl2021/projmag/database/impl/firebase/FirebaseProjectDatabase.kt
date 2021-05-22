@@ -154,7 +154,7 @@ class FirebaseProjectDatabase(private val firestore: FirebaseFirestore) : Projec
             if (project.id.isEmpty()) {
                 firestore.collection(ROOT).add(
                     it.toMapString()
-                ).addOnSuccessListener { id -> onSuccess(id.id) }
+                ).addOnSuccessListener { doc -> onSuccess(doc.id) }
             } else {
                 firestore.collection(ROOT).document(project.id).set(
                     it.toMapString()
