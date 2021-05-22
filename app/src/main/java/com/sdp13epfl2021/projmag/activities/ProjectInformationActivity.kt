@@ -29,6 +29,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.ProjectCreationActivity
+import com.sdp13epfl2021.projmag.ProjectCreationActivity.Companion.EDIT_EXTRA
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
@@ -567,8 +568,9 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.waitingListButton)?.isVisible = (userId == projectVar.authorId)
-        menu.findItem(R.id.editButton)?.isVisible = (userId == projectVar.authorId)
+        val isOwnProject = (userId == projectVar.authorId)
+        menu.findItem(R.id.waitingListButton)?.isVisible = isOwnProject
+        menu.findItem(R.id.editButton)?.isVisible = isOwnProject
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -615,7 +617,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             return true
         } else if (item.itemId == R.id.editButton) {
             val intent = Intent(this, ProjectCreationActivity::class.java)
-            intent.putExtra("edit",projectVar)
+            intent.putExtra(EDIT_EXTRA,projectVar)
             startActivity(intent)
             finish()
         }

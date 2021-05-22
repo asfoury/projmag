@@ -19,8 +19,10 @@ class ProjectEditTest {
 
     private fun getIntent(): Intent {
         val intent = Intent(context, ProjectCreationActivity::class.java)
-        val project = ImmutableProject("a", "b", "c", "d", "e", "f", 4,
-        listOf(), false, true, listOf(), false, "a")
+        val project = ImmutableProject(
+            "a", "b", "c", "d", "e", "f", 4,
+            listOf(), false, true, listOf(), false, "a"
+        )
         intent.putExtra("edit", project)
         return intent
     }
@@ -30,6 +32,10 @@ class ProjectEditTest {
 
     @Test
     fun changeName() {
-        onView(withId(R.id.form_edit_text_project_name)).perform(scrollTo(), clearText(), typeText("new name"))
+        onView(withId(R.id.form_edit_text_project_name)).perform(
+            scrollTo(),
+            clearText(),
+            typeText("new name")
+        )
     }
 }

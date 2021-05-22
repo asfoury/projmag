@@ -35,6 +35,7 @@ class ProjectCreationActivity : AppCompatActivity() {
         private const val REQUEST_VIDEO_SUBTITLING = 2
         private const val REQUEST_TAG_ACCESS = 3
         private const val REQUEST_SELECTION_ACCESS = 4
+        const val EDIT_EXTRA = "edit"
     }
 
     private var projectToEdit: ImmutableProject? = null
@@ -52,11 +53,18 @@ class ProjectCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
+        projectToEdit = intent.getParcelableExtra(EDIT_EXTRA) as ImmutableProject?
 
-        projectToEdit = intent.extras?.getParcelable("edit") as ImmutableProject?
+        setUpButtons()
 
+        projectToEdit?.let {
+            setInitialValues(it)
+        }
+    }
+
+    private fun setUpButtons() {
         val addVideoButton: Button = findViewById(R.id.add_video)
-        val addtagButton: Button = findViewById(R.id.addTagsButton)
+        val addTagButton: Button = findViewById(R.id.addTagsButton)
         val addSectionButton: Button = findViewById(R.id.addSectionButton)
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
@@ -67,7 +75,7 @@ class ProjectCreationActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.form_button_sub)?.setOnClickListener(::submit)
-        addtagButton.setOnClickListener {
+        addTagButton.setOnClickListener {
             switchToTagsSelectionActivity()
         }
         addSectionButton.setOnClickListener {
@@ -76,10 +84,6 @@ class ProjectCreationActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.title_form).requestFocus()
         findViewById<Button>(R.id.form_add_subtitle).setOnClickListener(::onClickSubtitleButton)
         findViewById<Button>(R.id.form_button_sub).setOnClickListener(::submit)
-
-        if (projectToEdit != null) {
-            setInitialValues(projectToEdit!!)
-        }
     }
 
     private fun setInitialValues(project: ImmutableProject) {
@@ -288,5 +292,3 @@ object FormHelper {
         subtitleButton.isEnabled = true
     }
 }
-
-
