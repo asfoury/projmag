@@ -205,7 +205,7 @@ class ProjectCreationActivity : AppCompatActivity() {
             id = if(projectToEdit == null) "" else projectToEdit!!.id, //id is defined by firebase itself
             name = getTextFromEditText(R.id.form_edit_text_project_name),
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
-            authorId = Utils.getInstance(this).auth.currentUser.uid, //TODO change after Hilt is completely available
+            authorId = Utils.getInstance(this).auth.currentUser?.uid ?: "", //TODO change after Hilt is completely available
             teacher = getTextFromEditText(R.id.form_edit_text_teacher),
             TA = getTextFromEditText(R.id.form_edit_text_project_TA),
             nbParticipant = try {
