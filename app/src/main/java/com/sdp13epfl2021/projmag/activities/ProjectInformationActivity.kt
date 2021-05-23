@@ -14,22 +14,18 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
-import com.sdp13epfl2021.projmag.ProjectCreationActivity
-import com.sdp13epfl2021.projmag.ProjectCreationActivity.Companion.EDIT_EXTRA
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
@@ -47,7 +43,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Activity displaying the information and media of a project and from which

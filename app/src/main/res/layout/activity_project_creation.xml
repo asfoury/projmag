@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollX="0dp"
-    tools:context=".ProjectCreationActivity">
+    tools:context=".activities.ProjectCreationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/form_constraint_layout"
