@@ -139,6 +139,14 @@
     <string name="unaply_text">UNAPPLY</string>
     <string name="failed">failed</string>
 
+    <string name="cv_display_cv_null">The cv is null.</string>
+    <string name="cv_display_title">CurriculumVitae</string>
+    <string name="cv_display_summary">Summary\n%s</string>
+    <string name="cv_display_summary_title">Summary</string>
+    <string name="cv_display_item_language">Language : %s</string>
+    <string name="cv_display_item_level">Level : %s</string>
+    <string name="cv_display_item_location">Location : %s</string>
+    <string name="cv_display_item_skill">Skill : %s</string>
 
 
 </resources>
