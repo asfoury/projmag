@@ -75,7 +75,7 @@ class PreferencesActivity : AppCompatActivity() {
         } else {
             own.visibility = View.INVISIBLE
         }
-        
+
         userDB.getPreferences(
             { pf ->
                 pf?.let {

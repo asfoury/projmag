@@ -14,23 +14,20 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
-import com.sdp13epfl2021.projmag.ProjectCreationActivity
-import com.sdp13epfl2021.projmag.ProjectCreationActivity.Companion.EDIT_EXTRA
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
@@ -47,7 +44,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Activity displaying the information and media of a project and from which
@@ -100,8 +96,8 @@ class ProjectInformationActivity : AppCompatActivity() {
         videoView.setVideoURI(videosUris[current].first)
         videosUris[current].second?.let {
             videoView.addSubtitleSource(
-                    it.byteInputStream(),
-                    VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
+                it.byteInputStream(),
+                VideoUtils.ENGLISH_WEBVTT_SUBTITLE_FORMAT
             )
         }
         videoView.start()
@@ -117,8 +113,8 @@ class ProjectInformationActivity : AppCompatActivity() {
      * @param falseText text to show on the button when the boolean value is false
      */
     private fun setButtonText(
-            button: Button, isOn: Boolean?,
-            trueText: String, falseText: String
+        button: Button, isOn: Boolean?,
+        trueText: String, falseText: String
     ) {
         button.text = when (isOn) {
             null -> {
@@ -137,9 +133,9 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private fun onApplyClick(
-            applyButton: Button,
-            candidatureDatabase: CandidatureDatabase,
-            projectId: ProjectId,
+        applyButton: Button,
+        candidatureDatabase: CandidatureDatabase,
+        projectId: ProjectId,
     ) {
         if (alreadyApplied) {
             candidatureDatabase.removeCandidature(
@@ -203,16 +199,16 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         applyButton.setOnClickListener {
             userdataDatabase.applyUnapply(
-                    !alreadyApplied,
-                    projectId,
-                    {
-                        if (userId != null) {
-                            onApplyClick(applyButton, candidatureDatabase, projectId)
-                        } else {
-                            showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
-                        }
-                    },
-                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
+                !alreadyApplied,
+                projectId,
+                {
+                    if (userId != null) {
+                        onApplyClick(applyButton, candidatureDatabase, projectId)
+                    } else {
+                        showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
+                    }
+                },
+                { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
 
             )
         }
@@ -223,10 +219,10 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         //until data is loaded from database, show loading
         setButtonText(
-                favButton,
-                null,
-                getString(R.string.favorite_remove_button),
-                getString(R.string.favorite_add_button)
+            favButton,
+            null,
+            getString(R.string.favorite_remove_button),
+            getString(R.string.favorite_add_button)
         )
 
         //load data from the database and set the favorite add button to the right value
@@ -255,21 +251,21 @@ class ProjectInformationActivity : AppCompatActivity() {
             favButton.isEnabled = true
             if (isFavorite && isClick) {
                 userdataDatabase.removeFromFavorite(projectId,
-                        { onSuccessFavorite(isFavorite) },
-                        { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
+                    { onSuccessFavorite(isFavorite) },
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
             }
             //clicked on the favorites button and the project isn't in the favorite list
             else if (isClick) {
                 userdataDatabase.pushFavoriteProject(projectId,
-                        { onSuccessFavorite(isFavorite) },
-                        { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
+                    { onSuccessFavorite(isFavorite) },
+                    { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) })
             }
             //initialize the button
             else {
                 setButtonText(
-                        favButton, isFavorite,
-                        getString(R.string.favorite_remove_button),
-                        getString(R.string.favorite_add_button)
+                    favButton, isFavorite,
+                    getString(R.string.favorite_remove_button),
+                    getString(R.string.favorite_add_button)
                 )
             }
 
@@ -280,9 +276,9 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun onSuccessFavorite(isFavorite: Boolean) {
         showToast(getString(R.string.success), Toast.LENGTH_SHORT)
         setButtonText(
-                favButton, !isFavorite,
-                getString(R.string.favorite_remove_button),
-                getString(R.string.favorite_add_button)
+            favButton, !isFavorite,
+            getString(R.string.favorite_remove_button),
+            getString(R.string.favorite_add_button)
         )
     }
 
@@ -322,14 +318,14 @@ class ProjectInformationActivity : AppCompatActivity() {
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
             creationDate.text = SimpleDateFormat(
-                    getString(R.string.diplay_creation_date_format),
-                    Locale.getDefault()
+                getString(R.string.diplay_creation_date_format),
+                Locale.getDefault()
             ).format(project.creationDate)
             type.text =
-                    if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
-                    else if (project.bachelorProject) getString(R.string.display_bachelor_only)
-                    else if (project.masterProject) getString(R.string.display_master_only)
-                    else getString(R.string.display_not_found)
+                if (project.bachelorProject && project.masterProject) getString(R.string.display_bachelor_and_master)
+                else if (project.bachelorProject) getString(R.string.display_bachelor_only)
+                else if (project.masterProject) getString(R.string.display_master_only)
+                else getString(R.string.display_not_found)
 
             projectDir = File(File(filesDir, "projects"), project.id)
 
@@ -432,13 +428,13 @@ class ProjectInformationActivity : AppCompatActivity() {
         fileDB.getFile(link, directory, { file ->
             val uri = Uri.fromFile(file)
             metadataDB.getSubtitlesFromVideo(
-                    link,
-                    Locale.ENGLISH.language,
-                    { subs ->
-                        subs?.let {
-                            addVideo(uri, it)
-                        } ?: run { addVideo(uri, null) }
-                    }, { addVideo(uri, null) }
+                link,
+                Locale.ENGLISH.language,
+                { subs ->
+                    subs?.let {
+                        addVideo(uri, it)
+                    } ?: run { addVideo(uri, null) }
+                }, { addVideo(uri, null) }
             )
         }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
     }
@@ -450,10 +446,10 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             descriptionView.text = Html.fromHtml(
-                    cleanDescription,
-                    Html.FROM_HTML_MODE_LEGACY,
-                    imageGetter,
-                    tagHandler
+                cleanDescription,
+                Html.FROM_HTML_MODE_LEGACY,
+                imageGetter,
+                tagHandler
             )
         } else {
             descriptionView.text = Html.fromHtml(cleanDescription, imageGetter, tagHandler)
@@ -466,17 +462,17 @@ class ProjectInformationActivity : AppCompatActivity() {
     private fun showToast(message: String, toastLength: Int) {
         runOnUiThread {
             Toast.makeText(
-                    this,
-                    message,
-                    toastLength
+                this,
+                message,
+                toastLength
             ).show()
         }
     }
 
 
     private inner class ImageGetter2(
-            private val res: Resources,
-            private val projectDir: File
+        private val res: Resources,
+        private val projectDir: File
     ) : Html.ImageGetter {
 
         override fun getDrawable(source: String): Drawable {
@@ -515,8 +511,8 @@ class ProjectInformationActivity : AppCompatActivity() {
     }
 
     private class BitmapDrawablePlaceHolder(res: Resources, bitmap: Bitmap?) : BitmapDrawable(
-            res,
-            bitmap
+        res,
+        bitmap
     ) {
         private var drawable: Drawable? = null
 
@@ -536,10 +532,10 @@ class ProjectInformationActivity : AppCompatActivity() {
         var index: Int = 1
 
         override fun handleTag(
-                opening: Boolean,
-                tag: String,
-                output: Editable,
-                xmlReader: XMLReader
+            opening: Boolean,
+            tag: String,
+            output: Editable,
+            xmlReader: XMLReader
         ) {
             when (tag) {
                 "ul", "ol" -> parent = if (opening) tag else null
@@ -617,7 +613,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             return true
         } else if (item.itemId == R.id.editButton) {
             val intent = Intent(this, ProjectCreationActivity::class.java)
-            intent.putExtra(EDIT_EXTRA,projectVar)
+            intent.putExtra(EDIT_EXTRA, projectVar)
             startActivity(intent)
             finish()
         }
