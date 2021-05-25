@@ -9,7 +9,6 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
 import com.sdp13epfl2021.projmag.video.VideoUtils
-import dagger.hilt.android.AndroidEntryPoint
 
 
 const val VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"
