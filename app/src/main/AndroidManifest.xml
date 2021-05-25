@@ -22,8 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-        <activity android:name=".activities.OrientationActivity" />
+        <activity android:name=".activities.CVDisplayActivity" />
         <activity android:name=".activities.ProfileDisplayActivity" />
+        <activity android:name=".activities.OrientationActivity" />
         <activity
             android:name=".activities.PreferencesActivity"
             android:parentActivityName=".activities.ProjectsListActivity"
