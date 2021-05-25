@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.CVDisplayActivity
+import com.sdp13epfl2021.projmag.activities.ProfileDisplayActivity
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
@@ -126,7 +127,7 @@ class CandidatureAdapter(
     }
 
     private fun openProfile(context: Context, profile: ImmutableProfile) {
-        val intent = Intent(context, MainActivity::class.java) //TODO change to profile view
+        val intent = Intent(context, ProfileDisplayActivity::class.java)
         intent.putExtra(MainActivity.profile, profile as Parcelable)
         context.startActivity(intent)
     }
