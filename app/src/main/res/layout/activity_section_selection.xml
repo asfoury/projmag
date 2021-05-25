@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.SectionSelectionActivity">
 
     <TextView
         android:id="@+id/section_title_form"
-        android:background="@color/teal_200"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/teal_200"
         android:paddingBottom="0dp"
         android:scrollbars="vertical"
         android:text="@string/section_selection_instructions"
