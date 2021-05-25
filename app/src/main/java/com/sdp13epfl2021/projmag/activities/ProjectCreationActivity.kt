@@ -67,19 +67,6 @@ class ProjectCreationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
         projectToEdit = intent.getParcelableExtra(EDIT_EXTRA) as ImmutableProject?
-
-        setUpButtons()
-
-        projectToEdit?.let {
-            setInitialValues(it)
-        }
-    }
-
-    private fun setUpButtons() {
-        val addVideoButton: Button = findViewById(R.id.add_video)
-        val addTagButton: Button = findViewById(R.id.addTagsButton)
-        val addSectionButton: Button = findViewById(R.id.addSectionButton)
-
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("failure", "Fetching FCM registration token failed", task.exception)
@@ -92,6 +79,19 @@ class ProjectCreationActivity : AppCompatActivity() {
                 authorToken = token
             }
         })
+        setUpButtons()
+
+        projectToEdit?.let {
+            setInitialValues(it)
+        }
+    }
+
+    private fun setUpButtons() {
+        val addVideoButton: Button = findViewById(R.id.add_video)
+        val addTagButton: Button = findViewById(R.id.addTagsButton)
+        val addSectionButton: Button = findViewById(R.id.addSectionButton)
+
+
 
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
