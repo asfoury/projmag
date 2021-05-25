@@ -14,6 +14,8 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.sdp13epfl2021.projmag.activities.FormHelper
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.FakeFileDatabase
 import com.sdp13epfl2021.projmag.database.fake.FakeMetadataDatabase
