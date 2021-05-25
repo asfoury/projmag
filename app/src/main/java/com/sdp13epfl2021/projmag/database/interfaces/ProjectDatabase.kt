@@ -86,7 +86,8 @@ interface ProjectDatabase {
     /**
      * Asynchronously push a `Project` to the database, an pass its id
      * to the `onSuccess` consumer. Otherwise pass an `Exception` to
-     * the `onFailure` consumer.
+     * the `onFailure` consumer. If project.id == "" then an id is
+     * generate upon push, otherwise it is pushed with its id.
      *
      * @param project the project to push to the database
      * @param onSuccess the consumer for successful results
