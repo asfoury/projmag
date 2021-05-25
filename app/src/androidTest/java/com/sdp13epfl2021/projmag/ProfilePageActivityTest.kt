@@ -134,7 +134,7 @@ class ProfilePageActivityTest {
                 closeSoftKeyboard()
         )
 
-        onView(withId(R.id.button_sub_change_profile)).perform(click())
+        onView(withId(R.id.buttonSubChangeProfil)).perform(click())
     }
 
 }

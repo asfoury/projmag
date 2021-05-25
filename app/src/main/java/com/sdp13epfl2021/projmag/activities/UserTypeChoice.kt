@@ -35,7 +35,7 @@ class UserTypeChoice : AppCompatActivity() {
         professorButton.setOnClickListener {
             isProfessor = true
             editor.putBoolean(isUserProf, true)
-            editor.commit()
+            editor.apply()
             startActivity(intent)
         }
         studentButton.setOnClickListener {

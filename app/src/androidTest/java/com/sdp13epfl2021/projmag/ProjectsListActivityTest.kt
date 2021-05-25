@@ -233,6 +233,27 @@ class ProjectsListActivityTest {
         val master = onView(withId(R.id.filter_master))
         val favorites = onView(withId(R.id.filter_favorites))
         val applied = onView(withId(R.id.filter_applied))
+        bachelor.perform(click())
+        bachelor.check(matches(isChecked()))
+        master.perform(click())
+        master.check(matches(isChecked()))
+        favorites.perform(click())
+        favorites.check(matches(isChecked()))
+
+        onView(withText(ok)).perform(click())
+        Thread.sleep(2000)
+        onView(withText("Project1")).check(matches(isDisplayed()))
+        onView(withText("Project2")).check(doesNotExist())
+    }
+
+    @Test
+    fun filterOwnWorks() {
+        onView(withId(R.id.filterButton)).perform(click())
+        val ok = ApplicationProvider.getApplicationContext<Context>().getString(R.string.ok)
+        val bachelor = onView(withId(R.id.filter_bachelor))
+        val master = onView(withId(R.id.filter_master))
+        val favorites = onView(withId(R.id.filter_favorites))
+        val applied = onView(withId(R.id.filter_applied))
         val own = onView(withId(R.id.filter_own))
         bachelor.perform(click())
         bachelor.check(matches(isChecked()))
@@ -250,7 +271,7 @@ class ProjectsListActivityTest {
 
         onView(withText(ok)).perform(click())
         Thread.sleep(2000)
-        onView(withText("Project1")).check(matches(isDisplayed()))
+        onView(withText("Project1")).check(doesNotExist())
         onView(withText("Project2")).check(doesNotExist())
     }
 }

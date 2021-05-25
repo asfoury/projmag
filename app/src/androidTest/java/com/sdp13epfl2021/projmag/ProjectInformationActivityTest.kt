@@ -16,28 +16,30 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.rules.RuleChain
 import org.mockito.Mockito
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class ProjectInformationActivityTest {
 
     private val epflUrl =
@@ -149,6 +151,9 @@ class ProjectInformationActivityTest {
     @get:Rule
     var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
 
+    @get:Rule
+    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(activityScenarioRule)
 
     @After
     fun clean() {
@@ -180,8 +185,6 @@ class ProjectInformationActivityTest {
         Thread.sleep(1000)
         video.perform(click())
         Thread.sleep(1000)
-        assertTrue(videoView.isPlaying)
-        Thread.sleep(8000)
         assertTrue(videoView.isPlaying)
 
         /*val prevButton = onView(

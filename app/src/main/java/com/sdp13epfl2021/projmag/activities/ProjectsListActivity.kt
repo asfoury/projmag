@@ -21,10 +21,12 @@ import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Displays a list of projects. User can filter based on various criteria and search by name.
@@ -40,6 +42,10 @@ class ProjectsListActivity : AppCompatActivity() {
 
     @Inject
     lateinit var candidatureDatabase: CandidatureDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userId: String
 
 
     private lateinit var projectAdapter: ProjectAdapter
@@ -61,7 +67,8 @@ class ProjectsListActivity : AppCompatActivity() {
         updateAppliedProjects()
 
         userDB.getListOfFavoriteProjects({
-            favoriteList.addAll(it)}, {})
+            favoriteList.addAll(it)
+        }, {})
 
         // if app was opened from deep link, extract relevant information to open the right project
         val fromLink = intent.getBooleanExtra(fromLinkString, false)
@@ -98,22 +105,20 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
         appliedProjects.forEach {
-            utils.candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
+            candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
                 val ownCandidatureThatChanged: Candidature? =
-                    list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                    list.find { candidature -> candidature.userId == userId }
                 if (ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
                     val otherCandidatures =
                         appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
                     otherCandidatures.forEach { otherCandidatureId ->
-                        utils.auth.currentUser?.uid?.let { uid ->
-                            candidatureDatabase.removeCandidature(
-                                otherCandidatureId,
-                                uid,
-                                {},
-                                {}
-                            )
-                        }
-                        utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+                        candidatureDatabase.removeCandidature(
+                            otherCandidatureId,
+                            userId,
+                            {},
+                            {}
+                        )
+                        userDB.applyUnapply(false, otherCandidatureId, {}, {})
                     }
                 }
             }
@@ -177,7 +182,7 @@ class ProjectsListActivity : AppCompatActivity() {
         }, {})
     }
 
-    private fun updateFavoriteProjects(){
+    private fun updateFavoriteProjects() {
         userDB.getListOfFavoriteProjects({ list ->
             favoriteList.clear()
             favoriteList.addAll(list)
@@ -339,7 +344,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * @return true if the project was made by the user, false else
      */
     private fun checkIfOwn(project: ImmutableProject): Boolean {
-        return userId != null && project.authorId == userId
+        return project.authorId == userId
     }
 
 
