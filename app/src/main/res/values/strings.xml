@@ -99,6 +99,7 @@
 
     <string name="form_save_profile">Save</string>
 
+    <string name="show_cv">Show cv</string>
     <string name="create_cv">create cv</string>
     <string name="sub_change">Submit change</string>
 
@@ -126,6 +127,7 @@
     <string name="applied">Applied</string>
     <string name="edit_profile_text">Edit Profile</string>
     <string name="profile_loading_failed">Failed to load profile</string>
+    <string name="cv_loading_failed">Failed to load cv</string>
     <string name="required_degree">Required Degree</string>
     <string name="application">Application</string>
     <string name="filter_settings_icon">filter settings icon</string>
