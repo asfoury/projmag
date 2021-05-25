@@ -5,13 +5,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.sdp13epfl2021.projmag.notification.MyFirebaseMessagingService
 import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
 import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 import com.sdp13epfl2021.projmag.database.ProjectUploader
@@ -35,6 +39,7 @@ class Form : AppCompatActivity() {
         private const val REQUEST_VIDEO_SUBTITLING = 2
         private const val REQUEST_TAG_ACCESS = 3
         private const val REQUEST_SELECTION_ACCESS = 4
+        private  var authorToken: String = ""
     }
 
 
@@ -56,6 +61,23 @@ class Form : AppCompatActivity() {
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addtagButton: Button = findViewById(R.id.addTagsButton)
         val addSectionButton: Button = findViewById(R.id.addSectionButton)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("failure", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            if (token != null) {
+                MyFirebaseMessagingService.token = token
+                authorToken = token
+
+            }
+        })
+
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(
@@ -175,6 +197,7 @@ class Form : AppCompatActivity() {
             name = getTextFromEditText(R.id.form_edit_text_project_name),
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
             authorId = Firebase.auth.currentUser!!.uid,
+            authorToken = authorToken,
             teacher = getTextFromEditText(R.id.form_edit_text_teacher),
             TA = getTextFromEditText(R.id.form_edit_text_project_TA),
             nbParticipant = try {

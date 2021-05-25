@@ -16,6 +16,7 @@ data class ImmutableProject(
     val name: String,
     val lab: String,
     val authorId: String,
+    val authorToken: String,
     val teacher: String,
     val TA: String,
     val nbParticipant: Int,
@@ -35,6 +36,7 @@ data class ImmutableProject(
             const val NAME = "name"
             const val LAB = "lab"
             const val AUTHOR_ID = "authorID"
+            const val AUTHOR_TOKEN = "authorToken"
             const val TEACHER = "teacher"
             const val TA = "TA"
             const val NB_PARTICIPANT = "nbParticipant"
@@ -77,6 +79,7 @@ data class ImmutableProject(
             name: String,
             lab: String,
             authorId: String,
+            authorToken: String,
             teacher: String,
             TA: String,
             nbParticipant: Int,
@@ -110,6 +113,7 @@ data class ImmutableProject(
                         name,
                         lab,
                         authorId,
+                        authorToken,
                         teacher,
                         TA,
                         nbParticipant,
@@ -143,6 +147,7 @@ data class ImmutableProject(
                     name = map[FieldNames.NAME] as String,
                     lab = map[FieldNames.LAB] as String,
                     authorId = map[FieldNames.AUTHOR_ID] as String,
+                    authorToken = map[FieldNames.AUTHOR_TOKEN]  as String,
                     teacher = map[FieldNames.TEACHER] as String,
                     TA = map[FieldNames.TA] as String,
                     nbParticipant = (map[FieldNames.NB_PARTICIPANT] as Number).toInt(),
@@ -198,6 +203,7 @@ data class ImmutableProject(
         name: String = this.name,
         lab: String = this.lab,
         authorId: String = this.authorId,
+        authorToken: String = this.authorToken,
         teacher: String = this.teacher,
         TA: String = this.TA,
         nbParticipant: Int = this.nbParticipant,
@@ -215,6 +221,7 @@ data class ImmutableProject(
         name,
         lab,
         authorId,
+        authorToken,
         teacher,
         TA,
         nbParticipant,
@@ -238,6 +245,7 @@ data class ImmutableProject(
         FieldNames.LAB to lab,
         FieldNames.LAB.toSearchName() to lab.toLowerCase(Locale.ROOT),
         FieldNames.AUTHOR_ID to authorId,
+        FieldNames.AUTHOR_TOKEN to authorToken,
         FieldNames.TEACHER to teacher,
         FieldNames.TEACHER.toSearchName() to teacher.toLowerCase(Locale.ROOT).split(" "),
         FieldNames.TA to TA,

@@ -19,25 +19,24 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.notification.NotificationData
+import com.sdp13epfl2021.projmag.notification.PushNotification
+import com.sdp13epfl2021.projmag.notification.RetrofitInstance
 import com.sdp13epfl2021.projmag.video.VideoUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
 import java.io.ByteArrayOutputStream
@@ -45,7 +44,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 /**
  * Activity displaying the information and media of a project and from which
@@ -139,6 +137,7 @@ class ProjectInformationActivity : AppCompatActivity() {
             candidatureDatabase: CandidatureDatabase,
             projectId: ProjectId,
     ) {
+
         if (alreadyApplied) {
             candidatureDatabase.removeCandidature(
                 projectId,
@@ -169,7 +168,14 @@ class ProjectInformationActivity : AppCompatActivity() {
                         getString(R.string.unaply_text),
                         getString(R.string.apply_text)
                     )
-                },
+                    PushNotification(
+                        NotificationData("Apply","New student apply to your project:"+"  " + projectVar.name), projectVar.authorToken
+                    ).also {
+                        sendNotification(it)
+                    }
+
+                }
+                ,
                 { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
         }
@@ -215,6 +221,19 @@ class ProjectInformationActivity : AppCompatActivity() {
             )
         }
     }
+
+    private  fun sendNotification (notification: PushNotification)= CoroutineScope(Dispatchers.IO).launch {
+        try{
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful){
+                Log.d("Notification", "Response: ${Gson().toJson(response)}")
+            } else{
+                Log.e("Notification error", response.errorBody().toString())
+            }
+        } catch (e: Exception){
+            Log.e( "Notification error ",e.toString() )
+
+        }    }
 
     private fun setUpFavoritesButton() {
         val projectId = projectVar.id
