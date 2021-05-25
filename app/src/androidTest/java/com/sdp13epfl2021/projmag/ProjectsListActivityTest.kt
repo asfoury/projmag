@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.widget.AutoCompleteTextView
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -114,7 +113,6 @@ class ProjectsListActivityTest {
             )
         )
     }
-
 
     // @Test
     // fun userCanPressOnProjectAndGoBackUsingBackButton() {

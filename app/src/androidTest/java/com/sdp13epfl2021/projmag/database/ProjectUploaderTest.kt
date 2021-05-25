@@ -121,7 +121,7 @@ class ProjectUploaderTest {
             mockFileDB,
             mockMetadataDB,
             mockCandidatureDB,
-            { msg -> assertEquals("Project pushed (without video) with ID : $PID", msg) },
+            { msg -> assertEquals("Project pushed with ID : $PID", msg) },
             {},
             {}).checkProjectAndThenUpload(
             Success(exampleProject),

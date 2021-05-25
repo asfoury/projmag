@@ -84,7 +84,7 @@ class ProjectUploader(
                     uploadVideo(id, uri, subtitles)
                 }
                     ?: run {
-                        showMsg("Project pushed (without video) with ID : $id")
+                        showMsg("Project pushed with ID : $id")
                         onSuccess()
                     }
             },
