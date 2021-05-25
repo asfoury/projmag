@@ -20,7 +20,7 @@ import kotlin.random.Random
 
 private const val CHANNEL_ID = "my_channel"
 class MyFirebaseMessagingService: FirebaseMessagingService() {
-    companion object{
+     companion object{
         var sharedPref: SharedPreferences? = null
         var token :String?
         get(){

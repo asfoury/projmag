@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.activities
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -32,6 +33,7 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.notification.MyFirebaseMessagingService
 import com.sdp13epfl2021.projmag.notification.NotificationData
 import com.sdp13epfl2021.projmag.notification.PushNotification
 import com.sdp13epfl2021.projmag.notification.RetrofitInstance
@@ -307,7 +309,7 @@ class ProjectInformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
-
+        MyFirebaseMessagingService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         val utils = Utils.getInstance(this)
         userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase

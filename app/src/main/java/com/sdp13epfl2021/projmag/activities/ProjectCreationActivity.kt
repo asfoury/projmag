@@ -67,14 +67,11 @@ class Form : AppCompatActivity() {
                 Log.w("failure", "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
-
             // Get new FCM registration token
             val token = task.result
-
             if (token != null) {
                 MyFirebaseMessagingService.token = token
                 authorToken = token
-
             }
         })
 
