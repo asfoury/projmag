@@ -40,7 +40,7 @@ class ProfilePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
         buttonAddCv = findViewById(R.id.button_add_cv)
-        buttonSubChange = findViewById(R.id.button_sub_change_profile)
+        buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 
         if (UserTypeChoice.isProfessor) {
             findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
@@ -48,7 +48,8 @@ class ProfilePageActivity : AppCompatActivity() {
         }
 
         userdataDatabase.getProfile(userID, ::loadUserProfile) {
-            Toast.makeText(this,getString(R.string.profile_loading_failed)   , Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
+                .show()
         }
 
 
@@ -60,7 +61,7 @@ class ProfilePageActivity : AppCompatActivity() {
         buttonSubChange.setOnClickListener {
             val profile = createProfileFromFields()
 
-            if(profile != null) {
+            if (profile != null) {
                 userdataDatabase.uploadProfile(profile, {}, {})
             }
             val intent = Intent(this, ProjectsListActivity::class.java)

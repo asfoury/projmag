@@ -6,9 +6,12 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.database.impl.firebase.FirebaseProjectDatabase
-import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
-import com.sdp13epfl2021.projmag.model.*
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.SectionBaseManager
+import com.sdp13epfl2021.projmag.model.Success
+import com.sdp13epfl2021.projmag.model.TagsBaseManager
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -180,7 +183,7 @@ class FirebaseProjectDatabaseTest {
                 "tags" to project.tags,
                 "isTaken" to project.isTaken,
                 "description" to project.description,
-                "videoURI" to project.videoURI,
+                "videoURI" to project.videoUri,
                 "allowedSections" to project.allowedSections,
                 "creationDate" to project.creationDate.time
 
@@ -224,7 +227,7 @@ class FirebaseProjectDatabaseTest {
                 "tags" to project.tags,
                 "isTaken" to project.isTaken,
                 "description" to project.description,
-                "videoURI" to project.videoURI,
+                "videoURI" to project.videoUri,
                 "allowedSections" to project.allowedSections,
                 "creationDate" to project.creationDate.time
             )

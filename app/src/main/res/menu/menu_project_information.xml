@@ -2,22 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/waitingListButton"
-        android:title="@string/waiting_button"
+    <item
+        android:id="@+id/editButton"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="@string/edit_button"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/waitingListButton"
         android:icon="@drawable/waiting_list_icon_24"
-        app:showAsAction="always"
-        />
+        android:title="@string/waiting_button"
+        app:showAsAction="always" />
 
-    <item android:id="@+id/shareButton"
-        android:title="@string/share"
+    <item
+        android:id="@+id/shareButton"
         android:icon="@drawable/ic_baseline_share_24"
-        app:showAsAction="always"
-        />
-
-    <item android:id="@+id/generateQRCodeButton"
         android:title="@string/share"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/generateQRCodeButton"
         android:icon="@drawable/ic_baseline_qr_code_24"
-        app:showAsAction="always"
-        />
+        android:title="@string/share"
+        app:showAsAction="always" />
 
 </menu>

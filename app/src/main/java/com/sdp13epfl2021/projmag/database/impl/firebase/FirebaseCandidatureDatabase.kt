@@ -82,27 +82,34 @@ class FirebaseCandidatureDatabase(
         val profileDeferred: CompletableDeferred<ImmutableProfile?> = CompletableDeferred()
         val cvDeferred: CompletableDeferred<CurriculumVitae?> = CompletableDeferred()
 
-        userdataDatabase.getProfile(userID, { profile ->
-            profileDeferred.complete(profile)
-            // If the profile is null, we stop to wait because no candidature will be added
-            if (profile == null) {
-                waiting.set(false)
-            }
-        }, { waiting.set(false) }) // If a problem occurs, we stop to wait because no candidature will be added
+        userdataDatabase.getProfile(
+            userID,
+            { profile ->
+                profileDeferred.complete(profile)
+                // If the profile is null, we stop to wait because no candidature will be added
+                if (profile == null) {
+                    waiting.set(false)
+                }
+            },
+            { waiting.set(false) }) // If a problem occurs, we stop to wait because no candidature will be added
 
-        userdataDatabase.getCv(userID, { cv ->
-            cvDeferred.complete(cv)
-            // If the cv is null, we stop to wait because no candidature will be added
-            if (cv == null) {
-                waiting.set(false)
-            }
-        }, { waiting.set(false) }) // If a problem occurs, we stop to wait because no candidature will be added
+        userdataDatabase.getCv(
+            userID,
+            { cv ->
+                cvDeferred.complete(cv)
+                // If the cv is null, we stop to wait because no candidature will be added
+                if (cv == null) {
+                    waiting.set(false)
+                }
+            },
+            { waiting.set(false) }) // If a problem occurs, we stop to wait because no candidature will be added
 
         //We wait until a problem or a null value occurs, or if both values are available
         while (waiting.get() && (profileDeferred.isActive || cvDeferred.isActive)) {
             delay(10)
         }
-        val profile: ImmutableProfile? = if (profileDeferred.isCompleted) profileDeferred.getCompleted() else null
+        val profile: ImmutableProfile? =
+            if (profileDeferred.isCompleted) profileDeferred.getCompleted() else null
         val cv: CurriculumVitae? = if (cvDeferred.isCompleted) cvDeferred.getCompleted() else null
 
         if (profile != null && cv != null) {
@@ -124,7 +131,8 @@ class FirebaseCandidatureDatabase(
                         GlobalScope.launch {
                             onSuccess(buildCandidature(it, projectID))
                         }
-                    } ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
+                    }
+                        ?: onFailure(Exception("Candidature document invalid for projectID : $projectID"))
                 } else {
                     onSuccess(emptyList())
                 }

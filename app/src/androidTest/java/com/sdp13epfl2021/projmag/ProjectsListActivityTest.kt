@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.widget.AutoCompleteTextView
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -212,29 +211,6 @@ class ProjectsListActivityTest {
         )
     }
 
-
-    @Test
-    fun userCanPressOnProjectAndGoBackUsingBackButton() {
-        // press on first project
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                0,
-                click()
-            )
-        )
-        // go back to list of project
-        Espresso.pressBack()
-        // press on second project
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                1,
-                click()
-            )
-        )
-        // go back to list of projects
-        Espresso.pressBack()
-    }
-
     @Test
     fun clearFilterDoNotCrash() {
         onView(withId(R.id.filterButton)).perform(click())
@@ -253,8 +229,25 @@ class ProjectsListActivityTest {
     fun filterWorks() {
         onView(withId(R.id.filterButton)).perform(click())
         val ok = ApplicationProvider.getApplicationContext<Context>().getString(R.string.ok)
-        onView(withId(R.id.filter_bachelor)).perform(click())
-        onView(withId(R.id.filter_master)).perform(click())
+        val bachelor = onView(withId(R.id.filter_bachelor))
+        val master = onView(withId(R.id.filter_master))
+        val favorites = onView(withId(R.id.filter_favorites))
+        val applied = onView(withId(R.id.filter_applied))
+        val own = onView(withId(R.id.filter_own))
+        bachelor.perform(click())
+        bachelor.check(matches(isChecked()))
+        master.perform(click())
+        master.check(matches(isChecked()))
+        favorites.perform(click())
+        favorites.check(matches(isChecked()))
+        if (userIsAProfessor) {
+            own.perform(click())
+            own.check(matches(isChecked()))
+        } else {
+            applied.perform(click())
+            applied.check(matches(isChecked()))
+        }
+
         onView(withText(ok)).perform(click())
         Thread.sleep(2000)
         onView(withText("Project1")).check(matches(isDisplayed()))

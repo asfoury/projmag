@@ -6,15 +6,11 @@ import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
-import com.sdp13epfl2021.projmag.activities.FormHelper
-import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.database.di.*
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
@@ -120,7 +116,7 @@ class ProjectCreationActivityTest {
 
         // need to swipe down to make sure textFields are visible when running tests
         onView(withId(R.id.project_submission_scrollview))
-                .perform(ViewActions.swipeDown())
+            .perform(swipeDown())
 
         Thread.sleep(2000)
 

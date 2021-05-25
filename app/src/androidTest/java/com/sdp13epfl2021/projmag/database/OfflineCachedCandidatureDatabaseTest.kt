@@ -66,9 +66,12 @@ class OfflineCachedCandidatureDatabaseTest {
     @Test
     fun candidatureWork() {
         val tempDir: File = Files.createTempDir()
-        val waitingCandidature = Candidature(projectId, userID, profile, cv, Candidature.State.Waiting)
-        val acceptedCandidature = Candidature(projectId, userID, profile, cv, Candidature.State.Accepted)
-        val fakeDB = FakeCandidatureDatabase(candidatures = hashMapOf(projectId to hashMapOf(userID to waitingCandidature)))
+        val waitingCandidature =
+            Candidature(projectId, userID, profile, cv, Candidature.State.Waiting)
+        val acceptedCandidature =
+            Candidature(projectId, userID, profile, cv, Candidature.State.Accepted)
+        val fakeDB =
+            FakeCandidatureDatabase(candidatures = hashMapOf(projectId to hashMapOf(userID to waitingCandidature)))
         val db1: CandidatureDatabase = OfflineCachedCandidatureDatabase(fakeDB, tempDir)
 
         val future1: CompletableFuture<List<Candidature>> = CompletableFuture()

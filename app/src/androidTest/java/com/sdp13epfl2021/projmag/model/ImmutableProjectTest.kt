@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
-import junit.framework.TestCase.*
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNull
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
@@ -161,7 +162,7 @@ class ImmutableProjectTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI,
+            "videoURI" to project.videoUri,
             "allowedSections" to project.allowedSections,
             "creationDate" to project.creationDate.time
         )

@@ -10,8 +10,7 @@ class SectionBaseManager {
             "Systems Communication",
             "EE",
             "Mechanical",
-            "Microtechnics"
-            ,
+            "Microtechnics",
             "Material",
             "Life Sciences",
             "Architecture",
@@ -25,12 +24,13 @@ class SectionBaseManager {
          *
          * @param listToBeChecked : list of section need to be check
          */
-        fun isListValid(listToBeChecked : List<String>) : Boolean = listToBeChecked.all(sectionsList::contains)
+        fun isListValid(listToBeChecked: List<String>): Boolean =
+            listToBeChecked.all(sectionsList::contains)
+
         /**
          * Function is to access list of section
          * return a list of section
          */
-
 
 
         fun sectionList(): List<String> {

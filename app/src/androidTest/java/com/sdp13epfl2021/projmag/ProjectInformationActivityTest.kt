@@ -3,7 +3,6 @@ package com.sdp13epfl2021.projmag
 
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings.Global.getString
 import android.widget.ScrollView
 import android.widget.VideoView
 import androidx.test.core.app.ApplicationProvider
@@ -11,6 +10,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -19,6 +21,7 @@ import androidx.test.filters.LargeTest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
+import com.sdp13epfl2021.projmag.activities.WaitingListActivity
 import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.fake.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -228,8 +231,8 @@ class ProjectInformationActivityTest {
     @Test
     //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
-        var applyString : String = "APPLY"
-        var unapplyString : String = "UNAPPLY"
+        var applyString: String = "APPLY"
+        var unapplyString: String = "UNAPPLY"
 
         Thread.sleep(2000)
         val applyButton = onView(withId(R.id.applyButton))
@@ -243,10 +246,20 @@ class ProjectInformationActivityTest {
     @Test
     fun clickOnWaitingListButton() {
         Thread.sleep(2000)
+        Intents.init()
         onView(withId(R.id.waitingListButton)).perform(click())
+        intended(hasComponent(WaitingListActivity::class.java.name))
+        Intents.release()
+    }
+
+    @Test
+    fun clickOnEditButton() {
+        Intents.init()
+        onView(withId(R.id.editButton)).perform(click())
+        intended(hasComponent(ProjectCreationActivity::class.java.name))
+        Intents.release()
     }
 }
-
 
 
 

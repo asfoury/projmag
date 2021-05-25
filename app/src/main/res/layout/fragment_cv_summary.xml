@@ -23,10 +23,10 @@
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/cv_summary_hint"
+        android:importantForAutofill="no"
         android:inputType="textAutoCorrect|textMultiLine|textCapSentences|textAutoComplete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
