@@ -17,7 +17,6 @@ import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.ProjectChange
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter

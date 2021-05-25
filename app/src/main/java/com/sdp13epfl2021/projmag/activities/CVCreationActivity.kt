@@ -11,7 +11,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.fragments.CVFragmentCollection
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -15,8 +15,11 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
+import com.sdp13epfl2021.projmag.database.di.CandidatureDatabaseModule
 import com.sdp13epfl2021.projmag.database.di.ProjectDatabaseModule
+import com.sdp13epfl2021.projmag.database.di.UserIdModule
 import com.sdp13epfl2021.projmag.database.di.UserdataDatabaseModule
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
@@ -32,8 +35,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.mockito.Mockito
+import javax.inject.Named
 
-@UninstallModules(ProjectDatabaseModule::class, UserdataDatabaseModule::class)
+@UninstallModules(
+    ProjectDatabaseModule::class,
+    UserdataDatabaseModule::class,
+    CandidatureDatabaseModule::class,
+    UserIdModule::class
+)
 @HiltAndroidTest
 class ProjectsListActivityTest {
 
@@ -123,6 +132,13 @@ class ProjectsListActivityTest {
             onSuccess(pref)
         }
     }
+
+    @BindValue
+    val candidatureDatabase: CandidatureDatabase = Mockito.mock(CandidatureDatabase::class.java)
+
+    @BindValue
+    @Named("currentUserId")
+    val userId: String = "uid"
 
 
     @Test
