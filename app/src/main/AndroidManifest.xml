@@ -23,6 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
+
         <service
             android:name=".notification.MyFirebaseMessagingService"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -32,7 +33,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".OrientationActivity" />
+
+        <activity android:name=".activities.OrientationActivity"></activity>
+
         <activity
             android:name=".activities.PreferencesActivity"
             android:parentActivityName=".activities.ProjectsListActivity"
@@ -63,7 +66,7 @@
         <activity android:name=".activities.WaitingListActivity" />
         <activity android:name=".activities.SignInActivity" />
         <activity
-            android:name=".Form"
+            android:name=".activities.ProjectCreationActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

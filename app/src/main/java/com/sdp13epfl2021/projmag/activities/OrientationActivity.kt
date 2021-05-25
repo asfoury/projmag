@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.activities
 
 
 import android.content.Context
@@ -6,10 +6,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.sdp13epfl2021.projmag.R
 
-class OrientationActivity : AppCompatActivity() , SensorEventListener {
+class OrientationActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private val accelerometerReading = FloatArray(3)
@@ -25,6 +26,7 @@ class OrientationActivity : AppCompatActivity() , SensorEventListener {
 
 
     }
+
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
     }
 
@@ -75,11 +77,12 @@ class OrientationActivity : AppCompatActivity() , SensorEventListener {
         SensorManager.getOrientation(rotationMatrix, orientationAngles)
 
     }
+
     /**
      *
      * @return the FloatArray orientationAngles
      */
-    fun getOrientationAngles(): FloatArray{
+    fun getOrientationAngles(): FloatArray {
         return orientationAngles
     }
 }

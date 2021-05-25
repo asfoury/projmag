@@ -260,7 +260,7 @@ class CachedProjectDatabaseTest {
         db.updateVideoWithProject(p1.id, uri_2, {}, { assertTrue(false) })
         Thread.sleep(500)
         TestCase.assertEquals(1, fakeDB.projects.size)
-        TestCase.assertEquals(listOf(uri_1, uri_2).sorted(), fakeDB.projects[0].videoURI.sorted())
+        TestCase.assertEquals(listOf(uri_1, uri_2).sorted(), fakeDB.projects[0].videoUri.sorted())
     }
 
     @Test

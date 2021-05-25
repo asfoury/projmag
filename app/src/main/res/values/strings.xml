@@ -137,6 +137,6 @@
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
     <string name="failed">failed</string>
-
+    <string name="edit_button">editButton</string>
 
 </resources>

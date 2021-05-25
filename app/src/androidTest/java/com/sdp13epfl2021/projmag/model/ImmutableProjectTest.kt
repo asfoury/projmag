@@ -162,7 +162,7 @@ class ImmutableProjectTest {
             "tags" to project.tags,
             "isTaken" to project.isTaken,
             "description" to project.description,
-            "videoURI" to project.videoURI,
+            "videoURI" to project.videoUri,
             "allowedSections" to project.allowedSections,
             "creationDate" to project.creationDate.time
         )
