@@ -9,7 +9,6 @@ import com.google.firebase.firestore.SetOptions
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
-import com.sdp13epfl2021.projmag.model.ProjectFilter
 import com.sdp13epfl2021.projmag.model.*
 import javax.inject.Inject
 
