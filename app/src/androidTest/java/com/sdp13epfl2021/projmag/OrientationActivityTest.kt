@@ -17,5 +17,6 @@ class OrientationActivityTest {
         assertEquals(-0.0, orientationAngle[0].toDouble())
         assertEquals(-0.0, orientationAngle[2].toDouble())
         assertEquals(-1.487892746925354, orientationAngle[1].toDouble())
+        
     }
 }
