@@ -72,7 +72,10 @@ class CVAdapter(
             }
             else -> Triple("", "", "")
         }
+        setTexts(holder, texts)
+    }
 
+    private fun setTexts(holder: CVHolder, texts: Triple<String, String, String>) {
         holder.line0TextView.text = texts.first
         holder.line1TextView.text = texts.second
         holder.line2TextView.text = texts.third
