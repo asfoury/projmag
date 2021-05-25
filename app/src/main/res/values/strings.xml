@@ -137,7 +137,18 @@
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
     <string name="failed">failed</string>
+    
     <string name="edit_button">editButton</string>
+
+    <string name="profile_display_title">Profile</string>
+    <string name="profile_display_firstname">Firstname : %s</string>
+    <string name="profile_display_lastname">Lastname : %s</string>
+    <string name="profile_display_age">Age : %s</string>
+    <string name="profile_display_gender">Gender : %s</string>
+    <string name="profile_display_sciper">Sciper : %s</string>
+    <string name="profile_display_phone">Phone : %s</string>
+    <string name="profile_display_role">Role : %s</string>
+    <string name="profile_display_profile_null">The profile is not valid</string>
 
 
 </resources>

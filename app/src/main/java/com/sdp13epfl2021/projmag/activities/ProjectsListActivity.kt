@@ -140,7 +140,7 @@ class ProjectsListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.profileButton -> {
-                val intent = Intent(this, ProfilePageActivity::class.java)
+                val intent = Intent(this, ProfileEditPageActivity::class.java)
                 startActivity(intent)
                 true
             }

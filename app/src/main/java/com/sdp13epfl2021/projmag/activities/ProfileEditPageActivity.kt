@@ -16,7 +16,7 @@ import com.sdp13epfl2021.projmag.model.*
  * Activity in which one can create their profile by filling in fields
  * such as names, age, sciper, etc...
  */
-class ProfilePageActivity : AppCompatActivity() {
+class ProfileEditPageActivity : AppCompatActivity() {
 
     lateinit var userdataDatabase: UserdataDatabase
     lateinit var imageView: ImageView

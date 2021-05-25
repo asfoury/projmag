@@ -10,7 +10,7 @@ import java.io.Serializable
 
 @Parcelize
 
-data class ImmutableProfile private constructor(
+data class ImmutableProfile constructor(
     val lastName: String, val firstName: String,
     val age: Int, val gender: Gender, val sciper: Int?, val phoneNumber: String, val role: Role
 ) :
