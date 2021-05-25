@@ -48,6 +48,12 @@ class ProjectsListActivityTest {
 
     private val userIsAProfessor: Boolean = true
 
+
+    @BindValue
+    @Named("currentUserId")
+    val userId: String = "uid"
+
+
     private val project1 = (ImmutableProject.build(
         id = "id1",
         authorId = "authorId",
@@ -67,7 +73,7 @@ class ProjectsListActivityTest {
 
     private val project2 = (ImmutableProject.build(
         id = "id2",
-        authorId = "authorId",
+        authorId = userId,
         name = "Project2",
         lab = "lab",
         teacher = "teacher",
@@ -135,10 +141,6 @@ class ProjectsListActivityTest {
 
     @BindValue
     val candidatureDatabase: CandidatureDatabase = Mockito.mock(CandidatureDatabase::class.java)
-
-    @BindValue
-    @Named("currentUserId")
-    val userId: String = "uid"
 
 
     @Test
@@ -266,28 +268,14 @@ class ProjectsListActivityTest {
     fun filterOwnWorks() {
         onView(withId(R.id.filterButton)).perform(click())
         val ok = ApplicationProvider.getApplicationContext<Context>().getString(R.string.ok)
-        val bachelor = onView(withId(R.id.filter_bachelor))
-        val master = onView(withId(R.id.filter_master))
-        val favorites = onView(withId(R.id.filter_favorites))
-        val applied = onView(withId(R.id.filter_applied))
         val own = onView(withId(R.id.filter_own))
-        bachelor.perform(click())
-        bachelor.check(matches(isChecked()))
-        master.perform(click())
-        master.check(matches(isChecked()))
-        favorites.perform(click())
-        favorites.check(matches(isChecked()))
-        if (userIsAProfessor) {
-            own.perform(click())
-            own.check(matches(isChecked()))
-        } else {
-            applied.perform(click())
-            applied.check(matches(isChecked()))
-        }
+
+        own.perform(click())
+        own.check(matches(isChecked()))
 
         onView(withText(ok)).perform(click())
         Thread.sleep(2000)
         onView(withText("Project1")).check(doesNotExist())
-        onView(withText("Project2")).check(doesNotExist())
+        onView(withText("Project2")).check(matches(isDisplayed()))
     }
 }

@@ -162,17 +162,60 @@ class FirebaseUserdataDatabase @Inject constructor(
                 try {
                     val cvMap = it[CV_FIELD] as Map<String, Any>
                     val summary = cvMap["summary"] as String
-                    val education = cvMap["education"] as List<CurriculumVitae.PeriodDescription>
-                    val jobExperience =
-                        cvMap["jobExperience"] as List<CurriculumVitae.PeriodDescription>
-                    val languages = cvMap["languages"] as List<CurriculumVitae.Language>
-                    val skills = cvMap["skills"] as List<CurriculumVitae.SkillDescription>
+                    val education = convertToPeriodList(cvMap, "education")
+                    val jobExperience = convertToPeriodList(cvMap, "jobExperience")
+                    val languages = convertToLanguageList(cvMap, "languages")
+                    val skills = convertToSkillList(cvMap, "skills")
                     onSuccess(CurriculumVitae(summary, education, jobExperience, languages, skills))
                 } catch (e: Exception) {
                     onFailure(e)
                 }
             }
             .addOnFailureListener(onFailure)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun getListOfMap(cvMap: Map<String, Any>, fieldName: String): List<Map<String, Any>> {
+        return cvMap[fieldName] as List<Map<String, Any>>
+    }
+
+    private fun convertToPeriodList(
+        cvMap: Map<String, Any>,
+        fieldName: String
+    ): List<CurriculumVitae.PeriodDescription> {
+        return getListOfMap(cvMap, fieldName).map { map ->
+            CurriculumVitae.PeriodDescription(
+                name = map["name"] as String,
+                location = map["location"] as String,
+                description = map["description"] as String,
+                from = (map["from"] as Number).toInt(),
+                to = (map["to"] as Number).toInt()
+            )
+        }
+    }
+
+    private fun convertToLanguageList(
+        cvMap: Map<String, Any>,
+        fieldName: String
+    ): List<CurriculumVitae.Language> {
+        return getListOfMap(cvMap, fieldName).map { map ->
+            CurriculumVitae.Language(
+                language = map["language"] as String,
+                level = CurriculumVitae.Language.Level.valueOf(map["level"] as String)
+            )
+        }
+    }
+
+    private fun convertToSkillList(
+        cvMap: Map<String, Any>,
+        fieldName: String
+    ): List<CurriculumVitae.SkillDescription> {
+        return getListOfMap(cvMap, fieldName).map { map ->
+            CurriculumVitae.SkillDescription(
+                name = map["name"] as String,
+                skillLevel = CurriculumVitae.SkillDescription.SkillLevel.valueOf(map["skillLevel"] as String)
+            )
+        }
     }
 
     override fun applyUnapply(

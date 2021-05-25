@@ -8,7 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
-import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
+import com.sdp13epfl2021.projmag.activities.ProfileEditPageActivity
 import com.sdp13epfl2021.projmag.database.di.ProjectDatabaseModule
 import com.sdp13epfl2021.projmag.database.di.UserIdModule
 import com.sdp13epfl2021.projmag.database.di.UserdataDatabaseModule
@@ -28,11 +28,11 @@ import javax.inject.Named
 
 @UninstallModules(ProjectDatabaseModule::class, UserdataDatabaseModule::class, UserIdModule::class)
 @HiltAndroidTest
-class ProfilePageActivityTest {
+class ProfileEditPageActivityTest {
 
     @get:Rule
-    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
-            .around(ActivityScenarioRule(ProfilePageActivity::class.java))
+    val testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(ActivityScenarioRule(ProfileEditPageActivity::class.java))
 
     @BindValue
     @Named("currentUserId")
