@@ -3,15 +3,20 @@ package com.sdp13epfl2021.projmag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.sdp13epfl2021.projmag.activities.OrientationActivity
+import dagger.hilt.android.testing.HiltAndroidRule
 import junit.framework.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class OrientationActivityTest {
-    @get:Rule
     var mActivityTestRule = ActivityTestRule(OrientationActivity::class.java)
+
+    @get:Rule
+    val testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(mActivityTestRule)
 
     @Test
     fun testDefaultPosition() {
