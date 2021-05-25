@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
@@ -27,7 +27,7 @@ import com.sdp13epfl2021.projmag.model.ImmutableProfile
  */
 class CandidatureAdapter(
     activity: Activity,
-    private val utils: Utils,
+    private val candidatureDatabase: CandidatureDatabase,
     private val projectId: ProjectId
 ) :
     RecyclerView.Adapter<CandidatureAdapter.CandidatureHolder>() {
@@ -36,7 +36,7 @@ class CandidatureAdapter(
     private val resources: Resources = activity.resources
 
     init {
-        utils.candidatureDatabase.getListOfCandidatures(
+        candidatureDatabase.getListOfCandidatures(
             projectId,
             {
                 activity.runOnUiThread {
@@ -94,8 +94,8 @@ class CandidatureAdapter(
         state: Candidature.State,
         successMsg: String
     ): (View) -> Unit {
-        return { view: View ->
-            utils.candidatureDatabase.pushCandidature(
+        return {
+            candidatureDatabase.pushCandidature(
                 projectId,
                 candidature.userId,
                 state,

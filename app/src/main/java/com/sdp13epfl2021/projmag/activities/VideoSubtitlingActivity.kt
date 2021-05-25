@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag.video
+package com.sdp13epfl2021.projmag.activities
 
 import android.content.Intent
 import android.net.Uri
@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.activities.FORM_TO_SUBTITLE_MESSAGE
+import com.sdp13epfl2021.projmag.video.SubtitleBuilder
 import com.sdp13epfl2021.projmag.video.SubtitleBuilder.Companion.webvttTime
+import com.sdp13epfl2021.projmag.video.VideoUtils
+import dagger.hilt.android.AndroidEntryPoint
 
 
 const val VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY = "com.sdp13epfl2021.projmag.video.VideoSubtitling"

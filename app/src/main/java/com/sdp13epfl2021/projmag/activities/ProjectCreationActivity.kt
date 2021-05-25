@@ -19,8 +19,6 @@ import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
-import com.sdp13epfl2021.projmag.video.VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY
-import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
