@@ -175,9 +175,12 @@ class FirebaseUserdataDatabase @Inject constructor(
     }
 
     @Suppress("UNCHECKED_CAST")
+    private fun getListOfMap(cvMap: Map<String, Any>, fieldName: String): List<Map<String, Any>> {
+        return cvMap[fieldName] as List<Map<String, Any>>
+    }
+
     private fun convertToPeriodList(cvMap: Map<String, Any>, fieldName: String): List<CurriculumVitae.PeriodDescription> {
-        val mapList = cvMap[fieldName] as List<Map<String, Any>>
-        return mapList.map { map ->
+        return getListOfMap(cvMap, fieldName).map { map ->
                 CurriculumVitae.PeriodDescription(
                 name = map["name"] as String,
                 location = map["location"] as String,
@@ -188,10 +191,8 @@ class FirebaseUserdataDatabase @Inject constructor(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun convertToLanguageList(cvMap: Map<String, Any>, fieldName: String): List<CurriculumVitae.Language> {
-        val mapList = cvMap[fieldName] as List<Map<String, Any>>
-        return mapList.map { map ->
+        return getListOfMap(cvMap, fieldName).map { map ->
             CurriculumVitae.Language(
                 language = map["language"] as String,
                 level = CurriculumVitae.Language.Level.valueOf(map["level"] as String)
@@ -199,10 +200,8 @@ class FirebaseUserdataDatabase @Inject constructor(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun convertToSkillList(cvMap: Map<String, Any>, fieldName: String): List<CurriculumVitae.SkillDescription> {
-        val mapList = cvMap[fieldName] as List<Map<String, Any>>
-        return mapList.map { map ->
+        return getListOfMap(cvMap, fieldName).map { map ->
             CurriculumVitae.SkillDescription(
                 name = map["name"] as String,
                 skillLevel = CurriculumVitae.SkillDescription.SkillLevel.valueOf(map["skillLevel"] as String)
