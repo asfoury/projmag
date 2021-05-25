@@ -1,4 +1,4 @@
-package com.sdp13epfl2021.projmag
+package com.sdp13epfl2021.projmag.activities
 
 
 import android.content.Context
@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.sdp13epfl2021.projmag.R
 
 class OrientationActivity : AppCompatActivity(), SensorEventListener {
 

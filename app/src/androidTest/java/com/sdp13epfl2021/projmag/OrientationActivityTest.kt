@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag
 
 import androidx.test.rule.ActivityTestRule
+import com.sdp13epfl2021.projmag.activities.OrientationActivity
 import junit.framework.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
