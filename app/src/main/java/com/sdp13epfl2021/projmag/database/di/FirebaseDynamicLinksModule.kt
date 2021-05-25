@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class FirebaseDynamicLinksModule {
+object FirebaseDynamicLinksModule {
     @Provides
     @Singleton
     fun provideFirebaseDynamicLinks(): FirebaseDynamicLinks = FirebaseDynamicLinks.getInstance()
