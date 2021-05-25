@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
@@ -83,7 +82,7 @@ class ProjectsListActivity : AppCompatActivity() {
         // get the fab and make it go to the Form activity
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener {
-            val intent = Intent(this, Form::class.java)
+            val intent = Intent(this, ProjectCreationActivity::class.java)
             startActivity(intent)
         }
 
@@ -92,24 +91,25 @@ class ProjectsListActivity : AppCompatActivity() {
         }
         candidatureDatabase = utils.candidatureDatabase
 
-        appliedProjects.forEach{
-            utils.candidatureDatabase.addListener(it) { _: ProjectId, list : List<Candidature> ->
-                val ownCandidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
-                    if(ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
-                        val otherCandidatures = appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
-                        otherCandidatures.forEach { otherCandidatureId ->
-                            utils.auth.currentUser?.uid?.let {
-                                uid ->
-                                candidatureDatabase.removeCandidature(
-                                        otherCandidatureId,
-                                        uid,
-                                        {},
-                                        {}
-                                )
-                            }
-                            utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+        appliedProjects.forEach {
+            utils.candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
+                val ownCandidatureThatChanged: Candidature? =
+                    list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                if (ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
+                    val otherCandidatures =
+                        appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
+                    otherCandidatures.forEach { otherCandidatureId ->
+                        utils.auth.currentUser?.uid?.let { uid ->
+                            candidatureDatabase.removeCandidature(
+                                otherCandidatureId,
+                                uid,
+                                {},
+                                {}
+                            )
                         }
+                        utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
                     }
+                }
             }
         }
     }
