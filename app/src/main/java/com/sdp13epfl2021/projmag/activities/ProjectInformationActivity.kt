@@ -462,7 +462,7 @@ class ProjectInformationActivity : AppCompatActivity() {
      * @param copyDirectory directory in which it is moved to
      * @return true if move was a success or there was no need to move, false else
      */
-    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File): Boolean{
+    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
         val fileName = fileDB.getFileName(fileUrl)
         val file = File(deleteDirectory, fileName)
         if(file.exists()){
@@ -470,11 +470,11 @@ class ProjectInformationActivity : AppCompatActivity() {
             try{
                 Files.move(file, newFile)
             }catch(e: Exception){
-                return false
+                
             }
-            return true
+
         }
-        return true
+
 
     }
 

@@ -83,7 +83,7 @@ interface FileDatabase {
      *  get the actual filename from the database
      *
      * @param fileUrl the file url
-     * @return the firebase file name
+     * @return the  file name
      */
     fun getFileName(fileUrl: String) : String
 
