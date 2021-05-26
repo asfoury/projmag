@@ -1,119 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="fill_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+    android:fillViewport="true">
 
-      <TextView
-          android:id="@+id/profile_editprofile_text"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/edit_profile_text"
-          android:textAlignment="center"
-          android:textSize="50sp"
-          android:textStyle="bold"
-          android:layout_marginBottom="20sp"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-      <EditText
-          android:id="@+id/profile_lastname"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:autofillHints=""
-          android:hint="@string/LastName"
-          android:layout_marginStart="20sp"
-          android:layout_marginEnd="20sp"
-          android:inputType="textPersonName"
-          android:textSize="20sp"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@id/profile_editprofile_text" />
+        <TextView
+            android:id="@+id/profile_editprofile_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20sp"
+            android:text="@string/edit_profile_text"
+            android:textAlignment="center"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/profile_firstname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:hint="@string/FirstName"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                android:inputType="textPersonName"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@id/profile_lastname"
-                app:layout_constraintStart_toStartOf="parent"/>
+        <EditText
+            android:id="@+id/profile_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:autofillHints=""
+            android:hint="@string/LastName"
+            android:inputType="textPersonName"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_editprofile_text" />
 
-            <EditText
-                android:id="@+id/profile_age"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                android:autofillHints=""
-                android:hint="@string/age"
-                android:inputType="number"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@id/profile_firstname"
-                app:layout_constraintStart_toStartOf="parent"/>
+        <EditText
+            android:id="@+id/profile_firstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:autofillHints=""
+            android:hint="@string/FirstName"
+            android:inputType="textPersonName"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_lastname" />
 
-            <EditText
-                android:id="@+id/profile_genre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:hint="@string/genre"
-                android:inputType="textPersonName"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@id/profile_age"
-                app:layout_constraintStart_toStartOf="parent"/>
+        <EditText
+            android:id="@+id/profile_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:autofillHints=""
+            android:hint="@string/age"
+            android:inputType="number"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_firstname" />
 
-            <EditText
-                android:id="@+id/profile_phone_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:hint="@string/phone_number"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                android:inputType="phone"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@id/profile_genre"
-                app:layout_constraintStart_toStartOf="parent"/>
-            <EditText
-                android:id="@+id/profile_sciper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:hint="@string/sciper"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:layout_marginStart="20sp"
-                android:layout_marginEnd="20sp"
-                app:layout_constraintTop_toBottomOf="@id/profile_phone_number"
-                app:layout_constraintStart_toStartOf="parent"/>
-      <Button
-          android:id="@+id/button_add_cv"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="20sp"
-          android:layout_marginEnd="20sp"
-          android:text="@string/create_cv"
-          app:layout_constraintTop_toBottomOf="@id/profile_sciper"
-          app:layout_constraintStart_toStartOf="parent"/>
-      <Button
-          android:id="@+id/buttonSubChangeProfil"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="20sp"
-          android:layout_marginEnd="20sp"
-          android:text="@string/sub_change"
-          app:layout_constraintTop_toBottomOf="@id/button_add_cv"
-          app:layout_constraintStart_toStartOf="parent"/>
+        <EditText
+            android:id="@+id/profile_genre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:autofillHints=""
+            android:hint="@string/genre"
+            android:inputType="textPersonName"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_age" />
+
+        <EditText
+            android:id="@+id/profile_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:autofillHints=""
+            android:hint="@string/phone_number"
+            android:inputType="phone"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_genre" />
+
+        <EditText
+            android:id="@+id/profile_sciper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:autofillHints=""
+            android:hint="@string/sciper"
+            android:inputType="number"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_phone_number" />
+
+        <Button
+            android:id="@+id/button_show_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:text="@string/show_cv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_sciper" />
+
+        <Button
+            android:id="@+id/button_add_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:text="@string/create_cv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_show_cv" />
+
+        <Button
+            android:id="@+id/buttonSubChangeProfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:text="@string/sub_change"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_add_cv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
