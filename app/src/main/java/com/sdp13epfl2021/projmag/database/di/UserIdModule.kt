@@ -13,7 +13,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object UserIdModule {
     @Provides
-    @Singleton
     @Named("currentUserId")
     fun provideCurrentUserID(auth: FirebaseAuth): String = auth.uid ?: ""
 }
