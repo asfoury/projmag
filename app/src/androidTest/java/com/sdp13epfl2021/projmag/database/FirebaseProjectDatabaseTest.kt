@@ -54,6 +54,7 @@ class FirebaseProjectDatabaseTest {
     val name = "epic roblox coding"
     val labName = "roblox labs"
     val authorId = "some author id"
+    val authorToken = "token"
     val projectManager = "kaou el roblox master"
     val teacher = "kaou el roblox master"
     val description = "epic roblox coding alll freaking day DAMN SON"
@@ -69,7 +70,7 @@ class FirebaseProjectDatabaseTest {
     val result = ImmutableProject.build(
         ID, name, labName, authorId, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList, creationDate
+        listOf(), sectionList, creationDate,authorToken = "token"
     ) as Success<ImmutableProject>
     val project = result.value
 
@@ -185,7 +186,8 @@ class FirebaseProjectDatabaseTest {
                 "description" to project.description,
                 "videoURI" to project.videoUri,
                 "allowedSections" to project.allowedSections,
-                "creationDate" to project.creationDate.time
+                "creationDate" to project.creationDate.time,
+                "authorToken" to project.authorToken
 
             )
         )
@@ -229,7 +231,8 @@ class FirebaseProjectDatabaseTest {
                 "description" to project.description,
                 "videoURI" to project.videoUri,
                 "allowedSections" to project.allowedSections,
-                "creationDate" to project.creationDate.time
+                "creationDate" to project.creationDate.time,
+                "authorToken" to project.authorToken
             )
         )
         /*

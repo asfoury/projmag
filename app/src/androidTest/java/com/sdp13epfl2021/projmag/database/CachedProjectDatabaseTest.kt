@@ -31,7 +31,8 @@ class CachedProjectDatabaseTest {
         false,
         "Description of project1",
         listOf(),
-        listOf(sectionList[0])
+        listOf(sectionList[0]),
+         authorToken = "token"
     )
     private val p2 = ImmutableProject(
         "11111",
@@ -48,7 +49,8 @@ class CachedProjectDatabaseTest {
         false,
         "Description of project2",
         listOf(),
-        listOf(sectionList[3])
+        listOf(sectionList[3]),
+        authorToken = "token"
     )
     private val p3 = ImmutableProject(
         "00000",
@@ -65,7 +67,8 @@ class CachedProjectDatabaseTest {
         false,
         "Description of project5",
         listOf(),
-        listOf(sectionList[2])
+        listOf(sectionList[2]),
+        authorToken = "token"
     )
 
 

@@ -66,8 +66,8 @@ class WaitingListTest {
         false,
         "Description of project1",
         listOf(),
-        listOf("Architecture")
-
+        listOf("Architecture"),
+        authorToken = "token"
     )
 
     val uid1 = "some-id-001"

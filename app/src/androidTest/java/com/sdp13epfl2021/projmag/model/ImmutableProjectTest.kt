@@ -28,7 +28,7 @@ class ImmutableProjectTest {
     val result = ImmutableProject.build(
         id, name, labName, authorID, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList
+        listOf(), sectionList,authorToken = "token"
     ) as Success<ImmutableProject>
     val project = result.value
 
@@ -47,12 +47,12 @@ class ImmutableProjectTest {
         val result = ImmutableProject.build(
             id, name, labName, authorID, projectManager, teacher, numberStudents,
             listStudents, true, true, tags, false, description,
-            listOf(), sections
+            listOf(), sections,authorToken = "token"
         )
 
         when (result) {
             is Success -> {
-                
+
                 //testing the getters
                 val project = result.value
                 Assert.assertEquals(name, project.name)
@@ -140,7 +140,8 @@ class ImmutableProjectTest {
                 isTaken = get("isTaken") as Boolean,
                 description = get("description") as String,
                 allowedSections = get("allowedSections") as List<String>,
-                creationDate = Date(get("creationDate") as Long)
+                creationDate = Date(get("creationDate") as Long),
+                authorToken = get("authorToken") as String
             )
         }
 
@@ -164,7 +165,8 @@ class ImmutableProjectTest {
             "description" to project.description,
             "videoURI" to project.videoUri,
             "allowedSections" to project.allowedSections,
-            "creationDate" to project.creationDate.time
+            "creationDate" to project.creationDate.time,
+            "authorToken" to project.authorToken
         )
 
 

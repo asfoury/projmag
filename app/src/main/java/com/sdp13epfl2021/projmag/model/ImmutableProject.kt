@@ -15,7 +15,8 @@ data class ImmutableProject(
     val id: String,
     val name: String,
     val lab: String,
-    val authorToken: String,
+    val authorId: String,
+
     val teacher: String,
     val TA: String,
     val nbParticipant: Int,
@@ -28,14 +29,14 @@ data class ImmutableProject(
     val videoUri: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
     val creationDate: Date = Date(),
-    val authorId: String
+    val authorToken: String
 ) : Parcelable {
     companion object {
         object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
-            const val AUTHOR_TOKEN = "authorToken"
+            const val AUTHOR_ID = "authorID"
             const val TEACHER = "teacher"
             const val TA = "TA"
             const val NB_PARTICIPANT = "nbParticipant"
@@ -48,7 +49,7 @@ data class ImmutableProject(
             const val VIDEO_URI = "videoURI"
             const val ALLOWED_SECTIONS = "allowedSections"
             const val CREATION_DATE = "creationDate"
-            const val AUTHOR_ID = "authorID"
+            const val AUTHOR_TOKEN = "authorToken"
         }
 
         const val MAX_PROJECT_NAME_SIZE = 120
