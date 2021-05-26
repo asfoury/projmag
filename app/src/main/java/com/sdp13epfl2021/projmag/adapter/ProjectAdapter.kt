@@ -17,7 +17,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.CommentsActivity
-import com.sdp13epfl2021.projmag.activities.ProfilePageActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.Utils
