@@ -35,7 +35,7 @@ import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
-import com.sdp13epfl2021.projmag.notification.MyFirebaseMessagingService
+import com.sdp13epfl2021.projmag.notification.ProjectNotificatonService
 import com.sdp13epfl2021.projmag.notification.NotificationData
 import com.sdp13epfl2021.projmag.notification.PushNotification
 import com.sdp13epfl2021.projmag.notification.RetrofitInstance
@@ -70,7 +70,9 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
     private lateinit var userdataDatabase: UserdataDatabase
     private lateinit var candidatureDatabase: CandidatureDatabase
-
+    private val title : String = "New Application"
+    private val msgNotification : String = "A student has applied to your project:"
+    private val sharedPrefString:String = "sharedPref"
 
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
@@ -173,7 +175,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                         getString(R.string.apply_text)
                     )
                     PushNotification(
-                        NotificationData("Apply","New student apply to your project:"+"  " + projectVar.name), projectVar.authorToken
+                        NotificationData(title,msgNotification +"  " + projectVar.name), projectVar.authorToken
                     ).also {
                         sendNotification(it)
                     }
@@ -311,7 +313,8 @@ class ProjectInformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
-        MyFirebaseMessagingService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+
+        ProjectNotificatonService.sharedPref = getSharedPreferences(sharedPrefString, Context.MODE_PRIVATE)
         val utils = Utils.getInstance(this)
         userId = utils.auth.currentUser?.uid
         fileDB = utils.fileDatabase

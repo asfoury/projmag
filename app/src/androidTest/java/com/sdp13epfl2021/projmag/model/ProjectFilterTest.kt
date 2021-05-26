@@ -20,8 +20,7 @@ class ProjectFilterTest {
         tags = listOf("tag"),
         isTaken = false,
         description = "description",
-        videoURI = listOf("uri"),
-        authorToken = "token"
+        videoURI = listOf("uri")
     ) as Success<ImmutableProject>).value
 
     @Test

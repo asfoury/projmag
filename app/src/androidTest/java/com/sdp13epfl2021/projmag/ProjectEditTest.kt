@@ -22,7 +22,7 @@ class ProjectEditTest {
         val intent = Intent(context, ProjectCreationActivity::class.java)
         val project = ImmutableProject(
             "a", "b", "c", "d", "e", "f", 4,
-            listOf(), false, true, listOf(), false, "a",authorToken = "token"
+            listOf(), false, true, listOf(), false, "a"
         )
         intent.putExtra("edit", project)
         return intent

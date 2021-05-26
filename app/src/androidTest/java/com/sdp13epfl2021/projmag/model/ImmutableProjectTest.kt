@@ -28,7 +28,7 @@ class ImmutableProjectTest {
     val result = ImmutableProject.build(
         id, name, labName, authorID, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList,authorToken = "token"
+        listOf(), sectionList
     ) as Success<ImmutableProject>
     val project = result.value
 
@@ -47,7 +47,7 @@ class ImmutableProjectTest {
         val result = ImmutableProject.build(
             id, name, labName, authorID, projectManager, teacher, numberStudents,
             listStudents, true, true, tags, false, description,
-            listOf(), sections,authorToken = "token"
+            listOf(), sections
         )
 
         when (result) {

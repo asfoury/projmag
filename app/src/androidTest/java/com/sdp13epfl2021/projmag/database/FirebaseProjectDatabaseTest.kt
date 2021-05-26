@@ -54,7 +54,6 @@ class FirebaseProjectDatabaseTest {
     val name = "epic roblox coding"
     val labName = "roblox labs"
     val authorId = "some author id"
-    val authorToken = "token"
     val projectManager = "kaou el roblox master"
     val teacher = "kaou el roblox master"
     val description = "epic roblox coding alll freaking day DAMN SON"
@@ -70,7 +69,7 @@ class FirebaseProjectDatabaseTest {
     val result = ImmutableProject.build(
         ID, name, labName, authorId, projectManager, teacher, numberStudents,
         listStudents, true, true, tagList, false, description,
-        listOf(), sectionList, creationDate,authorToken = "token"
+        listOf(), sectionList, creationDate
     ) as Success<ImmutableProject>
     val project = result.value
 

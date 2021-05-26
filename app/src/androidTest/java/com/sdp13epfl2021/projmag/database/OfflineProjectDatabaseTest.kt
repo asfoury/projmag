@@ -34,8 +34,7 @@ class OfflineProjectDatabaseTest {
         true,
         listOf("data analysis", "large datasets", "database", "systems", "database", "systems"),
         false,
-        "Description of project1",
-        authorToken = "token"
+        "Description of project1"
     )
     private val p2 = ImmutableProject(
         "11111",
@@ -50,8 +49,7 @@ class OfflineProjectDatabaseTest {
         true,
         listOf("Computer Vision", "ML"),
         false,
-        "Description of project2",
-        authorToken = "token"
+        "Description of project2"
     )
     private val p3 = ImmutableProject(
         "00000",
@@ -67,7 +65,6 @@ class OfflineProjectDatabaseTest {
         listOf("Low Level", "Networking", "Driver"),
         false,
         "Description of project5",
-        authorToken = "token"
     )
 
     private val fakeCandidatureDB: CandidatureDatabase = FakeCandidatureDatabase()

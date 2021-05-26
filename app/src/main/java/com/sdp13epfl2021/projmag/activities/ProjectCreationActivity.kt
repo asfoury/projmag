@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import com.sdp13epfl2021.projmag.notification.MyFirebaseMessagingService
+import com.sdp13epfl2021.projmag.notification.ProjectNotificatonService
 import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
 import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
 
@@ -75,7 +75,7 @@ class ProjectCreationActivity : AppCompatActivity() {
             // Get new FCM registration token
             val token = task.result
             if (token != null) {
-                MyFirebaseMessagingService.token = token
+                ProjectNotificatonService.token = token
                 authorToken = token
             }
         })

@@ -19,15 +19,20 @@ import com.sdp13epfl2021.projmag.R
 import kotlin.random.Random
 
 private const val CHANNEL_ID = "my_channel"
-class MyFirebaseMessagingService: FirebaseMessagingService() {
+private const val tokenString:String = "token"
+private const val title:String = "title"
+private const val msgString:String = "message"
+private const val descriptionString:String= "My channel description"
+private const val channelNameString:String = "channelName"
+class ProjectNotificatonService: FirebaseMessagingService() {
      companion object{
         var sharedPref: SharedPreferences? = null
         var token :String?
         get(){
-            return sharedPref?.getString("token","")
+            return sharedPref?.getString(tokenString,"")
         }
         set(value){
-            sharedPref?.edit()?.putString("token",value)?.apply()
+            sharedPref?.edit()?.putString(tokenString,value)?.apply()
         }
     }
 
@@ -43,8 +48,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this,0,intent,FLAG_ONE_SHOT)
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(msg.data["title"])
-            .setContentText(msg.data["message"])
+            .setContentTitle(msg.data[title])
+            .setContentText(msg.data[msgString])
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -58,10 +63,9 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private  fun createNotificationChannel(notificationManger: NotificationManager){
-        val channelName = "channelName"
+        val channelName = channelNameString
         val channel = NotificationChannel(CHANNEL_ID,channelName,IMPORTANCE_HIGH).apply {
-            description = "My channel description"
-
+            description = descriptionString
         }
 
         notificationManger.createNotificationChannel(channel)

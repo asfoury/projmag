@@ -29,7 +29,7 @@ data class ImmutableProject(
     val videoUri: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
     val creationDate: Date = Date(),
-    val authorToken: String
+    val authorToken: String = defaultToken
 ) : Parcelable {
     companion object {
         object FieldNames {
@@ -51,7 +51,7 @@ data class ImmutableProject(
             const val CREATION_DATE = "creationDate"
             const val AUTHOR_TOKEN = "authorToken"
         }
-
+        const val defaultToken = "token"
         const val MAX_PROJECT_NAME_SIZE = 120
         const val MAX_NAME_SIZE = 40
         const val MAX_DESCRIPTION_SIZE = 4000
@@ -92,7 +92,7 @@ data class ImmutableProject(
             videoURI: List<String> = listOf(),
             allowedSections: List<String> = listOf(),
             creationDate: Date = Date(),
-            authorToken: String,
+            authorToken: String = defaultToken
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")

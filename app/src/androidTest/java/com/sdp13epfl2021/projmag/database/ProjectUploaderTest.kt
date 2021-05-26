@@ -41,8 +41,7 @@ class ProjectUploaderTest {
         bachelorProject = false,
         tags = listOf("t1", "t2"),
         isTaken = false,
-        description = "some description",
-        authorToken = "token"
+        description = "some description"
     )
 
     @Suppress("UNCHECKED_CAST")
