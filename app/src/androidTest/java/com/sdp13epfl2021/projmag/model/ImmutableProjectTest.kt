@@ -52,7 +52,7 @@ class ImmutableProjectTest {
 
         when (result) {
             is Success -> {
-
+                
                 //testing the getters
                 val project = result.value
                 Assert.assertEquals(name, project.name)

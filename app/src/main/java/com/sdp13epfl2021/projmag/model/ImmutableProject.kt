@@ -15,7 +15,6 @@ data class ImmutableProject(
     val id: String,
     val name: String,
     val lab: String,
-    val authorId: String,
     val authorToken: String,
     val teacher: String,
     val TA: String,
@@ -28,14 +27,14 @@ data class ImmutableProject(
     val description: String,
     val videoUri: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
-    val creationDate: Date = Date()
+    val creationDate: Date = Date(),
+    val authorId: String
 ) : Parcelable {
     companion object {
         object FieldNames {
             fun String.toSearchName(): String = "${this}-search"
             const val NAME = "name"
             const val LAB = "lab"
-            const val AUTHOR_ID = "authorID"
             const val AUTHOR_TOKEN = "authorToken"
             const val TEACHER = "teacher"
             const val TA = "TA"
@@ -49,6 +48,7 @@ data class ImmutableProject(
             const val VIDEO_URI = "videoURI"
             const val ALLOWED_SECTIONS = "allowedSections"
             const val CREATION_DATE = "creationDate"
+            const val AUTHOR_ID = "authorID"
         }
 
         const val MAX_PROJECT_NAME_SIZE = 120
@@ -79,7 +79,6 @@ data class ImmutableProject(
             name: String,
             lab: String,
             authorId: String,
-            authorToken: String,
             teacher: String,
             TA: String,
             nbParticipant: Int,
@@ -91,7 +90,8 @@ data class ImmutableProject(
             description: String,
             videoURI: List<String> = listOf(),
             allowedSections: List<String> = listOf(),
-            creationDate: Date = Date()
+            creationDate: Date = Date(),
+            authorToken: String,
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -113,7 +113,6 @@ data class ImmutableProject(
                         name,
                         lab,
                         authorId,
-                        authorToken,
                         teacher,
                         TA,
                         nbParticipant,
@@ -125,7 +124,8 @@ data class ImmutableProject(
                         description,
                         videoURI,
                         allowedSections,
-                        creationDate
+                        creationDate,
+                        authorToken,
                     )
                 )
             }
@@ -147,7 +147,6 @@ data class ImmutableProject(
                     name = map[FieldNames.NAME] as String,
                     lab = map[FieldNames.LAB] as String,
                     authorId = map[FieldNames.AUTHOR_ID] as String,
-                    authorToken = map[FieldNames.AUTHOR_TOKEN]  as String,
                     teacher = map[FieldNames.TEACHER] as String,
                     TA = map[FieldNames.TA] as String,
                     nbParticipant = (map[FieldNames.NB_PARTICIPANT] as Number).toInt(),
@@ -159,7 +158,8 @@ data class ImmutableProject(
                     description = map[FieldNames.DESCRIPTION] as String,
                     videoURI = map[FieldNames.VIDEO_URI] as List<String>,
                     allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>,
-                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long)
+                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long),
+                    authorToken = map[FieldNames.AUTHOR_TOKEN]  as String
                 )
                 return when (result) {
                     is Success -> result.value
@@ -203,7 +203,6 @@ data class ImmutableProject(
         name: String = this.name,
         lab: String = this.lab,
         authorId: String = this.authorId,
-        authorToken: String = this.authorToken,
         teacher: String = this.teacher,
         TA: String = this.TA,
         nbParticipant: Int = this.nbParticipant,
@@ -215,13 +214,13 @@ data class ImmutableProject(
         description: String = this.description,
         videoURI: List<String> = this.videoUri,
         allowedSections: List<String> = this.allowedSections,
-        creationDate: Date = this.creationDate
+        creationDate: Date = this.creationDate,
+        authorToken: String = this.authorToken
     ) = build(
         id,
         name,
         lab,
         authorId,
-        authorToken,
         teacher,
         TA,
         nbParticipant,
@@ -233,7 +232,8 @@ data class ImmutableProject(
         description,
         videoURI,
         allowedSections,
-        creationDate
+        creationDate,
+        authorToken
     )
 
     /**
@@ -245,7 +245,6 @@ data class ImmutableProject(
         FieldNames.LAB to lab,
         FieldNames.LAB.toSearchName() to lab.toLowerCase(Locale.ROOT),
         FieldNames.AUTHOR_ID to authorId,
-        FieldNames.AUTHOR_TOKEN to authorToken,
         FieldNames.TEACHER to teacher,
         FieldNames.TEACHER.toSearchName() to teacher.toLowerCase(Locale.ROOT).split(" "),
         FieldNames.TA to TA,
@@ -260,7 +259,8 @@ data class ImmutableProject(
         FieldNames.DESCRIPTION to description,
         FieldNames.VIDEO_URI to videoUri,
         FieldNames.ALLOWED_SECTIONS to allowedSections,
-        FieldNames.CREATION_DATE to creationDate.time
+        FieldNames.CREATION_DATE to creationDate.time,
+        FieldNames.AUTHOR_TOKEN to authorToken
     )
 
 
