@@ -27,7 +27,7 @@ class UserTypeChoice : AppCompatActivity() {
         val professorButton: RadioButton = findViewById(R.id.radioProfessorType)
         val studentButton: RadioButton = findViewById(R.id.radioStudentType)
         val pdhButton: RadioButton = findViewById(R.id.radioPHDType)
-        val intent = Intent(this, ProfilePageActivity::class.java)
+        val intent = Intent(this, ProfileEditPageActivity::class.java)
         pdhButton.setOnClickListener {
             isProfessor = true
             startActivity(intent)

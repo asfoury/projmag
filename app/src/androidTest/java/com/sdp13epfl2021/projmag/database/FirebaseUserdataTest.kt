@@ -38,9 +38,27 @@ class FirebaseUserdataTest {
                 2012
             )
         ),
-        emptyList(),
-        emptyList(),
-        emptyList()
+        listOf(
+            CurriculumVitae.PeriodDescription(
+                "name1",
+                "location1",
+                "description1",
+                2010,
+                2012
+            )
+        ),
+        listOf(
+            CurriculumVitae.Language(
+                "language1",
+                CurriculumVitae.Language.Level.Basic
+            )
+        ),
+        listOf(
+            CurriculumVitae.SkillDescription(
+                "skill1",
+                CurriculumVitae.SkillDescription.SkillLevel.Expert
+            )
+        )
     )
 
     private val onFailureNotExpected: (Exception) -> Unit = {
@@ -138,13 +156,23 @@ class FirebaseUserdataTest {
         Mockito.`when`(mockDS["cv"]).thenReturn(
             mapOf(
                 "summary" to cv.summary,
-                "education" to cv.education,
-                "jobExperience" to cv.jobExperience,
-                "languages" to cv.languages,
-                "skills" to cv.skills,
+                "education" to cv.education.map(::periodToMap),
+                "jobExperience" to cv.jobExperience.map(::periodToMap),
+                "languages" to cv.languages.map { mapOf("language" to it.language, "level" to it.level.name) },
+                "skills" to cv.skills.map { mapOf("name" to it.name, "skillLevel" to it.skillLevel.name) },
             )
         )
 
+    }
+
+    private fun periodToMap(period: CurriculumVitae.PeriodDescription): Map<String, Any> {
+        return mapOf(
+            "name" to period.name,
+            "description" to period.description,
+            "location" to period.location,
+            "from" to period.from.toLong(),
+            "to" to period.to.toLong(),
+        )
     }
 
     @Test
