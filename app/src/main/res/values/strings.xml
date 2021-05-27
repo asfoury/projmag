@@ -139,9 +139,9 @@
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
     <string name="failed">failed</string>
-    
+
     <string name="edit_button">editButton</string>
-    
+
     <string name="cv_display_cv_null">The cv is null.</string>
     <string name="cv_display_title">CurriculumVitae</string>
     <string name="cv_display_summary">Summary\n%s</string>

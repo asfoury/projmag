@@ -158,8 +158,18 @@ class FirebaseUserdataTest {
                 "summary" to cv.summary,
                 "education" to cv.education.map(::periodToMap),
                 "jobExperience" to cv.jobExperience.map(::periodToMap),
-                "languages" to cv.languages.map { mapOf("language" to it.language, "level" to it.level.name) },
-                "skills" to cv.skills.map { mapOf("name" to it.name, "skillLevel" to it.skillLevel.name) },
+                "languages" to cv.languages.map {
+                    mapOf(
+                        "language" to it.language,
+                        "level" to it.level.name
+                    )
+                },
+                "skills" to cv.skills.map {
+                    mapOf(
+                        "name" to it.name,
+                        "skillLevel" to it.skillLevel.name
+                    )
+                },
             )
         )
 

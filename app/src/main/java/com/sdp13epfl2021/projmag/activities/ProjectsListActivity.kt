@@ -17,29 +17,45 @@ import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkStri
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.ProjectAdapter
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Displays a list of projects. User can filter based on various criteria and search by name.
  */
+@AndroidEntryPoint
 class ProjectsListActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var userDB: UserdataDatabase
+
+    @Inject
+    lateinit var projectDB: ProjectDatabase
+
+    @Inject
+    lateinit var candidatureDatabase: CandidatureDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userId: String
+
 
     private lateinit var projectAdapter: ProjectAdapter
 
     private lateinit var recyclerView: RecyclerView
     private val appliedProjects: MutableList<ProjectId> = ArrayList()
     private val favoriteList: MutableList<ProjectId> = ArrayList()
-    private lateinit var utils: Utils
-    private var userId: String? = null
     private var projectFilter: ProjectFilter = ProjectFilter()
     private var userPref: ProjectFilter = ProjectFilter()
     private var useFilterPref: Boolean = false
-    private lateinit var candidatureDatabase: CandidatureDatabase
 
     /**
      * Creates and displays list of projects.
@@ -48,11 +64,9 @@ class ProjectsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects_list)
 
-        utils = Utils.getInstance(this)
-        userId = utils.auth.uid
         updateAppliedProjects()
 
-        utils.userdataDatabase.getListOfFavoriteProjects({
+        userDB.getListOfFavoriteProjects({
             favoriteList.addAll(it)
         }, {})
 
@@ -64,10 +78,10 @@ class ProjectsListActivity : AppCompatActivity() {
         }
 
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view_project)
+        recyclerView = findViewById(R.id.recycler_view_project)
 
         projectAdapter =
-            ProjectAdapter(this, Utils.getInstance(this), recyclerView, fromLink, projectId)
+            ProjectAdapter(this, projectDB, recyclerView, fromLink, projectId)
         recyclerView.adapter = projectAdapter
 
 
@@ -89,25 +103,22 @@ class ProjectsListActivity : AppCompatActivity() {
         if (!UserTypeChoice.isProfessor) {
             fab.visibility = View.INVISIBLE
         }
-        candidatureDatabase = utils.candidatureDatabase
 
         appliedProjects.forEach {
-            utils.candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
+            candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
                 val ownCandidatureThatChanged: Candidature? =
-                    list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                    list.find { candidature -> candidature.userId == userId }
                 if (ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
                     val otherCandidatures =
                         appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
                     otherCandidatures.forEach { otherCandidatureId ->
-                        utils.auth.currentUser?.uid?.let { uid ->
-                            candidatureDatabase.removeCandidature(
-                                otherCandidatureId,
-                                uid,
-                                {},
-                                {}
-                            )
-                        }
-                        utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+                        candidatureDatabase.removeCandidature(
+                            otherCandidatureId,
+                            userId,
+                            {},
+                            {}
+                        )
+                        userDB.applyUnapply(false, otherCandidatureId, {}, {})
                     }
                 }
             }
@@ -165,14 +176,14 @@ class ProjectsListActivity : AppCompatActivity() {
      * Update the list of projects, which the user applied to, from the Database
      */
     private fun updateAppliedProjects() {
-        utils.userdataDatabase.getListOfAppliedToProjects({ list ->
+        userDB.getListOfAppliedToProjects({ list ->
             appliedProjects.clear()
             appliedProjects.addAll(list)
         }, {})
     }
 
     private fun updateFavoriteProjects() {
-        utils.userdataDatabase.getListOfFavoriteProjects({ list ->
+        userDB.getListOfFavoriteProjects({ list ->
             favoriteList.clear()
             favoriteList.addAll(list)
         }, {})
@@ -269,6 +280,8 @@ class ProjectsListActivity : AppCompatActivity() {
             setOnCheckedChangeListener { _, isChecked ->
                 useFilterPref = isChecked
 
+                updatePreferences()
+
                 view.findViewById<View>(R.id.filter_preferences_layout).visibility =
                     if (isChecked) View.GONE else View.VISIBLE
             }
@@ -331,7 +344,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * @return true if the project was made by the user, false else
      */
     private fun checkIfOwn(project: ImmutableProject): Boolean {
-        return userId != null && project.authorId == userId
+        return project.authorId == userId
     }
 
 
@@ -339,7 +352,7 @@ class ProjectsListActivity : AppCompatActivity() {
      * Fetch the user preference from Database and update.
      */
     private fun updatePreferences() {
-        utils.userdataDatabase.getPreferences(
+        userDB.getPreferences(
             { pf -> pf?.let { userPref = it } },
             {}
         )
