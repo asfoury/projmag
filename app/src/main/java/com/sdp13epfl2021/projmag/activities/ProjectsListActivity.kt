@@ -3,19 +3,16 @@ package com.sdp13epfl2021.projmag.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.sdp13epfl2021.projmag.Form
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.fromLinkString
 import com.sdp13epfl2021.projmag.MainActivity.MainActivityCompanion.projectIdString
 import com.sdp13epfl2021.projmag.R
@@ -85,7 +82,7 @@ class ProjectsListActivity : AppCompatActivity() {
         // get the fab and make it go to the Form activity
         val fab: View = findViewById(R.id.fab)
         fab.setOnClickListener {
-            val intent = Intent(this, Form::class.java)
+            val intent = Intent(this, ProjectCreationActivity::class.java)
             startActivity(intent)
         }
 
@@ -94,24 +91,25 @@ class ProjectsListActivity : AppCompatActivity() {
         }
         candidatureDatabase = utils.candidatureDatabase
 
-        appliedProjects.forEach{
-            utils.candidatureDatabase.addListener(it) { _: ProjectId, list : List<Candidature> ->
-                val ownCandidatureThatChanged : Candidature? = list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
-                    if(ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
-                        val otherCandidatures = appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
-                        otherCandidatures.forEach { otherCandidatureId ->
-                            utils.auth.currentUser?.uid?.let {
-                                uid ->
-                                candidatureDatabase.removeCandidature(
-                                        otherCandidatureId,
-                                        uid,
-                                        {},
-                                        {}
-                                )
-                            }
-                            utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
+        appliedProjects.forEach {
+            utils.candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
+                val ownCandidatureThatChanged: Candidature? =
+                    list.find { candidature -> candidature.userId == utils.auth.currentUser?.uid }
+                if (ownCandidatureThatChanged?.state == Candidature.State.Accepted) {
+                    val otherCandidatures =
+                        appliedProjects.filter { projectId -> (ownCandidatureThatChanged.projectId != projectId) }
+                    otherCandidatures.forEach { otherCandidatureId ->
+                        utils.auth.currentUser?.uid?.let { uid ->
+                            candidatureDatabase.removeCandidature(
+                                otherCandidatureId,
+                                uid,
+                                {},
+                                {}
+                            )
                         }
+                        utils.userdataDatabase.applyUnapply(false, otherCandidatureId, {}, {})
                     }
+                }
             }
         }
     }
@@ -142,7 +140,7 @@ class ProjectsListActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.profileButton -> {
-                val intent = Intent(this, ProfilePageActivity::class.java)
+                val intent = Intent(this, ProfileEditPageActivity::class.java)
                 startActivity(intent)
                 true
             }

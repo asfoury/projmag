@@ -335,7 +335,7 @@ class OfflineProjectDatabaseTest {
         db.updateVideoWithProject(p1.id, uri_2, {}, onFailureNotExpected)
         Thread.sleep(500)
         assertEquals(1, fakeDB.projects.size)
-        assertEquals(listOf(uri_1, uri_2).sorted(), fakeDB.projects[0].videoURI.sorted())
+        assertEquals(listOf(uri_1, uri_2).sorted(), fakeDB.projects[0].videoUri.sorted())
     }
 
 

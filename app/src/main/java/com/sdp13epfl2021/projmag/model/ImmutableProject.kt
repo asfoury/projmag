@@ -25,7 +25,7 @@ data class ImmutableProject(
     val tags: List<String>,
     val isTaken: Boolean,
     val description: String,
-    val videoURI: List<String> = listOf(),
+    val videoUri: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
     val creationDate: Date = Date()
 ) : Parcelable {
@@ -207,7 +207,7 @@ data class ImmutableProject(
         tags: List<String> = this.tags,
         isTaken: Boolean = this.isTaken,
         description: String = this.description,
-        videoURI: List<String> = this.videoURI,
+        videoURI: List<String> = this.videoUri,
         allowedSections: List<String> = this.allowedSections,
         creationDate: Date = this.creationDate
     ) = build(
@@ -250,7 +250,7 @@ data class ImmutableProject(
         FieldNames.TAGS.toSearchName() to tags.map { it.toLowerCase(Locale.ROOT) },
         FieldNames.IS_TAKEN to isTaken,
         FieldNames.DESCRIPTION to description,
-        FieldNames.VIDEO_URI to videoURI,
+        FieldNames.VIDEO_URI to videoUri,
         FieldNames.ALLOWED_SECTIONS to allowedSections,
         FieldNames.CREATION_DATE to creationDate.time
     )

@@ -4,25 +4,22 @@ package com.sdp13epfl2021.projmag.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
 
 /**
  * Activity in which one can create their profile by filling in fields
  * such as names, age, sciper, etc...
  */
-class ProfilePageActivity : AppCompatActivity() {
+class ProfileEditPageActivity : AppCompatActivity() {
 
-    lateinit var userdataDatabase: UserdataDatabase
     lateinit var imageView: ImageView
-    lateinit var button: Button
-    lateinit var buttonAddCv: Button
-    lateinit var buttonSubChange: Button
     private val pickImage = 0
     private var imageUri: Uri? = null
 
@@ -31,38 +28,60 @@ class ProfilePageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
         val utils = Utils.getInstance(this)
-        userdataDatabase = utils.userdataDatabase
+        val userdataDatabase = utils.userdataDatabase
         val userID = utils.auth.currentUser?.uid ?: "localID" //TODO remove after DI
-        buttonAddCv = findViewById(R.id.button_add_cv)
-        buttonSubChange = findViewById(R.id.buttonSubChangeProfil)
 
         if (UserTypeChoice.isProfessor) {
             findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
             //buttonAddCv.setVisibility(View.INVISIBLE)
         }
 
-        userdataDatabase.getProfile(userID, ::loadUserProfile) {
-            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
-                .show()
+        userdataDatabase.getProfile(userID, ::loadUserProfile) { showToast(getString(R.string.profile_loading_failed)) }
+
+        findViewById<Button>(R.id.button_show_cv).setOnClickListener {
+            userdataDatabase.getCv(userID, { cv ->
+                startActivityAndFinish(CVDisplayActivity::class.java, Pair(MainActivity.cv, cv as Parcelable?))
+            }, { showToast(getString(R.string.cv_loading_failed)) })
         }
 
-
-        buttonAddCv.setOnClickListener {
-            val intent = Intent(this, CVCreationActivity::class.java)
-            startActivity(intent)
-            finish()
+        findViewById<Button>(R.id.button_add_cv).setOnClickListener {
+            startActivityAndFinish(CVCreationActivity::class.java)
         }
-        buttonSubChange.setOnClickListener {
+
+        findViewById<Button>(R.id.buttonSubChangeProfil).setOnClickListener {
             val profile = createProfileFromFields()
 
             if (profile != null) {
                 userdataDatabase.uploadProfile(profile, {}, {})
             }
-            val intent = Intent(this, ProjectsListActivity::class.java)
-            startActivity(intent)
-            finish()
+            startActivityAndFinish(ProjectsListActivity::class.java)
         }
 
+    }
+
+    private fun showToast(msg: String) {
+        runOnUiThread {
+            Toast.makeText(
+                this,
+                msg,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    /**
+     * Start an activity with optional data in the intent, then finish.
+     *
+     * @param cls Class of the activity to start.
+     * @param extra an optional pair of name and parcelable data.
+     */
+    private fun <T> startActivityAndFinish(cls: Class<T>, extra: Pair<String, Parcelable?>? = null) {
+        val intent = Intent(this, cls)
+        extra?.let {
+            intent.putExtra(extra.first, extra.second)
+        }
+        startActivity(intent)
+        finish()
     }
 
     private fun loadUserProfile(profile: ImmutableProfile?) {
@@ -74,8 +93,7 @@ class ProfilePageActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.profile_phone_number).setText(profile.phoneNumber)
             findViewById<EditText>(R.id.profile_sciper).setText(profile.sciper.toString())
         } else {
-            Toast.makeText(this, getString(R.string.profile_loading_failed), Toast.LENGTH_LONG)
-                .show()
+            showToast(getString(R.string.profile_loading_failed))
         }
     }
 

@@ -2,8 +2,7 @@ package com.sdp13epfl2021.projmag
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.PreferencesActivity
@@ -81,7 +80,7 @@ class PreferencesActivityTests {
         onView(withId(R.id.filter_favorites)).perform(click())
         if (UserTypeChoice.isProfessor)
             onView(withId(R.id.filter_own)).perform(click())
-         else
+        else
             onView(withId(R.id.filter_applied)).perform(click())
 
         onView(withId(R.id.preferences_layout_submit)).perform(click())

@@ -49,9 +49,12 @@ data class ProjectFilter(
     /**
      * A function used to see if the user has applied to the project
      */
-    @Transient private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
-    @Transient private var isFavoriteProject : ((ImmutableProject) -> Boolean)? = null
-    @Transient private var isOwnProject: ((ImmutableProject) -> Boolean)? = null
+    @Transient
+    private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
+    @Transient
+    private var isFavoriteProject: ((ImmutableProject) -> Boolean)? = null
+    @Transient
+    private var isOwnProject: ((ImmutableProject) -> Boolean)? = null
 
     /**
      * Tells if the given project match the constraints
