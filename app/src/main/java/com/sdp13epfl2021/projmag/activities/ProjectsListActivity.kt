@@ -89,21 +89,10 @@ class ProjectsListActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(false)
 
         setUpFab()
-
+        addListenersToAppliedProjects()
     }
 
-    private fun setUpFab() {
-        // get the fab and make it go to the Form activity
-        val fab: View = findViewById(R.id.fab)
-        fab.setOnClickListener {
-            val intent = Intent(this, ProjectCreationActivity::class.java)
-            startActivity(intent)
-        }
-
-        if (!UserTypeChoice.isProfessor) {
-            fab.visibility = View.INVISIBLE
-        }
-
+    private fun addListenersToAppliedProjects() {
         appliedProjects.forEach {
             candidatureDatabase.addListener(it) { _: ProjectId, list: List<Candidature> ->
                 val ownCandidatureThatChanged: Candidature? =
@@ -122,6 +111,20 @@ class ProjectsListActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+    }
+
+    private fun setUpFab() {
+        // get the fab and make it go to the Form activity
+        val fab: View = findViewById(R.id.fab)
+        fab.setOnClickListener {
+            val intent = Intent(this, ProjectCreationActivity::class.java)
+            startActivity(intent)
+        }
+
+        if (!UserTypeChoice.isProfessor) {
+            fab.visibility = View.INVISIBLE
         }
     }
 

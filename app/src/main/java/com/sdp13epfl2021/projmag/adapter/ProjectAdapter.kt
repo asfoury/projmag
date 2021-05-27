@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.CommentsActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
@@ -107,6 +109,7 @@ class ProjectAdapter(
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val chipGroupView: ChipGroup = view.findViewById(R.id.chip_group)
+        val commentButton : ImageButton = view.findViewById(R.id.projects_comments_button)
     }
 
 
@@ -118,7 +121,7 @@ class ProjectAdapter(
         return ProjectViewHolder(adapterLayout)
     }
 
-    fun openProject(holder: ProjectViewHolder, project: ImmutableProject) {
+    private fun openProject(holder: ProjectViewHolder, project: ImmutableProject) {
         val context = holder.view.context
         val intent = Intent(context, ProjectInformationActivity::class.java)
         intent.putExtra(projectString, project as Parcelable)
@@ -135,6 +138,12 @@ class ProjectAdapter(
         // remove all tags to keep them from being duplicated
         holder.chipGroupView.removeAllViews()
 
+        // go to the comments activity when comments button is pressed
+        holder.commentButton.setOnClickListener {
+            val context = holder.view.context
+            val intent = Intent(context, CommentsActivity::class.java)
+            context.startActivity(intent)
+        }
 
         if (dataset[position].isTaken) {
             holder.view.alpha = 0.5f
