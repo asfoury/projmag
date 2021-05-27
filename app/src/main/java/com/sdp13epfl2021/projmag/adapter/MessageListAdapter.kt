@@ -11,7 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.model.Message
+import java.util.*
 
+/**
+ * Adapter for a message to recycler view. Allows messages to be displayed in comments
+ */
 class MessageListAdapter( private val context : Context,  private val messages : List<Message>) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>() {
     /**
      * Holder of project fields to display in list.
