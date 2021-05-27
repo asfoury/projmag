@@ -2,10 +2,11 @@
 
 
 ## Mohamed 
-This sprint I had two tasks the first was to implement the UI for the comment section and the second, to connect it to firebase, I ended up working 8 hours on the UI of the comment section because it was quite complex. It took multiple tries to get right.  
+
 
 ## Giovanni (Scrum Master)
-
+This week I finish my task Notification this take me more time then expeted, because I spent a lot of time on the requested changes, and had a 
+problem with how to store properly the server key
 
 ## Luke
 
@@ -21,3 +22,5 @@ This week I finish implementing Dagger Hilt in our code base. It took me two wee
 I need to get more used to the error reporting of the Hilt framework, and also to add more tests
 
 ## Overall Team
+This sprint we work well and we did 2 stand up meeting, the only problem is as it is the end of the 
+semester we have lot of work and it can be difficult to mananage the time between all deadlines
