@@ -39,12 +39,14 @@ class CommentsUITest {
     fun userCanClickOnCommentsButton() {
         onView(withId(R.id.comments_edit_text))
             .perform(replaceText("Hello! this is a question"))
+        onView(withId(R.id.comments_edit_text)).check(matches((withText("Hello! this is a question"))));
     }
 
     @Test
     fun userCanClickOnSend() {
         onView(withId(R.id.comments_edit_text))
             .perform(replaceText("Hello! this is a question"))
+        onView(withId(R.id.comments_edit_text)).check(matches((withText("Hello! this is a question"))));
         onView(withId(R.id.comments_send_button))
             .perform(click())
     }
