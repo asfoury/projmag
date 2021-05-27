@@ -14,4 +14,3 @@ exclude_patterns:
   - "**/test/"
   - "**/androidTest/"
   - "**test"
-  - "**/di/" # Exclude Hilt modules (Dependency Injections)
