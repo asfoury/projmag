@@ -42,7 +42,7 @@ class CVCreationActivity : AppCompatActivity() {
     override fun onBackPressed() { /* DO NOTHING TO AVOID LOOSING WORK */
     }
 
-    fun buildCV() = cvFrags.buildCV()
+    private fun buildCV() = cvFrags.buildCV()
 
     private fun onFinish() {
         val cv = buildCV()
