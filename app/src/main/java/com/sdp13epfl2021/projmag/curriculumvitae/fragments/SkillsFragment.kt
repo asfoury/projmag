@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.SkillDescription
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.SkillDescription.SkillLevel
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * A Fragment, where the user should input various skills
  */
+@AndroidEntryPoint
 class SkillsFragment : Fragment() {
 
     private val skillList: MutableList<SkillDescription> = mutableListOf()

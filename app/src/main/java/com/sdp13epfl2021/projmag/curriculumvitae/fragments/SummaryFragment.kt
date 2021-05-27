@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.sdp13epfl2021.projmag.R
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * A Fragment where the user should write a few sentence to introduce its CV,
  * a summary of its professional life.
  */
+@AndroidEntryPoint
 class SummaryFragment : Fragment() {
 
     private var content = ""

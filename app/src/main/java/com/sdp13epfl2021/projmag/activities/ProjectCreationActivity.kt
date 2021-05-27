@@ -24,12 +24,16 @@ import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 
 import com.sdp13epfl2021.projmag.database.ProjectUploader
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.Result
-import com.sdp13epfl2021.projmag.video.VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY
-import com.sdp13epfl2021.projmag.video.VideoSubtitlingActivity
 import com.sdp13epfl2021.projmag.video.VideoUtils
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Named
 
 
 const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.activities.FORM_TO_SUBTITLE_MESSAGE"
@@ -37,6 +41,7 @@ const val FORM_TO_SUBTITLE_MESSAGE = "com.sdp13epfl2021.projmag.activities.FORM_
 /**
  * Activity consisting of a form one can use to create and submit a project.
  */
+@AndroidEntryPoint
 class ProjectCreationActivity : AppCompatActivity() {
 
     companion object {
@@ -54,10 +59,25 @@ class ProjectCreationActivity : AppCompatActivity() {
     private var projectToEdit: ImmutableProject? = null
     private var changedVid = false
 
+    @Inject
+    lateinit var projectDB: ProjectDatabase
+
+    @Inject
+    lateinit var fileDB: FileDatabase
+
+    @Inject
+    lateinit var metadataDB: MetadataDatabase
+
+    @Inject
+    lateinit var candidatureDB: CandidatureDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userID: String
+
     //tag selection related variables
     private lateinit var tagRecyclerView: RecyclerView
 
-    //video related variables
     private var videoUri: Uri? = null
     private var subtitles: String? = null
     private var listTags: Array<String> = emptyArray()
@@ -233,9 +253,13 @@ class ProjectCreationActivity : AppCompatActivity() {
             name = getTextFromEditText(R.id.form_edit_text_project_name),
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
 
+
             authorId = Utils.getInstance(this).auth.currentUser?.uid
                 ?: "", //TODO change after Hilt is completely available
             authorToken = authorToken,
+
+
+            authorId = userID,
 
             teacher = getTextFromEditText(R.id.form_edit_text_teacher),
             TA = getTextFromEditText(R.id.form_edit_text_project_TA),
@@ -270,12 +294,11 @@ class ProjectCreationActivity : AppCompatActivity() {
      */
     private fun submit(view: View) {
         setSubmitButtonEnabled(false) // disable submit, as there is a long time uploading video
-        val utils = Utils.getInstance(this)
         ProjectUploader(
-            utils.projectDatabase,
-            utils.fileDatabase,
-            utils.metadataDatabase,
-            utils.candidatureDatabase,
+            projectDB,
+            fileDB,
+            metadataDB,
+            candidatureDB,
             ::showToast,
             { setSubmitButtonEnabled(true) },
             ::finishFromOtherThread
@@ -323,3 +346,5 @@ object FormHelper {
         subtitleButton.isEnabled = true
     }
 }
+
+

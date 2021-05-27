@@ -25,6 +25,7 @@
         android:theme="@style/Theme.Projmag">
 
 
+
         <service
             android:name=".notification.ProjectNotificatonService"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -34,6 +35,9 @@
             </intent-filter>
         </service>
 
+
+
+        <activity android:name=".activities.CommentsActivity"></activity>
 
         <activity android:name=".activities.CVDisplayActivity" />
         <activity android:name=".activities.ProfileDisplayActivity" />
@@ -55,7 +59,7 @@
             android:name=".activities.ProfileEditPageActivity"
             android:parentActivityName=".activities.ProjectsListActivity" />
         <activity
-            android:name=".video.VideoSubtitlingActivity"
+            android:name=".activities.VideoSubtitlingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

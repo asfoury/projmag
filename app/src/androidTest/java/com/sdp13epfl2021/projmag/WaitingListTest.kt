@@ -1,6 +1,5 @@
 package com.sdp13epfl2021.projmag
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
@@ -14,16 +13,19 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.google.firebase.auth.FirebaseAuth
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
 import com.sdp13epfl2021.projmag.adapter.CandidatureAdapter
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
-import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.fake.*
+import com.sdp13epfl2021.projmag.database.di.CandidatureDatabaseModule
+import com.sdp13epfl2021.projmag.database.fake.FakeCandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.*
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.hamcrest.Description
@@ -31,17 +33,17 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.hamcrest.TypeSafeMatcher
 import org.hamcrest.core.IsInstanceOf
-import org.junit.After
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito
+import org.junit.rules.RuleChain
+
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
+@UninstallModules(
+    CandidatureDatabaseModule::class
+)
+@HiltAndroidTest
 class WaitingListTest {
-
-    val auth: FirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
 
     val pid = "J890ghj34sdklv3245"
     val project = ImmutableProject(
@@ -78,10 +80,8 @@ class WaitingListTest {
     val cand3 = dummyCandidature(pid, uid3, Candidature.State.Rejected)
     val cand4 = dummyCandidature(pid, uid4, Candidature.State.Accepted)
 
-    val projectsDB = FakeProjectDatabase(listOf(project))
-    val userdataDB = FakeUserdataDatabase()
-    val fileDB = FakeFileDatabase()
-    val candidatureDB = FakeCandidatureDatabase(
+    @BindValue
+    val candidatureDB: CandidatureDatabase = FakeCandidatureDatabase(
         mapOf(
             pid to mapOf(
                 uid1 to Candidature.State.Waiting,
@@ -99,34 +99,22 @@ class WaitingListTest {
             )
         ).toMutableMap()
     )
-    val metadataDB = FakeMetadataDatabase()
-    val context: Context = ApplicationProvider.getApplicationContext()
-    val utils = Utils.getInstance(
-        context,
-        true,
-        auth,
-        userdataDB,
-        candidatureDB,
-        fileDB,
-        metadataDB,
-        projectsDB
-    )
+
 
     private fun getIntent(): Intent {
-        val intent = Intent(context, WaitingListActivity::class.java)
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), WaitingListActivity::class.java)
         intent.putExtra(MainActivity.projectIdString, pid)
         //scenario = ActivityScenario.launch(intent)
         return intent
     }
 
-    @get:Rule
+
     var activityScenarioRule = ActivityScenarioRule<WaitingListActivity>(getIntent())
 
-    @After
-    fun clean() {
-        //reset the Utils instance to default one
-        Utils.getInstance(context, true)
-    }
+    @get:Rule
+    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(activityScenarioRule)
 
     private fun dummyCandidature(
         projectId: ProjectId,

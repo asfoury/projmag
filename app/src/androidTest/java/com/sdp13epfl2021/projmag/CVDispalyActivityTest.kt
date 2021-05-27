@@ -71,8 +71,6 @@ class CVDispalyActivityTest {
         checkTextForView(R.id.cv_display_summary, cv.summary)
 
 
-        
-
     }
 
     private fun checkTextForView(viewId: Int, expectedText: String) {

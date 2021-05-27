@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.PeriodDescription
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * A Fragment requesting the user to give period of their activity (job, education,...)
  */
+@AndroidEntryPoint
 class PeriodFragment : Fragment() {
 
     private val listPeriod: MutableList<PeriodDescription> = mutableListOf()

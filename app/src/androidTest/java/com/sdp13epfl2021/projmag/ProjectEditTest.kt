@@ -7,14 +7,15 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.rules.RuleChain
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class ProjectEditTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
 
@@ -28,8 +29,13 @@ class ProjectEditTest {
         return intent
     }
 
-    @get:Rule
+
     var activityScenarioRule = ActivityScenarioRule<ProjectCreationActivity>(getIntent())
+
+    @get:Rule
+    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(activityScenarioRule)
+
 
     @Test
     fun changeName() {
