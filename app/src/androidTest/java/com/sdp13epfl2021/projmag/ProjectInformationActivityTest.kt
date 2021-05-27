@@ -233,8 +233,8 @@ class ProjectInformationActivityTest {
     @Test
     //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
-        var applyString: String = "APPLY"
-        var unapplyString: String = "UNAPPLY"
+        var applyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.apply_text)
+        var unapplyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.unaply_text)
 
         Thread.sleep(2000)
 

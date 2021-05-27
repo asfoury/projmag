@@ -47,8 +47,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 import com.google.common.io.Files
-
-
+import java.io.IOException
+import java.lang.IllegalArgumentException
 
 
 /**
@@ -408,8 +408,8 @@ class ProjectInformationActivity : AppCompatActivity() {
     /**
      * Function that downloads a video either in the proj dir permanent app memory if it's
      * a favorite or one of our own projects. Else, the video is stored in the cache dir which is a
-     * memory that is deleted by the phone if it needs it. This function calls a callback and will do
-     * nothing if the userDatabase or the projectDatabase didn't respond for some reason.
+     * memory that is deleted by the phone if it needs it. this function does nothing in the event
+     * of on failure being thrown by one of the user or project databases
      * @param videosLinks links of the videos to be downloaded
      */
     private fun handleVideo(videosLinks: List<String>){
@@ -472,10 +472,13 @@ class ProjectInformationActivity : AppCompatActivity() {
             val newFile = File(copyDirectory, fileName)
             try{
                 Files.move(file, newFile)
-            }catch(e: Exception){
-                
+            }catch(e: IllegalArgumentException){
+                //do nothing because this exeption is launched when the delete and copy directories
+                //are identical (so the video is already where it was asked to be)
             }
-
+            catch(e: IOException){
+                showToast("failed to move video", Toast.LENGTH_LONG)
+            }
         }
 
 
