@@ -19,7 +19,7 @@ import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.CommentsActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.database.ProjectChange
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.util.*
@@ -30,7 +30,7 @@ import kotlin.collections.ArrayList
  */
 class ProjectAdapter(
     private val activity: Activity,
-    private val utils: Utils,
+    projectDB: ProjectDatabase,
     private val recyclerView: RecyclerView,
     private val fromLink: Boolean,
     private var projectIdLink: String
@@ -66,7 +66,7 @@ class ProjectAdapter(
      * all projects from database.
      */
     init {
-        utils.projectDatabase.addProjectsChangeListener { change ->
+        projectDB.addProjectsChangeListener { change ->
             when (change.type) {
                 ProjectChange.Type.ADDED -> addProject(change.project)
                 ProjectChange.Type.MODIFIED -> addProject(change.project)
@@ -75,7 +75,7 @@ class ProjectAdapter(
             activity.runOnUiThread { notifyDataSetChanged() }
         }
 
-        utils.projectDatabase.getAllProjects({ it.forEach(this::addProject) }, {})
+        projectDB.getAllProjects({ it.forEach(this::addProject) }, {})
     }
 
     @Synchronized

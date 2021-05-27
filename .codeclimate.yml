@@ -11,6 +11,6 @@ checks:
       threshold: 250 # not number of lines, but mass threshold (see default analysis configuration)
 
 exclude_patterns:
-- "**/test/"
-- "**/androidTest/"
-- "**test"
+  - "**/test/"
+  - "**/androidTest/"
+  - "**test"

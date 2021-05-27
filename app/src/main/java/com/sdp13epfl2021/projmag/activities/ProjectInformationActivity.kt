@@ -26,13 +26,12 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -43,29 +42,43 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.collections.ArrayList
 
 /**
  * Activity displaying the information and media of a project and from which
  * one can apply to the project or send it using a deep link or QR code.
  */
+@AndroidEntryPoint
 class ProjectInformationActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var fileDB: FileDatabase
+
+    @Inject
+    lateinit var metadataDB: MetadataDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userId: String
+
+    @Inject
+    lateinit var userdataDatabase: UserdataDatabase
+
+    @Inject
+    lateinit var candidatureDatabase: CandidatureDatabase
 
     private lateinit var projectVar: ImmutableProject
-    private lateinit var fileDB: FileDatabase
-    private lateinit var metadataDB: MetadataDatabase
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
     private lateinit var favButton: Button
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
-    private var userId: String? = null
     private var alreadyApplied: Boolean = false
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
-    private lateinit var userdataDatabase: UserdataDatabase
-    private lateinit var candidatureDatabase: CandidatureDatabase
+
 
 
     @Synchronized
@@ -140,7 +153,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         if (alreadyApplied) {
             candidatureDatabase.removeCandidature(
                 projectId,
-                userId!!,
+                userId,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
@@ -156,7 +169,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         } else {
             candidatureDatabase.pushCandidature(
                 projectId,
-                userId!!,
+                userId,
                 Candidature.State.Waiting,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
@@ -175,9 +188,6 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val utils = Utils.getInstance(this)
-        userdataDatabase = utils.userdataDatabase
-        candidatureDatabase = utils.candidatureDatabase
         setButtonText(
             applyButton,
             null,
@@ -186,7 +196,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         )
         userdataDatabase.getListOfAppliedToProjects({ projectIds ->
             appliedProjectsIds.addAll(projectIds)
-            var alreadyApplied = projectIds.contains(projectId)
+            val alreadyApplied = projectIds.contains(projectId)
             setButtonText(
                 applyButton,
                 alreadyApplied,
@@ -202,7 +212,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 !alreadyApplied,
                 projectId,
                 {
-                    if (userId != null) {
+                    if (userId.isNotEmpty()) {
                         onApplyClick(applyButton, candidatureDatabase, projectId)
                     } else {
                         showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
@@ -287,12 +297,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
-        val utils = Utils.getInstance(this)
-        userId = utils.auth.currentUser?.uid
-        fileDB = utils.fileDatabase
-        metadataDB = utils.metadataDatabase
-        userdataDatabase = utils.userdataDatabase
-
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
         val lab = findViewById<TextView>(R.id.info_lab_name)
@@ -347,7 +351,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setUpApplyButton(findViewById<Button>(R.id.applyButton))
+        setUpApplyButton(findViewById(R.id.applyButton))
         setUpFavoritesButton()
     }
 

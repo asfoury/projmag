@@ -1,76 +1,58 @@
 package com.sdp13epfl2021.projmag
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import androidx.test.platform.app.InstrumentationRegistry
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.FormHelper
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
-import com.sdp13epfl2021.projmag.database.Utils
-import com.sdp13epfl2021.projmag.database.fake.FakeFileDatabase
-import com.sdp13epfl2021.projmag.database.fake.FakeMetadataDatabase
-import com.sdp13epfl2021.projmag.database.fake.FakeProjectDatabase
+import com.sdp13epfl2021.projmag.database.di.*
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
+import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.Success
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import junit.framework.TestCase.assertEquals
-import org.junit.After
+import junit.framework.TestCase.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.rules.RuleChain
 import org.mockito.Mockito
 import java.io.File
+import javax.inject.Named
 
-@RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
+@UninstallModules(
+        ProjectDatabaseModule::class,
+        FileDatabaseModule::class,
+        MetadataDatabaseModule::class,
+        CandidatureDatabaseModule::class,
+        UserIdModule::class
+)
 class ProjectCreationActivityTest {
 
-
-    val userId = "abc123"
-    private val projectDB = FakeProjectDatabase()
-    private val fileDB = FakeFileDatabase()
-    private val metadataDB = FakeMetadataDatabase()
-    private val mockAuth = Mockito.mock(FirebaseAuth::class.java)
-    private val mockUser = Mockito.mock(FirebaseUser::class.java)
-
-    private val context: Context = ApplicationProvider.getApplicationContext()
-
-    private fun getIntent(): Intent {
-        Mockito.`when`(mockAuth.currentUser).thenReturn(mockUser)
-        Mockito.`when`(mockUser.uid).thenReturn(userId)
-
-        Utils.getInstance(
-            context,
-            true,
-            auth = mockAuth,
-            projectDB = projectDB,
-            fileDB = fileDB,
-            metadataDB = metadataDB
-        )
-        return Intent(context, ProjectCreationActivity::class.java)
-    }
+    private var activityRule: ActivityScenarioRule<ProjectCreationActivity> =
+            ActivityScenarioRule(ProjectCreationActivity::class.java)
 
     @get:Rule
-    var activityRule: ActivityScenarioRule<ProjectCreationActivity> =
-        ActivityScenarioRule(getIntent())
+    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+            .around(activityRule)
 
-    @After
-    fun clean() {
-        Utils.getInstance(context, true)
-    }
 
-    private val newLab: String = "Lab Name"
-    private val newProjectName: String = "Project Name"
-    private val newTeacher: String = "Professor Name"
-    private val newTA: String = "TA Name"
-    private val newNbParticipant = 2
-    private val newDescription = """
+    private val description = """
                 Hannah Glasse (née Allgood; March 1708 – 1 September 1770) was an English cookery writer of the 18th century. Her first cookery book, The Art of Cookery Made Plain and Easy, published in 1747, became the best-selling recipe book that century. 
                 It was reprinted within its first year of publication, appeared in 20 editions in the 18th century, and continued to be published until well into the 19th century. 
                 She later wrote The Servants' Directory (1760) and The Compleat Confectioner, which was probably published in 1760; neither book was as commercially successful as her first.
@@ -83,83 +65,110 @@ class ProjectCreationActivityTest {
                 Much of Glasse's later life is unrecorded; information about her identity was lost until uncovered in 1938 by the historian Madeleine Hope Dodds.
             """.trimIndent()
 
+    private val project = (ImmutableProject.build(
+            id = "",
+            authorId = "authorId",
+            name = "Project1",
+            lab = "lab",
+            teacher = "teacher",
+            TA = "TA",
+            nbParticipant = 1,
+            assigned = listOf("student"),
+            masterProject = true,
+            bachelorProject = true,
+            tags = listOf(),
+            isTaken = false,
+            description = description,
+            videoURI = listOf()
+    ) as Success<ImmutableProject>).value
+
+
+    @BindValue
+    val projectDB: ProjectDatabase = Mockito.mock(ProjectDatabase::class.java)
+
+    @BindValue
+    val fileDB: FileDatabase = Mockito.mock(FileDatabase::class.java)
+
+    @BindValue
+    val metadataDB: MetadataDatabase = Mockito.mock(MetadataDatabase::class.java)
+
+    @BindValue
+    val candidatureDB: CandidatureDatabase = Mockito.mock(CandidatureDatabase::class.java)
+
+    @BindValue
+    @Named("currentUserId")
+    val userID: String = "uid"
+
+
+    private lateinit var instrumentationContext: Context
+
+    @Before
+    fun setup() {
+        instrumentationContext = InstrumentationRegistry.getInstrumentation().targetContext
+    }
+
     @Test
     fun writeAProjectToSubmit() {
+        Mockito.`when`(projectDB.pushProject(anyObject(), anyObject(), anyObject())).then {
+            val p = it.arguments[0] as ImmutableProject
+            assertEquals(project, p)
+        }
+
+        Mockito.`when`(candidatureDB.addListener(anyObject(), anyObject())).then {}
+
         // need to swipe down to make sure textFields are visible when running tests
         onView(withId(R.id.project_submission_scrollview))
             .perform(swipeDown())
 
-        Thread.sleep(1000)
+        Thread.sleep(2000)
 
         onView(withId(R.id.form_edit_text_laboratory))
-            .perform(scrollTo())
-            .perform(replaceText(newLab))
+                .perform(replaceText(project.lab))
 
         onView(withId(R.id.form_edit_text_project_name))
-            .perform(scrollTo())
-            .perform(replaceText(newProjectName))
+                .perform(replaceText(project.name))
 
         onView(withId(R.id.form_edit_text_teacher))
-            .perform(scrollTo())
-            .perform(replaceText(newTeacher))
+                .perform(replaceText(project.teacher))
 
         onView(withId(R.id.form_edit_text_project_TA))
-            .perform(scrollTo())
-            .perform(replaceText(newTA))
+                .perform(replaceText(project.TA))
 
         onView(withId(R.id.form_nb_of_participant))
-            .perform(scrollTo())
-            .perform(replaceText(newNbParticipant.toString()))
+                .perform(replaceText(project.nbParticipant.toString()))
 
         onView(withId(R.id.form_check_box_MP))
-            .perform(scrollTo())
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.form_check_box_SP))
-            .perform(scrollTo())
-            .perform(click())
+                .perform(click())
 
         onView(withId(R.id.form_project_description))
-            .perform(scrollTo())
-            .perform(
-                replaceText(newDescription)
-            )
-
-        onView(withId(R.id.form_button_sub))
-            .perform(scrollTo())
-            .perform(click())
-
-
-        Thread.sleep(2000)
-        assertEquals(1, projectDB.projects.size)
-        projectDB.projects[0].let {
-            assertEquals(newProjectName, it.name)
-            assertEquals(newLab, it.lab)
-            assertEquals(newTeacher, it.teacher)
-            assertEquals(newTA, it.TA)
-            assertEquals(newNbParticipant, it.nbParticipant)
-            assertEquals(newDescription, it.description)
-        }
+                .perform(
+                        replaceText(
+                                project.description
+                        )
+                )
     }
 
     @Test
     fun testFormHelperFunctions() {
-        val vidButton = Button(context)
-        val subButton = Button(context)
-        val mediaController = MediaController(context)
+        val vidButton = Button(instrumentationContext)
+        val subButton = Button(instrumentationContext)
+        val mediaController = MediaController(instrumentationContext)
         val fakeStringPath = Uri.fromFile(File("test"))
-        val vidView = VideoView(context)
+        val vidView = VideoView(instrumentationContext)
 
         FormHelper.playVideoFromLocalPath(
-            vidButton,
-            subButton,
-            vidView,
-            mediaController,
-            fakeStringPath
+                vidButton,
+                subButton,
+                vidView,
+                mediaController,
+                fakeStringPath
         )
-        assert(vidButton.isEnabled)
-        assert(subButton.isEnabled)
-        assert(vidButton.hasOnClickListeners())
-        assert(!vidView.isPlaying)
+        assertTrue(vidButton.isEnabled)
+        assertTrue(subButton.isEnabled)
+        assertTrue(vidButton.hasOnClickListeners())
+        assertTrue(!vidView.isPlaying)
     }
 }

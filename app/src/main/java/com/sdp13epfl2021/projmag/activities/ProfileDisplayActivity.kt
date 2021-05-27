@@ -15,13 +15,33 @@ class ProfileDisplayActivity : AppCompatActivity() {
 
         val profile: ImmutableProfile? = intent.getParcelableExtra(MainActivity.profile)
         profile?.let {
-            setTextView(R.id.profile_display_firstname, R.string.profile_display_firstname, it.firstName)
-            setTextView(R.id.profile_display_lastname, R.string.profile_display_lastname, it.lastName)
+            setTextView(
+                R.id.profile_display_firstname,
+                R.string.profile_display_firstname,
+                it.firstName
+            )
+            setTextView(
+                R.id.profile_display_lastname,
+                R.string.profile_display_lastname,
+                it.lastName
+            )
             setTextView(R.id.profile_display_age, R.string.profile_display_age, it.age.toString())
-            setTextView(R.id.profile_display_gender, R.string.profile_display_gender, it.gender.toString())
-            setTextView(R.id.profile_display_sciper, R.string.profile_display_sciper, it.sciper.toString())
+            setTextView(
+                R.id.profile_display_gender,
+                R.string.profile_display_gender,
+                it.gender.toString()
+            )
+            setTextView(
+                R.id.profile_display_sciper,
+                R.string.profile_display_sciper,
+                it.sciper.toString()
+            )
             setTextView(R.id.profile_display_phone, R.string.profile_display_phone, it.phoneNumber)
-            setTextView(R.id.profile_display_role, R.string.profile_display_role, it.role.toString())
+            setTextView(
+                R.id.profile_display_role,
+                R.string.profile_display_role,
+                it.role.toString()
+            )
         } ?: run {
             Toast.makeText(
                 this,

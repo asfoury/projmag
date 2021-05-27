@@ -179,9 +179,12 @@ class FirebaseUserdataDatabase @Inject constructor(
         return cvMap[fieldName] as List<Map<String, Any>>
     }
 
-    private fun convertToPeriodList(cvMap: Map<String, Any>, fieldName: String): List<CurriculumVitae.PeriodDescription> {
+    private fun convertToPeriodList(
+        cvMap: Map<String, Any>,
+        fieldName: String
+    ): List<CurriculumVitae.PeriodDescription> {
         return getListOfMap(cvMap, fieldName).map { map ->
-                CurriculumVitae.PeriodDescription(
+            CurriculumVitae.PeriodDescription(
                 name = map["name"] as String,
                 location = map["location"] as String,
                 description = map["description"] as String,
@@ -191,7 +194,10 @@ class FirebaseUserdataDatabase @Inject constructor(
         }
     }
 
-    private fun convertToLanguageList(cvMap: Map<String, Any>, fieldName: String): List<CurriculumVitae.Language> {
+    private fun convertToLanguageList(
+        cvMap: Map<String, Any>,
+        fieldName: String
+    ): List<CurriculumVitae.Language> {
         return getListOfMap(cvMap, fieldName).map { map ->
             CurriculumVitae.Language(
                 language = map["language"] as String,
@@ -200,7 +206,10 @@ class FirebaseUserdataDatabase @Inject constructor(
         }
     }
 
-    private fun convertToSkillList(cvMap: Map<String, Any>, fieldName: String): List<CurriculumVitae.SkillDescription> {
+    private fun convertToSkillList(
+        cvMap: Map<String, Any>,
+        fieldName: String
+    ): List<CurriculumVitae.SkillDescription> {
         return getListOfMap(cvMap, fieldName).map { map ->
             CurriculumVitae.SkillDescription(
                 name = map["name"] as String,

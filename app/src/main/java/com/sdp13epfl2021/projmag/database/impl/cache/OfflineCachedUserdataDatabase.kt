@@ -9,6 +9,7 @@ import com.sdp13epfl2021.projmag.database.saveToFile
 import com.sdp13epfl2021.projmag.model.ImmutableProfile
 import com.sdp13epfl2021.projmag.model.ProjectFilter
 import java.io.File
+import javax.inject.Inject
 
 
 /**
@@ -19,7 +20,7 @@ import java.io.File
  *
  * Favorites/Applied will not use `db` (expect push) because it is only for the local user use.
  */
-class OfflineCachedUserdataDatabase(
+class OfflineCachedUserdataDatabase @Inject constructor(
     private val db: UserdataDatabase,
     private val localUserID: String,
     private val usersRootDir: File
