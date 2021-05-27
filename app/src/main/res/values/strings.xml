@@ -162,6 +162,6 @@
     <string name="profile_display_profile_null">The profile is not valid</string>
     <string name="title_activity_maps">Map</string>
     <string name="add_location">add location</string>
-
+    <string name="mapsDoneButton">mapsDoneButton</string>
 
 </resources>

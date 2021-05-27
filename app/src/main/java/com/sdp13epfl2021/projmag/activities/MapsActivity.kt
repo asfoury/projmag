@@ -1,8 +1,10 @@
 package com.sdp13epfl2021.projmag.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -10,6 +12,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.CREATION_STRING
 import com.sdp13epfl2021.projmag.databinding.ActivityMapsBinding
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -47,5 +50,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setOnMapClickListener { latLng ->
             val newMarker = mMap.addMarker(MarkerOptions().position(latLng).title("New Marker"))
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_maps_activity, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.mapsDoneButton) {
+            val returnToActivity = intent.getStringExtra(ProjectCreationActivity.LOCATION_EXTRA)
+            val nextActivity =
+                if (returnToActivity == CREATION_STRING)
+                    ProjectCreationActivity::class.java
+                else
+                    ProjectInformationActivity::class.java
+            val newIntent = Intent(this, nextActivity)
+            startActivity(newIntent)
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

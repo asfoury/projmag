@@ -34,6 +34,8 @@ class ProjectCreationActivity : AppCompatActivity() {
         private const val REQUEST_TAG_ACCESS = 3
         private const val REQUEST_SELECTION_ACCESS = 4
         const val EDIT_EXTRA = "edit"
+        const val LOCATION_EXTRA = "location"
+        const val CREATION_STRING = "creation"
     }
 
     private var projectToEdit: ImmutableProject? = null
@@ -63,7 +65,9 @@ class ProjectCreationActivity : AppCompatActivity() {
     private fun setUpButtons() {
         val addLocationButton: ImageButton = findViewById(R.id.add_location)
         addLocationButton.setOnClickListener {
-            startActivity(Intent(this, MapsActivity::class.java))
+            val locationIntent = Intent(this, MapsActivity::class.java)
+            locationIntent.putExtra(LOCATION_EXTRA, CREATION_STRING)
+            startActivity(locationIntent)
         }
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addTagButton: Button = findViewById(R.id.addTagsButton)
