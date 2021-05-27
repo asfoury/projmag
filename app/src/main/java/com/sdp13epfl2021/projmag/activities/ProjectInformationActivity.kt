@@ -463,7 +463,6 @@ class ProjectInformationActivity : AppCompatActivity() {
      * @param fileUrl url of the file to be moved
      * @param deleteDirectory directory from which it has to be moved
      * @param copyDirectory directory in which it is moved to
-     * @return true if move was a success or there was no need to move, false else
      */
     private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
         val fileName = fileDB.getFileName(fileUrl)
