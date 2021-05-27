@@ -12,7 +12,9 @@ problem with how to store properly the server key
 
 
 ## Arnaud
-
+This week I added two activities, one that display a cv and the other one for a profile.  
+I also fix a problem I had with the firebase implementation of getCv.  
+It took me a little more time than expected because of that problem.  
 
 ## Kaourintin
 
