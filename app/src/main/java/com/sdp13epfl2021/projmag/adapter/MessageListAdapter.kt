@@ -31,7 +31,7 @@ class MessageListAdapter( private val context : Context,  private val messages :
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = messages[position]
         holder.messageTextView.text = message.messageContent
-        holder.messageDate.text = message.createdAt.toString()
+        holder.messageDate.text = Date(message.createdAt).toString()
         holder.messageSender.text = message.sender.firstName
 
     }
