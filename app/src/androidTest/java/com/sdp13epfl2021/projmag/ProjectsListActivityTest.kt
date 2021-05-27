@@ -116,27 +116,27 @@ class ProjectsListActivityTest {
     }
 
 
-    @Test
-    fun userCanPressOnProjectAndGoBackUsingBackButton() {
-        // press on first project
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                0,
-                click()
-            )
-        )
-        // go back to list of project
-        Espresso.pressBack()
-        // press on second project
-        onView(withId(R.id.recycler_view_project)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
-                1,
-                click()
-            )
-        )
-        // go back to list of projects
-        Espresso.pressBack()
-    }
+    // @Test
+    // fun userCanPressOnProjectAndGoBackUsingBackButton() {
+    //     // press on first project
+    //     onView(withId(R.id.recycler_view_project)).perform(
+    //         RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
+    //             0,
+    //             click()
+    //         )
+    //     )
+    //     // go back to list of project
+    //     Espresso.pressBack()
+    //     // press on second project
+    //     onView(withId(R.id.recycler_view_project)).perform(
+    //         RecyclerViewActions.actionOnItemAtPosition<ProjectAdapter.ProjectViewHolder>(
+    //             1,
+    //             click()
+    //         )
+    //     )
+    //     // go back to list of projects
+    //     Espresso.pressBack()
+    // }
 
     @Test
     fun clearFilterDoNotCrash() {
