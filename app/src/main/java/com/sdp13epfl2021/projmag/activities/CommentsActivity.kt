@@ -19,6 +19,6 @@ class CommentsActivity : AppCompatActivity() {
         val comments = MessagesDatasource().loadMessages()
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_comments)
         recyclerView.adapter = MessageListAdapter(this, comments)
-        recyclerView.setHasFixedSize(true)
+        recyclerView.setHasFixedSize(false)
     }
 }
