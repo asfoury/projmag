@@ -23,6 +23,7 @@ import org.junit.rules.RuleChain
 import org.mockito.Mockito
 import javax.inject.Named
 
+
 @UninstallModules(
     ProjectDatabaseModule::class,
     UserdataDatabaseModule::class,
@@ -90,5 +91,7 @@ class MainActivityTest {
         }
         Mockito.`when`(mockTask.addOnFailureListener(anyObject())).thenReturn(mockTask)
         Mockito.`when`(firebaseDynLinks.getDynamicLink(anyObject<Intent>())).thenReturn(mockTask)
+
+        Thread.sleep(5000) // wait for activity to start
     }
 }
