@@ -9,7 +9,7 @@ This week I finish my task Notification this take me more time then expeted, bec
 problem with how to store properly the server key
 
 ## Luke
-
+This week I spent about 1 hours finishing up the testing of my PR from last week (editing existing projects). Arnaud helped me very much with this. I then spent a lot of time reviewing various PRs as well as working on adding a map to the application. I am in the process of adding a map to the project creation and project information activities. When starting though, I spent a lot of time watching videos and reading documentation about how to do this. I had a problem with the google cloud API key but was able to fix this relatively quickly. I am overall quite happy with my work this week, and feel that each task took a reasonable amount of time. I spent an overall 10 hours on the project this week.
 
 ## Arnaud
 This week I added two activities, one that display a cv and the other one for a profile.  
