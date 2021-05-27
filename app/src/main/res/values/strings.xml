@@ -139,9 +139,9 @@
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
     <string name="failed">failed</string>
-    
+
     <string name="edit_button">editButton</string>
-    
+
     <string name="cv_display_cv_null">The cv is null.</string>
     <string name="cv_display_title">CurriculumVitae</string>
     <string name="cv_display_summary">Summary\n%s</string>
@@ -160,6 +160,8 @@
     <string name="profile_display_phone">Phone : %s</string>
     <string name="profile_display_role">Role : %s</string>
     <string name="profile_display_profile_null">The profile is not valid</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="add_location">add location</string>
 
 
 </resources>

@@ -61,6 +61,10 @@ class ProjectCreationActivity : AppCompatActivity() {
     }
 
     private fun setUpButtons() {
+        val addLocationButton: ImageButton = findViewById(R.id.add_location)
+        addLocationButton.setOnClickListener {
+            startActivity(Intent(this, MapsActivity::class.java))
+        }
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addTagButton: Button = findViewById(R.id.addTagsButton)
         val addSectionButton: Button = findViewById(R.id.addSectionButton)
