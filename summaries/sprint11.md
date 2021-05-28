@@ -25,4 +25,4 @@ I need to get more used to the error reporting of the Hilt framework, and also t
 
 ## Overall Team
 This sprint we work well and we did 2 stand up meeting, the only problem is as it is the end of the 
-semester we have lot of work and it can be difficult to mananage the time between all deadlines
+semester we have lot of work and it can be difficult to manage the time between all deadlines
