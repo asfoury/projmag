@@ -17,7 +17,7 @@ I also fix a problem I had with the firebase implementation of getCv.
 It took me a little more time than expected because of that problem.  
 
 ## Kaourintin
-
+I had a lot of trouble running the AR video camera on computer and designing tests, I took a lot of time learning about hilt and I didn’t succeed in doing anything concrete this week  for one small PR
 
 ## Paul
 This week I finish implementing Dagger Hilt in our code base. It took me two weeks to do this, but it seems that it was worth it, as all the testing and access to our services are cleaner and easier now. This should have been achieved earlier as we would have been far more productive.
