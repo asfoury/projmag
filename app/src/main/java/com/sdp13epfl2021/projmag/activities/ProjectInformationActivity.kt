@@ -90,8 +90,6 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var alreadyApplied: Boolean = false
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
 
-    private lateinit var userdataDatabase: UserdataDatabase
-    private lateinit var candidatureDatabase: CandidatureDatabase
     private val title : String = "New Application"
     private val msgNotification : String = "A student has applied to your project:"
     private val sharedPrefString:String = "sharedPref"
@@ -336,11 +334,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
         ProjectNotificatonService.sharedPref = getSharedPreferences(sharedPrefString, Context.MODE_PRIVATE)
-        val utils = Utils.getInstance(this)
-        userId = utils.auth.currentUser?.uid
-        fileDB = utils.fileDatabase
-        metadataDB = utils.metadataDatabase
-        userdataDatabase = utils.userdataDatabase
+
 
 
         // get all the text views that will be set
