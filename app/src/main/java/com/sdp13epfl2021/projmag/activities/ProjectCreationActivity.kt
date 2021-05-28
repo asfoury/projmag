@@ -254,8 +254,7 @@ class ProjectCreationActivity : AppCompatActivity() {
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
 
 
-            authorId = Utils.getInstance(this).auth.currentUser?.uid
-                ?: "", //TODO change after Hilt is completely available
+            authorId = userID,
             authorToken = authorToken,
 
 
