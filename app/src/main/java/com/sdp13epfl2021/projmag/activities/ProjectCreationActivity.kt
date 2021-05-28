@@ -259,7 +259,7 @@ class ProjectCreationActivity : AppCompatActivity() {
             authorToken = authorToken,
 
 
-            authorId = userID,
+           
 
             teacher = getTextFromEditText(R.id.form_edit_text_teacher),
             TA = getTextFromEditText(R.id.form_edit_text_project_TA),
