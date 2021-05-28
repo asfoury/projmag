@@ -2,7 +2,7 @@
 
 
 ## Mohamed 
-
+This sprint I had two tasks the first was to implement the UI for the comment section and the second, to connect it to firebase, I ended up working 8 hours on the UI of the comment section because it was quite complex. It took multiple tries to get right.  
 
 ## Giovanni (Scrum Master)
 This week I finish my task Notification this take me more time then expeted, because I spent a lot of time on the requested changes, and had a 
