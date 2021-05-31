@@ -12,6 +12,7 @@
 /.idea/gradle.xml
 /.idea/*
 /app/src/main/java/com/sdp13epfl2021/projmag/notification/Constant.kt
+/app/src/main/java/com/sdp13epfl2021/projmag/notification/Cons.kt
 .DS_Store
 /build
 /captures

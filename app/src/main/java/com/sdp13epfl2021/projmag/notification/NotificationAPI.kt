@@ -2,6 +2,8 @@ package com.sdp13epfl2021.projmag.notification
 
 
 
+import com.sdp13epfl2021.projmag.notification.Cons.Companion.CONTENT_TYPE
+import com.sdp13epfl2021.projmag.notification.Cons.Companion.SERVER_KEY
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
