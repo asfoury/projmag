@@ -10,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
+import java.lang.IllegalArgumentException
 import java.util.*
 
 /**
@@ -134,8 +135,14 @@ class FirebaseFileDatabase(
             .addOnFailureListener(onFailure)
     }
 
-    override fun getFileName(fileUrl: String): String {
-        return storage.getReferenceFromUrl(fileUrl).name
+    override fun getFileName(fileUrl: String): String? {
+
+        try{
+            return storage.getReferenceFromUrl(fileUrl).name
+        }
+        catch(e : IllegalArgumentException){
+            return null
+        }
     }
 
 }
