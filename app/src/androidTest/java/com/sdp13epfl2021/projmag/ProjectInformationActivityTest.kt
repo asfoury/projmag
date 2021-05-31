@@ -16,29 +16,39 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.di.*
 import com.sdp13epfl2021.projmag.database.fake.*
+import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito
+import org.junit.rules.RuleChain
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import javax.inject.Named
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
+@UninstallModules(
+    ProjectDatabaseModule::class,
+    UserdataDatabaseModule::class,
+    MetadataDatabaseModule::class,
+    CandidatureDatabaseModule::class,
+    FileDatabaseModule::class,
+    UserIdModule::class
+)
+@HiltAndroidTest
 class ProjectInformationActivityTest {
 
     private val epflUrl =
@@ -56,7 +66,11 @@ class ProjectInformationActivityTest {
         "https://firebasestorage.googleapis.com/v0/b/projmag.appspot.com/o/users%2FFakeUserFolderForTestingOnly%2Fea77c6b0-0f93-4b25-80ae-808fc6d70c78_empty.jpeg?alt=media&token=11762a74-a0b9-4ba8-aed3-e82fb981dab0"
 
     private val pid = "fakeProjectIdDoNotUse"
-    private val userID = "fakeUserID"
+
+    @BindValue
+    @Named("currentUserId")
+    val userID = "fakeUserID"
+
     private val project = ImmutableProject(
         pid,
         "A simple project for test (with a video)",
@@ -65,7 +79,7 @@ class ProjectInformationActivityTest {
         "Teacher5",
         "TA5",
         3,
-        listOf<String>(),
+        listOf(),
         false,
         true,
         listOf("Low Level", "Networking", "Driver"),
@@ -98,9 +112,15 @@ class ProjectInformationActivityTest {
     private val imageSOFile: File = Files.createTempFile("SO", ".png").toFile()
     private val emptyFile: File = Files.createTempFile("empty", ".jpeg").toFile()
 
-    private val projectsDB = FakeProjectDatabase(listOf(project))
-    private val userdataDB = FakeUserdataDatabase()
-    private val fileDB = FakeFileDatabase(
+
+    @BindValue
+    val projectsDB: ProjectDatabase = FakeProjectDatabase(listOf(project))
+
+    @BindValue
+    val userdataDB: UserdataDatabase = FakeUserdataDatabase()
+
+    @BindValue
+    val fileDB: FileDatabase = FakeFileDatabase(
         mapOf(
             snkUrl to videoSNKFile,
             epflUrl to videoEPFLFile,
@@ -110,33 +130,17 @@ class ProjectInformationActivityTest {
         )
     )
 
-    private val auth: FirebaseAuth = Mockito.mock(FirebaseAuth::class.java)
-    private val user: FirebaseUser = Mockito.mock(FirebaseUser::class.java)
+    @BindValue
+    val candidatureDB: CandidatureDatabase = FakeCandidatureDatabase()
 
-    private val candidatureDB = FakeCandidatureDatabase()
-    private val metadataDB = FakeMetadataDatabase()
+    @BindValue
+    val metadataDB: MetadataDatabase = FakeMetadataDatabase()
+
     private val context: Context = ApplicationProvider.getApplicationContext()
-    private val utils = Utils.getInstance(
-        context,
-        true,
-        auth,
-        userdataDB,
-        candidatureDB,
-        fileDB,
-        metadataDB,
-        projectsDB
-    )
 
     private fun getIntent(): Intent {
         val intent = Intent(context, ProjectInformationActivity::class.java)
         intent.putExtra(MainActivity.projectString, project)
-
-        Mockito
-            .`when`(auth.currentUser)
-            .thenReturn(user)
-        Mockito
-            .`when`(user.uid)
-            .thenReturn(userID)
 
         Files.copy(inputStreamSNK, videoSNKFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamEPFL, videoEPFLFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
@@ -147,9 +151,11 @@ class ProjectInformationActivityTest {
         return intent
     }
 
-    @get:Rule
     var activityScenarioRule = ActivityScenarioRule<ProjectInformationActivity>(getIntent())
 
+    @get:Rule
+    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(activityScenarioRule)
 
 
     @After
@@ -159,7 +165,6 @@ class ProjectInformationActivityTest {
         imageArchFile.delete()
         imageSOFile.delete()
         emptyFile.delete()
-        Utils.getInstance(context, true)
     }
 
     //it should play the first video, continue with next, play prev, play next, pause
@@ -182,8 +187,6 @@ class ProjectInformationActivityTest {
         Thread.sleep(1000)
         video.perform(click())
         Thread.sleep(1000)
-        assertTrue(videoView.isPlaying)
-        Thread.sleep(8000)
         assertTrue(videoView.isPlaying)
 
         /*val prevButton = onView(

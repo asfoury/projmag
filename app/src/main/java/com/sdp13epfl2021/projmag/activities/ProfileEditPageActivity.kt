@@ -10,14 +10,26 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.*
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Activity in which one can create their profile by filling in fields
  * such as names, age, sciper, etc...
  */
+@AndroidEntryPoint
 class ProfileEditPageActivity : AppCompatActivity() {
+
+
+    @Inject
+    lateinit var userdataDatabase: UserdataDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userID: String
 
     lateinit var imageView: ImageView
     private val pickImage = 0
@@ -27,20 +39,24 @@ class ProfileEditPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile_page)
-        val utils = Utils.getInstance(this)
-        val userdataDatabase = utils.userdataDatabase
-        val userID = utils.auth.currentUser?.uid ?: "localID" //TODO remove after DI
+
 
         if (UserTypeChoice.isProfessor) {
             findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
             //buttonAddCv.setVisibility(View.INVISIBLE)
         }
 
-        userdataDatabase.getProfile(userID, ::loadUserProfile) { showToast(getString(R.string.profile_loading_failed)) }
+        userdataDatabase.getProfile(
+            userID,
+            ::loadUserProfile
+        ) { showToast(getString(R.string.profile_loading_failed)) }
 
         findViewById<Button>(R.id.button_show_cv).setOnClickListener {
             userdataDatabase.getCv(userID, { cv ->
-                startActivityAndFinish(CVDisplayActivity::class.java, Pair(MainActivity.cv, cv as Parcelable?))
+                startActivityAndFinish(
+                    CVDisplayActivity::class.java,
+                    Pair(MainActivity.cv, cv as Parcelable?)
+                )
             }, { showToast(getString(R.string.cv_loading_failed)) })
         }
 
@@ -75,7 +91,10 @@ class ProfileEditPageActivity : AppCompatActivity() {
      * @param cls Class of the activity to start.
      * @param extra an optional pair of name and parcelable data.
      */
-    private fun <T> startActivityAndFinish(cls: Class<T>, extra: Pair<String, Parcelable?>? = null) {
+    private fun <T> startActivityAndFinish(
+        cls: Class<T>,
+        extra: Pair<String, Parcelable?>? = null
+    ) {
         val intent = Intent(this, cls)
         extra?.let {
             intent.putExtra(extra.first, extra.second)

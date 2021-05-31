@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Language
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.Language.Level
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * A Fragment requesting the user to input its spoken language along the respective level at it
  */
+@AndroidEntryPoint
 class LanguagesFragment : Fragment() {
 
     private val listLanguage: MutableList<Language> = mutableListOf()

@@ -40,7 +40,7 @@ data class ProjectFilter(
                 bachelor = data["bachelor"] as? Boolean ?: false,
                 master = data["master"] as? Boolean ?: false,
                 applied = data["applied"] as? Boolean ?: false,
-                favorite = data["favorites"] as? Boolean ?: false,
+                favorite = data["favorite"] as? Boolean ?: false,
                 own = data["own"] as? Boolean ?: false
             )
 
@@ -51,8 +51,10 @@ data class ProjectFilter(
      */
     @Transient
     private var isAppliedProject: ((ImmutableProject) -> Boolean)? = null
+
     @Transient
     private var isFavoriteProject: ((ImmutableProject) -> Boolean)? = null
+
     @Transient
     private var isOwnProject: ((ImmutableProject) -> Boolean)? = null
 

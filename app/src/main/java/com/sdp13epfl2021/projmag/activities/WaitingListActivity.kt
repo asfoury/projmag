@@ -8,13 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.CandidatureAdapter
-import com.sdp13epfl2021.projmag.database.Utils
+import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * Activity which displays a list of those who have applied to a project submitted
  * by the user.
  */
+@AndroidEntryPoint
 class WaitingListActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var candidatureDB: CandidatureDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_waiting_list)
@@ -23,7 +30,7 @@ class WaitingListActivity : AppCompatActivity() {
         val projectId = intent.getStringExtra(MainActivity.projectIdString)
 
         projectId?.let {
-            val waitingCVAdapter = CandidatureAdapter(this, Utils.getInstance(this), projectId)
+            val waitingCVAdapter = CandidatureAdapter(this, candidatureDB, projectId)
             waitingListView.adapter = waitingCVAdapter
             waitingListView.layoutManager = LinearLayoutManager(this)
             waitingListView.setHasFixedSize(false)

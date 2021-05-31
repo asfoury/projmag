@@ -139,9 +139,15 @@
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
     <string name="failed">failed</string>
+    <string name="enter_comment">Enter Comment</string>
+    <string name="send_comment_icon">send_comment_icon</string>
+    <string name="march_11">March 11</string>
+    <string name="john_doe">John Doe</string>
+    <string name="hello_how_are_you">Hello! How are you?</string>
+    <string name="_1_00">1:00</string>
     
     <string name="edit_button">editButton</string>
-    
+
     <string name="cv_display_cv_null">The cv is null.</string>
     <string name="cv_display_title">CurriculumVitae</string>
     <string name="cv_display_summary">Summary\n%s</string>

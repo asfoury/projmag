@@ -27,13 +27,12 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
-import com.sdp13epfl2021.projmag.database.Utils
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.video.VideoUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,6 +43,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.collections.ArrayList
 
 import com.google.common.io.Files
@@ -55,24 +56,37 @@ import java.lang.IllegalArgumentException
  * Activity displaying the information and media of a project and from which
  * one can apply to the project or send it using a deep link or QR code.
  */
+@AndroidEntryPoint
 class ProjectInformationActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var fileDB: FileDatabase
+
+    @Inject
+    lateinit var metadataDB: MetadataDatabase
+
+    @Inject
+    @Named("currentUserId")
+    lateinit var userId: String
+
+    @Inject
+    lateinit var userdataDatabase: UserdataDatabase
+
+    @Inject
+    lateinit var projectDatabase: ProjectDatabase
+
+    @Inject
+    lateinit var candidatureDatabase: CandidatureDatabase
 
     private lateinit var projectVar: ImmutableProject
-    private lateinit var fileDB: FileDatabase
-    private lateinit var metadataDB: MetadataDatabase
     private lateinit var videoView: VideoView
     private lateinit var descriptionView: TextView
     private lateinit var projectDir: File
     private lateinit var favButton: Button
     private val videosUris: MutableList<Pair<Uri, String?>> = ArrayList()
     private var current: Int = -1
-    private var userId: String? = null
     private var alreadyApplied: Boolean = false
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
-    private lateinit var userdataDatabase: UserdataDatabase
-    private lateinit var candidatureDatabase: CandidatureDatabase
-    private lateinit var projectDatabase: ProjectDatabase
 
 
     @Synchronized
@@ -147,7 +161,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         if (alreadyApplied) {
             candidatureDatabase.removeCandidature(
                 projectId,
-                userId!!,
+                userId,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
                     alreadyApplied = !alreadyApplied
@@ -163,7 +177,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         } else {
             candidatureDatabase.pushCandidature(
                 projectId,
-                userId!!,
+                userId,
                 Candidature.State.Waiting,
                 {
                     showToast(getString(R.string.success), Toast.LENGTH_SHORT)
@@ -182,9 +196,6 @@ class ProjectInformationActivity : AppCompatActivity() {
 
     private fun setUpApplyButton(applyButton: Button) {
         val projectId = projectVar.id
-        val utils = Utils.getInstance(this)
-        userdataDatabase = utils.userdataDatabase
-        candidatureDatabase = utils.candidatureDatabase
         setButtonText(
             applyButton,
             null,
@@ -209,7 +220,7 @@ class ProjectInformationActivity : AppCompatActivity() {
                 !alreadyApplied,
                 projectId,
                 {
-                    if (userId != null) {
+                    if (userId.isNotEmpty()) {
                         onApplyClick(applyButton, candidatureDatabase, projectId)
                     } else {
                         showToast(getString(R.string.failure), Toast.LENGTH_SHORT)
@@ -294,13 +305,6 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
-        //initialize all the necessary databases
-        val utils = Utils.getInstance(this)
-        userId = utils.auth.currentUser?.uid
-        fileDB = utils.fileDatabase
-        metadataDB = utils.metadataDatabase
-        userdataDatabase = utils.userdataDatabase
-        projectDatabase = utils.projectDatabase
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
@@ -357,7 +361,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setUpApplyButton(findViewById<Button>(R.id.applyButton))
+        setUpApplyButton(findViewById(R.id.applyButton))
         setUpFavoritesButton()
     }
 
@@ -412,28 +416,32 @@ class ProjectInformationActivity : AppCompatActivity() {
      * of on failure being thrown by one of the user or project databases
      * @param videosLinks links of the videos to be downloaded
      */
-    private fun handleVideo(videosLinks: List<String>){
-        //TODO : change the firebase Auth get instance to hilt dependency injection when possible
+    private fun handleVideo(videosLinks: List<String>) {
         //get the favorite list, the applied To list and the own projects list
         userdataDatabase.getListOfFavoriteProjects({ favorites ->
-            projectDatabase.getAllProjects({projects ->
+            projectDatabase.getAllProjects({ projects ->
                 addVideoDownload(videosLinks, favorites.contains(projectVar.id),
-            projects.filter { project -> project.authorId == FirebaseAuth.getInstance().uid })},
+                    projects.filter { project -> project.authorId == userId })
+            },
                 {})
 
-        },{
+        }, {
 
         })
     }
 
     // download all videos and add them to the video player
-    private fun addVideoDownload(videosLinks: List<String>, isFavorite : Boolean, ownProjects: List<ImmutableProject> ) {
+    private fun addVideoDownload(
+        videosLinks: List<String>,
+        isFavorite: Boolean,
+        ownProjects: List<ImmutableProject>
+    ) {
 
         videosLinks.forEach { link ->
-            if(isFavorite || ownProjects.any {project -> project.id == projectVar.id}){//storing the video in the permanent memory
+            if (isFavorite || ownProjects.any { project -> project.id == projectVar.id }) {//storing the video in the permanent memory
                 movingVideo(link, cacheDir, projectDir)
                 storingVideo(link, projectDir)
-            }else {
+            } else {
                 movingVideo(link, projectDir, cacheDir)//storing
                 storingVideo(link, cacheDir)
             }
@@ -464,26 +472,23 @@ class ProjectInformationActivity : AppCompatActivity() {
      * @param deleteDirectory directory from which it has to be moved
      * @param copyDirectory directory in which it is moved to
      */
-    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File){
+    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File) {
         val fileName = fileDB.getFileName(fileUrl)
         val file = File(deleteDirectory, fileName)
-        if(file.exists()){
+        if (file.exists()) {
             val newFile = File(copyDirectory, fileName)
-            try{
+            try {
                 Files.move(file, newFile)
-            }catch(e: IllegalArgumentException){
+            } catch (e: IllegalArgumentException) {
                 //do nothing because this exeption is launched when the delete and copy directories
                 //are identical (so the video is already where it was asked to be)
-            }
-            catch(e: IOException){
+            } catch (e: IOException) {
                 showToast("failed to move video", Toast.LENGTH_LONG)
             }
         }
 
 
     }
-
-
 
 
     private fun setupDescriptionWithHTML(cleanDescription: String) {

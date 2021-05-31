@@ -6,14 +6,25 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.VIDEO_SUBTITLING_ACTIVITY_RESULT_KEY
+import com.sdp13epfl2021.projmag.activities.VideoSubtitlingActivity
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(AndroidJUnit4::class)
 class VideoSubtitlingActivityTest {
+
     @get:Rule
     var activityRule = ActivityScenarioRule(VideoSubtitlingActivity::class.java)
+
 
     val subtitlesText = "some text for subtitles"
     val defaultTimestampText = "00:00:00.000"
