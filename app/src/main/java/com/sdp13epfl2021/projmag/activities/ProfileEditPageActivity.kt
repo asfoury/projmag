@@ -137,12 +137,7 @@ class ProfileEditPageActivity : AppCompatActivity() {
         val firstName = findViewById<EditText>(R.id.profile_firstname).text.toString()
         val lastName = findViewById<EditText>(R.id.profile_lastname).text.toString()
         val age = findViewById<EditText>(R.id.profile_age).text.toString()
-
-        val gender = when (findViewById<EditText>(R.id.profile_genre).text.toString()) {
-            Gender.MALE.name -> Gender.MALE
-            Gender.FEMALE.name -> Gender.FEMALE
-            else -> Gender.OTHER
-        }
+        val gender = Gender.enumOf(genderSpinner.selectedItem as? String) ?: Gender.OTHER
         val phoneNumber = findViewById<EditText>(R.id.profile_phone_number).text.toString()
         val role = Role.STUDENT
         val sciper = findViewById<EditText>(R.id.profile_sciper).text.toString()
