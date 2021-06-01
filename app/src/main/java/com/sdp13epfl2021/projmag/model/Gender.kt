@@ -23,6 +23,13 @@ enum class Gender {
     };
 
     companion object {
+        /**
+         * Return the Gender corresponding to the given string.
+         * It is not case sensitive, and will return null if invalid.
+         *
+         * @param s the string to convert.
+         * @return the Gender that correspond to the given string.
+         */
         fun enumOf(s: String?): Gender? {
             return when (s?.toUpperCase(Locale.getDefault())) {
                 MALE.name -> MALE
