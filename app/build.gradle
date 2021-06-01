@@ -4,6 +4,7 @@ plugins {
     id 'jacoco'
     id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
+    id 'com.google.secrets_gradle_plugin' version '0.4'
 }
 
 apply plugin: 'kotlin-kapt'
