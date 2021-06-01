@@ -166,6 +166,11 @@
     <string name="profile_display_phone">Phone : %s</string>
     <string name="profile_display_role">Role : %s</string>
     <string name="profile_display_profile_null">The profile is not valid</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 
 
 </resources>
