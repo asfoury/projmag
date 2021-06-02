@@ -1,15 +1,17 @@
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'jacoco'
     id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
-    id 'com.google.secrets_gradle_plugin' version '0.4'
+    //id 'com.google.secrets_gradle_plugin' version '0.4'
 }
 
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(rootProject.file("local.properties")))
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -23,6 +25,7 @@ android {
 
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "com.sdp13epfl2021.projmag.CustomTestRunner"
+        buildConfigField "String", "API_KEY",localProperties['SERVER_KEY_API']
     }
 
     buildTypes {
