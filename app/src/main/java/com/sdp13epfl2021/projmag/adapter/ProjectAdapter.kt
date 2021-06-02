@@ -142,6 +142,7 @@ class ProjectAdapter(
         holder.commentButton.setOnClickListener {
             val context = holder.view.context
             val intent = Intent(context, CommentsActivity::class.java)
+            intent.putExtra("projectId", project.id)
             context.startActivity(intent)
         }
 

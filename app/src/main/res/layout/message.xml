@@ -64,15 +64,4 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/text_gchat_timestamp_other"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/_1_00"
-        android:textColor="#C0C0C0"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/commen_card_view"
-        app:layout_constraintStart_toEndOf="@+id/commen_card_view" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
