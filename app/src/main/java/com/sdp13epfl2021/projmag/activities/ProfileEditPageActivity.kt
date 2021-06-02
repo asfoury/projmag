@@ -48,10 +48,10 @@ class ProfileEditPageActivity : AppCompatActivity() {
         }
 
         genderSpinner = findViewById(R.id.profile_gender_spinner)
-        genderSpinner.adapter = ArrayAdapter.createFromResource(
+        genderSpinner.adapter = ArrayAdapter(
             this,
-            R.array.gender_array,
-            R.layout.support_simple_spinner_dropdown_item
+            R.layout.support_simple_spinner_dropdown_item,
+            Gender.values()
         )
 
         userdataDatabase.getProfile(
@@ -137,7 +137,7 @@ class ProfileEditPageActivity : AppCompatActivity() {
         val firstName = findViewById<EditText>(R.id.profile_firstname).text.toString()
         val lastName = findViewById<EditText>(R.id.profile_lastname).text.toString()
         val age = findViewById<EditText>(R.id.profile_age).text.toString()
-        val gender = Gender.enumOf(genderSpinner.selectedItem as? String) ?: Gender.OTHER
+        val gender = genderSpinner.selectedItem as Gender
         val phoneNumber = findViewById<EditText>(R.id.profile_phone_number).text.toString()
         val role = Role.STUDENT
         val sciper = findViewById<EditText>(R.id.profile_sciper).text.toString()
