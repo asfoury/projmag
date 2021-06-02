@@ -9,28 +9,41 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
-import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
+import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.CVCreationActivity
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae
 import com.sdp13epfl2021.projmag.curriculumvitae.CurriculumVitae.*
+import com.sdp13epfl2021.projmag.database.di.UserdataDatabaseModule
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
+import dagger.hilt.android.testing.BindValue
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import junit.framework.TestCase.assertEquals
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import org.hamcrest.TypeSafeMatcher
-import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.rules.RuleChain
+import org.mockito.Mockito
 
 @LargeTest
-@RunWith(AndroidJUnit4::class)
+@UninstallModules(UserdataDatabaseModule::class)
+@HiltAndroidTest
 class CVCreationActivityTest {
 
-    @Rule
-    @JvmField
-    var mActivityTestRule = ActivityTestRule(CVCreationActivity::class.java)
+    private val scenarioRule = ActivityScenarioRule(CVCreationActivity::class.java)
+
+    @get:Rule
+    var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
+        .around(scenarioRule)
+
+    @BindValue
+    val mUserDB: UserdataDatabase = Mockito.mock(UserdataDatabase::class.java)
 
     private fun swipe(id: Int) {
         SystemClock.sleep(1000)
@@ -46,8 +59,19 @@ class CVCreationActivityTest {
         listOf(SkillDescription("skill", SkillDescription.SkillLevel.Basic))
     )
 
+    @Suppress("UNCHECKED_CAST")
     @Test
     fun cVCreationActivityTest() {
+        Mockito.`when`(mUserDB.pushCv(anyObject(), anyObject(), anyObject())).then {
+            val cv = it.arguments[0] as CurriculumVitae
+            val s = it.arguments[1] as Function0<Unit>
+            val f = it.arguments[2] as Function1<Exception, Unit>
+            assertEquals(exampleCV, cv)
+            // callbacks do not crash
+            s()
+            f(java.lang.Exception())
+        }
+
         swipe(R.id.cv_intro_title)
         val appCompatEditText = onView(
             allOf(
@@ -244,25 +268,7 @@ class CVCreationActivityTest {
 
         swipe(R.id.cv_skills_title)
 
-        val materialButton4 = onView(
-            allOf(
-                withId(R.id.cv_submission_button), withText("Submit"),
-                childAtPosition(
-                    childAtPosition(
-                        withClassName(`is`("android.widget.FrameLayout")),
-                        0
-                    ),
-                    1
-                ),
-                isDisplayed()
-            )
-        )
-
-        val cv = mActivityTestRule.activity.buildCV()
-
-        Assert.assertEquals(exampleCV, cv)
-
-        materialButton4.perform(click())
+        onView(withId(R.id.cv_submission_button)).perform(click())
     }
 
     @Test

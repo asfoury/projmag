@@ -28,7 +28,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -44,6 +43,7 @@
         <activity
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
+        <activity android:name=".activities.CommentsActivity"></activity>
         <activity android:name=".activities.CVDisplayActivity" />
         <activity android:name=".activities.ProfileDisplayActivity" />
         <activity android:name=".activities.OrientationActivity" />
@@ -63,7 +63,7 @@
             android:name=".activities.ProfileEditPageActivity"
             android:parentActivityName=".activities.ProjectsListActivity" />
         <activity
-            android:name=".video.VideoSubtitlingActivity"
+            android:name=".activities.VideoSubtitlingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity

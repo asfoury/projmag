@@ -8,12 +8,15 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.sdp13epfl2021.projmag.activities.ProjectsListActivity
 import com.sdp13epfl2021.projmag.activities.SignInActivity
 import com.sdp13epfl2021.projmag.activities.UserTypeChoice
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Named
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     companion object MainActivityCompanion {
         //These are used as name for extra in Intent
@@ -26,7 +29,12 @@ class MainActivity : AppCompatActivity() {
         const val sectionsList: String = "sectionsList" //Array string
     }
 
-    private lateinit var mAuth: FirebaseAuth
+    @Inject
+    @Named("currentUserId")
+    lateinit var userId: String
+
+    @Inject // TODO change with abstraction interface
+    lateinit var firebaseDynLink: FirebaseDynamicLinks
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +46,10 @@ class MainActivity : AppCompatActivity() {
                 true
             )
 
-        mAuth = FirebaseAuth.getInstance()
-        val user = mAuth.currentUser
-
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
          * Else send him to DashboardActivity*/
         Handler(Looper.getMainLooper()).postDelayed({
-            if (user != null) {
+            if (userId.isNotEmpty()) {
                 handleLink()
             } else {
                 goToSignIn()
@@ -66,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleLink() {
-        FirebaseDynamicLinks.getInstance().getDynamicLink(intent)
+        firebaseDynLink.getDynamicLink(intent)
             .addOnSuccessListener { pendingDynamicLinkData ->
                 var dynamicLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
@@ -87,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             }.addOnFailureListener {
                 Toast.makeText(applicationContext, getString(R.string.failure), Toast.LENGTH_LONG)
                     .show()
-                goToList({})
+                goToList {}
             }
     }
 }

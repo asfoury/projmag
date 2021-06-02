@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.sdp13epfl2021.projmag.R
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
  * A Fragment where the user can finish its CV by submitting it
  */
+@AndroidEntryPoint
 class SubmitFragment : Fragment() {
 
     private var callbacks: MutableList<() -> Unit> = mutableListOf()
