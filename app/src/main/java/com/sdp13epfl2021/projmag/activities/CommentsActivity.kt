@@ -1,12 +1,13 @@
 package com.sdp13epfl2021.projmag.activities
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.app.PendingIntent.getActivity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.MessageListAdapter
@@ -18,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.concurrent.thread
 
 @AndroidEntryPoint
 class CommentsActivity : AppCompatActivity() {
@@ -57,6 +57,7 @@ class CommentsActivity : AppCompatActivity() {
             this.comments = it
             recyclerView.adapter = MessageListAdapter(commentsDB,this, comments)
             recyclerView.setHasFixedSize(false)
+            recyclerView.scrollToPosition(this.comments.size - 1)
         }, {})
 
         commentsDB.addListener(projectId) { _: ProjectId, _: List<Message> ->
@@ -65,6 +66,7 @@ class CommentsActivity : AppCompatActivity() {
                     this.comments = it
                     recyclerView.adapter = MessageListAdapter(commentsDB,this, comments)
                     recyclerView.setHasFixedSize(false)
+                    recyclerView.scrollToPosition(this.comments.size - 1)
                 }, {})
             }
         }
