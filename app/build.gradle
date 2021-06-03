@@ -10,8 +10,7 @@ plugins {
 
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -25,18 +24,18 @@ android {
 
         //testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "com.sdp13epfl2021.projmag.CustomTestRunner"
-        buildConfigField "String", "API_KEY",localProperties['SERVER_KEY_API']
+
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_KEY",localProperties['SERVER_KEY_API']
+
         }
         debug {
             testCoverageEnabled true
-            buildConfigField "String", "API_KEY",localProperties['SERVER_KEY_API']
+
         }
     }
     compileOptions {
