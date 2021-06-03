@@ -4,27 +4,45 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.CREATION_STRING
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.LOCATION_EXTRA
 import com.sdp13epfl2021.projmag.databinding.ActivityMapsBinding
+import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.LATITUDE
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.LONGITUDE
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    companion object {
+        val PROJECT_EXTRA = "project"
+    }
+
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private var newMarker: Marker? = null
+    private var latitude: Double = Double.MAX_VALUE
+    private var longitude: Double = Double.MAX_VALUE
+    lateinit private var project: ImmutableProject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        project = intent.getParcelableExtra(PROJECT_EXTRA)!!
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Toast.makeText(this, "aslkdjfh", Toast.LENGTH_LONG)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -48,7 +66,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //mMap.addMarker(MarkerOptions().position(epfl).title("Marker at EPFL"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(epfl, 15.5f))
         mMap.setOnMapClickListener { latLng ->
-            val newMarker = mMap.addMarker(MarkerOptions().position(latLng).title("New Marker"))
+            newMarker?.let{ it.remove() }
+            newMarker = mMap.addMarker(MarkerOptions().position(latLng).title(
+                project.name))
+            latitude = latLng.latitude
+            longitude = latLng.longitude
+            val newIntent = Intent(this, ProjectCreationActivity::class.java)
+            newIntent.putExtra("other", true)
         }
     }
 
@@ -58,17 +82,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.mapsDoneButton) {
-            val returnToActivity = intent.getStringExtra(ProjectCreationActivity.LOCATION_EXTRA)
-            val nextActivity =
-                if (returnToActivity == CREATION_STRING)
-                    ProjectCreationActivity::class.java
-                else
-                    ProjectInformationActivity::class.java
-            val newIntent = Intent(this, nextActivity)
+        val nextActivityString = intent.getStringExtra(LOCATION_EXTRA)
+        val nextActivity =
+            if (nextActivityString == CREATION_STRING)
+                ProjectCreationActivity::class.java
+            else
+                ProjectInformationActivity::class.java
+        val newIntent = Intent(this, nextActivity)
+            newIntent.putExtra(LOCATION_EXTRA, true)
+            newIntent.putExtra(EDIT_EXTRA, project)
+            newIntent.putExtra(LATITUDE, latitude)
+            newIntent.putExtra(LONGITUDE, longitude)
             startActivity(newIntent)
             finish()
-        }
         return super.onOptionsItemSelected(item)
     }
 }

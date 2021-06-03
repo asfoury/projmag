@@ -1,6 +1,7 @@
 package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
+import com.google.android.gms.maps.model.LatLng
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize
@@ -27,7 +28,9 @@ data class ImmutableProject(
     val description: String,
     val videoUri: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
-    val creationDate: Date = Date()
+    val creationDate: Date = Date(),
+    val latitude: Double? = null,
+    val longitude: Double? = null
 ) : Parcelable {
     companion object {
         object FieldNames {
@@ -47,6 +50,8 @@ data class ImmutableProject(
             const val VIDEO_URI = "videoURI"
             const val ALLOWED_SECTIONS = "allowedSections"
             const val CREATION_DATE = "creationDate"
+            const val LATITUDE = "latitude"
+            const val LONGITUDE = "longitude"
         }
 
         const val MAX_PROJECT_NAME_SIZE = 120
@@ -88,7 +93,9 @@ data class ImmutableProject(
             description: String,
             videoURI: List<String> = listOf(),
             allowedSections: List<String> = listOf(),
-            creationDate: Date = Date()
+            creationDate: Date = Date(),
+            latitude: Double? = null,
+            longitude: Double? = null
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -121,7 +128,9 @@ data class ImmutableProject(
                         description,
                         videoURI,
                         allowedSections,
-                        creationDate
+                        creationDate,
+                        latitude,
+                        longitude
                     )
                 )
             }
@@ -154,7 +163,9 @@ data class ImmutableProject(
                     description = map[FieldNames.DESCRIPTION] as String,
                     videoURI = map[FieldNames.VIDEO_URI] as List<String>,
                     allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>,
-                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long)
+                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long),
+                    latitude = map[FieldNames.LATITUDE] as Double?,
+                    longitude = map[FieldNames.LONGITUDE] as Double?
                 )
                 return when (result) {
                     is Success -> result.value
@@ -209,7 +220,9 @@ data class ImmutableProject(
         description: String = this.description,
         videoURI: List<String> = this.videoUri,
         allowedSections: List<String> = this.allowedSections,
-        creationDate: Date = this.creationDate
+        creationDate: Date = this.creationDate,
+        latitude: Double? = this.latitude,
+        longitude: Double? = this.longitude
     ) = build(
         id,
         name,
@@ -226,7 +239,9 @@ data class ImmutableProject(
         description,
         videoURI,
         allowedSections,
-        creationDate
+        creationDate,
+        latitude,
+        longitude
     )
 
     /**
@@ -252,7 +267,10 @@ data class ImmutableProject(
         FieldNames.DESCRIPTION to description,
         FieldNames.VIDEO_URI to videoUri,
         FieldNames.ALLOWED_SECTIONS to allowedSections,
-        FieldNames.CREATION_DATE to creationDate.time
+        FieldNames.CREATION_DATE to creationDate.time,
+        FieldNames.LATITUDE to latitude,
+        FieldNames.LONGITUDE to longitude
+
     )
 
 

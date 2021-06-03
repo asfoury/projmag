@@ -168,5 +168,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="add_location">add location</string>
     <string name="mapsDoneButton">mapsDoneButton</string>
+    <string name="UnableGoToMap">Unable to go to map</string>
 
 </resources>

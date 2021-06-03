@@ -12,13 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.PROJECT_EXTRA
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.MetadataDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectDatabase
+import com.sdp13epfl2021.projmag.model.Failure
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.LATITUDE
+import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.LONGITUDE
 import com.sdp13epfl2021.projmag.model.Result
+import com.sdp13epfl2021.projmag.model.Success
 import com.sdp13epfl2021.projmag.video.VideoUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -69,6 +74,9 @@ class ProjectCreationActivity : AppCompatActivity() {
     private var subtitles: String? = null
     private var listTags: Array<String> = emptyArray()
     private var listSections: Array<String> = emptyArray()
+    private var latitude: Double? = null
+    private var longitude: Double? = null
+    private var fromMap: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +84,20 @@ class ProjectCreationActivity : AppCompatActivity() {
         projectToEdit = intent.getParcelableExtra(EDIT_EXTRA) as ImmutableProject?
 
         setUpButtons()
+        fromMap = intent.getBooleanExtra(LOCATION_EXTRA, false)
+        if (fromMap) {
+            latitude = intent.getDoubleExtra(LATITUDE, Double.MAX_VALUE)
+            longitude = intent.getDoubleExtra(LONGITUDE, Double.MAX_VALUE)
+            if (latitude == Double.MAX_VALUE || longitude == Double.MAX_VALUE) {
+                latitude = null
+                longitude = null
+            } else {
+                val addLocationButton: ImageButton = findViewById(R.id.add_location)
+                addLocationButton.isEnabled = false
+            }
+        }
 
+        showToast((projectToEdit==null).toString())
         projectToEdit?.let {
             setInitialValues(it)
         }
@@ -85,9 +106,20 @@ class ProjectCreationActivity : AppCompatActivity() {
     private fun setUpButtons() {
         val addLocationButton: ImageButton = findViewById(R.id.add_location)
         addLocationButton.setOnClickListener {
-            val locationIntent = Intent(this, MapsActivity::class.java)
-            locationIntent.putExtra(LOCATION_EXTRA, CREATION_STRING)
-            startActivity(locationIntent)
+            when (val maybeProject = constructProject()) {
+                is Failure<ImmutableProject> -> {
+                    addLocationButton.isEnabled = false
+                    showToast(getString(R.string.UnableGoToMap))
+                }
+                is Success<ImmutableProject> -> {
+                    val locationIntent = Intent(this, MapsActivity::class.java)
+                    locationIntent.putExtra(LOCATION_EXTRA, CREATION_STRING)
+                    locationIntent.putExtra(PROJECT_EXTRA, maybeProject.value)
+                    startActivity(locationIntent)
+                    finish()
+                }
+            }
+
         }
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addTagButton: Button = findViewById(R.id.addTagsButton)
@@ -122,6 +154,10 @@ class ProjectCreationActivity : AppCompatActivity() {
         findViewById<CheckBox>(R.id.form_check_box_MP).isChecked = project.masterProject
         findViewById<TextView>(R.id.form_project_description).text = project.description
         listTags = project.tags.toTypedArray()
+        if (!fromMap) {
+            longitude = project.longitude
+            latitude = project.latitude
+        }
         listSections = project.allowedSections.toTypedArray()
         if (!project.videoUri.isEmpty()) {
             videoUri = Uri.parse(project.videoUri[0])
@@ -246,7 +282,9 @@ class ProjectCreationActivity : AppCompatActivity() {
             assigned = listOf(),
             tags = listTags.toList(),
             allowedSections = listSections.toList(),
-            videoURI = if (videoUri != null) listOf(videoUri.toString()) else listOf()
+            videoURI = if (videoUri != null) listOf(videoUri.toString()) else listOf(),
+            latitude = latitude,
+            longitude = longitude
         )
     }
 
