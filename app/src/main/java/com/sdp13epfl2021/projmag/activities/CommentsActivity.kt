@@ -21,8 +21,6 @@ import javax.inject.Named
 class CommentsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var messageAdapter: MessageListAdapter
-    private lateinit var comments : List<Message>
-
 
 
     @Inject
@@ -46,19 +44,17 @@ class CommentsActivity : AppCompatActivity() {
         setUpSendButton(profileId, projectId)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_comments)
         commentsDB.getCommentsOfProject(projectId!!, {
-            this.comments = it
-            recyclerView.adapter = MessageListAdapter(commentsDB,this, comments, userDB)
+            recyclerView.adapter = MessageListAdapter(commentsDB,this, it, userDB)
             recyclerView.setHasFixedSize(false)
-            recyclerView.scrollToPosition(this.comments.size - 1)
+            recyclerView.scrollToPosition(it.size - 1)
         }, {})
 
         commentsDB.addListener(projectId) { _: ProjectId, _: List<Message> ->
             this.runOnUiThread {
                 commentsDB.getCommentsOfProject(projectId, {
-                    this.comments = it
-                    recyclerView.adapter = MessageListAdapter(commentsDB,this, comments, userDB)
+                    recyclerView.adapter = MessageListAdapter(commentsDB,this, it, userDB)
                     recyclerView.setHasFixedSize(false)
-                    recyclerView.scrollToPosition(this.comments.size - 1)
+                    recyclerView.scrollToPosition(it.size - 1)
                 }, {})
             }
         }
