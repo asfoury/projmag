@@ -55,24 +55,20 @@ class FirebaseCommentsDatabase @Inject constructor(
     ) {
         firestore.collection(PROJECT_COMMENTS).document(projectId).get()
             .addOnSuccessListener { doc ->
-                val messages: MutableList<Message> = mutableListOf()
-                (doc["comments"] as? List<*>)?.forEach { comment ->
+                val messages = (doc["comments"] as? List<*>)?.mapNotNull { comment ->
                     val commentHash = comment as? HashMap<*, *>
-                    commentHash?.let { comment ->
-                        (comment["message"] as? String)?.let { messageContent ->
-                            (comment["sender"] as? String)?.let { senderId ->
-                                (comment["creationDate"] as? Long)?.let { creationDate ->
-                                    messages += Message(
-                                        messageContent,
-                                        senderId,
-                                        creationDate
-                                    )
-                                }
-                            }
-                        }
+                     commentHash?.let {
+                        val messageContent = it["message"] as? String
+                        val userId = it["sender"] as? String
+                        val createdAt = it["creationDate"] as? Long
 
+                        if (messageContent != null && userId != null && createdAt != null) {
+                            Message(messageContent, userId, createdAt)
+                        } else {
+                            null
+                        }
                     }
-                }
+                } ?: emptyList()
                 onSuccess(messages)
             }
     }
