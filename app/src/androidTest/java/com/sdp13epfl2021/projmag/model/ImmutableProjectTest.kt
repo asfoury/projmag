@@ -140,7 +140,8 @@ class ImmutableProjectTest {
                 isTaken = get("isTaken") as Boolean,
                 description = get("description") as String,
                 allowedSections = get("allowedSections") as List<String>,
-                creationDate = Date(get("creationDate") as Long)
+                creationDate = Date(get("creationDate") as Long),
+                authorToken = get("authorToken") as String
             )
         }
 
@@ -164,7 +165,8 @@ class ImmutableProjectTest {
             "description" to project.description,
             "videoURI" to project.videoUri,
             "allowedSections" to project.allowedSections,
-            "creationDate" to project.creationDate.time
+            "creationDate" to project.creationDate.time,
+            "authorToken" to project.authorToken
         )
 
 

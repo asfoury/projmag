@@ -69,7 +69,6 @@ class WaitingListTest {
         "Description of project1",
         listOf(),
         listOf("Architecture")
-
     )
 
     val uid1 = "some-id-001"

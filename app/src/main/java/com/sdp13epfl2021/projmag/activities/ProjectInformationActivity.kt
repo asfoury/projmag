@@ -2,6 +2,7 @@ package com.sdp13epfl2021.projmag.activities
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -14,6 +15,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -24,18 +26,27 @@ import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
+import com.sdp13epfl2021.projmag.notification.ProjectNotificatonService
+import com.sdp13epfl2021.projmag.notification.NotificationData
+import com.sdp13epfl2021.projmag.notification.PushNotification
+import com.sdp13epfl2021.projmag.notification.RetrofitInstance
 import com.sdp13epfl2021.projmag.video.VideoUtils
+
+import kotlinx.coroutines.*
+
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
 import java.io.ByteArrayOutputStream
@@ -79,6 +90,9 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var alreadyApplied: Boolean = false
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
 
+    private val title : String = "New Application"
+    private val msgNotification : String = "A student has applied to your project:"
+    private val sharedPrefString:String = "sharedPref"
 
 
     @Synchronized
@@ -150,6 +164,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         candidatureDatabase: CandidatureDatabase,
         projectId: ProjectId,
     ) {
+
         if (alreadyApplied) {
             candidatureDatabase.removeCandidature(
                 projectId,
@@ -180,7 +195,14 @@ class ProjectInformationActivity : AppCompatActivity() {
                         getString(R.string.unaply_text),
                         getString(R.string.apply_text)
                     )
-                },
+                    PushNotification(
+                        NotificationData(title,msgNotification +"  " + projectVar.name), projectVar.authorToken
+                    ).also {
+                        sendNotification(it)
+                    }
+
+                }
+                ,
                 { showToast(getString(R.string.failure), Toast.LENGTH_SHORT) }
             )
         }
@@ -223,6 +245,19 @@ class ProjectInformationActivity : AppCompatActivity() {
             )
         }
     }
+
+    private  fun sendNotification (notification: PushNotification)= CoroutineScope(Dispatchers.IO).launch {
+        try{
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful){
+                Log.d("Notification", "Response: ${Gson().toJson(response)}")
+            } else{
+                Log.e("Notification error", response.errorBody().toString())
+            }
+        } catch (e: Exception){
+            Log.e( "Notification error ",e.toString() )
+
+        }    }
 
     private fun setUpFavoritesButton() {
         val projectId = projectVar.id
@@ -296,6 +331,11 @@ class ProjectInformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
+
+
+        ProjectNotificatonService.sharedPref = getSharedPreferences(sharedPrefString, Context.MODE_PRIVATE)
+
+
 
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)

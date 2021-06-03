@@ -5,13 +5,24 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.sdp13epfl2021.projmag.notification.ProjectNotificatonService
+import com.sdp13epfl2021.projmag.activities.SectionSelectionActivity
+import com.sdp13epfl2021.projmag.activities.TagsSelectorActivity
+
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
@@ -38,7 +49,11 @@ class ProjectCreationActivity : AppCompatActivity() {
         private const val REQUEST_VIDEO_SUBTITLING = 2
         private const val REQUEST_TAG_ACCESS = 3
         private const val REQUEST_SELECTION_ACCESS = 4
+
+        private  var authorToken: String = ""
+
         const val EDIT_EXTRA = "edit"
+
     }
 
     private var projectToEdit: ImmutableProject? = null
@@ -72,7 +87,18 @@ class ProjectCreationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_creation)
         projectToEdit = intent.getParcelableExtra(EDIT_EXTRA) as ImmutableProject?
-
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("failure", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            if (token != null) {
+                ProjectNotificatonService.token = token
+                authorToken = token
+            }
+        })
         setUpButtons()
 
         projectToEdit?.let {
@@ -84,6 +110,9 @@ class ProjectCreationActivity : AppCompatActivity() {
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addTagButton: Button = findViewById(R.id.addTagsButton)
         val addSectionButton: Button = findViewById(R.id.addSectionButton)
+
+
+
         addVideoButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(
@@ -223,7 +252,14 @@ class ProjectCreationActivity : AppCompatActivity() {
             id = if (projectToEdit == null) "" else projectToEdit!!.id, //id is defined by firebase itself
             name = getTextFromEditText(R.id.form_edit_text_project_name),
             lab = getTextFromEditText(R.id.form_edit_text_laboratory),
+
+
             authorId = userID,
+            authorToken = authorToken,
+
+
+           
+
             teacher = getTextFromEditText(R.id.form_edit_text_teacher),
             TA = getTextFromEditText(R.id.form_edit_text_project_TA),
             nbParticipant = try {

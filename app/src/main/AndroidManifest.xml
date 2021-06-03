@@ -7,6 +7,7 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:required="true" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -22,10 +23,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
+
+
+
+        <service
+            android:name=".notification.ProjectNotificatonService"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2m.intent.RECEIVE"/>
+            </intent-filter>
+        </service>
+
+
+
         <activity android:name=".activities.CommentsActivity"></activity>
+
         <activity android:name=".activities.CVDisplayActivity" />
         <activity android:name=".activities.ProfileDisplayActivity" />
         <activity android:name=".activities.OrientationActivity" />
+
         <activity
             android:name=".activities.PreferencesActivity"
             android:parentActivityName=".activities.ProjectsListActivity"
@@ -70,6 +87,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

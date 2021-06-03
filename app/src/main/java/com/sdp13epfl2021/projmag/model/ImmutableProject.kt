@@ -16,6 +16,7 @@ data class ImmutableProject(
     val name: String,
     val lab: String,
     val authorId: String,
+
     val teacher: String,
     val TA: String,
     val nbParticipant: Int,
@@ -27,7 +28,8 @@ data class ImmutableProject(
     val description: String,
     val videoUri: List<String> = listOf(),
     val allowedSections: List<String> = listOf(),
-    val creationDate: Date = Date()
+    val creationDate: Date = Date(),
+    val authorToken: String = defaultToken
 ) : Parcelable {
     companion object {
         object FieldNames {
@@ -47,8 +49,9 @@ data class ImmutableProject(
             const val VIDEO_URI = "videoURI"
             const val ALLOWED_SECTIONS = "allowedSections"
             const val CREATION_DATE = "creationDate"
+            const val AUTHOR_TOKEN = "authorToken"
         }
-
+        const val defaultToken = "token"
         const val MAX_PROJECT_NAME_SIZE = 120
         const val MAX_NAME_SIZE = 40
         const val MAX_DESCRIPTION_SIZE = 4000
@@ -88,7 +91,8 @@ data class ImmutableProject(
             description: String,
             videoURI: List<String> = listOf(),
             allowedSections: List<String> = listOf(),
-            creationDate: Date = Date()
+            creationDate: Date = Date(),
+            authorToken: String = defaultToken
         ): Result<ImmutableProject> {
             return when {
                 name.length > MAX_PROJECT_NAME_SIZE -> Failure("name is more than $MAX_PROJECT_NAME_SIZE characters")
@@ -121,7 +125,8 @@ data class ImmutableProject(
                         description,
                         videoURI,
                         allowedSections,
-                        creationDate
+                        creationDate,
+                        authorToken,
                     )
                 )
             }
@@ -154,7 +159,8 @@ data class ImmutableProject(
                     description = map[FieldNames.DESCRIPTION] as String,
                     videoURI = map[FieldNames.VIDEO_URI] as List<String>,
                     allowedSections = map[FieldNames.ALLOWED_SECTIONS] as List<String>,
-                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long)
+                    creationDate = Date(map[FieldNames.CREATION_DATE] as Long),
+                    authorToken = map[FieldNames.AUTHOR_TOKEN]  as String
                 )
                 return when (result) {
                     is Success -> result.value
@@ -209,7 +215,8 @@ data class ImmutableProject(
         description: String = this.description,
         videoURI: List<String> = this.videoUri,
         allowedSections: List<String> = this.allowedSections,
-        creationDate: Date = this.creationDate
+        creationDate: Date = this.creationDate,
+        authorToken: String = this.authorToken
     ) = build(
         id,
         name,
@@ -226,7 +233,8 @@ data class ImmutableProject(
         description,
         videoURI,
         allowedSections,
-        creationDate
+        creationDate,
+        authorToken
     )
 
     /**
@@ -252,7 +260,8 @@ data class ImmutableProject(
         FieldNames.DESCRIPTION to description,
         FieldNames.VIDEO_URI to videoUri,
         FieldNames.ALLOWED_SECTIONS to allowedSections,
-        FieldNames.CREATION_DATE to creationDate.time
+        FieldNames.CREATION_DATE to creationDate.time,
+        FieldNames.AUTHOR_TOKEN to authorToken
     )
 
 

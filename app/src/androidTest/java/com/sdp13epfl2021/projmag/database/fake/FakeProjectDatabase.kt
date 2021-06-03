@@ -95,7 +95,9 @@ class FakeProjectDatabase(projectsBeginning: List<ImmutableProject> = emptyList(
                 it.isTaken,
                 it.description,
                 it.videoUri,
-                it.allowedSections
+                it.allowedSections,
+                it.creationDate,
+                it.authorToken
             )
         }
         add(newProject)

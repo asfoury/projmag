@@ -64,7 +64,7 @@ class OfflineProjectDatabaseTest {
         true,
         listOf("Low Level", "Networking", "Driver"),
         false,
-        "Description of project5"
+        "Description of project5",
     )
 
     private val fakeCandidatureDB: CandidatureDatabase = FakeCandidatureDatabase()

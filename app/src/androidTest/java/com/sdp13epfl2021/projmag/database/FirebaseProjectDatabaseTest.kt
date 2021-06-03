@@ -185,7 +185,8 @@ class FirebaseProjectDatabaseTest {
                 "description" to project.description,
                 "videoURI" to project.videoUri,
                 "allowedSections" to project.allowedSections,
-                "creationDate" to project.creationDate.time
+                "creationDate" to project.creationDate.time,
+                "authorToken" to project.authorToken
 
             )
         )
@@ -229,7 +230,8 @@ class FirebaseProjectDatabaseTest {
                 "description" to project.description,
                 "videoURI" to project.videoUri,
                 "allowedSections" to project.allowedSections,
-                "creationDate" to project.creationDate.time
+                "creationDate" to project.creationDate.time,
+                "authorToken" to project.authorToken
             )
         )
         /*
