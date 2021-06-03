@@ -20,13 +20,13 @@ object CandidatureDatabaseModule {
     @Provides
     @Singleton
     fun provideCandidatureDatabase(
-            fs: FirebaseFirestore,
-            auth: FirebaseAuth,
-            userdataDB: UserdataDatabase,
-            @Named("fileCacheProjectDB") dir: File
+        fs: FirebaseFirestore,
+        auth: FirebaseAuth,
+        userdataDB: UserdataDatabase,
+        @Named("fileCacheProjectDB") dir: File
     ): CandidatureDatabase =
-            OfflineCachedCandidatureDatabase(
-                    FirebaseCandidatureDatabase(fs, auth, userdataDB),
-                    dir
-            )
+        OfflineCachedCandidatureDatabase(
+            FirebaseCandidatureDatabase(fs, auth, userdataDB),
+            dir
+        )
 }

@@ -1,12 +1,11 @@
 package com.sdp13epfl2021.projmag.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.adapter.MessageListAdapter
-import com.sdp13epfl2021.projmag.model.*
+import com.sdp13epfl2021.projmag.model.MessagesDatasource
 
 class CommentsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView

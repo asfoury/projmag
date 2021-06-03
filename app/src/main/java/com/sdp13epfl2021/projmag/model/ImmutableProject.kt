@@ -1,7 +1,6 @@
 package com.sdp13epfl2021.projmag.model
 
 import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.toSearchName
 import kotlinx.parcelize.Parcelize

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,11 +12,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.CREATION_STRING
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
-import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.LOCATION_EXTRA
+import com.sdp13epfl2021.projmag.activities.ProjectsListActivity.Companion.PROJECT_EXTRA
 import com.sdp13epfl2021.projmag.databinding.ActivityMapsBinding
 import com.sdp13epfl2021.projmag.model.ImmutableProject
 import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.LATITUDE
@@ -26,7 +24,9 @@ import com.sdp13epfl2021.projmag.model.ImmutableProject.Companion.FieldNames.LON
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
-        val PROJECT_EXTRA = "project"
+        private val EPFL = LatLng(46.51886897414146, 6.566790856808788)
+        const private val INITIAL_ZOOM = 15.5f
+        const val LOCATION_EXTRA = "location"
     }
 
     private lateinit var mMap: GoogleMap
@@ -63,10 +63,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        // Add a marker in Sydney and move the camera
-        val epfl = LatLng(46.51886897414146, 6.566790856808788)
-        //mMap.addMarker(MarkerOptions().position(epfl).title("Marker at EPFL"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(epfl, 15.5f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(EPFL, INITIAL_ZOOM))
         if (nextActivityString == CREATION_STRING) {
             mMap.setOnMapClickListener { latLng ->
                 newMarker?.let { it.remove() }
@@ -77,12 +74,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 )
                 latitude = latLng.latitude
                 longitude = latLng.longitude
-                val newIntent = Intent(this, ProjectCreationActivity::class.java)
-                newIntent.putExtra("other", true)
             }
-        } else if (project.latitude != null && project.longitude != null){
+        } else if (project.latitude != null && project.longitude != null) {
             newMarker = mMap.addMarker(
-                MarkerOptions().position(LatLng(project.latitude!!, project.longitude!!)).title(project.name)
+                MarkerOptions().position(LatLng(project.latitude!!, project.longitude!!))
+                    .title(project.name)
             )
         }
     }
@@ -107,8 +103,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             newIntent.putExtra(LATITUDE, latitude)
             newIntent.putExtra(LONGITUDE, longitude)
         }
-            startActivity(newIntent)
-            finish()
+        startActivity(newIntent)
+        finish()
         return super.onOptionsItemSelected(item)
     }
 }

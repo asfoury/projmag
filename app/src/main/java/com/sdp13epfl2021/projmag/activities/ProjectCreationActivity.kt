@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.PROJECT_EXTRA
+import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.LOCATION_EXTRA
+import com.sdp13epfl2021.projmag.activities.ProjectsListActivity.Companion.PROJECT_EXTRA
 import com.sdp13epfl2021.projmag.database.ProjectUploader
 import com.sdp13epfl2021.projmag.database.interfaces.CandidatureDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.FileDatabase
@@ -44,7 +45,6 @@ class ProjectCreationActivity : AppCompatActivity() {
         private const val REQUEST_TAG_ACCESS = 3
         private const val REQUEST_SELECTION_ACCESS = 4
         const val EDIT_EXTRA = "edit"
-        const val LOCATION_EXTRA = "location"
         const val CREATION_STRING = "creation"
     }
 
@@ -91,9 +91,6 @@ class ProjectCreationActivity : AppCompatActivity() {
             if (latitude == Double.MAX_VALUE || longitude == Double.MAX_VALUE) {
                 latitude = null
                 longitude = null
-            } else {
-                val addLocationButton: ImageButton = findViewById(R.id.add_location)
-                addLocationButton.isEnabled = false
             }
         }
 

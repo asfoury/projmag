@@ -87,7 +87,6 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
 
 
-
     @Synchronized
     private fun addVideo(videoUri: Uri, subtitle: String?) {
         videosUris.add(Pair(videoUri, subtitle))

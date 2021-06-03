@@ -34,6 +34,10 @@ import javax.inject.Named
 @AndroidEntryPoint
 class ProjectsListActivity : AppCompatActivity() {
 
+    companion object {
+        val PROJECT_EXTRA = "project"
+    }
+
     @Inject
     lateinit var userDB: UserdataDatabase
 
