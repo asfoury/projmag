@@ -17,7 +17,7 @@ data class Message(val messageContent: String, val userId: String, val createdAt
          * returns a message wrapped in a success wrapper, or a failure with the explanation wrapped as a string
          *
          * @param messageContent : content of the message
-         * @param sender : profile of the user that send the message
+         * @param userId the id of the user that send the message
          * @param createdAt : when the message was send
          */
         fun build(
