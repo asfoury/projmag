@@ -17,6 +17,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
+import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.PROJECT_EXTRA
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
 import com.sdp13epfl2021.projmag.activities.WaitingListActivity
@@ -140,7 +141,7 @@ class ProjectInformationActivityTest {
 
     private fun getIntent(): Intent {
         val intent = Intent(context, ProjectInformationActivity::class.java)
-        intent.putExtra(MainActivity.projectString, project)
+        intent.putExtra(PROJECT_EXTRA, project)
 
         Files.copy(inputStreamSNK, videoSNKFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         Files.copy(inputStreamEPFL, videoEPFLFile.toPath(), StandardCopyOption.REPLACE_EXISTING)

@@ -35,14 +35,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var latitude: Double = Double.MAX_VALUE
     private var longitude: Double = Double.MAX_VALUE
     lateinit private var project: ImmutableProject
+    private var nextActivityString: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        nextActivityString = intent.getStringExtra(LOCATION_EXTRA)
+
         project = intent.getParcelableExtra(PROJECT_EXTRA)!!
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Toast.makeText(this, "aslkdjfh", Toast.LENGTH_LONG)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -65,14 +67,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val epfl = LatLng(46.51886897414146, 6.566790856808788)
         //mMap.addMarker(MarkerOptions().position(epfl).title("Marker at EPFL"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(epfl, 15.5f))
-        mMap.setOnMapClickListener { latLng ->
-            newMarker?.let{ it.remove() }
-            newMarker = mMap.addMarker(MarkerOptions().position(latLng).title(
-                project.name))
-            latitude = latLng.latitude
-            longitude = latLng.longitude
-            val newIntent = Intent(this, ProjectCreationActivity::class.java)
-            newIntent.putExtra("other", true)
+        if (nextActivityString == CREATION_STRING) {
+            mMap.setOnMapClickListener { latLng ->
+                newMarker?.let { it.remove() }
+                newMarker = mMap.addMarker(
+                    MarkerOptions().position(latLng).title(
+                        project.name
+                    )
+                )
+                latitude = latLng.latitude
+                longitude = latLng.longitude
+                val newIntent = Intent(this, ProjectCreationActivity::class.java)
+                newIntent.putExtra("other", true)
+            }
+        } else if (project.latitude != null && project.longitude != null){
+            newMarker = mMap.addMarker(
+                MarkerOptions().position(LatLng(project.latitude!!, project.longitude!!)).title(project.name)
+            )
         }
     }
 
@@ -82,17 +93,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val nextActivityString = intent.getStringExtra(LOCATION_EXTRA)
+
         val nextActivity =
             if (nextActivityString == CREATION_STRING)
                 ProjectCreationActivity::class.java
             else
                 ProjectInformationActivity::class.java
         val newIntent = Intent(this, nextActivity)
+        newIntent.putExtra(PROJECT_EXTRA, project)
+        if (nextActivityString == CREATION_STRING) {
             newIntent.putExtra(LOCATION_EXTRA, true)
             newIntent.putExtra(EDIT_EXTRA, project)
             newIntent.putExtra(LATITUDE, latitude)
             newIntent.putExtra(LONGITUDE, longitude)
+        }
             startActivity(newIntent)
             finish()
         return super.onOptionsItemSelected(item)

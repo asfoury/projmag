@@ -80,14 +80,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="32dp"
             android:textAlignment="textStart"
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/info_creation_date"
+            app:layout_constraintTop_toBottomOf="@+id/location_button"
             tools:text="Project description" />
 
         <VideoView
@@ -125,6 +125,17 @@
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_video" />
+
+        <ImageButton
+            android:id="@+id/location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/applyButton"
+            app:srcCompat="@drawable/ic_baseline_map_24" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

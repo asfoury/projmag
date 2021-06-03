@@ -17,6 +17,7 @@ import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
@@ -26,7 +27,9 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
+import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.PROJECT_EXTRA
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
+import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.LOCATION_EXTRA
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject
@@ -52,6 +55,10 @@ import kotlin.collections.ArrayList
  */
 @AndroidEntryPoint
 class ProjectInformationActivity : AppCompatActivity() {
+
+    companion object {
+        const val INFORMATION_STRING = "information"
+    }
 
     @Inject
     lateinit var fileDB: FileDatabase
@@ -311,7 +318,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
 
         // get the project
-        val project: ImmutableProject? = intent.getParcelableExtra(MainActivity.projectString)
+        val project: ImmutableProject? = intent.getParcelableExtra(PROJECT_EXTRA)
         if (project != null) {
             projectVar = project
             // set the text views
@@ -343,6 +350,8 @@ class ProjectInformationActivity : AppCompatActivity() {
                 setupPlayerListeners(controller)
                 handleVideoWithFavoritePersistenceFiltering(project.videoUri)
             }
+
+            setUpLocationButton()
         } else {
             showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
         }
@@ -353,6 +362,21 @@ class ProjectInformationActivity : AppCompatActivity() {
 
         setUpApplyButton(findViewById(R.id.applyButton))
         setUpFavoritesButton()
+    }
+
+    private fun setUpLocationButton() {
+        val locationButton: ImageButton = findViewById<ImageButton>(R.id.location_button)
+        if (projectVar.latitude == null || projectVar.longitude == null) {
+            locationButton.visibility = View.GONE
+        } else {
+            locationButton.setOnClickListener {
+                val newIntent = Intent(this, MapsActivity::class.java)
+                newIntent.putExtra(PROJECT_EXTRA, projectVar)
+                newIntent.putExtra(LOCATION_EXTRA, INFORMATION_STRING)
+                startActivity(newIntent)
+                finish()
+            }
+        }
     }
 
     // pause/start when we touch the video
