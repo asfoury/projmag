@@ -97,7 +97,6 @@ class ProjectCreationActivity : AppCompatActivity() {
             }
         }
 
-        showToast((projectToEdit==null).toString())
         projectToEdit?.let {
             setInitialValues(it)
         }
