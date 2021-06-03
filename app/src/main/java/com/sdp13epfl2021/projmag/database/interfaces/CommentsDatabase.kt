@@ -9,7 +9,7 @@ interface CommentsDatabase {
      * Call `onFailure` with an Exception in case of failure
      *
      * @param message The message to be added
-     * @param projectId The ID of the favorite project
+     * @param projectId The ID of the project
      * @param onSuccess called on success
      * @param onFailure called with an exception on failure
      */
