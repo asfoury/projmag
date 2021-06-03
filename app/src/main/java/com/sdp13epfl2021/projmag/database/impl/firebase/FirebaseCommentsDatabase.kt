@@ -16,7 +16,7 @@ class FirebaseCommentsDatabase @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth,
     private val userdataDatabase: UserdataDatabase
-) : CommentsDatabase,  AppCompatActivity() {
+) : CommentsDatabase {
 
     companion object {
         /**
@@ -32,17 +32,17 @@ class FirebaseCommentsDatabase @Inject constructor(
         onFailure: (Exception) -> Unit
     ) {
         getCommentsOfProject(projectId, { oldMessages ->
-            val newMessages = oldMessages.toMutableList()
-            newMessages += message
-            val messagesStrings = newMessages.map {message -> message.toMapString()}
+            val newMessages: List<Message> = oldMessages + message
+            val messagesStrings = newMessages.map(Message::toMapString)
             val docData = hashMapOf(
                 "comments" to messagesStrings
             )
-            firestore.collection(PROJECT_COMMENTS).document(projectId).set(
-                docData
-            )
-                .addOnSuccessListener{  onSuccess() }
-                .addOnFailureListener { exception -> onFailure(exception) }
+            firestore
+                .collection(PROJECT_COMMENTS)
+                .document(projectId)
+                .set(docData)
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener(onFailure)
 
         }, {})
     }
@@ -52,27 +52,28 @@ class FirebaseCommentsDatabase @Inject constructor(
         onSuccess: (List<Message>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val userId = auth.uid
-        if(userId != null) {
-            userdataDatabase.getProfile(userId,{ profile ->
-                if(profile != null) {
-                    firestore.collection(PROJECT_COMMENTS).document(projectId).get()
-                        .addOnSuccessListener { doc ->
-                            val messages: MutableList<Message> = mutableListOf()
-                            (doc["comments"] as? List<*>)?.forEach { comment ->
-                                val commentHash = comment as? HashMap<*, *>
-                                commentHash?.let { comment ->
+        firestore.collection(PROJECT_COMMENTS).document(projectId).get()
+            .addOnSuccessListener { doc ->
+                val messages: MutableList<Message> = mutableListOf()
+                (doc["comments"] as? List<*>)?.forEach { comment ->
+                    val commentHash = comment as? HashMap<*, *>
+                    commentHash?.let { comment ->
+                        (comment["message"] as? String)?.let { messageContent ->
+                            (comment["sender"] as? String)?.let { senderId ->
+                                (comment["creationDate"] as? Long)?.let { creationDate ->
                                     messages += Message(
-                                        comment["message"] as String,
-                                        profile, comment["creationDate"] as Long
+                                        messageContent,
+                                        senderId,
+                                        creationDate
                                     )
                                 }
                             }
-                            onSuccess(messages ?: listOf())
                         }
+
+                    }
                 }
-            },{})
-        }
+                onSuccess(messages)
+            }
     }
 
     override fun addListener(
@@ -97,8 +98,6 @@ class FirebaseCommentsDatabase @Inject constructor(
             .collection(PROJECT_COMMENTS)
             .document(projectID)
     }
-
-
 
 
 }

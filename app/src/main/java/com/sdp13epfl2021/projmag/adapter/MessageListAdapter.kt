@@ -14,13 +14,14 @@ import com.google.android.material.chip.ChipGroup
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.database.ProjectChange
 import com.sdp13epfl2021.projmag.database.interfaces.CommentsDatabase
+import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.Message
 import java.util.*
 
 /**
  * Adapter for a message to recycler view. Allows messages to be displayed in comments
  */
-class MessageListAdapter(private val commentsDB : CommentsDatabase, private val context : Context, private val messages : List<Message>) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>() {
+class MessageListAdapter(private val commentsDB : CommentsDatabase, private val context : Context, private val messages : List<Message>, private val userDatabase : UserdataDatabase) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>() {
     /**
      * Holder of project fields to display in list.
      */
@@ -40,10 +41,13 @@ class MessageListAdapter(private val commentsDB : CommentsDatabase, private val 
         val message = messages[position]
         holder.messageTextView.text = message.messageContent
         holder.messageDate.text = Date(message.createdAt).toString()
-        holder.messageSender.text = message.sender.firstName
-
-
-
+        // by default set it to anonymous
+        holder.messageSender.text = context.getString(R.string.sender_anonymous)
+        userDatabase.getProfile(message.userId, { senderProfile ->
+            senderProfile?.let {
+                profile -> holder.messageSender.text = profile.firstName
+            }
+        }, {})
     }
 
     override fun getItemCount(): Int {

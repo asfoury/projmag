@@ -4,7 +4,7 @@ package com.sdp13epfl2021.projmag.model
  * createdAt parameter is the time in milliseconds check Date()
  */
 
-data class Message(val messageContent: String, val sender : ImmutableProfile, val createdAt : Long) {
+data class Message(val messageContent: String, val userId: String, val createdAt : Long) {
     companion object {
         object FieldNames {
             const val MESSAGE_CONTENT = "message"
@@ -22,19 +22,19 @@ data class Message(val messageContent: String, val sender : ImmutableProfile, va
          */
         fun build(
             messageContent: String,
-            sender : ImmutableProfile,
+            userId : String,
             createdAt: Long
         ) : Result<Message> {
             return when {
                 messageContent.length > MAX_MESSAGE_SIZE || messageContent.isEmpty() -> Failure("Message is very long or empty")
-                else -> Success(Message(messageContent,sender,createdAt))
+                else -> Success(Message(messageContent,userId,createdAt))
             }
         }
     }
 
     fun toMapString() = hashMapOf(
         FieldNames.MESSAGE_CONTENT to messageContent,
-        FieldNames.SENDER to sender.firstName,
+        FieldNames.SENDER to userId,
         FieldNames.CREATION_DATE to createdAt
     )
 }

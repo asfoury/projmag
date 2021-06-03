@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
 import com.sdp13epfl2021.projmag.activities.CommentsActivity
 import com.sdp13epfl2021.projmag.activities.ProjectInformationActivity
@@ -142,7 +143,7 @@ class ProjectAdapter(
         holder.commentButton.setOnClickListener {
             val context = holder.view.context
             val intent = Intent(context, CommentsActivity::class.java)
-            intent.putExtra("projectId", project.id)
+            intent.putExtra(MainActivity.projectIdString, project.id)
             context.startActivity(intent)
         }
 

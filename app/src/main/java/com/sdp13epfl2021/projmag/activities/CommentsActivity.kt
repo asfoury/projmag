@@ -41,21 +41,16 @@ class CommentsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comments)
-        //get the users profile
-        var profile : ImmutableProfile? = null
-         userDB.getProfile(userId,{
-             if (it != null) {
-                 profile = it
-             }
-        },{})
+        //get the users profileId
+        val profileId : String = userId
         // send a message
         // get the project id
         val projectId = intent.extras?.getString("projectId")
-        setUpSendButton(profile, projectId)
+        setUpSendButton(profileId, projectId)
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view_comments)
         commentsDB.getCommentsOfProject(projectId!!, {
             this.comments = it
-            recyclerView.adapter = MessageListAdapter(commentsDB,this, comments)
+            recyclerView.adapter = MessageListAdapter(commentsDB,this, comments, userDB)
             recyclerView.setHasFixedSize(false)
             recyclerView.scrollToPosition(this.comments.size - 1)
         }, {})
@@ -64,7 +59,7 @@ class CommentsActivity : AppCompatActivity() {
             this.runOnUiThread {
                 commentsDB.getCommentsOfProject(projectId, {
                     this.comments = it
-                    recyclerView.adapter = MessageListAdapter(commentsDB,this, comments)
+                    recyclerView.adapter = MessageListAdapter(commentsDB,this, comments, userDB)
                     recyclerView.setHasFixedSize(false)
                     recyclerView.scrollToPosition(this.comments.size - 1)
                 }, {})
@@ -72,13 +67,13 @@ class CommentsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpSendButton(profile : ImmutableProfile?, projectId : String?) {
-        if(profile != null) {
+    private fun setUpSendButton(profileId : String?, projectId : String?) {
+        if(profileId != null) {
             val sendCommentButton = findViewById<ImageButton>(R.id.comments_send_button)
             sendCommentButton.setOnClickListener {
                 val editTextView = findViewById<EditText>(R.id.comments_edit_text)
                 val messageText = editTextView.text.toString()
-                when (val message = Message.build(messageText, profile, Date().time) ) {
+                when (val message = Message.build(messageText, profileId, Date().time) ) {
                     is Success ->
                     {
                         commentsDB.addCommentToProjectComments(message.value, (projectId ?: ""),{}, {})

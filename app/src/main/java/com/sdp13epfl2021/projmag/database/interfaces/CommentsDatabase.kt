@@ -25,7 +25,7 @@ interface CommentsDatabase {
      * Call `onSuccess` with the a `List` of messages if the operation succeeded
      * Call `onFailure` with an Exception in case of failure
      *
-     * @param projectId The ID of the favorite project
+     * @param projectId The ID of the project
      * @param onSuccess called on success
      * @param onFailure called with an exception on failure
      */
@@ -37,7 +37,7 @@ interface CommentsDatabase {
 
     /**
      * Adds a listener to the comments of a project
-     * @param projectID The ID of the favorite project
+     * @param projectID The ID of the project
      * @param onChange called on success
      */
     fun addListener(
