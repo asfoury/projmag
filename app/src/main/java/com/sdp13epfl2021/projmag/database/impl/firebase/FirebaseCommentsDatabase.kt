@@ -1,5 +1,6 @@
 package com.sdp13epfl2021.projmag.database.impl.firebase
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -80,17 +81,20 @@ class FirebaseCommentsDatabase @Inject constructor(
         projectID: ProjectId,
         onChange: (ProjectId, List<Message>) -> Unit
     ) {
-        getCommentsOfProject(projectID, { comments ->
             getDoc(projectID)
                 .addSnapshotListener { snapshot, _ ->
                     snapshot?.data?.let {
                         GlobalScope.launch {
-                            onChange(projectID, comments)
+                            @Suppress("UNCHECKED_CAST")
+                            val comments = snapshot["comments"] as? List<Message>
+                            comments?.let { coms ->
+                                Log.d("MYTEST","${coms.size}")
+                                onChange(projectID,coms)
+                            }
+
                         }
                     }
                 }
-
-        }, {})
     }
 
     private fun getDoc(projectID: ProjectId): DocumentReference {
