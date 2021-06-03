@@ -41,8 +41,6 @@ class MessageListAdapter(private val commentsDB : CommentsDatabase, private val 
         val message = messages[position]
         holder.messageTextView.text = message.messageContent
         holder.messageDate.text = Date(message.createdAt).toString()
-        // by default set it to anonymous
-        holder.messageSender.text = context.getString(R.string.sender_anonymous)
         userDatabase.getProfile(message.userId, { senderProfile ->
             senderProfile?.let {
                 profile -> holder.messageSender.text = profile.firstName
