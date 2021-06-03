@@ -88,7 +88,6 @@ class FirebaseCommentsDatabase @Inject constructor(
                             @Suppress("UNCHECKED_CAST")
                             val comments = snapshot["comments"] as? List<Message>
                             comments?.let { coms ->
-                                Log.d("MYTEST","${coms.size}")
                                 onChange(projectID,coms)
                             }
 
