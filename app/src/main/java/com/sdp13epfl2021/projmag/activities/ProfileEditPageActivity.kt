@@ -32,6 +32,7 @@ class ProfileEditPageActivity : AppCompatActivity() {
     lateinit var userID: String
 
     lateinit var imageView: ImageView
+    lateinit var genderSpinner: Spinner
     private val pickImage = 0
     private var imageUri: Uri? = null
 
@@ -45,6 +46,13 @@ class ProfileEditPageActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.profile_sciper).visibility = View.INVISIBLE
             //buttonAddCv.setVisibility(View.INVISIBLE)
         }
+
+        genderSpinner = findViewById(R.id.profile_gender_spinner)
+        genderSpinner.adapter = ArrayAdapter(
+            this,
+            R.layout.support_simple_spinner_dropdown_item,
+            Gender.values()
+        )
 
         userdataDatabase.getProfile(
             userID,
@@ -108,7 +116,7 @@ class ProfileEditPageActivity : AppCompatActivity() {
             findViewById<EditText>(R.id.profile_firstname).setText(profile.firstName)
             findViewById<EditText>(R.id.profile_lastname).setText(profile.lastName)
             findViewById<EditText>(R.id.profile_age).setText(profile.age.toString())
-            findViewById<EditText>(R.id.profile_genre).setText(profile.gender.toString())
+            genderSpinner.setSelection(profile.gender.ordinal)
             findViewById<EditText>(R.id.profile_phone_number).setText(profile.phoneNumber)
             findViewById<EditText>(R.id.profile_sciper).setText(profile.sciper.toString())
         } else {
@@ -129,12 +137,7 @@ class ProfileEditPageActivity : AppCompatActivity() {
         val firstName = findViewById<EditText>(R.id.profile_firstname).text.toString()
         val lastName = findViewById<EditText>(R.id.profile_lastname).text.toString()
         val age = findViewById<EditText>(R.id.profile_age).text.toString()
-
-        val gender = when (findViewById<EditText>(R.id.profile_genre).text.toString()) {
-            Gender.MALE.name -> Gender.MALE
-            Gender.FEMALE.name -> Gender.FEMALE
-            else -> Gender.OTHER
-        }
+        val gender = genderSpinner.selectedItem as Gender
         val phoneNumber = findViewById<EditText>(R.id.profile_phone_number).text.toString()
         val role = Role.STUDENT
         val sciper = findViewById<EditText>(R.id.profile_sciper).text.toString()

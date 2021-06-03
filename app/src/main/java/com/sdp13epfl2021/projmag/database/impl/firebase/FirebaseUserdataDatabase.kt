@@ -308,11 +308,7 @@ class FirebaseUserdataDatabase @Inject constructor(
                     val sciper = (document["sciper"] as? Long)?.toInt()
                     val phoneNumber = (document["phoneNumber"] as? String)
 
-                    val gender = when (document["gender"] as? String) {
-                        Gender.MALE.name -> Gender.MALE
-                        Gender.FEMALE.name -> Gender.FEMALE
-                        else -> Gender.OTHER
-                    }
+                    val gender = Gender.enumOf(document["gender"] as? String)
 
                     val role = when (document["role"] as? String) {
                         Role.TEACHER.name -> Role.TEACHER
@@ -320,7 +316,7 @@ class FirebaseUserdataDatabase @Inject constructor(
                         else -> Role.OTHER
                     }
 
-                    if (firstName != null && lastName != null && age != null && phoneNumber != null) {
+                    if (firstName != null && lastName != null && age != null && gender != null && phoneNumber != null) {
                         when (val resProfile = ImmutableProfile.build(
                             lastName,
                             firstName,
@@ -338,7 +334,7 @@ class FirebaseUserdataDatabase @Inject constructor(
                             }
                         }
                     } else {
-                        onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, sciper = $sciper, phoneNumber = $phoneNumber."))
+                        onFailure(Exception("At least one of the following fields is null: firstName = $firstName, lastName = $lastName, age = $age, gender = $gender, sciper = $sciper, phoneNumber = $phoneNumber."))
                     }
                 } else {
                     onSuccess(null)
