@@ -1,10 +1,7 @@
 package com.sdp13epfl2021.projmag.activities
 
-import android.app.PendingIntent.getActivity
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity

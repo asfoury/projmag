@@ -31,7 +31,9 @@ data class Message(val messageContent: String, val userId: String, val createdAt
             }
         }
     }
-
+    /**
+     * Returns a Map<> with fields mapped to the correct values
+     */
     fun toMapString() = hashMapOf(
         FieldNames.MESSAGE_CONTENT to messageContent,
         FieldNames.SENDER to userId,
