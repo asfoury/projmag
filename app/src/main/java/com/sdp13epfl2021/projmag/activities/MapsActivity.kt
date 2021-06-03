@@ -64,6 +64,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(EPFL, INITIAL_ZOOM))
+
+        if (project.latitude != null && project.longitude != null) {
+            newMarker = mMap.addMarker(
+                MarkerOptions().position(LatLng(project.latitude!!, project.longitude!!))
+                    .title(project.name)
+            )
+        }
+
         if (nextActivityString == CREATION_STRING) {
             mMap.setOnMapClickListener { latLng ->
                 newMarker?.let { it.remove() }
@@ -75,12 +83,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 latitude = latLng.latitude
                 longitude = latLng.longitude
             }
-        } else if (project.latitude != null && project.longitude != null) {
-            newMarker = mMap.addMarker(
-                MarkerOptions().position(LatLng(project.latitude!!, project.longitude!!))
-                    .title(project.name)
-            )
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
