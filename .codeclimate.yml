@@ -9,6 +9,9 @@ checks:
   identical-code:
     config:
       threshold: 250 # not number of lines, but mass threshold (see default analysis configuration)
+  file-lines:
+    config:
+      threshold: 300
 
 exclude_patterns:
   - "**/test/"
