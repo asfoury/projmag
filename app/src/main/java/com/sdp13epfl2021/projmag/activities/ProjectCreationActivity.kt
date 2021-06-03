@@ -99,7 +99,7 @@ class ProjectCreationActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpButtons() {
+    private fun setUpLocationButton() {
         val addLocationButton: ImageButton = findViewById(R.id.add_location)
         addLocationButton.setOnClickListener {
             when (val maybeProject = constructProject()) {
@@ -115,8 +115,11 @@ class ProjectCreationActivity : AppCompatActivity() {
                     finish()
                 }
             }
-
         }
+    }
+
+    private fun setUpButtons() {
+        setUpLocationButton()
         val addVideoButton: Button = findViewById(R.id.add_video)
         val addTagButton: Button = findViewById(R.id.addTagsButton)
         val addSectionButton: Button = findViewById(R.id.addSectionButton)
