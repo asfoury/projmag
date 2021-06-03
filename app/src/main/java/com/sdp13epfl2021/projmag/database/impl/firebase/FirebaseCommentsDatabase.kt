@@ -48,54 +48,56 @@ class FirebaseCommentsDatabase @Inject constructor(
         }, {})
     }
 
+    @Suppress("UNCHECKED_CAST")
+    private fun dataListToMessages(dataList: List<*>?): List<Message> {
+        return dataList?.mapNotNull { commentData ->
+            val commentMap = commentData as? Map<String, Any>
+            commentMap?.let {
+                val messageContent = it["message"] as? String
+                val userId = it["sender"] as? String
+                val createdAt = it["creationDate"] as? Long
+
+                if (messageContent != null && userId != null && createdAt != null) {
+                    Message(messageContent, userId, createdAt)
+                } else {
+                    null
+                }
+            }
+        } ?: emptyList()
+    }
+
     override fun getCommentsOfProject(
         projectId: ProjectId,
         onSuccess: (List<Message>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        firestore.collection(PROJECT_COMMENTS).document(projectId).get()
+        firestore
+            .collection(PROJECT_COMMENTS)
+            .document(projectId)
+            .get()
             .addOnSuccessListener { doc ->
-                val messages: MutableList<Message> = mutableListOf()
-                (doc["comments"] as? List<*>)?.forEach { comment ->
-                    val commentHash = comment as? HashMap<*, *>
-                    commentHash?.let { comment ->
-                        (comment["message"] as? String)?.let { messageContent ->
-                            (comment["sender"] as? String)?.let { senderId ->
-                                (comment["creationDate"] as? Long)?.let { creationDate ->
-                                    messages += Message(
-                                        messageContent,
-                                        senderId,
-                                        creationDate
-                                    )
-                                }
-                            }
-                        }
-
-                    }
-                }
+                val messages = dataListToMessages(doc["comments"] as? List<*>)
                 onSuccess(messages)
             }
+            .addOnFailureListener(onFailure)
     }
 
     override fun addListener(
         projectID: ProjectId,
         onChange: (ProjectId, List<Message>) -> Unit
     ) {
-            getDoc(projectID)
-                .addSnapshotListener { snapshot, _ ->
-                    snapshot?.data?.let {
-                        GlobalScope.launch {
-                            @Suppress("UNCHECKED_CAST")
-                            val comments = snapshot["comments"] as? List<Message>
-                            comments?.let { coms ->
-                                Log.d("MYTEST","${coms.size}")
-                                onChange(projectID,coms)
-                            }
-
-                        }
+        getDoc(projectID)
+            .addSnapshotListener { snapshot, _ ->
+                snapshot?.data?.let {
+                    GlobalScope.launch {
+                        val messages = dataListToMessages(it["comments"] as? List<*>)
+                        onChange(projectID, messages)
                     }
                 }
+            }
     }
+
+
 
     private fun getDoc(projectID: ProjectId): DocumentReference {
         return firestore

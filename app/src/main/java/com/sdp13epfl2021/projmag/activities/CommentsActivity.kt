@@ -50,14 +50,11 @@ class CommentsActivity : AppCompatActivity() {
                 recyclerView.setHasFixedSize(false)
                 recyclerView.scrollToPosition(it.size - 1)
             }, {})
-
-            commentsDB.addListener(projectId) { _: ProjectId, _: List<Message> ->
+            commentsDB.addListener(projectId) { _: ProjectId, messages: List<Message> ->
                 this.runOnUiThread {
-                    commentsDB.getCommentsOfProject(projectId, {
-                        recyclerView.adapter = MessageListAdapter(commentsDB, this, it, userDB)
-                        recyclerView.setHasFixedSize(false)
-                        recyclerView.scrollToPosition(it.size - 1)
-                    }, {})
+                    recyclerView.adapter = MessageListAdapter(commentsDB, this, messages, userDB)
+                    recyclerView.setHasFixedSize(false)
+                    recyclerView.scrollToPosition(messages.size - 1)
                 }
             }
         }
