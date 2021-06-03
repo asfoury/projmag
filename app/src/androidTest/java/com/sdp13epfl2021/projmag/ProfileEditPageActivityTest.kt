@@ -1,9 +1,11 @@
 package com.sdp13epfl2021.projmag
 
 
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -20,6 +22,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import junit.framework.TestCase.assertEquals
+import org.hamcrest.Matchers.anything
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -96,10 +99,12 @@ class ProfileEditPageActivityTest {
         onView(withId(R.id.profile_age)).perform(scrollTo())
             .check(matches(withText(dummyProfile.age.toString())))
 
-        onView(withId(R.id.profile_genre)).perform(scrollTo())
-            .check(matches(withText(dummyProfile.gender.toString())))
+        onView(withId(R.id.profile_gender_spinner)).perform(scrollTo())
+        
+                .check(matches(ViewMatchers.withSpinnerText(dummyProfile.gender.toString())))
         onView(withId(R.id.profile_phone_number)).perform(scrollTo())
             .check(matches(withText(dummyProfile.phoneNumber)))
+            
         onView(withId(R.id.profile_sciper))
             .check(matches(withText(dummyProfile.sciper.toString())))
     }
@@ -124,10 +129,13 @@ class ProfileEditPageActivityTest {
             scrollTo(),
             replaceText(otherDummyProfile.age.toString())
         )
-        onView(withId(R.id.profile_genre)).perform(
-            scrollTo(),
-            replaceText(otherDummyProfile.gender.name)
+
+        onView(withId(R.id.profile_gender_spinner)).perform(
+                scrollTo(),
+                click()
         )
+        onData(anything()).atPosition(otherDummyProfile.gender.ordinal).perform(click())
+
         onView(withId(R.id.profile_phone_number)).perform(
             scrollTo(),
             replaceText(otherDummyProfile.phoneNumber),
