@@ -27,9 +27,9 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.sdp13epfl2021.projmag.MainActivity
 import com.sdp13epfl2021.projmag.R
-import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.PROJECT_EXTRA
+import com.sdp13epfl2021.projmag.activities.MapsActivity.Companion.LOCATION_EXTRA
 import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.EDIT_EXTRA
-import com.sdp13epfl2021.projmag.activities.ProjectCreationActivity.Companion.LOCATION_EXTRA
+import com.sdp13epfl2021.projmag.activities.ProjectsListActivity.Companion.PROJECT_EXTRA
 import com.sdp13epfl2021.projmag.database.interfaces.*
 import com.sdp13epfl2021.projmag.model.Candidature
 import com.sdp13epfl2021.projmag.model.ImmutableProject

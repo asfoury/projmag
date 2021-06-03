@@ -25,7 +25,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private val EPFL = LatLng(46.51886897414146, 6.566790856808788)
-        const private val INITIAL_ZOOM = 15.5f
+        private const val INITIAL_ZOOM = 15.5f
         const val LOCATION_EXTRA = "location"
     }
 
@@ -34,7 +34,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var newMarker: Marker? = null
     private var latitude: Double = Double.MAX_VALUE
     private var longitude: Double = Double.MAX_VALUE
-    lateinit private var project: ImmutableProject
+    private lateinit var project: ImmutableProject
     private var nextActivityString: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

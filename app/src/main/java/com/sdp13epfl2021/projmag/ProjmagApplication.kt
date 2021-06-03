@@ -7,4 +7,4 @@ import dagger.hilt.android.HiltAndroidApp
  * Class used for testing purpose, needed by Hilt
  */
 @HiltAndroidApp
-class ProjmagApplication : Application() {}
+class ProjmagApplication : Application()
