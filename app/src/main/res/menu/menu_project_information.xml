@@ -6,24 +6,24 @@
         android:id="@+id/editButton"
         android:icon="@drawable/ic_baseline_edit_24"
         android:title="@string/edit_button"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/waitingListButton"
         android:icon="@drawable/waiting_list_icon_24"
         android:title="@string/waiting_button"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/shareButton"
         android:icon="@drawable/ic_baseline_share_24"
         android:title="@string/share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/generateQRCodeButton"
         android:icon="@drawable/ic_baseline_qr_code_24"
-        android:title="@string/share"
-        app:showAsAction="always" />
+        android:title="@string/generate_barcode"
+        app:showAsAction="ifRoom" />
 
 </menu>

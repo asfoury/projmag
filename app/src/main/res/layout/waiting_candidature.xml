@@ -37,7 +37,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            style="?android:attr/buttonBarStyle" >
 
             <Button
                 android:id="@+id/waiting_profile"
@@ -45,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_orange_light"
-                android:text="profile" />
+                android:text="@string/waiting_profile"
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/waiting_cv"
@@ -53,7 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_blue_bright"
-                android:text="CV" />
+                android:text="@string/waiting_cv"
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/waiting_accept"
@@ -61,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_green_light"
-                android:text="accept" />
+                android:text="@string/waiting_accept"
+                style="?android:attr/buttonBarButtonStyle" />
 
             <Button
                 android:id="@+id/waiting_reject"
@@ -69,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_red_dark"
-                android:text="reject" />
+                android:text="@string/waiting_reject"
+                style="?android:attr/buttonBarButtonStyle" />
 
         </LinearLayout>
     </LinearLayout>

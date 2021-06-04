@@ -328,7 +328,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
             creationDate.text = SimpleDateFormat(
-                getString(R.string.diplay_creation_date_format),
+                getString(R.string.display_creation_date_format),
                 Locale.getDefault()
             ).format(project.creationDate)
             type.text =
