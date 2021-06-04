@@ -75,16 +75,17 @@ class CommentsUITest {
     @Named("currentUserId")
     val userId: String = "user-id-mock"
 
-    val intent = Intent(
-        ApplicationProvider.getApplicationContext(),
-        CommentsActivity::class.java
-    ).apply {
-        putExtra("projectId", "project-id-mock")
-    }
 
 
     @Test
     fun userCanScroll() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            CommentsActivity::class.java
+        ).apply {
+            putExtra("projectId", "project-id-mock")
+        }
+
         ActivityScenario.launch<CommentsActivity>(intent).use { scenario ->
             onView(withId(R.id.recycler_view_comments))
                 .perform(ViewActions.swipeUp())
@@ -94,6 +95,13 @@ class CommentsUITest {
 
     @Test
     fun userCanClickOnCommentsButton() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            CommentsActivity::class.java
+        ).apply {
+            putExtra("projectId", "project-id-mock")
+        }
+
         ActivityScenario.launch<CommentsActivity>(intent).use { scenario ->
             onView(withId(R.id.comments_edit_text))
                 .perform(replaceText("Hello! this is a question"))
@@ -107,12 +115,30 @@ class CommentsUITest {
 
     @Test
     fun userCanClickOnSend() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            CommentsActivity::class.java
+        ).apply {
+            putExtra("projectId", "project-id-mock")
+        }
+
         ActivityScenario.launch<CommentsActivity>(intent).use { scenario ->
             onView(withId(R.id.comments_edit_text))
                 .perform(replaceText("Hello! this is a question"))
             onView(withId(R.id.comments_edit_text)).check(matches((withText("Hello! this is a question"))));
             onView(withId(R.id.comments_send_button))
                 .perform(click())
+            onView(withId(R.id.comments_edit_text)).check(matches((withText(""))));
+        }
+    }
+
+    @Test
+    fun nullProfileIdDoesNotCauseCrash() {
+        val intent = Intent(
+            ApplicationProvider.getApplicationContext(),
+            CommentsActivity::class.java)
+        ActivityScenario.launch<CommentsActivity>(intent).use { scenario ->
+
         }
     }
 

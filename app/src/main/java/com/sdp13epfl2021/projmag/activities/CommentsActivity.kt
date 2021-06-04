@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.sdp13epfl2021.projmag.MainActivity
@@ -41,6 +42,7 @@ class CommentsActivity : AppCompatActivity() {
         // get the project id
         val projectId: String? = intent.getStringExtra(MainActivity.projectIdString)
         if(projectId == null){
+            Toast.makeText(this, getString(R.string.failed_to_get_comments), Toast.LENGTH_LONG).show()
             finish()
         } else {
             setUpSendButton(projectId)
