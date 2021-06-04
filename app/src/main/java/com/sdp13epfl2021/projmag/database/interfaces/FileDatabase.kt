@@ -79,4 +79,12 @@ interface FileDatabase {
         onFailure: (Exception) -> Unit
     )
 
+    /**
+     *  get the actual filename from the database
+     *
+     * @param fileUrl the file url
+     * @return the  file name, null if the file name was invalid
+     */
+    fun getFileName(fileUrl: String) : String?
+
 }

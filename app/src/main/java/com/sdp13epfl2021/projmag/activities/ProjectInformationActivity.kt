@@ -20,6 +20,7 @@ import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -46,6 +47,11 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlin.collections.ArrayList
 
+import com.google.common.io.Files
+import java.io.IOException
+import java.lang.IllegalArgumentException
+
+
 /**
  * Activity displaying the information and media of a project and from which
  * one can apply to the project or send it using a deep link or QR code.
@@ -67,6 +73,9 @@ class ProjectInformationActivity : AppCompatActivity() {
     lateinit var userdataDatabase: UserdataDatabase
 
     @Inject
+    lateinit var projectDatabase: ProjectDatabase
+
+    @Inject
     lateinit var candidatureDatabase: CandidatureDatabase
 
     private lateinit var projectVar: ImmutableProject
@@ -78,7 +87,6 @@ class ProjectInformationActivity : AppCompatActivity() {
     private var current: Int = -1
     private var alreadyApplied: Boolean = false
     private var appliedProjectsIds: MutableList<ProjectId> = ArrayList()
-
 
 
     @Synchronized
@@ -297,6 +305,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_project_information)
 
+
         // get all the text views that will be set
         val title = findViewById<TextView>(R.id.info_project_title)
         val lab = findViewById<TextView>(R.id.info_lab_name)
@@ -306,7 +315,7 @@ class ProjectInformationActivity : AppCompatActivity() {
         val responsible = findViewById<TextView>(R.id.info_responsible_name)
         val creationDate = findViewById<TextView>(R.id.info_creation_date)
         videoView = findViewById(R.id.info_video)
-        favButton = findViewById(R.id.addFavoriteInProject)
+        favButton = findViewById(R.id.favoriteButton)
         favButton.isEnabled = false
 
 
@@ -341,7 +350,8 @@ class ProjectInformationActivity : AppCompatActivity() {
 
                 addPauseOnTouchListener(controller)
                 setupPlayerListeners(controller)
-                handleVideoWithFavoritePersistenceFiltering(project.videoUri)
+                handleVideo(project.videoUri)
+
             }
         } else {
             showToast("An error occurred while loading project.", Toast.LENGTH_LONG)
@@ -398,29 +408,41 @@ class ProjectInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleVideoWithFavoritePersistenceFiltering(videosLinks: List<String>) {
-        //get the favorite list and when it's available provide it to the function that is
-        //responsible for downloading videos in volatile or non volatile memory
+
+    /**
+     * Function that downloads a video either in the proj dir permanent app memory if it's
+     * a favorite or one of our own projects. Else, the video is stored in the cache dir which is a
+     * memory that is deleted by the phone if it needs it. this function does nothing in the event
+     * of on failure being thrown by one of the user or project databases
+     * @param videosLinks links of the videos to be downloaded
+     */
+    private fun handleVideo(videosLinks: List<String>) {
+        //get the favorite list, the applied To list and the own projects list
         userdataDatabase.getListOfFavoriteProjects({ favorites ->
-            addVideoAfterDownloadedWithFavoritePersistence(
-                videosLinks,
-                favorites.contains(projectVar.id)
-            )
+            projectDatabase.getAllProjects({ projects ->
+                addVideoDownload(videosLinks, favorites.contains(projectVar.id),
+                    projects.filter { project -> project.authorId == userId })
+            },
+                {})
+
         }, {
 
         })
     }
 
     // download all videos and add them to the video player
-    private fun addVideoAfterDownloadedWithFavoritePersistence(
+    private fun addVideoDownload(
         videosLinks: List<String>,
-        isFavorite: Boolean
+        isFavorite: Boolean,
+        ownProjects: List<ImmutableProject>
     ) {
 
         videosLinks.forEach { link ->
-            if (isFavorite) {//storing the video with persistence
+            if (isFavorite || ownProjects.any { project -> project.id == projectVar.id }) {//storing the video in the permanent memory
+                movingVideo(link, cacheDir, projectDir)
                 storingVideo(link, projectDir)
             } else {
+                movingVideo(link, projectDir, cacheDir)//storing
                 storingVideo(link, cacheDir)
             }
         }
@@ -441,6 +463,35 @@ class ProjectInformationActivity : AppCompatActivity() {
                 }, { addVideo(uri, null) }
             )
         }, { showToast(getString(R.string.could_not_download_video), Toast.LENGTH_LONG) })
+    }
+
+    /**
+     * moves a video from the delete Directory to the copy Directory
+     *
+     * @param fileUrl url of the file to be moved
+     * @param deleteDirectory directory from which it has to be moved
+     * @param copyDirectory directory in which it is moved to
+     */
+    private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File) {
+        val fileName = fileDB.getFileName(fileUrl)
+        if(fileName  == null){
+            showToast("invalid video url name", Toast.LENGTH_LONG)
+            return
+        }
+        val file = File(deleteDirectory, fileName)
+        if (file.exists()) {
+            val newFile = File(copyDirectory, fileName)
+            try {
+                Files.move(file, newFile)
+            } catch (e: IllegalArgumentException) {
+                //do nothing because this exeption is launched when the delete and copy directories
+                //are identical (so the video is already where it was asked to be)
+            } catch (e: IOException) {
+                showToast("failed to move video", Toast.LENGTH_LONG)
+            }
+        }
+
+
     }
 
 

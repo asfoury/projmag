@@ -6,6 +6,9 @@ import java.io.File
 import java.util.*
 
 class FakeFileDatabase(var files: Map<String, File> = emptyMap()) : FileDatabase {
+    override fun getFileName(fileUrl: String): String {
+        return "noFakeFile"
+    }
 
     override fun getFile(
         fileUrl: String,
