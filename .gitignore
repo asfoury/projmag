@@ -20,3 +20,4 @@
 local.properties
 app/src/debug/
 app/src/release/
+app/src/main/res/values/google_maps_api.xml
