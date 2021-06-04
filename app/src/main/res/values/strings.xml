@@ -138,7 +138,7 @@
     <string name="hello_how_are_you">Hello! How are you?</string>
     <string name="_1_00">1:00</string>
 
-    <string name="edit_button">editButton</string>
+    <string name="edit_button">Edit</string>
 
     <string name="cv_display_cv_null">The cv is null.</string>
     <string name="cv_display_title">CurriculumVitae</string>
