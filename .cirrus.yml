@@ -1,3 +1,4 @@
+
 check_android_task:
   name: Run Android tests
   env:
@@ -5,6 +6,7 @@ check_android_task:
     TARGET: google_apis
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[853f2f85191910ea7ee87a0784efb0b48e4cb84adc81e9ddda4086ea9bd4422edc30d6cd80bf313a589878efdffc89cc]
+    GMP_KEY:ENCRYPTED[6d6574b8e1d1c37f62338a6521ff88d876b9903d81a060bd69d0d0f4168037fa31da99769e871cabaecc2618fb6bb267]
   container:
     image: reactivecircus/android-emulator-$API_LEVEL:latest
     kvm: true
