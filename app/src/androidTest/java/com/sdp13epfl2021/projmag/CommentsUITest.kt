@@ -8,7 +8,8 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.sdp13epfl2021.projmag.JavaToKotlinHelperAndroidTest.anyObject
 import com.sdp13epfl2021.projmag.activities.CommentsActivity
@@ -28,7 +29,7 @@ import org.mockito.Mockito
 import javax.inject.Named
 
 
-@UninstallModules(UserdataDatabaseModule::class,CommentsDatabaseModule::class, UserIdModule::class)
+@UninstallModules(UserdataDatabaseModule::class, CommentsDatabaseModule::class, UserIdModule::class)
 @HiltAndroidTest
 class CommentsUITest {
 
@@ -40,22 +41,19 @@ class CommentsUITest {
     var hiltRule = HiltAndroidRule(this)
 
 
-
-
-    private val messages : List<Message> = listOf(
-        Message("test","test", 100000),
-        Message("test","test", 100000),
-        Message("test","test", 100000),
-        Message("test","test", 100000),
-        Message("test","test", 100000),
-        Message("test","test", 100000),
+    private val messages: List<Message> = listOf(
+        Message("test", "test", 100000),
+        Message("test", "test", 100000),
+        Message("test", "test", 100000),
+        Message("test", "test", 100000),
+        Message("test", "test", 100000),
+        Message("test", "test", 100000),
     )
 
     @BindValue
     val userDB: UserdataDatabase = Mockito.mock(UserdataDatabase::class.java).apply {
 
     }
-
 
 
     @BindValue
@@ -74,7 +72,6 @@ class CommentsUITest {
     @BindValue
     @Named("currentUserId")
     val userId: String = "user-id-mock"
-
 
 
     @Test
@@ -136,7 +133,8 @@ class CommentsUITest {
     fun nullProfileIdDoesNotCauseCrash() {
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            CommentsActivity::class.java)
+            CommentsActivity::class.java
+        )
         ActivityScenario.launch<CommentsActivity>(intent).use { scenario ->
 
         }

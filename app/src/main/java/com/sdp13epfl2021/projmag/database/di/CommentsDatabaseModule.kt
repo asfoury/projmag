@@ -19,6 +19,6 @@ object CommentsDatabaseModule {
     fun providesUserdataDatabase(
         firestore: FirebaseFirestore,
         auth: FirebaseAuth,
-        userDB : FirebaseUserdataDatabase
+        userDB: FirebaseUserdataDatabase
     ): CommentsDatabase = FirebaseCommentsDatabase(firestore, auth, userDB)
 }
