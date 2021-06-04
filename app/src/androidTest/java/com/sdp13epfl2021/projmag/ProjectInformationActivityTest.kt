@@ -157,6 +157,7 @@ class ProjectInformationActivityTest {
     var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
         .around(activityScenarioRule)
 
+
     @After
     fun clean() {
         videoSNKFile.delete()
@@ -235,16 +236,34 @@ class ProjectInformationActivityTest {
     @Test
     //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
-        var applyString: String = "APPLY"
-        var unapplyString: String = "UNAPPLY"
+        var applyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.apply_text)
+        var unapplyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.unaply_text)
 
         Thread.sleep(2000)
+
         val applyButton = onView(withId(R.id.applyButton))
         applyButton.check(matches(withText(applyString)))
         applyButton.perform(scrollTo()).perform(click())
         applyButton.check(matches(withText(unapplyString)))
         applyButton.perform(scrollTo()).perform(click())
         applyButton.check(matches(withText(applyString)))
+    }
+
+
+    @Test
+    //TODO : call the proper string ressource in string.xml w mockito
+    fun clickOnFavoriteButton() {
+        var favoriteString : String = "add project to favorites"
+        var removeFavoriteString : String = "remove project from favorites"
+
+        Thread.sleep(2000)
+
+        val favoriteButton = onView(withId(R.id.favoriteButton))
+        favoriteButton.check(matches(withText(favoriteString)))
+        favoriteButton.perform(scrollTo()).perform(click())
+        favoriteButton.check(matches(withText(removeFavoriteString)))
+        favoriteButton.perform(scrollTo()).perform(click())
+        favoriteButton.check(matches(withText(favoriteString)))
     }
 
     @Test
