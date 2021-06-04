@@ -471,7 +471,7 @@ class ProjectInformationActivity : AppCompatActivity() {
      */
     private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File) {
         val fileName = fileDB.getFileName(fileUrl)
-        if(fileName  == null){
+        if (fileName == null) {
             showToast("invalid video url name", Toast.LENGTH_LONG)
             return
         }

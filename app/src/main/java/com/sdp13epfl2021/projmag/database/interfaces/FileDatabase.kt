@@ -85,6 +85,6 @@ interface FileDatabase {
      * @param fileUrl the file url
      * @return the  file name, null if the file name was invalid
      */
-    fun getFileName(fileUrl: String) : String?
+    fun getFileName(fileUrl: String): String?
 
 }

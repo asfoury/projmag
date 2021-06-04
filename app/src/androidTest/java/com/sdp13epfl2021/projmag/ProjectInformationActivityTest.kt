@@ -234,10 +234,11 @@ class ProjectInformationActivityTest {
     }
 
     @Test
-    //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
-        var applyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.apply_text)
-        var unapplyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.unaply_text)
+        var applyString: String =
+            ApplicationProvider.getApplicationContext<Context>().getString(R.string.apply_text)
+        var unapplyString: String =
+            ApplicationProvider.getApplicationContext<Context>().getString(R.string.unaply_text)
 
         Thread.sleep(2000)
 
@@ -253,8 +254,8 @@ class ProjectInformationActivityTest {
     @Test
     //TODO : call the proper string ressource in string.xml w mockito
     fun clickOnFavoriteButton() {
-        var favoriteString : String = "add project to favorites"
-        var removeFavoriteString : String = "remove project from favorites"
+        var favoriteString: String = "add project to favorites"
+        var removeFavoriteString: String = "remove project from favorites"
 
         Thread.sleep(2000)
 

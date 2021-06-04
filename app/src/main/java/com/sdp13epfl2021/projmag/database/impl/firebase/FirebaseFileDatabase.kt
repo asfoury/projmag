@@ -136,10 +136,9 @@ class FirebaseFileDatabase(
 
     override fun getFileName(fileUrl: String): String? {
 
-        try{
+        try {
             return storage.getReferenceFromUrl(fileUrl).name
-        }
-        catch(e : IllegalArgumentException){
+        } catch (e: IllegalArgumentException) {
             return null
         }
     }

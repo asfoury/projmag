@@ -109,7 +109,7 @@ class ProjectAdapter(
         val textView: TextView = view.findViewById(R.id.project_title)
         val labNameView: TextView = view.findViewById(R.id.lab_name)
         val chipGroupView: ChipGroup = view.findViewById(R.id.chip_group)
-        val commentButton : ImageButton = view.findViewById(R.id.projects_comments_button)
+        val commentButton: ImageButton = view.findViewById(R.id.projects_comments_button)
     }
 
 
