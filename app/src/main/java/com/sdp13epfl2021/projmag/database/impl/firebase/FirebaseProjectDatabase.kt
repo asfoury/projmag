@@ -145,6 +145,7 @@ class FirebaseProjectDatabase(private val firestore: FirebaseFirestore) : Projec
         )
     }
 
+
     override fun pushProject(
         project: ImmutableProject,
         onSuccess: (ProjectId) -> Unit,

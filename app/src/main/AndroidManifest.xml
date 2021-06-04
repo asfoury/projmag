@@ -23,9 +23,9 @@
     <application
         android:name=".ProjmagApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_projmag_launcher"
+        android:roundIcon="@mipmap/ic_projmag_launcher_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Projmag">
         <!--
@@ -43,7 +43,7 @@
         <activity
             android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity android:name=".activities.CommentsActivity"></activity>
+        <activity android:name=".activities.CommentsActivity" />
         <activity android:name=".activities.CVDisplayActivity" />
         <activity android:name=".activities.ProfileDisplayActivity" />
         <activity android:name=".activities.OrientationActivity" />
