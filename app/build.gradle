@@ -4,7 +4,6 @@ plugins {
     id 'jacoco'
     id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
-    id 'com.google.secrets_gradle_plugin' version '0.4'
 }
 
 apply plugin: 'kotlin-kapt'
@@ -12,7 +11,7 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.sdp13epfl2021.projmag"

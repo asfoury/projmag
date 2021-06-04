@@ -41,7 +41,3 @@ check_android_task:
       path: ./app/build/reports/lint-results-debug.xml
       type: text/xml
       format: android-lint
-  publish_task:
-    environment:
-      GMP_KEY: ENCRYPTED[6d6574b8e1d1c37f62338a6521ff88d876b9903d81a060bd69d0d0f4168037fa31da99769e871cabaecc2618fb6bb267]
-
