@@ -35,41 +35,46 @@
 
 
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/waiting_profile"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_orange_light"
-                android:text="profile" />
+                android:text="@string/waiting_profile" />
 
             <Button
                 android:id="@+id/waiting_cv"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_blue_bright"
-                android:text="CV" />
+                android:text="@string/waiting_cv" />
 
             <Button
                 android:id="@+id/waiting_accept"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_green_light"
-                android:text="accept" />
+                android:text="@string/waiting_accept" />
 
             <Button
                 android:id="@+id/waiting_reject"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_red_dark"
-                android:text="reject" />
+                android:text="@string/waiting_reject" />
 
         </LinearLayout>
     </LinearLayout>

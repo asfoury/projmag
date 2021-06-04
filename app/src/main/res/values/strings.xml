@@ -25,21 +25,15 @@
     <string name="LastName">LastName</string>
     <string name="FirstName">FirstName</string>
     <string name="age">Age</string>
-    <string name="genre">Gender</string>
     <string name="phone_number">Phone number</string>
     <string name="sciper">Sciper</string>
-    <string name="description">Description</string>
-    <string name="edit">Edit</string>
-    <string name="email">example@epfl.ch</string>
     <string name="search">search</string>
     <string name="profile">profileButton</string>
-    <string name="share">shareButton</string>
+    <string name="share">Share</string>
     <string name="submit">Add a new project to the list</string>
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
     <string name="could_not_download_video">An error occurred while downloading a video.</string>
-    <string name="could_not_download_subtitles">Subtitles could not be fetched !</string>
-    <string name="no_subtitles_found">No subtitles could be found a video !</string>
     <string name="cv_period_description">Description</string>
     <string name="cv_period_school_name">School Name</string>
     <string name="cv_period_period_title">Period (to change)</string>
@@ -63,10 +57,9 @@
     <string name="master">Master</string>
     <string name="display_bachelor_and_master">Bachelor &amp; Master semester</string>
     <string name="display_not_found">Project not found</string>
-    <string name="diplay_creation_date_format">"EEEE, d MMM yyyy"</string>
+    <string name="display_creation_date_format">"EEEE, d MMM yyyy"</string>
 
     <string name="video_subtitling_title">Video Subtitling</string>
-    <string name="video_subtitling_begin_end_time">Begin/End Time</string>
     <string name="video_subtitling_set_start">Set Start</string>
     <string name="video_subtitling_set_end">Set End</string>
     <string name="video_subtitling_field">Subtitling Text</string>
@@ -97,8 +90,6 @@
     <string name="section_save_button">Save</string>
     <string name="section_add_button_title">add Section</string>
 
-    <string name="form_save_profile">Save</string>
-
     <string name="show_cv">Show cv</string>
     <string name="create_cv">create cv</string>
     <string name="sub_change">Submit change</string>
@@ -107,6 +98,10 @@
     <string name="waiting_firstname">First name : %s</string>
     <string name="waiting_lastname">Last name : %s</string>
     <string name="waiting_section">Section : %s</string>
+    <string name="waiting_profile">Profile</string>
+    <string name="waiting_cv">CV</string>
+    <string name="waiting_accept">Accept</string>
+    <string name="waiting_reject">Reject</string>
     <string name="waiting_error_msg">An error has occurred while updating candidature : %s</string>
     <string name="waiting_accepted_msg">"Candidature accepted."</string>
     <string name="waiting_rejected_msg">"Candidature rejected."</string>
@@ -128,28 +123,23 @@
     <string name="edit_profile_text">Edit Profile</string>
     <string name="profile_loading_failed">Failed to load profile</string>
     <string name="cv_loading_failed">Failed to load cv</string>
-    <string name="required_degree">Required Degree</string>
-    <string name="application">Application</string>
     <string name="filter_settings_icon">filter settings icon</string>
     <string name="preferences">Preferences</string>
-    <string name="sending_preferences">Sending Preferences...</string>
+    <string name="sending_preferences">Sending Preferences…</string>
     <string name="failed_send_pref">Failed to Send Preferences</string>
     <string name="invalid_data">Invalid data</string>
     <string name="couldnt_get_data">Couldn\'t get data</string>
     <string name="apply_text">APPLY</string>
     <string name="unaply_text">UNAPPLY</string>
-    <string name="failed">failed</string>
     <string name="enter_comment">Enter Comment</string>
     <string name="send_comment_icon">send_comment_icon</string>
     <string name="march_11">March 11</string>
     <string name="hello_how_are_you">Hello! How are you?</string>
-    <string name="_1_00">1:00</string>
-    
-    <string name="edit_button">editButton</string>
+
+    <string name="edit_button">Edit</string>
 
     <string name="cv_display_cv_null">The cv is null.</string>
     <string name="cv_display_title">CurriculumVitae</string>
-    <string name="cv_display_summary">Summary\n%s</string>
     <string name="cv_display_summary_title">Summary</string>
     <string name="cv_display_item_language">Language : %s</string>
     <string name="cv_display_item_level">Level : %s</string>

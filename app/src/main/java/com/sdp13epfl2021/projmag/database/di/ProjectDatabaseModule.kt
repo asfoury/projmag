@@ -20,15 +20,15 @@ object ProjectDatabaseModule {
     @Provides
     @Singleton
     fun provideProjectDatabase(
-            fs: FirebaseFirestore,
-            @Named("fileCacheProjectDB") dir: File,
-            candidatureDB: CandidatureDatabase
+        fs: FirebaseFirestore,
+        @Named("fileCacheProjectDB") dir: File,
+        candidatureDB: CandidatureDatabase
     ): ProjectDatabase =
-            CachedProjectDatabase(
-                    OfflineProjectDatabase(
-                            FirebaseProjectDatabase(fs),
-                            dir,
-                            candidatureDB
-                    )
+        CachedProjectDatabase(
+            OfflineProjectDatabase(
+                FirebaseProjectDatabase(fs),
+                dir,
+                candidatureDB
             )
+        )
 }

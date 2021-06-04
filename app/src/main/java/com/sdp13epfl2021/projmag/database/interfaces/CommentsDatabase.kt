@@ -14,8 +14,8 @@ interface CommentsDatabase {
      * @param onFailure called with an exception on failure
      */
     fun addCommentToProjectComments(
-        message : Message,
-        projectId : ProjectId,
+        message: Message,
+        projectId: ProjectId,
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     )
@@ -30,7 +30,7 @@ interface CommentsDatabase {
      * @param onFailure called with an exception on failure
      */
     fun getCommentsOfProject(
-        projectId : ProjectId,
+        projectId: ProjectId,
         onSuccess: (List<Message>) -> Unit,
         onFailure: (Exception) -> Unit
     )

@@ -7,6 +7,8 @@ import android.widget.ScrollView
 import android.widget.VideoView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -224,20 +226,21 @@ class ProjectInformationActivityTest {
 
     @Test
     fun clickOnShareButton() {
-        onView(withId(R.id.shareButton)).perform(click())
+        clickOnMenu(R.id.shareButton, R.string.share)
     }
 
     @Test
     fun clickOnGenQRButton() {
         Thread.sleep(2000)
-        onView(withId(R.id.generateQRCodeButton)).perform(click())
+        clickOnMenu(R.id.generateQRCodeButton, R.string.generate_barcode)
     }
 
     @Test
-    //TODO : call the proper string ressource in string.xml
     fun clickOnApplyButton() {
-        var applyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.apply_text)
-        var unapplyString: String = ApplicationProvider.getApplicationContext<Context>().getString(R.string.unaply_text)
+        var applyString: String =
+            ApplicationProvider.getApplicationContext<Context>().getString(R.string.apply_text)
+        var unapplyString: String =
+            ApplicationProvider.getApplicationContext<Context>().getString(R.string.unaply_text)
 
         Thread.sleep(2000)
 
@@ -253,8 +256,8 @@ class ProjectInformationActivityTest {
     @Test
     //TODO : call the proper string ressource in string.xml w mockito
     fun clickOnFavoriteButton() {
-        var favoriteString : String = "add project to favorites"
-        var removeFavoriteString : String = "remove project from favorites"
+        var favoriteString: String = "add project to favorites"
+        var removeFavoriteString: String = "remove project from favorites"
 
         Thread.sleep(2000)
 
@@ -270,7 +273,7 @@ class ProjectInformationActivityTest {
     fun clickOnWaitingListButton() {
         Thread.sleep(2000)
         Intents.init()
-        onView(withId(R.id.waitingListButton)).perform(click())
+        clickOnMenu(R.id.waitingListButton, R.string.waiting_button)
         intended(hasComponent(WaitingListActivity::class.java.name))
         Intents.release()
     }
@@ -278,9 +281,18 @@ class ProjectInformationActivityTest {
     @Test
     fun clickOnEditButton() {
         Intents.init()
-        onView(withId(R.id.editButton)).perform(click())
+        clickOnMenu(R.id.editButton, R.string.edit_button)
         intended(hasComponent(ProjectCreationActivity::class.java.name))
         Intents.release()
+    }
+
+    private fun clickOnMenu(menuId: Int, menuTextId: Int) {
+        try {
+            onView(withId(menuId)).perform(click())
+        } catch (e: NoMatchingViewException) {
+            openActionBarOverflowOrOptionsMenu(context)
+            onView(withText(menuTextId)).perform(click())
+        }
     }
 }
 

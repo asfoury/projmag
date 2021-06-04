@@ -20,7 +20,7 @@ import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
-import com.google.firebase.auth.FirebaseAuth
+import com.google.common.io.Files
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -41,15 +41,12 @@ import net.glxn.qrgen.android.QRCode
 import org.xml.sax.XMLReader
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.collections.ArrayList
-
-import com.google.common.io.Files
-import java.io.IOException
-import java.lang.IllegalArgumentException
 
 
 /**
@@ -331,7 +328,7 @@ class ProjectInformationActivity : AppCompatActivity() {
 
             nbOfStudents.text = getString(R.string.display_number_student, project.nbParticipant)
             creationDate.text = SimpleDateFormat(
-                getString(R.string.diplay_creation_date_format),
+                getString(R.string.display_creation_date_format),
                 Locale.getDefault()
             ).format(project.creationDate)
             type.text =
@@ -474,7 +471,7 @@ class ProjectInformationActivity : AppCompatActivity() {
      */
     private fun movingVideo(fileUrl: String, deleteDirectory: File, copyDirectory: File) {
         val fileName = fileDB.getFileName(fileUrl)
-        if(fileName  == null){
+        if (fileName == null) {
             showToast("invalid video url name", Toast.LENGTH_LONG)
             return
         }

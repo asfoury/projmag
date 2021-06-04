@@ -7,7 +7,9 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:required="true" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature
@@ -18,10 +20,11 @@
         android:name=".ProjmagApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_projmag_launcher"
-        android:roundIcon="@mipmap/ic_projmag_launcher_round"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_projmag_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Projmag">
+        android:theme="@style/Theme.Projmag"
+        tools:ignore="AllowBackup">
         <activity android:name=".activities.CommentsActivity" />
         <activity android:name=".activities.CVDisplayActivity" />
         <activity android:name=".activities.ProfileDisplayActivity" />

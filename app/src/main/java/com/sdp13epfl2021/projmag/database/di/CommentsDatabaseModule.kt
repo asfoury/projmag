@@ -17,8 +17,6 @@ object CommentsDatabaseModule {
     @Provides
     @Singleton
     fun providesUserdataDatabase(
-        firestore: FirebaseFirestore,
-        auth: FirebaseAuth,
-        userDB : FirebaseUserdataDatabase
-    ): CommentsDatabase = FirebaseCommentsDatabase(firestore, auth, userDB)
+        firestore: FirebaseFirestore
+    ): CommentsDatabase = FirebaseCommentsDatabase(firestore)
 }

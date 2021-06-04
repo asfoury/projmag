@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".video.VideoSubtitlingActivity">
+    tools:context=".activities.VideoSubtitlingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -73,6 +73,7 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:ems="10"
+            android:hint="@string/video_subtitling_field"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:text="@string/video_subtitling_field"

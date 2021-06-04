@@ -36,20 +36,20 @@ import javax.inject.Named
 
 @HiltAndroidTest
 @UninstallModules(
-        ProjectDatabaseModule::class,
-        FileDatabaseModule::class,
-        MetadataDatabaseModule::class,
-        CandidatureDatabaseModule::class,
-        UserIdModule::class
+    ProjectDatabaseModule::class,
+    FileDatabaseModule::class,
+    MetadataDatabaseModule::class,
+    CandidatureDatabaseModule::class,
+    UserIdModule::class
 )
 class ProjectCreationActivityTest {
 
     private var activityRule: ActivityScenarioRule<ProjectCreationActivity> =
-            ActivityScenarioRule(ProjectCreationActivity::class.java)
+        ActivityScenarioRule(ProjectCreationActivity::class.java)
 
     @get:Rule
     var testRule: RuleChain = RuleChain.outerRule(HiltAndroidRule(this))
-            .around(activityRule)
+        .around(activityRule)
 
 
     private val description = """
@@ -66,20 +66,20 @@ class ProjectCreationActivityTest {
             """.trimIndent()
 
     private val project = (ImmutableProject.build(
-            id = "",
-            authorId = "authorId",
-            name = "Project1",
-            lab = "lab",
-            teacher = "teacher",
-            TA = "TA",
-            nbParticipant = 1,
-            assigned = listOf("student"),
-            masterProject = true,
-            bachelorProject = true,
-            tags = listOf(),
-            isTaken = false,
-            description = description,
-            videoURI = listOf()
+        id = "",
+        authorId = "authorId",
+        name = "Project1",
+        lab = "lab",
+        teacher = "teacher",
+        TA = "TA",
+        nbParticipant = 1,
+        assigned = listOf("student"),
+        masterProject = true,
+        bachelorProject = true,
+        tags = listOf(),
+        isTaken = false,
+        description = description,
+        videoURI = listOf()
     ) as Success<ImmutableProject>).value
 
 
@@ -123,32 +123,32 @@ class ProjectCreationActivityTest {
         Thread.sleep(2000)
 
         onView(withId(R.id.form_edit_text_laboratory))
-                .perform(replaceText(project.lab))
+            .perform(replaceText(project.lab))
 
         onView(withId(R.id.form_edit_text_project_name))
-                .perform(replaceText(project.name))
+            .perform(replaceText(project.name))
 
         onView(withId(R.id.form_edit_text_teacher))
-                .perform(replaceText(project.teacher))
+            .perform(replaceText(project.teacher))
 
         onView(withId(R.id.form_edit_text_project_TA))
-                .perform(replaceText(project.TA))
+            .perform(replaceText(project.TA))
 
         onView(withId(R.id.form_nb_of_participant))
-                .perform(replaceText(project.nbParticipant.toString()))
+            .perform(replaceText(project.nbParticipant.toString()))
 
         onView(withId(R.id.form_check_box_MP))
-                .perform(click())
+            .perform(click())
 
         onView(withId(R.id.form_check_box_SP))
-                .perform(click())
+            .perform(click())
 
         onView(withId(R.id.form_project_description))
-                .perform(
-                        replaceText(
-                                project.description
-                        )
+            .perform(
+                replaceText(
+                    project.description
                 )
+            )
     }
 
     @Test
@@ -160,11 +160,11 @@ class ProjectCreationActivityTest {
         val vidView = VideoView(instrumentationContext)
 
         FormHelper.playVideoFromLocalPath(
-                vidButton,
-                subButton,
-                vidView,
-                mediaController,
-                fakeStringPath
+            vidButton,
+            subButton,
+            vidView,
+            mediaController,
+            fakeStringPath
         )
         assertTrue(vidButton.isEnabled)
         assertTrue(subButton.isEnabled)
