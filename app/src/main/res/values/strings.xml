@@ -34,7 +34,6 @@
     <string name="play_video">Play Video</string>
     <string name="add_video">Add Video</string>
     <string name="could_not_download_video">An error occurred while downloading a video.</string>
-    <string name="no_subtitles_found">No subtitles could be found a video !</string>
     <string name="cv_period_description">Description</string>
     <string name="cv_period_school_name">School Name</string>
     <string name="cv_period_period_title">Period (to change)</string>
@@ -136,7 +135,6 @@
     <string name="send_comment_icon">send_comment_icon</string>
     <string name="march_11">March 11</string>
     <string name="hello_how_are_you">Hello! How are you?</string>
-    <string name="_1_00">1:00</string>
 
     <string name="edit_button">Edit</string>
 
