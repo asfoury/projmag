@@ -1,20 +1,20 @@
 package com.sdp13epfl2021.projmag.database.impl.firebase
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.sdp13epfl2021.projmag.database.interfaces.CommentsDatabase
 import com.sdp13epfl2021.projmag.database.interfaces.ProjectId
-import com.sdp13epfl2021.projmag.database.interfaces.UserdataDatabase
 import com.sdp13epfl2021.projmag.model.Message
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+/**
+ * An implementation of CommentsDatabase using Firebase firestore.
+ */
 class FirebaseCommentsDatabase @Inject constructor(
-    private val firestore: FirebaseFirestore,
-    private val auth: FirebaseAuth,
-    private val userdataDatabase: UserdataDatabase
+    private val firestore: FirebaseFirestore
 ) : CommentsDatabase {
 
     companion object {
